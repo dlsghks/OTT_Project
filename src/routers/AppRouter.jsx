@@ -3,19 +3,19 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // 공통 레이아웃
-import Layout from "../pages/Layout";
+import {Layout} from "../pages/Layout";
 
 // 기존 페이지
-import Home from "../pages/Home";
-import Entertainment from "../pages/Entertainment";
-import Drama from "../pages/Drama";
-import Movie from "../pages/Movie";
-import Currentaffairs from "../pages/Currentaffairs";
-import Animation from "../pages/Animation";
-import Global from "../pages/Global";
-import Live from "../pages/Live";
-import RetroV from "../pages/RetroV";
-import ProgramDetail from "../pages/ProgramDetail";
+import {Home} from "../pages/Home";
+import {Entertainment} from "../pages/Entertainment";
+import {Drama} from "../pages/Drama";
+import {Movie} from "../pages/Movie";
+import {Currentaffairs} from "../pages/Currentaffairs";
+import {Animation} from "../pages/Animation";
+import {Global} from "../pages/Global";
+import {Live} from "../pages/Live";
+import {RetroV} from "../pages/RetroV";
+import {ProgramDetail} from "../pages/ProgramDetail";
 
 // 추가 페이지
 import {Category} from "../pages/Category";
