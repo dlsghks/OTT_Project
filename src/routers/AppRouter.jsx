@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // 공통 레이아웃
 import {Layout} from "../pages/Layout";
@@ -33,49 +33,49 @@ import {Shorts} from "../pages/Shorts";
 
 export const AppRouter = () => {
   return (
-    <BrowserRouter>
+
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* 메인 */}
           <Route index element={<Home />} />
 
           {/* 웨이브 콘텐츠 */}
-          <Route path="entertainment" element={<Entertainment />} />
-          <Route path="drama" element={<Drama />} />
-          <Route path="movie" element={<Movie />} />
-          <Route path="currentaffairs" element={<Currentaffairs />} />
-          <Route path="animation" element={<Animation />} />
-          <Route path="global" element={<Global />} />
-          <Route path="category" element={<Category />} />
+          <Route path="/entertainment" element={<Entertainment />} />
+          <Route path="/drama" element={<Drama />} />
+          <Route path="/movie" element={<Movie />} />
+          <Route path="/currentaffairs" element={<Currentaffairs />} />
+          <Route path="/animation" element={<Animation />} />
+          <Route path="/global" element={<Global />} />
+          <Route path="/category" element={<Category />} />
 
           {/* LIVE */}
-          <Route path="live" element={<Live />} />
-          <Route path="livechannel" element={<LiveChannel />} />
-          <Route path="schedule" element={<Schedule />} />
+          <Route path="/live" element={<Live />} />
+          <Route path="/livechannel" element={<LiveChannel />} />
+          <Route path="/schedule" element={<Schedule />} />
 
           {/* 레트로브 */}
-          <Route path="retrov" element={<RetroV />} />
-          <Route path="programdetail" element={<ProgramDetail />} />
+          <Route path="/retrov" element={<RetroV />} />
+          <Route path="/programdetail" element={<ProgramDetail />} />
 
           {/* 이벤트 */}
-          <Route path="event" element={<Event />} />
-          <Route path="eventdetail" element={<EventDetail />} />
+          <Route path="/event" element={<Event />} />
+          <Route path="/eventdetail" element={<EventDetail />} />
 
           {/* 검색 및 숏폼 */}
-          <Route path="search" element={<Search />} />
-          <Route path="shorts" element={<Shorts />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/shorts" element={<Shorts />} />
 
           {/* 공지사항 */}
-          <Route path="notice" element={<Notice />} />
-          <Route path="noticeview" element={<NoticeView />} />
+          <Route path="/notice" element={<Notice />} />
+          <Route path="/noticeview" element={<NoticeView />} />
 
           {/* 회원 */}
-          <Route path="login" element={<Login />} />
-          <Route path="member" element={<Member />} />
-          <Route path="profileselect" element={<ProfileSelect />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/member" element={<Member />} />
+          <Route path="/profileselect" element={<ProfileSelect />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+
   );
 };
 
