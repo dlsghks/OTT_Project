@@ -16,17 +16,17 @@ export const AppRouter = () => {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Home />} />
+                <Route path='/entertainment' element={<Entertainment />} />
                 <Route path='/drama' element={<Drama />} />
                 <Route path='/movie' element={<Movie />} />
-                <Route path='/entertainment' element={<Entertainment />} />
                 <Route path='/currentaffairs' element={<Currentaffairs />} />
                 <Route path='/animation' element={<Animation />} />
                 <Route path='/global' element={<Global />} />
                 <Route path='/live' element={<Live />} />
-                <Route path='/programdetail' element={<ProgramDetail />} />
 
                 <Route path='/retrov' element={<RetroV />} />
 
+                <Route path='/programdetail' element={<ProgramDetail />} />
             </Routes>
         </BrowserRouter>
     )
