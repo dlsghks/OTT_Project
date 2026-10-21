@@ -1,4 +1,5 @@
-import './footer.scss'
+import React from 'react'
+import '../styles/components/Footer.scss'
 
 const links = [
   { label: '회사소개', href: 'https://www.wavve.com/customer/company' },
@@ -9,7 +10,7 @@ const links = [
   { label: '이벤트', href: 'https://www.wavve.com/customer/event' },
 ]
 
-export default function Footer() {
+export const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer__inner">
