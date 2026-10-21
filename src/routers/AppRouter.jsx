@@ -10,12 +10,13 @@ import { Global } from '../pages/Global'
 import { ProgramDetail } from '../pages/ProgramDetail'
 import { Movie } from '../pages/Movie'
 import { Live } from '../pages/Live'
+import { Layout } from '../pages/Layout'
 
 export const AppRouter = () => {
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<Home />} />
+            <Routes path='/' element={<Layout/>}>
+                <Route index element={<Home />} />
                 <Route path='/entertainment' element={<Entertainment />} />
                 <Route path='/drama' element={<Drama />} />
                 <Route path='/movie' element={<Movie />} />
