@@ -31,7 +31,7 @@ import {Schedule} from "../pages/Schedule";
 import {Search} from "../pages/Search";
 import {Shorts} from "../pages/Shorts";
 
-const AppRouter = () => {
+export const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
