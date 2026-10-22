@@ -1,0 +1,274 @@
+$retrov-blue: #1450ff;
+$quiz-background: #39358b;
+
+.retrov-detail {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+
+  button,
+  a {
+    &:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 5px;
+    }
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+}
+
+.retrov-container {
+  width: min(1280px, calc(100% - 48px));
+  margin-inline: auto;
+  padding-bottom: 80px;
+}
+
+.program-hero {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  align-items: flex-end;
+  background-position: center;
+  background-size: cover;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      0deg,
+      #000 0%,
+      rgba(0, 0, 0, 0.1) 75%
+    );
+  }
+
+  &__content {
+    position: relative;
+    width: min(1280px, calc(100% - 48px));
+    margin-inline: auto;
+    padding-block: 48px;
+  }
+}
+
+.event-banner {
+  margin-block: 32px;
+  padding: 28px;
+  background: #ffe5ef;
+  color: #b80068;
+  text-align: center;
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 800;
+}
+
+.circle-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 16px 6px 28px;
+
+  &__item {
+    flex: 0 0 88px;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    text-decoration: none;
+
+    img {
+      width: 88px;
+      height: 88px;
+      border: 3px solid transparent;
+      border-radius: 50%;
+      object-fit: cover;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    &:hover img {
+      transform: translateY(-3px);
+    }
+
+    &[aria-expanded="true"] img {
+      border-color: $retrov-blue;
+    }
+  }
+}
+
+.character-quiz {
+  max-width: 960px;
+  margin: 0 auto 56px;
+  background: $quiz-background;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background: #2b276b;
+
+    button {
+      margin-left: 8px;
+    }
+  }
+
+  &__body {
+    display: grid;
+    justify-items: center;
+    gap: 20px;
+    padding: 40px 24px;
+    text-align: center;
+
+    h2,
+    p {
+      margin: 0;
+    }
+  }
+
+  &__portrait {
+    width: 100px;
+    height: 100px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__options {
+    display: grid;
+    gap: 12px;
+    width: min(100%, 480px);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    text-align: left;
+
+    legend {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 8px;
+      background: #29256b;
+      cursor: pointer;
+
+      &:has(input:checked) {
+        outline: 2px solid #fff;
+        background: #102eb5;
+      }
+    }
+  }
+}
+
+.primary-button {
+  width: min(100%, 440px);
+  padding: 14px 24px;
+  border: 0;
+  border-radius: 6px;
+  background: $retrov-blue;
+  color: #fff;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.video-section {
+  margin-block: 56px;
+
+  h2 {
+    margin-bottom: 24px;
+    font-size: 20px;
+  }
+
+  &__list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    margin: 0;
+    padding: 0 0 16px;
+    list-style: none;
+    scroll-snap-type: x proximity;
+  }
+}
+
+.video-card {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
+
+  &__screen {
+    padding: 8px;
+    border: 3px solid #4e5553;
+    border-radius: 14px;
+    background: #202525;
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 7px;
+      object-fit: cover;
+    }
+  }
+
+  h3 {
+    margin: 12px 0 6px;
+    font-size: 16px;
+  }
+
+  p,
+  time {
+    font-size: 12px;
+    color: #aaa;
+  }
+}
+
+@media (max-width: 768px) {
+  .retrov-container {
+    width: calc(100% - 32px);
+  }
+
+  .program-hero {
+    min-height: 360px;
+  }
+
+  .circle-navigation {
+    justify-content: flex-start;
+    gap: 16px;
+
+    &__item {
+      flex-basis: 68px;
+
+      img {
+        width: 68px;
+        height: 68px;
+      }
+    }
+  }
+
+  .character-quiz__body {
+    padding: 28px 16px;
+  }
+
+  .video-card {
+    flex-basis: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circle-navigation__item img {
+    transition: none;
+  }
+}
