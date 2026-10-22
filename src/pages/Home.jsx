@@ -22,6 +22,7 @@ export const Home = () => {
       <HomeHero items={heroItems} />
 
       <div className="wavve-home__inner">
+        <EventBanner items={eventBanners.slice(0, 1)} />
         <CategoryMenu items={categories} />
 
         {homeSections.slice(0, 3).map((section) => (
