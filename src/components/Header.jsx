@@ -30,7 +30,7 @@ export const Header = () => {
         <div className="header-right">
           <ul>
             <li>알림</li>
-            <li>검색</li>
+            <li><Link to='/search'>검색</Link></li>
             <li>프로필</li>
           </ul>
         </div>
