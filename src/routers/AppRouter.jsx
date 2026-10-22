@@ -30,6 +30,7 @@ import {ProfileSelect} from "../pages/ProfileSelect";
 import {Schedule} from "../pages/Schedule";
 import {Search} from "../pages/Search";
 import {Shorts} from "../pages/Shorts";
+import { RetrovDetail } from "../pages/RetrovDetail";
 
 export const AppRouter = () => {
   return (
@@ -47,6 +48,7 @@ export const AppRouter = () => {
           <Route path="/animation" element={<Animation />} />
           <Route path="/global" element={<Global />} />
           <Route path="/category" element={<Category />} />
+          <Route path="/programdetail" element={<ProgramDetail />} />
 
           {/* LIVE */}
           <Route path="/live" element={<Live />} />
@@ -55,7 +57,7 @@ export const AppRouter = () => {
 
           {/* 레트로브 */}
           <Route path="/retrov" element={<RetroV />} />
-          <Route path="/programdetail" element={<ProgramDetail />} />
+          <Route path="/retrov/:programId" element={<RetrovDetail/>}/>
 
           {/* 이벤트 */}
           <Route path="/event" element={<Event />} />
