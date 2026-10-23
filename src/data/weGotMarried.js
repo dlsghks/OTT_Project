@@ -1,0 +1,157 @@
+// 우리 결혼했어요 상세페이지 데이터
+// 이미지: public/images/retrov/we-got-married/
+//   - hero.jpg, logo.png
+//   - s{시즌}/couples/{커플id}.png      : 동그란 커플 아이콘 (150x150)
+//   - s{시즌}/invitations/{커플id}.png  : 아이콘 클릭 시 보이는 청첩장 카드 (1420x780)
+//   - videos/{영상id}.jpg               : 영상 카드 썸네일
+// TODO: 영상 링크(videoId)는 아직 없어 null → 카드 클릭 시 재생되지 않음 (엑셀 받으면 채우기)
+// TODO: 영상 제목/설명/날짜는 시안 이미지에서 읽은 임시 값 — 실제 데이터로 교체 필요
+
+const IMG = "/images/retrov/we-got-married";
+
+// 시즌별 커플 (아이콘 + 청첩장)
+const couple = (season, id, name) => ({
+  id,
+  name,
+  image: `${IMG}/s${season}/couples/${id}.png`,
+  panelImage: `${IMG}/s${season}/invitations/${id}.png`, // 클릭 시 보이는 청첩장
+});
+
+const video = (id, title, description, date) => ({
+  id,
+  videoId: null,
+  playlistId: null,
+  image: `${IMG}/videos/${id}.jpg`,
+  title,
+  description,
+  date,
+});
+
+export const weGotMarried = {
+  title: "우리 결혼했어요",
+  logo: `${IMG}/logo.png`,
+  hero: `${IMG}/hero.jpg`,
+  rating: "15",
+  genre: "예능",
+  tvFrame: "wgm", // RetroTvFrame 의 TV_FRAMES 키
+  characterMode: "image", // 캐릭터 클릭 시: "quiz"(퀴즈) | "image"(이미지 카드)
+  panelLabel: "청첩장",
+  othersTitle: "또 다른 그 때 그 시절로~",
+
+  // 히어로 시즌 선택 → 선택한 시즌의 재생 버튼 문구와 커플(캐릭터) 필터가 바뀜
+  seasons: [
+    {
+      id: "season-1",
+      label: "시즌 1",
+      playLabel: "1화 보기",
+      characters: [
+        couple(1, "crownj-inyoung", "크라운제이♥인영"),
+        couple(1, "hyunjoong-hwangbo", "현중♥황보"),
+        couple(1, "andy-solbi", "앤디♥솔비"),
+        couple(1, "hwanhee-hwayobi", "환희♥화요비"),
+        couple(1, "alex-shinae", "알렉스♥신애"),
+        couple(1, "hyungdon-taeyeon", "형돈♥태연"),
+        couple(1, "marco-dambi", "마르코♥담비"),
+        couple(1, "jinjin-siyoung", "전진♥시영"),
+      ],
+    },
+    {
+      id: "season-2",
+      label: "시즌 2",
+      playLabel: "1화 보기",
+      characters: [
+        couple(2, "yongjun-jungeum", "용준♥정음"),
+        couple(2, "jaejung-yumi", "재정♥유미"),
+        couple(2, "jokwon-gain", "조권♥가인"),
+        couple(2, "sunho-seulhye", "선호♥슬혜"),
+        couple(2, "nichkhun-victoria", "닉쿤♥빅토리아"),
+        couple(2, "yonghwa-seohyun", "용화♥서현"),
+      ],
+    },
+    {
+      id: "season-3",
+      label: "시즌 3",
+      playLabel: "1화 보기",
+      characters: [
+        couple(3, "nichkhun-victoria", "닉쿤♥빅토리아"),
+        couple(3, "wonjun-soyeon", "원준♥소연"),
+        couple(3, "leeteuk-sora", "이특♥소라"),
+        couple(3, "jangwoo-eunjung", "장우♥은정"),
+        couple(3, "davi-rise", "데이비♥리세"),
+        couple(3, "julien-sea", "줄리엔♥세아"),
+      ],
+    },
+    {
+      id: "season-4",
+      label: "시즌 4",
+      playLabel: "1화 보기",
+      characters: [
+        couple(4, "taemin-naeun", "태민♥나은"),
+        couple(4, "jonghyun-yura", "종현♥유라"),
+        couple(4, "namgung-jinyoung", "남궁민♥진영"),
+        couple(4, "jaerim-soeun", "재림♥소은"),
+        couple(4, "sungjae-joy", "성재♥조이"),
+        couple(4, "kwanghee-sunhwa", "광희♥선화"),
+        couple(4, "siyang-soyeon", "시양♥소연"),
+        couple(4, "ericnam-solar", "에릭남♥솔라"),
+      ],
+    },
+  ],
+
+  description: [
+    "‘이렇게 결혼해 살아가는구나’ 한번쯤은 고민해보는 보편적 질문, 리얼과 가상을 넘나드는 커플들의 좌충우돌 가상 결혼생활을",
+    "통해, 연애와 결혼에 관한 현실적 고민의 해답을 찾아본다. 연애에 대한 공감과 결혼의 설렘을 함께...",
+  ],
+  cast: ["조혜련", "유세윤", "김신영", "소녀시대", "강인", "이윤지", "전진", "이시영", "솔비", "이국주", "정예성", "공명", "최민"],
+
+  sections: [
+    {
+      id: "first-flutter",
+      title: "💌 처음이라 더 설렜던 순간",
+      videos: [
+        video("first-01", "1화", "정형돈·사오리, 앤디·솔비, 크라운제이·서인영, 알렉스·신애의 가상 부부 신혼 첫날, 신혼집 꾸미기", "2008.03.16"),
+        video("first-02", "2화", "신혼집 꾸미기 집들이, 정형돈·사오리, 앤디·솔비 가상부부 첫날 밤", "2008.03.23"),
+        video("first-03", "3화", "크라운제이·서인영, 앤디·솔비, 알렉스·신애의 정형돈 첫 야유회, 각 식사준비 등 이야기", "2008.03.30"),
+        video("first-09", "9화", "새로운 가상 커플 김현중·황보, 이휘재·조여정, 첫 만남부터 오늘의 이벤트까지", "2008.05.11"),
+        video("first-11", "11화", "집들이 하는 날, 이휘재·조여정, 김현중·황보 집들이 준비, 여정·휘재 부부 육주현 박에진 신부 신고식", "2008.05.25"),
+        video("first-29", "29화", "크라운제이·서인영 부부의 특별한 하루", "2008.10.12"),
+      ],
+    },
+    {
+      id: "newlywed-diary",
+      title: "🏡 티격태격, 우리들의 신혼일기",
+      videos: [
+        video("diary-03", "3화", "크라운제이·서인영, 앤디·솔비, 알렉스·신애, 정형돈·사오리 첫 야유회, 각 식사준비 등 이야기", "2008.03.30"),
+        video("diary-05", "5화", "[우리 결혼했어요] 크라운제이·서인영, 앤디·솔비, 정형돈·사오리, 알렉스·신애 김치 담그는 날", "2008.04.13"),
+        video("diary-06", "6화", "[우리 결혼했어요] 서인영·크라운제이, 앤디·솔비, 알렉스·신애, 정형돈·사오리 김치 담그기 완성", "2008.04.20"),
+        video("diary-11", "11화", "집들이 하는 날, 이휘재·조여정, 김현중·황보 집들이 준비, 신부 신고식", "2008.05.25"),
+        video("diary-12", "12화", "[우리 결혼했어요] 휘재·여정 집들이, 위해 친구 이웃, 김현중 방문, 황보·현중 집들이", "2008.06.01"),
+        video("diary-18", "18화", "오늘 이 부부의 하루", "2008.07.06"),
+      ],
+    },
+    {
+      id: "special-day",
+      title: "💑 둘이라 더 특별했던 하루",
+      videos: [
+        video("special-07", "7화", "[우리 결혼했어요] 서인영·크라운제이, 신애·알렉스, 사오리·정형돈 첫 여행, 솔비 어머니 방문", "2008.04.27"),
+        video("special-13", "13화", "[우리 결혼했어요] 크라운제이·서인영 부부 노래, 게임 첫 회 수영장 데이트", "2008.06.08"),
+        video("special-16", "16화", "오늘의 미션 100일기념 웨딩촬영과 부부만의 추억 만들기, 현중·황보 부부 두 번째 여행 이야기", "2008.06.29"),
+        video("special-17", "17화", "오늘 미션 사랑하는 남편(아내)을 위한 내조(외조) 하기, 인영·크라운제이 부부, 아픈 인영 위해", "2008.07.13"),
+        video("special-20", "20화", "오늘의 미션 부부동반 바캉스 떠나기, 인영·크라운제이 J, 솔비·앤디 부부동반 가평 바캉스", "2008.07.27"),
+        video("special-21", "21화", "오늘의 미션, 그리고 두 사람의 하루", "2008.08.03"),
+      ],
+    },
+    {
+      id: "laugh-and-tears",
+      title: "🥹 웃음부터 눈물까지, 다시 보는 그 순간",
+      videos: [
+        video("moment-17", "17화", "오늘 미션 사랑하는 남편(아내)을 위한 내조(외조) 하기, 인영·크라운제이 부부, 아픈 인영 위해 병원간…", "2008.07.13"),
+        video("moment-19", "19화", "오늘 미션 사랑하는 남편(아내)을 위한 내조(외조) 하기, 앤디·솔비 부부, 남편 위해 장어요리, 다시…", "2008.07.20"),
+        video("moment-27", "27화", "오늘의 미션 두 사람의 이별여행 마지막으로 부부가 함께 하고 싶은 것 하기, 앤디·솔비 이별여행", "2008.09.28"),
+        video("moment-28", "28화", "오늘의 미션 두 사람의 이별여행 그 후 착한 원정과 고 꼭 나 그리고 눈물 첫 뽀뽀를 했던 추억에…", "2008.10.05"),
+        video("moment-31", "31화", "오늘의 미션 부부동반 바캉스 떠나기, 새로운 커플 첫 일정, 남편 위해 깜짝 이벤트", "2008.10.26"),
+        video("moment-34", "34화", "황보·현중 부부, 마르코·손담비 첫 일상 공개", "2008.11.16"),
+      ],
+    },
+  ],
+};
