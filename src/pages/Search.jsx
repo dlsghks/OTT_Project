@@ -46,7 +46,7 @@ export const Search = () => {
       ...prev.filter(word => word !== value)
     ].slice(0, 10));
 
-    setKeyword(value);
+    setKeyword("");
 
     // 추후 실제 검색 결과 페이지와 연결 가능
     // navigate(`/search/result?keyword=${encodeURIComponent(value)}`);

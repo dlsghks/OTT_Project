@@ -50,13 +50,15 @@ export const Header = ({
         <div className="header-right">
           <ul>
             <li>
-              <button
-                type="button"
-                aria-label="알림"
-                onClick={onNotificationClick}
-              >
-                <img src={bellIcon} alt="" width="28" height="28" />
-              </button>
+              <Link to='/schedule'>
+                <button
+                  type="button"
+                  aria-label="알림"
+                  onClick={onNotificationClick}
+                >
+                  <img src={bellIcon} alt="" width="28" height="28" />
+                </button>
+              </Link>
             </li>
             <li>
               <Link to='/search'>
