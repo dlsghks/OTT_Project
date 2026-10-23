@@ -7,26 +7,26 @@ import {Layout} from "../pages/Layout";
 
 // 기존 페이지
 import {Home} from "../pages/Home";
-import {Entertainment} from "../pages/Entertainment";
-import {Drama} from "../pages/Drama";
-import {Movie} from "../pages/Movie";
-import {Currentaffairs} from "../pages/Currentaffairs";
-import {Animation} from "../pages/Animation";
-import {Global} from "../pages/Global";
-import {Live} from "../pages/Live";
+import {Entertainment} from "../pages/category/Entertainment";
+import {Drama} from "../pages/category/Drama";
+import {Movie} from "../pages/category/Movie";
+import {Currentaffairs} from "../pages/category/Currentaffairs";
+import {Animation} from "../pages/category/Animation";
+import {Global} from "../pages/category/Global";
+import {Live} from "../pages/category/Live";
 import {RetroV} from "../pages/RetroV";
-import {ProgramDetail} from "../pages/ProgramDetail";
+import {ProgramDetail} from "../pages/contents/ProgramDetail";
 
 // 추가 페이지
-import {Category} from "../pages/Category";
-import {Event} from "../pages/Event";
-import {EventDetail} from "../pages/EventDetail";
+import {Category} from "../pages/category/Category";
+import {Event} from "../pages/event/Event";
+import {EventDetail} from "../pages/event/EventDetail";
 import {LiveChannel} from "../pages/LiveChannel";
-import {Login} from "../pages/Login";
-import {Member} from "../pages/Member";
-import {Notice} from "../pages/Notice";
-import {NoticeView} from "../pages/NoticeView";
-import {ProfileSelect} from "../pages/ProfileSelect";
+import {Login} from "../pages/member/Login";
+import {Member} from "../pages/member/Member";
+import {Notice} from "../pages/notice/Notice";
+import {NoticeView} from "../pages/notice/NoticeView";
+import {ProfileSelect} from "../pages/member/ProfileSelect";
 import {Schedule} from "../pages/Schedule";
 import {Search} from "../pages/Search";
 import {Shorts} from "../pages/Shorts";
