@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { programs, programDetails } from '../data/retrov';
-import ProgramNavigation from '../components/retrov/ProgramNavigation';
-import "../styles/Retrov.scss";
+import { programs, programDetails } from '../../data/retrov';
+import ProgramNavigation from '../../components/retrov/ProgramNavigation';
+import "../../styles/Retrov.scss";
 
 export const RetrovDetail = () => {
   const { programId } = useParams();
