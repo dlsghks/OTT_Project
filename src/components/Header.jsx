@@ -59,13 +59,15 @@ export const Header = ({
               </button>
             </li>
             <li>
-              <button
-                type="button"
-                aria-label="검색"
-                onClick={onSearchClick}
-              >
-                <img src={searchIcon} alt="" width="28" height="28" />
-              </button>
+              <Link to='/search'>
+                <button
+                  type="button"
+                  aria-label="검색"
+                  onClick={onSearchClick}
+                >
+                  <img src={searchIcon} alt="" width="28" height="28" />
+                </button>
+              </Link>
             </li>
             <li>
               <button
