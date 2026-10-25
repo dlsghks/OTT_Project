@@ -45,6 +45,9 @@
 .search-page__form input::placeholder {
   color: #777f90;
 }
+.search-page__form input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
 .search-page__form button {
   height: 100%;
   padding: 0 28px;
