@@ -1,20 +1,37 @@
 @import "tailwindcss";
 
-@layer base{
-  *{
+
+
+@layer base {
+
+  * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-  li{
+
+  li {
     list-style: none;
   }
-  a{
+
+  a {
     text-decoration: none;
     color: inherit;
   }
-  img{
+
+  img {
     width: 100%;
     vertical-align: middle;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    background-color: #111;
+  }
+
+  body {
+    margin: 0;
   }
 }
