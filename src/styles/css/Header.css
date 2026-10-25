@@ -73,6 +73,9 @@ header .header-right li {
   font-size: 16px;
   white-space: nowrap;
 }
+header .header-right button {
+  cursor: pointer;
+}
 @media (max-width: 1600px) {
   header .header-left {
     gap: 36px;

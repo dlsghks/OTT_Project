@@ -1,13 +1,17 @@
-import { useCallback, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useCallback, useRef, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { ChevronDown, Heart, Share2 } from 'lucide-react';
-import { programs, programDetails, eventBanners } from '../data/retrov';
-import RetroVideoRow from '../components/retrov/RetroVideoRow';
-import YoutubePlayerModal from '../components/retrov/YoutubePlayerModal';
-import CharacterQuiz from '../components/retrov/CharacterQuiz';
-import CharacterImagePanel from '../components/retrov/CharacterImagePanel';
-import { characterQuizzes } from '../data/characterQuizzes';
-import "../styles/RetrovDetail.scss";
+
+import { programs, programDetails, eventBanners } from '../../data/retrov';
+import { characterQuizzes } from '../../data/characterQuizzes';
+
+import RetroVideoRow from '../../components/retrov/RetroVideoRow';
+import YoutubePlayerModal from '../../components/retrov/YoutubePlayerModal';
+import CharacterQuiz from '../../components/retrov/CharacterQuiz';
+import CharacterImagePanel from '../../components/retrov/CharacterImagePanel';
+
+import '../../styles/RetrovDetail.scss';
+import '../../styles/Retrov.scss';
 
 export const RetrovDetail = () => {
   const { programId } = useParams();
@@ -161,29 +165,30 @@ function ProgramFanPage({ programId, program }) {
       {/* 이벤트 배너 */}
       <EventCarousel banners={eventBanners} />
 
+
       <div className="rv-container">
         {/* 캐릭터 선택 (해당 시즌 캐릭터가 없으면 숨김) */}
         {characters.length > 0 && (
-        <nav
-          ref={castRef}
-          className="rv-cast"
-          aria-label={`${program.title} ${isImagePanel ? panelLabel : "캐릭터 퀴즈"} 선택`}
-        >
-          {characters.map((character) => (
-            <button
-              key={character.id}
-              type="button"
-              className="rv-cast__item"
-              data-character={character.id}
-              aria-expanded={selectedCharacterId === character.id}
-              aria-controls={selectedCharacterId === character.id ? "character-panel" : undefined}
-              onClick={() => handleCharacterClick(character.id)}
-            >
-              <img src={character.image} alt="" />
-              <span>{character.name}</span>
-            </button>
-          ))}
-        </nav>
+          <nav
+            ref={castRef}
+            className="rv-cast"
+            aria-label={`${program.title} ${isImagePanel ? panelLabel : "캐릭터 퀴즈"} 선택`}
+          >
+            {characters.map((character) => (
+              <button
+                key={character.id}
+                type="button"
+                className="rv-cast__item"
+                data-character={character.id}
+                aria-expanded={selectedCharacterId === character.id}
+                aria-controls={selectedCharacterId === character.id ? "character-panel" : undefined}
+                onClick={() => handleCharacterClick(character.id)}
+              >
+                <img src={character.image} alt="" />
+                <span>{character.name}</span>
+              </button>
+            ))}
+          </nav>
         )}
 
         {/* 캐릭터 아래에 이미지 카드(우결·하이킥·꽃남·풀하우스) 또는 퀴즈(무도) 표시 */}
@@ -258,9 +263,8 @@ function EventCarousel({ banners }) {
           return (
             <article
               key={`${banner.id}-${offset}`}
-              className={`rv-event__slide rv-event__slide--${banner.theme} ${
-                isCenter ? "is-active" : offset < 0 ? "is-prev" : "is-next"
-              }`}
+              className={`rv-event__slide rv-event__slide--${banner.theme} ${isCenter ? "is-active" : offset < 0 ? "is-prev" : "is-next"
+                }`}
               aria-hidden={!isCenter}
               onClick={isCenter ? undefined : () => move(offset)}
             >

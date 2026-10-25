@@ -1,9 +1,11 @@
 // src/pages/RetroV.jsx
+import React from "react";
 import { Link } from "react-router-dom";
 
-import ProgramNavigation from "../components/retrov/ProgramNavigation";
-import { programs } from "../data/retrov";
-import "../styles/Retrov.scss";
+import ProgramNavigation from "../../components/retrov/ProgramNavigation";
+import { programs } from "../../data/retrov";
+import "../../styles/Retrov.scss";
+
 
 // 예시 데이터: 실제 이미지 파일명으로 교체해주세요.
 const rankings = [

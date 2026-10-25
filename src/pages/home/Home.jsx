@@ -1,10 +1,11 @@
-
 import React from 'react';
-import { HomeHero } from '../components/home/HomeHero';
-import { CategoryMenu } from '../components/home/CategoryMenu';
-import { ContentSection } from '../components/home/ContentSection';
-import { RankingSection } from '../components/home/RankingSection';
-import { EventBanner } from '../components/home/EventBanner';
+
+import { HomeHero } from '../../components/home/HomeHero';
+import { CategoryMenu } from '../../components/home/CategoryMenu';
+import { ContentSection } from '../../components/home/ContentSection';
+import { RankingSection } from '../../components/home/RankingSection';
+import { EventBanner } from '../../components/home/EventBanner';
+
 
 import {
   heroItems,
@@ -12,9 +13,9 @@ import {
   homeSections,
   rankingItems,
   eventBanners
-} from '../data/homeData';
+} from '../../data/homeData';
 
-import '../styles/components/Home.scss';
+import '../../styles/components/Home.scss';
 
 export const Home = () => {
   return (
