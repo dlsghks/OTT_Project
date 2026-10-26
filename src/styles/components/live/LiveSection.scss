@@ -1,0 +1,100 @@
+.live-section {
+  width: 100%;
+  margin-bottom: 60px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 24px;
+      font-weight: 700;
+    }
+  }
+
+  &__slider {
+    position: relative;
+
+    // 양쪽 화살표를 감싸는 기준 영역
+    &:hover {
+      .live-section__arrow:not(.swiper-button-disabled) {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  &__swiper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .swiper-slide {
+    height: auto;
+    min-width: 0;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+
+    width: 65px;
+    border: 0;
+    color: #fff;
+    font-size: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.25s ease;
+
+    &--prev {
+      left: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.8),
+        transparent
+      );
+    }
+
+    &--next {
+      right: 0;
+      background: linear-gradient(
+        270deg,
+        rgba(0, 0, 0, 0.8),
+        transparent
+      );
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .live-section {
+    margin-bottom: 36px;
+
+    &__header h2 {
+      font-size: 20px;
+    }
+
+    &__arrow {
+      width: 40px;
+      font-size: 30px;
+    }
+  }
+}
