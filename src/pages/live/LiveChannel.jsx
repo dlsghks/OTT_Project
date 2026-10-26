@@ -27,23 +27,12 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
   const requestedId = searchParams.get('channel');
   const selected = useMemo(() => livePrograms.find(p => String(p.channelId) === requestedId || String(p.id) === requestedId) ?? livePrograms[0], [requestedId]);
   const channels = useMemo(() => [...new Map(livePrograms.map(p => [String(p.channelId), p])).values()], []);
-  // 이 페이지에서는 이전 방송 1개 + 현재 방송 1개 + 다음 방송 5개만 표시합니다.
+  // 이 페이지에서는 현재 방송 1개 + 다음 방송 5개만 표시합니다.
   // 다음 방송은 UI 확인을 위한 임시 편성 데이터입니다.
   const displaySchedule = useMemo(() => {
     if (!selected) return [];
-    // 이전 방송은 실제 편성 데이터 대신 UI 확인용 1개를 표시합니다.
+    // 현재 방송부터 표시합니다. 과거 방송은 편성 리스트에서 제외합니다.
     const currentStart = new Date(selected.start).getTime();
-    const previousDuration = 70 * 60 * 1000;
-    const previous = {
-      id: `demo-previous-${selected.channelId}`,
-      channelId: selected.channelId,
-      title: '지난 방송 다시보기',
-      start: new Date(currentStart - previousDuration).toISOString(),
-      end: new Date(currentStart).toISOString(),
-      isDemo: true,
-      position: 'past',
-    };
-
     const currentEnd = new Date(selected.end).getTime();
     const duration = Math.max(30 * 60 * 1000,
       Number.isFinite(currentEnd - currentStart) ? currentEnd - currentStart : 60 * 60 * 1000);
@@ -56,9 +45,9 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
       end: new Date(currentEnd + duration * (i + 1)).toISOString(),
       isDemo: true,
     }));
-    return [previous, selected, ...nextPrograms];
+    return [selected, ...nextPrograms];
   }, [selected]);
-  const displayCurrentIndex = 1;
+  const displayCurrentIndex = 0;
   const [now, setNow] = useState(Date.now());
   const [liked, setLiked] = useState(false);
   const [reminders, setReminders] = useState([]);
@@ -69,6 +58,10 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
   const [messages, setMessages] = useState([]);
   const [category, setCategory] = useState('전체');
   const [adComplete, setAdComplete] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(70);
+  const [playerSettingsOpen, setPlayerSettingsOpen] = useState(false);
   const scheduleSwiper = useRef(null);
   const playerRef = useRef(null);
   const top20Ref = useRef(null);
@@ -84,8 +77,8 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
   const updateScheduleNav = swiper => { setSchedulePrev(!swiper.isBeginning); setScheduleNext(!swiper.isEnd); };
 
   useEffect(() => { const id = setInterval(() => setNow(Date.now()), 30000); return () => clearInterval(id); }, []);
-  useEffect(() => { setAdComplete(false); setLiked(false); }, [selected?.channelId]);
-  useEffect(() => { scheduleSwiper.current?.slideTo(Math.max(0, displayCurrentIndex - 1), 0); }, [selected?.channelId, displayCurrentIndex]);
+  useEffect(() => { setAdComplete(false); setLiked(false); setIsPlaying(true); setPlayerSettingsOpen(false); }, [selected?.channelId]);
+  useEffect(() => { scheduleSwiper.current?.slideTo(0, 0); }, [selected?.channelId, displayCurrentIndex]);
   useEffect(() => {
     const measure = () => {
       if (!playerRef.current || !top20Ref.current || !layoutRef.current) return;
@@ -143,6 +136,7 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
     return 'live';
   };
 
+
   return (
     <main className="live-channel-page">
       <div className="live-channel-layout" ref={layoutRef}>
@@ -151,8 +145,29 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
             <div className="live-player__overlay">
               {!isLoggedIn ? <><h2>라이브를 시청하려면 로그인이 필요해요</h2><button type="button" className="live-player__button" onClick={() => onLoginRequired()}>로그인</button></>
                 : !adComplete ? <><h2>광고 시청 후 라이브를 시청할 수 있어요</h2><p>실제 광고 연동 전 미리보기입니다.</p><button className="live-player__button" onClick={() => setAdComplete(true)}>광고 시청 완료 (데모)</button></>
-                  : <><h2>{selected.title}</h2><p>영상 스트림을 연결하면 이 영역에서 재생됩니다.</p></>}
+                  : null}
             </div>
+            {isLoggedIn && adComplete && (
+              <>
+                <div className="live-player__demo-label">미리보기 · 실제 스트림 미연결</div>
+                <div className="live-player__controls" aria-label="영상 플레이어 컨트롤">
+                  <div className="live-player__controls-top"><span className="live-player__live-badge">● 라이브</span></div>
+                  <div className="live-player__controls-bottom">
+                    <div className="live-player__controls-left">
+                      <button type="button" onClick={() => setIsPlaying(v => !v)} aria-label={isPlaying ? '일시정지 (데모)' : '재생 (데모)'}>{isPlaying ? 'Ⅱ' : '▶'}</button>
+                      <button type="button" onClick={() => window.alert('실제 영상 연결 후 다시보기 기능을 사용할 수 있습니다.')} aria-label="다시보기 (데모)">↶</button>
+                      <button type="button" onClick={() => setIsMuted(v => !v)} aria-label={isMuted ? '음소거 해제' : '음소거'}>{isMuted ? '🔇' : '◖))'}</button>
+                      <input className="live-player__volume" type="range" min="0" max="100" value={isMuted ? 0 : volume} aria-label="볼륨" onChange={e => { setVolume(Number(e.target.value)); setIsMuted(Number(e.target.value) === 0); }} />
+                    </div>
+                    <div className="live-player__controls-right">
+                      <button type="button" onClick={() => setPlayerSettingsOpen(v => !v)} aria-label="플레이어 설정">⚙</button>
+                      <button type="button" onClick={() => { if (!document.fullscreenElement) playerRef.current?.requestFullscreen?.(); else document.exitFullscreen?.(); }} aria-label="전체 화면">⛶</button>
+                    </div>
+                  </div>
+                </div>
+                {playerSettingsOpen && <div className="live-player__settings">화질 · 실제 스트림 연결 후 설정 가능</div>}
+              </>
+            )}
           </div>
           <div className="live-channel-info">
             <div className="live-channel-info__text"><strong>{selected.channel}</strong><div><b>{selected.title}</b><span>{formatTime(selected.start)} ~ {formatTime(selected.end)}</span></div></div>
@@ -164,10 +179,10 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
             <div className="live-schedule__slider">
               <Swiper
                 key={selected.channelId}
-                onSwiper={s => { scheduleSwiper.current = s; updateScheduleNav(s); s.slideTo(Math.max(0, displayCurrentIndex - 1), 0); }}
+                onSwiper={s => { scheduleSwiper.current = s; updateScheduleNav(s); s.slideTo(0, 0); }}
                 onSlideChange={updateScheduleNav}
                 onResize={updateScheduleNav}
-                initialSlide={Math.max(0, displayCurrentIndex - 1)}
+                initialSlide={0}
                 slidesPerView={1}
                 slidesPerGroup={1}
                 centeredSlides={false}
