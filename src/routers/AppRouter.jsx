@@ -62,7 +62,7 @@ export const AppRouter = () => {
                 <Route path="/animation" element={<Animation />} />
                 <Route path="/global" element={<Global />} />
                 <Route path="/category" element={<Category />} />
-                <Route path="/programdetail" element={<ProgramDetail />} />
+                <Route path="/programdetail/:programId" element={<ProgramDetail />} />
 
                 {/* LIVE */}
                 <Route path="/live" element={<Live />} />

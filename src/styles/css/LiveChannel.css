@@ -1,0 +1,862 @@
+@charset "UTF-8";
+.live-channel-page {
+  background: #09090b;
+  color: #fff;
+  min-height: 100vh;
+  padding: 48px max(24px, 4vw) 100px;
+  box-sizing: border-box;
+}
+.live-channel-page button {
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+.live-channel-page a {
+  color: inherit;
+  text-decoration: none;
+}
+.live-channel-page h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.live-channel-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(300px, 3fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.live-channel-main,
+.live-sidebar {
+  min-width: 0;
+}
+
+.live-player {
+  aspect-ratio: 16/9;
+  background: #050505 center/cover;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.live-player__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.76);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  padding: 20px;
+}
+
+.live-player__overlay h2 {
+  font-size: 22px;
+}
+
+.live-player__overlay p {
+  margin: 0;
+  color: #bbb;
+}
+
+.live-player__button {
+  border: 1px solid #fff;
+  border-radius: 28px;
+  padding: 12px 32px;
+  background: transparent;
+  color: #fff;
+}
+
+.live-channel-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0 34px;
+}
+
+.live-channel-info__text {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.live-channel-info__text > strong {
+  font-size: 27px;
+  white-space: nowrap;
+}
+
+.live-channel-info__text > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.live-channel-info__text b {
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.live-channel-info__text span {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.live-channel-info__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.live-channel-info__actions button {
+  border: 0;
+  background: #242426;
+  border-radius: 30px;
+  padding: 10px 15px;
+}
+
+.live-channel-info__actions button[aria-pressed=true] {
+  color: #ff4169;
+}
+
+.live-schedule {
+  margin-bottom: 46px;
+}
+
+.live-schedule__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.live-schedule__heading a {
+  font-size: 13px;
+  color: #bbb;
+}
+
+.live-schedule__slider {
+  position: relative;
+}
+
+.live-schedule__item {
+  box-sizing: border-box;
+  background: #222224;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  min-height: 86px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.live-schedule__item.is-current {
+  border-color: #ddd;
+  background: #151517;
+}
+
+.live-schedule__item strong {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.live-schedule__item small {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.live-schedule__arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 42px;
+  background: linear-gradient(90deg, rgba(8, 8, 11, 0.8666666667), transparent);
+  border: 0;
+  font-size: 34px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.live-schedule__arrow--prev {
+  left: 0;
+}
+
+.live-schedule__arrow--next {
+  right: 0;
+  background: linear-gradient(270deg, rgba(8, 8, 11, 0.8666666667), transparent);
+}
+
+.live-schedule__slider:hover .live-schedule__arrow {
+  opacity: 1;
+}
+
+.live-top20 h2 {
+  margin-bottom: 16px;
+}
+
+.live-top20__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px 12px;
+}
+
+.live-top20__card {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  min-width: 0;
+}
+
+.live-top20__image {
+  aspect-ratio: 16/9;
+  background: #262632;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.live-top20__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.live-top20__meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.live-top20__meta em {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.live-top20__meta > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.live-top20__meta strong,
+.live-top20__meta span {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.live-top20__meta span {
+  color: #aaa;
+}
+
+.live-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.live-chat,
+.live-channel-list {
+  background: #151720;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.live-sidebar__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px;
+  font-size: 18px;
+}
+
+.live-sidebar__heading a {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.live-chat__toggle {
+  width: 100%;
+  background: none;
+  border: 0;
+  text-align: left;
+}
+
+.live-chat__preview {
+  margin: 0 14px 14px;
+  padding: 13px;
+  background: #08090e;
+  border-radius: 8px;
+  color: #999;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.live-chat.is-open {
+  height: auto;
+  aspect-ratio: unset;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.live-chat__messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px;
+  font-size: 13px;
+  color: #cbd1ed;
+}
+
+.live-chat__messages p {
+  margin: 0 0 14px;
+}
+
+.live-chat__form {
+  display: flex;
+  margin: 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.live-chat__form input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: white;
+  padding: 12px;
+  outline: 0;
+}
+
+.live-chat__form button {
+  border: 0;
+  background: #323747;
+  padding: 0 14px;
+}
+
+.live-chat__form button:disabled {
+  opacity: 0.45;
+}
+
+.live-channel-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 670px;
+}
+
+.live-channel-list__filters {
+  display: flex;
+  overflow-x: auto;
+  gap: 4px;
+  padding: 0 14px 12px;
+  scrollbar-width: none;
+}
+
+.live-channel-list__filters button {
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.live-channel-list__filters button.active {
+  background: #343744;
+}
+
+.live-channel-list__scroll {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 0 14px 12px;
+}
+
+.live-channel-list__item {
+  width: 100%;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 8px 0;
+}
+
+.live-channel-list__item.active .live-channel-list__thumb {
+  outline: 2px solid #fff;
+}
+
+.live-channel-list__thumb {
+  position: relative;
+  flex: 0 0 40%;
+  aspect-ratio: 16/9;
+  background: #292c36;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.live-channel-list__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.live-channel-list__thumb > span {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: rgba(0, 0, 0, 0.7333333333);
+  font-size: 10px;
+  padding: 2px;
+}
+
+.live-channel-list__progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: #2764fa;
+}
+
+.live-channel-list__item > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.live-channel-list__item strong {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.live-channel-list__item small {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.live-share-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.live-share-modal {
+  width: min(440px, 100%);
+  background: #222;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.live-share-modal__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.live-share-modal__heading button {
+  background: none;
+  border: 0;
+  font-size: 30px;
+}
+
+.live-share-modal__sns {
+  display: flex;
+  gap: 18px;
+  margin: 26px 0;
+}
+
+.live-share-modal__sns button {
+  border: 0;
+  background: #343434;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.live-share-modal__sns small {
+  font-size: 10px;
+}
+
+.live-share-modal__copy {
+  display: flex;
+  gap: 10px;
+}
+
+.live-share-modal__copy input {
+  min-width: 0;
+  flex: 1;
+  background: #333;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+}
+
+.live-share-modal__copy button {
+  background: white;
+  color: black;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 20px;
+}
+
+.live-share-modal > p {
+  font-size: 11px;
+  color: #aaa;
+  margin: 16px 0 0;
+}
+
+@media (min-width: 901px) {
+  .live-channel-layout {
+    --player-width: calc((100vw - max(48px, 8vw) - 20px)*.7) ;
+  }
+  .live-chat.is-open {
+    height: calc(var(--player-width) * 9 / 16);
+  }
+  .live-chat.is-open + .live-channel-list {
+    height: 380px;
+  }
+}
+@media (max-width: 900px) {
+  .live-channel-layout {
+    grid-template-columns: 1fr;
+  }
+  .live-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  .live-chat.is-open {
+    height: 440px;
+  }
+  .live-channel-list {
+    height: 440px;
+  }
+  .live-top20__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .live-channel-page {
+    padding: 20px 14px 60px;
+  }
+  .live-sidebar {
+    display: flex;
+  }
+  .live-channel-info {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .live-top20__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .live-player__overlay h2 {
+    font-size: 16px;
+  }
+}
+/* 2차 수정: 로그인 제한, 편성표 버튼, TOP20 Swiper */
+.live-channel-login-notice {
+  margin: -18px 0 22px;
+  color: #ffb9c7;
+  font-size: 13px;
+}
+.live-channel-login-notice a {
+  margin-left: 8px;
+  color: white;
+  text-decoration: underline;
+}
+
+.live-schedule__item-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.live-schedule__item-title strong {
+  min-width: 0;
+  display: block;
+}
+
+.live-schedule__live {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 3px 5px;
+  background: #ef4055;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 10px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.live-schedule__action {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 6px;
+  background: #38383d;
+  padding: 7px 9px;
+  font-size: 11px;
+}
+
+.live-schedule__bell {
+  font-size: 17px;
+  background: transparent;
+  padding: 3px 5px;
+  filter: grayscale(1);
+}
+
+.live-schedule__bell.is-active {
+  filter: none;
+}
+
+.live-schedule__slider .swiper-slide {
+  height: auto;
+}
+
+.live-schedule__slider .swiper-slide .live-schedule__item {
+  height: 100%;
+}
+
+.live-top20__slider {
+  position: relative;
+}
+
+.live-top20__slider .swiper-slide {
+  min-width: 0;
+}
+
+.live-top20__card {
+  display: block;
+  width: 100%;
+}
+
+.live-top20__arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 52px;
+  border: 0;
+  font-size: 36px;
+  background: linear-gradient(90deg, rgba(9, 9, 11, 0.9098039216), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.live-top20__arrow--prev {
+  left: 0;
+}
+
+.live-top20__arrow--next {
+  right: 0;
+  background: linear-gradient(270deg, rgba(9, 9, 11, 0.9098039216), transparent);
+}
+
+.live-top20__slider:hover .live-top20__arrow {
+  opacity: 1;
+}
+
+/* 3차 수정: 편성표 카드, 로그인 모달, 오른쪽 높이 동기화 */
+.live-schedule__item {
+  min-height: 84px;
+  background: #202022;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  padding: 18px 20px;
+  justify-content: center;
+  gap: 7px;
+}
+
+.live-schedule__item.is-current {
+  background: #171719;
+  border-color: #f0f0f0;
+}
+
+.live-schedule__item-title {
+  gap: 12px;
+}
+
+.live-schedule__item-title strong {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.live-schedule__item small {
+  font-size: 14px;
+  color: #a4a4a8;
+}
+
+.live-schedule__live {
+  background: #f44357;
+  font-size: 12px;
+  padding: 4px 7px;
+  margin-right: 7px;
+}
+
+.live-schedule__action {
+  background: #39393c;
+  border-radius: 7px;
+  padding: 9px 12px;
+  white-space: nowrap;
+}
+
+.live-schedule__bell {
+  background: transparent;
+  font-size: 20px;
+}
+
+.live-sidebar {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.live-chat {
+  flex: 0 0 auto;
+}
+
+.live-channel-list,
+.live-chat.is-open + .live-channel-list {
+  height: auto;
+  min-height: 0;
+  flex: 1 1 0;
+  overflow: hidden;
+}
+
+.live-channel-list__scroll {
+  overscroll-behavior: contain;
+}
+
+.live-login-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.live-login-modal {
+  position: relative;
+  width: min(420px, 100%);
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #232326;
+  text-align: center;
+  padding: 44px 28px 32px;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.5333333333);
+}
+
+.live-login-modal h2 {
+  font-size: 22px;
+  margin: 0 0 14px;
+}
+
+.live-login-modal p {
+  font-size: 14px;
+  color: #bdbdc4;
+  line-height: 1.6;
+  margin: 0 0 26px;
+}
+
+.live-login-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: 0;
+  background: transparent;
+  font-size: 30px;
+}
+
+.live-login-modal__link {
+  display: inline-block;
+  background: #2763f4;
+  color: white !important;
+  border-radius: 8px;
+  padding: 13px 40px;
+  font-weight: 700;
+}
+
+@media (min-width: 901px) {
+  .live-chat.is-open {
+    height: auto;
+  }
+  .live-chat.is-open + .live-channel-list {
+    height: auto;
+  }
+}
+@media (max-width: 900px) {
+  .live-sidebar {
+    height: auto !important;
+    min-height: 520px;
+    overflow: visible;
+  }
+  .live-chat.is-open {
+    height: 440px !important;
+  }
+  .live-channel-list {
+    min-height: 320px;
+  }
+}
+@media (max-width: 600px) {
+  .live-sidebar {
+    min-height: 700px;
+  }
+  .live-schedule__item {
+    padding: 13px;
+  }
+  .live-schedule__item-title strong {
+    font-size: 14px;
+  }
+}
+/* 임시 편성 정보 구분 */
+.live-schedule__demo {
+  font-size: 11px;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+/* 공유 링크 복사 결과 안내 */
+.live-share-modal__copy-status {
+  margin: 8px 0 0;
+  color: #e9e9ed;
+  font-size: 13px;
+  font-weight: 600;
+}

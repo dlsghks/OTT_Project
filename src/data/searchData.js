@@ -6,8 +6,8 @@ export const popularKeywords = [
     { rank: 4, keyword: '미지의 서울', change: 'up' },
     { rank: 5, keyword: '신병3', change: 'new' },
     { rank: 6, keyword: '틈만 나면,', change: 'up' },
-    { rank: 7, keyword: '우리 영화', change: 'new' },
-    { rank: 8, keyword: '독수리 5형제를 부탁해!', change: 'up' },
+    { rank: 7, keyword: '너 말고 다른 연애', change: 'new' },
+    { rank: 8, keyword: '인턴', change: 'up' },
     { rank: 9, keyword: '미운 우리 새끼', change: 'new' },
     { rank: 10, keyword: '꼬리에 꼬리를 무는 그날 이야기', change: 'up' },
 ];

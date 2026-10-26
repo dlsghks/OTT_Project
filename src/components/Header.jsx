@@ -50,7 +50,7 @@ export const Header = ({
         <div className="header-right">
           <ul>
             <li>
-              <Link to='/schedule'>
+              <Link>
                 <button
                   type="button"
                   aria-label="알림"
