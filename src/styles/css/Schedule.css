@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .schedule-page {
   max-width: 1500px;
   margin: 0 auto;
@@ -379,4 +380,32 @@
     padding: 10px 7px;
     flex-direction: column;
   }
+}
+/* Swiper 추가 스타일: 기존 편성표 디자인 유지 */
+.schedule-guide {
+  position: relative;
+  overflow: hidden;
+}
+.schedule-guide__swiper {
+  width: 100%;
+}
+.schedule-guide__swiper .swiper-slide {
+  height: auto;
+}
+.schedule-guide {
+  /* 기존 시간 이동 버튼을 편성표 전체에 겹쳐 표시 */
+}
+.schedule-guide__arrow {
+  top: 0;
+  height: 62px;
+  transform: none;
+  z-index: 5;
+}
+
+/* 라이브 채널 알림 아이콘과 동일한 빨간색 */
+.schedule-action--bell {
+  filter: grayscale(1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
