@@ -1,0 +1,95 @@
+.rv-event {
+  position: relative;
+  overflow: hidden;
+}
+.rv-event__track {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 77vw) 1fr;
+  gap: 24px;
+  margin-inline: -12vw;
+}
+.rv-event__slide {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: clamp(120px, 9.2vw, 177px);
+  padding-inline: clamp(24px, 5vw, 96px);
+  overflow: hidden;
+}
+.rv-event__slide.is-prev, .rv-event__slide.is-next {
+  cursor: pointer;
+  opacity: 0.85;
+}
+.rv-event__slide.is-prev .rv-event__text, .rv-event__slide.is-next .rv-event__text {
+  visibility: hidden;
+}
+.rv-event__slide--pink {
+  background: radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.7) 0 8%, transparent 9%), linear-gradient(90deg, #ffe3ee 0%, #fff5f9 50%, #ffe3ee 100%);
+}
+.rv-event__slide--purple {
+  background: linear-gradient(90deg, #3a0ca3 0%, #7209b7 100%);
+}
+.rv-event__slide--mint {
+  background: linear-gradient(90deg, #d8fff1 0%, #f2fffa 50%, #d8fff1 100%);
+}
+.rv-event__text {
+  flex: 1;
+  padding-left: clamp(16px, 8vw, 200px);
+}
+.rv-event__label {
+  margin-bottom: 6px;
+  font-size: 15px;
+  color: #e3007b;
+}
+.rv-event__title {
+  display: block;
+  font-size: clamp(26px, 2.6vw, 50px);
+  font-weight: normal;
+  color: #222;
+}
+.rv-event__title em {
+  font-style: normal;
+  color: #e3007b;
+}
+.rv-event__desc {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #666;
+}
+.rv-event__slide--purple .rv-event__title, .rv-event__slide--purple .rv-event__desc {
+  color: #fff;
+}
+.rv-event__slide--purple .rv-event__label, .rv-event__slide--purple .rv-event__title em {
+  color: #ffd6f0;
+}
+.rv-event__deco {
+  font-size: clamp(48px, 6vw, 120px);
+  line-height: 1;
+  color: #ff4d8d;
+  filter: drop-shadow(0 6px 10px rgba(227, 0, 123, 0.35));
+}
+.rv-event__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  font-size: 28px;
+  line-height: 1;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.rv-event__nav--prev {
+  left: calc(11.5vw - 20px);
+}
+.rv-event__nav--next {
+  right: calc(11.5vw - 20px);
+}
+.rv-event:hover .rv-event__nav, .rv-event__nav:focus-visible {
+  opacity: 1;
+}

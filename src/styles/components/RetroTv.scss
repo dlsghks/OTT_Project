@@ -1,3 +1,5 @@
+@use "../retrov/variables" as *;
+
 // 레트로브 TV 프레임 / 영상 카드 / 가로 스크롤 목록 (디자인 기준: 1920px)
 
 /* ---------- TV 프레임 ---------- */
@@ -86,7 +88,6 @@
   }
 
   &__title {
-    margin: 18px 0 10px;
     font-size: 18px;
     font-weight: normal;
   }
@@ -94,7 +95,6 @@
   &__desc {
     display: -webkit-box;
     overflow: hidden;
-    margin-bottom: 14px;
     font-size: 13px;
     line-height: 1.5;
     color: #cfcfcf;
@@ -104,24 +104,22 @@
 
   &__date {
     font-size: 12px;
-    color: #9a9a9a;
+    color: $retrov-text-muted;
   }
 }
 
 /* ---------- 가로 스크롤 목록 ---------- */
 .retro-video-row {
-  margin-top: 60px;
+  // 섹션 간격·제목 크기·카드 너비 등은 RetrovDetail.scss 에서 지정
 
   &__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 30px;
   }
 
   &__title {
-    font-size: clamp(20px, 1.4vw, 27px);
     font-weight: normal;
   }
 
@@ -149,7 +147,6 @@
 
   &__list {
     display: flex;
-    gap: clamp(16px, 1.6vw, 30px);
     overflow-x: auto;
     overscroll-behavior-x: contain;
     // 오른쪽은 화면 끝까지 이어지도록
@@ -171,7 +168,7 @@
   }
 
   &__item {
-    flex: 0 0 clamp(220px, 16vw, 307px);
+    flex: 0 0 auto;
     scroll-snap-align: start;
   }
 }
@@ -182,13 +179,7 @@
       display: none;
     }
 
-    &__list {
-      margin-right: -16px;
-    }
 
-    &__item {
-      flex-basis: 200px;
-    }
   }
 }
 

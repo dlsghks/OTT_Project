@@ -1,274 +1,553 @@
-$retrov-blue: #1450ff;
-$quiz-background: #39358b;
+// 레트로브 메인 (디자인 기준: 1920px)
+@use "./retrov/fonts";
+@use "./retrov/variables" as *; // 색상 · 폰트 · 여백 · 간격 공통 변수
 
-.retrov-detail {
+.retrov-main {
   min-height: 100vh;
-  background: #000;
+  overflow-x: clip; // 오른쪽으로 넘치는 카드 잘라내기
+  padding-bottom: 120px;
+  background: $retrov-bg;
   color: #fff;
+  font-family: $retrov-sans;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
 
   button,
   a {
     &:focus-visible {
       outline: 3px solid #fff;
-      outline-offset: 5px;
+      outline-offset: 4px;
     }
   }
 
-  button {
-    font: inherit;
-    cursor: pointer;
+  img {
+    -webkit-user-drag: none;
+  }
+
+  &__event {
+    margin-top: $retrov-gap-100;
+    font-family: $retrov-pixel;
   }
 }
 
-.retrov-container {
-  width: min(1280px, calc(100% - 48px));
-  margin-inline: auto;
-  padding-bottom: 80px;
-}
-
-.program-hero {
+/* ---------------- 메인 배너 ---------------- */
+.rv-main-hero {
   position: relative;
-  min-height: 560px;
-  display: flex;
-  align-items: flex-end;
-  background-position: center;
-  background-size: cover;
 
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      0deg,
-      #000 0%,
-      rgba(0, 0, 0, 0.1) 75%
-    );
+  &__slide.swiper-slide {
+    width: $retrov-inner; // 1920px 기준 1700px
+  }
+
+  &__card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    aspect-ratio: 1660 / 705;
+    min-height: 320px;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #111;
+    background-position: center;
+    background-size: cover;
+
+    // 왼쪽 글씨가 잘 보이도록 어둡게
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.4) 38%, rgba(0, 0, 0, 0) 65%),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 40%);
+    }
+  }
+
+  // 양옆 미리보기 배너는 어둡게
+  &__slide:not(.swiper-slide-active) &__card {
+    filter: brightness(0.45);
   }
 
   &__content {
     position: relative;
-    width: min(1280px, calc(100% - 48px));
-    margin-inline: auto;
-    padding-block: 48px;
-  }
-}
-
-.event-banner {
-  margin-block: 32px;
-  padding: 28px;
-  background: #ffe5ef;
-  color: #b80068;
-  text-align: center;
-  font-size: clamp(20px, 3vw, 32px);
-  font-weight: 800;
-}
-
-.circle-navigation {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  overflow-x: auto;
-  padding: 16px 6px 28px;
-
-  &__item {
-    flex: 0 0 88px;
     display: grid;
-    justify-items: center;
-    gap: 10px;
+    justify-items: start;
+    gap: clamp(8px, 0.8vw, 16px);
+    padding: 8% 0 0 clamp(24px, 5.6%, 96px);
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: clamp(14px, 1.15vw, 22px);
+
+    img {
+      width: 1.2em;
+      height: 1.2em;
+    }
+  }
+
+  &__logo {
+    margin: 0;
+
+    img {
+      display: block;
+      width: auto;
+      height: clamp(80px, 10vw, 196px);
+      max-width: min(36vw, 560px);
+      object-fit: contain;
+      object-position: left center;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: clamp(13px, 0.95vw, 18px);
+  }
+
+  &__rating {
+    display: inline-grid;
+    place-items: center;
+    width: 1.3em;
+    height: 1.3em;
+    border-radius: 50%;
+    background: #fbc02d;
+    color: #222;
+    font-size: 0.8em;
+    font-weight: 700;
+  }
+
+  &__desc {
+    display: grid;
+    gap: 0.5em;
+    margin: 0;
+    font-family: $retrov-pixel;
+    font-size: clamp(16px, 1.6vw, 30px);
+    line-height: 1.3;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  // 양옆 미리보기 영역 가운데에 화살표
+  &__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    width: 48px;
+    height: 72px;
     padding: 0;
     border: 0;
     background: transparent;
-    color: #fff;
-    text-decoration: none;
+    font-size: 56px;
+    line-height: 1;
+    transform: translateY(-50%);
+    opacity: 0.8;
 
-    img {
-      width: 88px;
-      height: 88px;
-      border: 3px solid transparent;
-      border-radius: 50%;
-      object-fit: cover;
-      transition: border-color 0.2s, transform 0.2s;
+    &:hover {
+      opacity: 1;
     }
 
-    &:hover img {
-      transform: translateY(-3px);
+    &--prev {
+      left: calc(3.4% - 24px);
     }
 
-    &[aria-expanded="true"] img {
-      border-color: $retrov-blue;
+    &--next {
+      right: calc(3.4% - 24px);
     }
   }
-}
 
-.character-quiz {
-  max-width: 960px;
-  margin: 0 auto 56px;
-  background: $quiz-background;
-
-  &__header {
+  &__dots {
+    position: absolute;
+    bottom: clamp(16px, 1.6vw, 32px);
+    left: 50%;
+    z-index: 2;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 24px;
-    background: #2b276b;
-
-    button {
-      margin-left: 8px;
-    }
-  }
-
-  &__body {
-    display: grid;
-    justify-items: center;
-    gap: 20px;
-    padding: 40px 24px;
-    text-align: center;
-
-    h2,
-    p {
-      margin: 0;
-    }
-  }
-
-  &__portrait {
-    width: 100px;
-    height: 100px;
-    border: 3px solid #fff;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  &__options {
-    display: grid;
-    gap: 12px;
-    width: min(100%, 480px);
-    min-width: 0;
+    gap: 6px;
     margin: 0;
     padding: 0;
-    border: 0;
-    text-align: left;
+    list-style: none;
+    transform: translateX(-50%);
 
-    legend {
-      margin-bottom: 20px;
-      text-align: center;
-    }
+    button {
+      display: block;
+      width: clamp(24px, 2.4vw, 46px);
+      height: 4px;
+      padding: 0;
+      border: 0;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.35);
+      transition: background-color 0.3s;
 
-    label {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-      border-radius: 8px;
-      background: #29256b;
-      cursor: pointer;
-
-      &:has(input:checked) {
-        outline: 2px solid #fff;
-        background: #102eb5;
+      &.is-active {
+        background: $retrov-blue;
       }
     }
   }
-}
 
-.primary-button {
-  width: min(100%, 440px);
-  padding: 14px 24px;
-  border: 0;
-  border-radius: 6px;
-  background: $retrov-blue;
-  color: #fff;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: default;
-  }
-}
-
-.video-section {
-  margin-block: 56px;
-
-  h2 {
-    margin-bottom: 24px;
-    font-size: 20px;
-  }
-
-  &__list {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
+  &__count {
+    position: absolute;
+    right: calc((100% - #{$retrov-inner}) / 2 + clamp(16px, 1.6vw, 32px)); // 슬라이드 바깥 여백 + 안쪽 여백
+    bottom: clamp(12px, 1.4vw, 28px);
+    z-index: 2;
     margin: 0;
-    padding: 0 0 16px;
-    list-style: none;
-    scroll-snap-type: x proximity;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 13px;
+    color: #ccc;
+
+    strong {
+      color: #fff;
+    }
   }
 }
 
-.video-card {
-  flex: 0 0 240px;
-  scroll-snap-align: start;
+/* ---------------- 프로그램 필터 ---------------- */
+.retrov-main .circle-navigation {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 1.9vw, 36px);
+  overflow-x: auto;
+  margin-top: $retrov-gap-80;
+  padding: 6px 16px;
+  scrollbar-width: none;
 
-  &__screen {
-    padding: 8px;
-    border: 3px solid #4e5553;
-    border-radius: 14px;
-    background: #202525;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__item {
+    flex: 0 0 auto;
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    width: clamp(72px, 7.7vw, 148px);
+    font-size: clamp(12px, 0.95vw, 18px);
+    color: #ddd;
+    white-space: nowrap;
+
+    img {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    &:hover {
+      color: #fff;
+
+      img {
+        // transform: translateY(-4px);
+        box-shadow:0 10px 24px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+
+  // 마우스를 올린(또는 키보드로 선택한) 프로그램만 선명하게, 나머지는 50%
+  &__item {
+    transition: opacity 0.25s;
+  }
+
+  // (&__item 을 두 번 쓰면 .retrov-main 이 중복돼 선택자가 안 맞으므로 클래스명을 직접 사용)
+  &:has(.circle-navigation__item:hover) .circle-navigation__item:not(:hover),
+  &:has(.circle-navigation__item:focus-visible) .circle-navigation__item:not(:focus-visible) {
+    opacity: 0.5;
+  }
+}
+
+/* ---------------- 가로 목록 공통 ---------------- */
+.rv-main-row {
+  margin-top: $retrov-gap-100;
+  padding-left: $retrov-side;
+
+  .circle-navigation + & {
+    margin-top: $retrov-gap-80;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px;
+    font-family: $retrov-pixel;
+    font-size: clamp(20px, 1.6vw, 30px);
+    font-weight: normal;
+  }
+
+  &__slider {
+    position: relative;
+  }
+
+  &__swiper.swiper {
+    overflow: visible; // 오른쪽 카드가 화면 끝까지 보이도록 (.retrov-main 에서 잘림)
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    width: clamp(40px, 3vw, 56px);
+    border: 0;
+    background: linear-gradient(90deg, rgba($retrov-bg, 0.9), rgba($retrov-bg, 0));
+    font-size: 44px;
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    &--prev {
+      left: calc(#{$retrov-side} * -1);
+    }
+
+    &--next {
+      right: 0;
+      background: linear-gradient(270deg, rgba($retrov-bg, 0.9), rgba($retrov-bg, 0));
+    }
+  }
+
+  &__slider:hover &__arrow,
+  &__arrow:focus-visible {
+    opacity: 1;
+  }
+
+  // 카드 너비
+  &--ranking &__item {
+    width: clamp(150px, 16.6vw, 318px);
+  }
+
+  &--watching &__item,
+  &--recommend &__item,
+  &--shorts &__item {
+    width: clamp(150px, 16.3vw, 313px);
+  }
+}
+
+/* ---------------- TOP 랭킹 포스터 ---------------- */
+.rv-rank-card {
+  position: relative;
+  display: block;
+  padding-bottom: 6%; // 숫자가 포스터 아래로 살짝 내려오는 공간
+
+  &__poster {
+    position: relative;
+    display: block;
+    aspect-ratio: 318 / 466;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #1b2233;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 45%);
+    }
 
     img {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      border-radius: 7px;
+      height: 100%;
+      object-fit: cover;
+      object-position: 62% center; // 배너 사진의 인물 쪽으로
+      transition: transform 0.3s;
+    }
+  }
+
+  &__logo.rv-rank-card__logo {
+    position: absolute;
+    right: 8%;
+    bottom: 7%;
+    z-index: 1;
+    width: 62%;
+    height: 24%;
+    object-fit: contain;
+    object-position: right bottom;
+  }
+
+  &__number {
+    position: absolute;
+    bottom: 0;
+    left: -0.06em;
+    z-index: 2;
+    font-family: $retrov-pixel;
+    font-size: clamp(72px, 9vw, 172px);
+    line-height: 0.8;
+    color: #fff;
+    -webkit-text-stroke: 3px $retrov-bg;
+    paint-order: stroke fill;
+    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  &:hover &__poster img:not(.rv-rank-card__logo) {
+    transform: scale(1.05);
+  }
+}
+
+/* ---------------- 시청 중 · 추천 카드 ---------------- */
+.rv-thumb-card {
+  display: grid;
+  gap: 8px;
+
+  &__image {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #1b2233;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+  }
+
+  &:hover &__image img {
+    transform: scale(1.05);
+  }
+
+  &__progress {
+    display: block;
+    height: 4px;
+    margin-top: 6px;
+    border-radius: 2px;
+    background: #3a4152;
+
+    span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: $retrov-blue;
+    }
+  }
+
+  &__title {
+    overflow: hidden;
+    margin-top: 4px;
+    font-family: $retrov-pixel;
+    font-size: clamp(13px, 0.85vw, 16px);
+    font-weight: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__desc {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: clamp(11px, 0.7vw, 13px);
+    line-height: 1.5;
+    color: $retrov-gray;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+/* ---------------- 쇼츠 카드 ---------------- */
+.rv-short-card {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 313 / 532;
+  overflow: hidden;
+  border: 1px solid #2c3343;
+  border-radius: 6px;
+  background: #000;
+
+  &__caption {
+    display: grid;
+    padding: 10px 8px;
+    font-size: clamp(12px, 0.95vw, 18px);
+    font-weight: 800;
+    line-height: 1.3;
+    text-align: center;
+
+    span,
+    em {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    em {
+      font-style: normal;
+      color: #3d8bff;
+    }
+  }
+
+  &__image {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    background: #3a3a3a;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
   }
 
-  h3 {
-    margin: 12px 0 6px;
-    font-size: 16px;
+  &__badge.rv-short-card__badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: clamp(18px, 1.3vw, 26px);
+    height: auto;
   }
 
-  p,
-  time {
-    font-size: 12px;
-    color: #aaa;
+  &__footer {
+    padding: 10px 8px;
+    font-size: clamp(10px, 0.65vw, 12px);
+    text-align: center;
+    color: #bbb;
+
+    b {
+      color: $retrov-blue;
+    }
   }
 }
 
 @media (max-width: 768px) {
-  .retrov-container {
-    width: calc(100% - 32px);
-  }
+  .rv-main-hero {
+    &__slide.swiper-slide {
+      width: $retrov-inner-mobile;
+    }
 
-  .program-hero {
-    min-height: 360px;
-  }
+    &__nav {
+      display: none;
+    }
 
-  .circle-navigation {
-    justify-content: flex-start;
-    gap: 16px;
+    &__card {
+      aspect-ratio: auto;
+    }
 
-    &__item {
-      flex-basis: 68px;
-
-      img {
-        width: 68px;
-        height: 68px;
-      }
+    &__count {
+      right: calc(4% + 12px);
     }
   }
 
-  .character-quiz__body {
-    padding: 28px 16px;
-  }
-
-  .video-card {
-    flex-basis: 200px;
+  .retrov-main .circle-navigation {
+    justify-content: flex-start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .circle-navigation__item img {
-    transition: none;
+  .retrov-main *,
+  .rv-main-hero * {
+    transition: none !important;
   }
 }

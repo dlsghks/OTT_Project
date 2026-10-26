@@ -1,0 +1,151 @@
+@charset "UTF-8";
+/* ---------- TV 프레임 ---------- */
+.retro-tv {
+  position: relative;
+  aspect-ratio: 656/492;
+}
+.retro-tv__screen {
+  position: absolute;
+  inset: var(--tv-screen-inset, 5.6% 6.2% 6.9% 6.2%);
+  overflow: hidden;
+  border-radius: 4%;
+  background: #111;
+}
+.retro-tv__screen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.2s;
+}
+.retro-tv__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* ---------- 영상 카드 ---------- */
+.retro-video-card__play {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.retro-video-card__play[aria-disabled=true] {
+  cursor: default;
+}
+.retro-video-card__play:hover:not([aria-disabled=true]) .retro-tv__screen img {
+  filter: brightness(1.12);
+}
+.retro-video-card__play:hover:not([aria-disabled=true]) .retro-video-card__play-icon, .retro-video-card__play:focus-visible .retro-video-card__play-icon {
+  opacity: 1;
+}
+.retro-video-card__play:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+.retro-video-card__play-icon {
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding-left: 4px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 22px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.retro-video-card__title {
+  font-size: 18px;
+  font-weight: normal;
+}
+.retro-video-card__desc {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #cfcfcf;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.retro-video-card__date {
+  font-size: 12px;
+  color: #9a9a9a;
+}
+
+/* ---------- 가로 스크롤 목록 ---------- */
+.retro-video-row__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.retro-video-row__title {
+  font-weight: normal;
+}
+.retro-video-row__controls {
+  display: flex;
+  gap: 8px;
+}
+.retro-video-row__controls button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #444;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.retro-video-row__controls button:hover {
+  background: #222;
+}
+.retro-video-row__list {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  margin: 0 calc((100% - 100vw) / 2) 0 0;
+  padding: 0 0 16px;
+  list-style: none;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  user-select: none;
+  cursor: grab;
+}
+.retro-video-row__list:active {
+  cursor: grabbing;
+}
+.retro-video-row__list::-webkit-scrollbar {
+  display: none;
+}
+.retro-video-row__item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 768px) {
+  .retro-video-row__controls {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .retro-tv__screen img {
+    transition: none;
+  }
+}
