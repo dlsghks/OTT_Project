@@ -1,0 +1,468 @@
+// 무도 퀴즈 패널 (디자인 기준: 1920px 화면에서 1420 x 780px)
+$quiz-width: 1420px;
+$quiz-height: 780px;
+$quiz-bar-height: 60px;
+$quiz-footer-height: 46px;
+$quiz-bg: #3734a0;
+$quiz-bar: #2a2784;
+$quiz-card: #0f1c8c;
+$quiz-blue: #1450ff;
+$quiz-blue-light: #4d73ff;
+$quiz-line: #5a56c4;
+$quiz-text-sub: #b9b7ea;
+
+.mudo-quiz {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $quiz-width;
+  height: $quiz-height;
+  margin: 8px auto 72px;
+  overflow: hidden;
+  background: $quiz-bg;
+  color: #fff;
+  // 페이지는 도트 폰트지만 퀴즈는 시안대로 일반 고딕
+  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  animation: mudo-quiz-open 0.25s ease-out;
+
+  p,
+  h3 {
+    margin: 0;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* ---------- 상단 / 하단 바 ---------- */
+  &__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    gap: 16px;
+    height: $quiz-bar-height;
+    padding: 0 36px;
+    background: $quiz-bar;
+    font-size: 13px;
+
+    &--bottom {
+      height: $quiz-footer-height;
+      font-size: 12px;
+      color: $quiz-text-sub;
+    }
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &__logo {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: $quiz-blue;
+    font-size: 13px;
+  }
+
+  &__bar-meta {
+    color: $quiz-text-sub;
+  }
+
+  /* ---------- 본문 ---------- */
+  // 남은 높이(780 - 60 - 46 = 674px)를 채우고, 내용은 세로 가운데 정렬
+  &__body {
+    position: relative;
+    flex: 1;
+    display: grid;
+    align-content: center;
+    min-height: 0;
+    padding: 32px 36px;
+    overflow-y: auto; // 혹시 내용이 넘치면 패널 크기는 유지하고 안에서 스크롤
+  }
+
+  &__actions {
+    position: absolute;
+    top: 32px;
+    right: 36px;
+    display: flex;
+    gap: 8px;
+  }
+
+  &__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 30px;
+    padding: 0 14px;
+    border: 1px solid $quiz-blue-light;
+    border-radius: 999px;
+    background: $quiz-card;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: $quiz-blue;
+    }
+  }
+
+  &__stage {
+    display: grid;
+    justify-items: center;
+    width: min(490px, 100%);
+    margin-inline: auto;
+    text-align: center;
+
+    &--intro,
+    &--result {
+      padding-top: 8px;
+    }
+  }
+
+  &__eyebrow {
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: $quiz-text-sub;
+
+    span {
+      opacity: 0.8;
+    }
+  }
+
+  &__title {
+    display: grid;
+    margin-bottom: 14px;
+    font-size: clamp(26px, 2.1vw, 40px);
+    font-weight: 800;
+    line-height: 1.3;
+    outline: none;
+  }
+
+  &__question {
+    margin-bottom: 20px;
+    font-size: clamp(20px, 1.4vw, 26px);
+    font-weight: 800;
+    outline: none;
+  }
+
+  &__desc {
+    display: grid;
+    margin-bottom: 26px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: $quiz-text-sub;
+  }
+
+  /* ---------- 캐릭터 카드 ---------- */
+  &__profile {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    width: 210px;
+    margin-bottom: 26px;
+    padding: 22px 16px 20px;
+    border-radius: 10px;
+    background: $quiz-card;
+
+    img {
+      width: 96px;
+      height: 96px;
+      margin-bottom: 8px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: #222;
+      object-fit: cover;
+    }
+
+    strong {
+      font-size: 16px;
+    }
+
+    span {
+      font-size: 11px;
+      color: $quiz-text-sub;
+    }
+  }
+
+  /* ---------- 버튼 ---------- */
+  &__primary,
+  &__secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    height: 48px;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+  }
+
+  &__primary {
+    background: $quiz-blue;
+
+    &:hover:not(:disabled) {
+      background: $quiz-blue-light;
+    }
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
+  }
+
+  &__secondary {
+    margin-top: 10px;
+    background: $quiz-bar;
+
+    &:hover {
+      background: $quiz-card;
+    }
+  }
+
+  &__hint {
+    margin-top: 12px;
+    font-size: 11px;
+    color: $quiz-text-sub;
+  }
+
+  /* ---------- 진행 바 ---------- */
+  &__progress {
+    width: 100%;
+    margin-bottom: 26px;
+  }
+
+  &__progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 11px;
+    color: $quiz-text-sub;
+
+    span:last-child {
+      color: #fff;
+      font-weight: 700;
+    }
+  }
+
+  &__progress-bar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      height: 3px;
+      border-radius: 2px;
+      background: $quiz-line;
+      transition: background-color 0.3s;
+
+      &.is-done {
+        background: $quiz-blue-light;
+      }
+    }
+  }
+
+  /* ---------- 문제 이미지 ---------- */
+  &__image {
+    margin: 0 0 22px;
+
+    img {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      height: clamp(200px, 15.625vw, 300px); // 1920px 기준 300px (780px 높이 안에 맞춤)
+      margin-inline: auto;
+      background: #1d1a6b;
+      object-fit: contain;
+    }
+  }
+
+  /* ---------- 입력 ---------- */
+  &__form {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+  }
+
+  &__input {
+    position: relative;
+    display: block;
+
+    input {
+      width: 100%;
+      height: 44px;
+      padding: 0 40px 0 14px;
+      border: 0;
+      border-radius: 4px;
+      background: #f4f4fb;
+      color: #222;
+      font-family: inherit;
+      font-size: 14px;
+
+      &::placeholder {
+        color: #9a9ab0;
+      }
+
+      &:focus-visible {
+        outline: 3px solid $quiz-blue-light;
+        outline-offset: 2px;
+      }
+    }
+
+    svg {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      color: #9a9ab0;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
+
+  /* ---------- 정답 공개 ---------- */
+  &__answer {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 18px;
+
+    strong {
+      font-size: 16px;
+    }
+  }
+
+  &__verdict {
+    font-size: 11px;
+
+    &.is-correct {
+      color: #8fb0ff;
+    }
+
+    &.is-wrong {
+      color: #ffb3c7;
+    }
+  }
+
+  &__my-answer {
+    font-size: 12px;
+    color: $quiz-text-sub;
+  }
+
+  /* ---------- 결과 ---------- */
+  &__check {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    background: $quiz-blue;
+    box-shadow: 0 0 0 8px rgba(20, 80, 255, 0.25);
+  }
+
+  &__summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    margin-bottom: 18px;
+    padding: 16px 18px;
+    border: 1px solid $quiz-line;
+    border-radius: 8px;
+    background: rgba(15, 28, 140, 0.45);
+    text-align: left;
+
+    img {
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #222;
+      object-fit: cover;
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    p {
+      font-size: 12px;
+    }
+
+    em {
+      font-style: normal;
+      font-weight: 700;
+      color: #8fb0ff;
+    }
+  }
+
+  &__summary-sub {
+    margin-top: 2px;
+    color: $quiz-text-sub;
+  }
+
+  button:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+  }
+}
+
+@keyframes mudo-quiz-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 1024px) {
+  // 작은 화면에서는 고정 높이 대신 내용만큼 늘어나도록
+  .mudo-quiz {
+    height: auto;
+    min-height: 600px;
+
+    &__bar {
+      padding: 0 16px;
+    }
+
+    &__body {
+      padding: 76px 16px 28px; // 위쪽 알약 버튼 자리 확보
+    }
+
+    &__actions {
+      top: 20px;
+      right: 16px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mudo-quiz {
+    animation: none;
+  }
+}

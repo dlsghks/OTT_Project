@@ -1,0 +1,139 @@
+header {
+  width: 100%;
+  background: #000;
+  color: #8b8b8b;
+}
+header > .inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+  max-width: 1800px;
+  min-height: 100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+header ul {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+header a {
+  color: inherit;
+  text-decoration: none;
+}
+header a:hover {
+  color: #fff;
+}
+header a:focus-visible {
+  outline: 2px solid #1351f9;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+header .header-left {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  min-width: 0;
+}
+header .header-left h1 {
+  flex-shrink: 0;
+  margin: 0;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -3px;
+  line-height: 1;
+}
+header .header-left ul {
+  gap: 44px;
+}
+header .header-left li {
+  flex-shrink: 0;
+}
+header .header-left li a {
+  display: block;
+  padding: 12px 0;
+  font-size: 22px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+header .header-right {
+  flex-shrink: 0;
+}
+header .header-right ul {
+  gap: 28px;
+}
+header .header-right li {
+  font-size: 16px;
+  white-space: nowrap;
+}
+header .header-right button {
+  cursor: pointer;
+}
+@media (max-width: 1600px) {
+  header .header-left {
+    gap: 36px;
+  }
+  header .header-left ul {
+    gap: 28px;
+  }
+  header .header-left li a {
+    font-size: 18px;
+  }
+  header .header-right ul {
+    gap: 20px;
+  }
+}
+@media (max-width: 1280px) {
+  header > .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px 24px;
+    padding: 20px 24px;
+  }
+  header .header-left {
+    display: contents;
+  }
+  header .header-left h1 {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 40px;
+  }
+  header .header-left ul {
+    grid-column: 1/-1;
+    grid-row: 2;
+    min-width: 0;
+    gap: 28px;
+    overflow-x: auto;
+  }
+  header .header-left li a {
+    font-size: 16px;
+  }
+  header .header-right {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+@media (max-width: 480px) {
+  header > .inner {
+    padding: 16px;
+  }
+  header .header-left h1 {
+    font-size: 34px;
+  }
+  header .header-left ul {
+    gap: 24px;
+  }
+  header .header-right ul {
+    gap: 16px;
+  }
+  header .header-right li {
+    font-size: 14px;
+  }
+}
