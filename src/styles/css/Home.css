@@ -4,9 +4,11 @@
   color: #fff;
 }
 .wavve-home__inner {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 32px 70px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 .wavve-home button {
   cursor: pointer;
@@ -14,31 +16,31 @@
 
 .home-hero {
   position: relative;
-  min-height: min(46vw, 590px);
+  min-height: 0;
   display: flex;
   align-items: center;
   background: radial-gradient(circle at 70% 30%, #284f7b, transparent 40%), linear-gradient(120deg, #080b12, #162b49 65%, #101521);
   background-size: cover;
   background-position: center;
-  padding: 50px max(32px, (100vw - 1376px) / 2);
+  padding: 0;
   cursor: pointer;
   user-select: none;
 }
-.home-hero img {
+.home-hero .home-hero img {
   user-select: none;
   -webkit-user-drag: none;
 }
-.home-hero img__content {
+.home-hero .home-hero__content {
   max-width: 600px;
 }
-.home-hero img__content h2 {
+.home-hero .home-hero__content h2 {
   font-size: clamp(32px, 4vw, 64px);
   margin: 10px 0;
 }
-.home-hero img__content p {
+.home-hero .home-hero__content p {
   color: #d3d8e4;
 }
-.home-hero__link {
+.home-hero .home-hero__link {
   display: inline-block;
   margin-top: 22px;
   padding: 12px 20px;
@@ -47,7 +49,7 @@
   text-decoration: none;
   background: #1556e8;
 }
-.home-hero__controls {
+.home-hero .home-hero__controls {
   position: absolute;
   bottom: 24px;
   right: 5%;
@@ -55,7 +57,7 @@
   align-items: center;
   gap: 12px;
 }
-.home-hero__controls button {
+.home-hero .home-hero__controls button {
   border: 0;
   background: rgba(255, 255, 255, 0.1882352941);
   color: white;
