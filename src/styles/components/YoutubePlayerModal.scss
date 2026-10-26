@@ -1,0 +1,112 @@
+// 유튜브 재생 팝업
+.yt-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.85);
+  animation: yt-modal-fade 0.2s ease-out;
+
+  &__box {
+    width: min(1200px, 100%);
+    color: #fff;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+
+    h2 {
+      font-size: clamp(18px, 1.4vw, 26px);
+      font-weight: normal;
+    }
+  }
+
+  &__close {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    &:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+
+  &__player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    max-height: calc(100vh - 200px);
+    margin-inline: auto;
+    background: #000;
+
+    iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  &__info {
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #cfcfcf;
+
+    time {
+      display: block;
+      margin-top: 6px;
+      font-size: 13px;
+      color: #9a9a9a;
+    }
+  }
+
+  &__external {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #9a9a9a;
+    text-decoration: underline;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+@keyframes yt-modal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .yt-modal {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yt-modal {
+    animation: none;
+  }
+}

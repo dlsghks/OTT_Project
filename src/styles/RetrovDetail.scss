@@ -1,0 +1,497 @@
+// 레트로브 프로그램 상세 (디자인 기준: 1920px)
+@font-face {
+  font-family: "DungGeunMo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff") format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+
+$rv-blue: #1450ff;
+$rv-gray: #9a9a9a;
+$rv-font: "DungGeunMo", "Noto Sans KR", sans-serif;
+$rv-content-width: 1680px;
+
+.rv-detail {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #000;
+  color: #fff;
+  font-family: $rv-font;
+
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  button,
+  a {
+    &:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 4px;
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+.rv-container {
+  width: min(#{$rv-content-width}, calc(100% - 96px));
+  margin-inline: auto;
+  padding-bottom: 120px;
+}
+
+.rv-empty {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+  padding-top: 120px;
+
+  a {
+    color: $rv-blue;
+  }
+}
+
+/* ---------------- 히어로 ---------------- */
+.rv-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(520px, 50.5vw, 980px);
+  background-color: #111;
+  background-position: center top;
+  background-size: cover;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.55) 22%, rgba(0, 0, 0, 0) 50%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 45%);
+  }
+
+  &__content {
+    position: relative;
+    width: min(#{$rv-content-width}, calc(100% - 96px));
+    margin-inline: auto;
+    padding-bottom: clamp(40px, 4vw, 72px);
+  }
+
+  &__logo {
+    width: clamp(140px, 11.7vw, 225px);
+    margin-bottom: 28px;
+    font-size: 48px;
+    line-height: 1;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 22px;
+    font-size: 16px;
+    color: #d9d9d9;
+  }
+
+  &__rating {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    background: #f26b1d;
+    color: #fff;
+    font-size: 12px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 28px;
+  }
+
+  &__play {
+    width: clamp(300px, 24.5vw, 470px);
+    height: 56px;
+    padding: 0 24px;
+    border: 0;
+    border-radius: 4px;
+    background: $rv-blue;
+    font-size: 18px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: #3d6dff;
+    }
+  }
+
+  // 시즌 선택 (우리 결혼했어요)
+  &__season {
+    position: relative;
+    display: block;
+    width: clamp(200px, 15.6vw, 300px);
+    margin-right: -6px; // 시안: 재생 버튼과 거의 붙어 있음
+
+    select {
+      width: 100%;
+      height: 56px;
+      padding: 0 52px 0 20px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      font: inherit;
+      font-size: 18px;
+      appearance: none;
+      cursor: pointer;
+
+      &:hover {
+        border-color: #fff;
+      }
+
+      &:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 4px;
+      }
+
+      option {
+        background: #111;
+        color: #fff;
+      }
+    }
+
+    svg {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+  }
+
+  &__icon-btn {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 12px;
+
+    &[aria-pressed="true"] {
+      color: #ff4d7a;
+    }
+  }
+
+  &__desc {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  &__cast {
+    margin-top: 14px;
+    font-size: 16px;
+    color: #d9d9d9;
+  }
+}
+
+/* ---------------- 이벤트 배너 ---------------- */
+.rv-event {
+  position: relative;
+  overflow: hidden;
+
+  &__track {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 77vw) 1fr;
+    gap: 24px;
+    margin-inline: -12vw; // 양옆 배너가 일부만 보이도록
+  }
+
+  &__slide {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: clamp(120px, 9.2vw, 177px);
+    padding-inline: clamp(24px, 5vw, 96px);
+    overflow: hidden;
+
+    &.is-prev,
+    &.is-next {
+      cursor: pointer;
+      opacity: 0.85;
+
+      .rv-event__text {
+        visibility: hidden;
+      }
+    }
+
+    &--pink {
+      background:
+        radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.7) 0 8%, transparent 9%),
+        linear-gradient(90deg, #ffe3ee 0%, #fff5f9 50%, #ffe3ee 100%);
+    }
+
+    &--purple {
+      background: linear-gradient(90deg, #3a0ca3 0%, #7209b7 100%);
+    }
+
+    &--mint {
+      background: linear-gradient(90deg, #d8fff1 0%, #f2fffa 50%, #d8fff1 100%);
+    }
+  }
+
+  &__text {
+    flex: 1;
+    padding-left: clamp(16px, 8vw, 200px);
+  }
+
+  &__label {
+    margin-bottom: 6px;
+    font-size: 15px;
+    color: #e3007b;
+  }
+
+  &__title {
+    display: block;
+    font-size: clamp(26px, 2.6vw, 50px);
+    font-weight: normal;
+    color: #222;
+
+    em {
+      font-style: normal;
+      color: #e3007b;
+    }
+  }
+
+  &__desc {
+    margin-top: 10px;
+    font-size: 15px;
+    color: #666;
+  }
+
+  &__slide--purple &__title,
+  &__slide--purple &__desc {
+    color: #fff;
+  }
+
+  &__slide--purple &__label,
+  &__slide--purple &__title em {
+    color: #ffd6f0;
+  }
+
+  &__deco {
+    font-size: clamp(48px, 6vw, 120px);
+    line-height: 1;
+    color: #ff4d8d;
+    filter: drop-shadow(0 6px 10px rgba(227, 0, 123, 0.35));
+  }
+
+  &__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    font-size: 28px;
+    line-height: 1;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    &--prev {
+      left: calc(11.5vw - 20px);
+    }
+
+    &--next {
+      right: calc(11.5vw - 20px);
+    }
+  }
+
+  &:hover &__nav,
+  &__nav:focus-visible {
+    opacity: 1;
+  }
+}
+
+/* ---------------- 캐릭터 ---------------- */
+.rv-cast {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 1.9vw, 36px);
+  overflow-x: auto;
+  padding: 64px 6px 40px;
+
+  &__item {
+    flex: 0 0 auto;
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+    width: clamp(80px, 7.6vw, 146px);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: 18px;
+    white-space: nowrap;
+
+    img {
+      width: 100%;
+      aspect-ratio: 1;
+      border: 4px solid transparent;
+      border-radius: 50%;
+      background: transparent; // 캐릭터 PNG가 이미 원형(투명 배경)이라 배경색 없음
+      object-fit: cover;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    &:hover img {
+      transform: translateY(-4px);
+    }
+
+    &[aria-expanded="true"] img {
+      border-color: $rv-blue;
+    }
+  }
+}
+
+/* ---------------- 영상 섹션 ---------------- */
+.rv-section {
+  margin-top: 60px;
+
+  &__title {
+    margin-bottom: 30px;
+    font-size: clamp(20px, 1.4vw, 27px);
+    font-weight: normal;
+  }
+}
+
+/* ---------------- 다른 프로그램 ---------------- */
+.rv-others {
+  margin-top: 100px;
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: clamp(12px, 1.1vw, 20px);
+  }
+
+  &__item {
+    display: block;
+    overflow: hidden;
+    background: #222;
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 320 / 180;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+}
+
+/* ---------------- 반응형 ---------------- */
+@media (max-width: 1024px) {
+  .rv-hero__desc {
+    font-size: 16px;
+  }
+
+  .rv-others__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .rv-container,
+  .rv-hero__content {
+    width: calc(100% - 32px);
+  }
+
+  .rv-hero {
+    min-height: 480px;
+
+    &__actions {
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    &__play {
+      width: 100%;
+      font-size: 16px;
+    }
+
+    &__season {
+      width: 100%;
+      margin-right: 0;
+
+      select {
+        font-size: 16px;
+      }
+    }
+
+    &__desc,
+    &__cast {
+      font-size: 14px;
+    }
+  }
+
+  .rv-event {
+    &__track {
+      grid-template-columns: 1fr minmax(0, 88vw) 1fr;
+      gap: 12px;
+      margin-inline: -6vw;
+    }
+
+    &__deco,
+    &__desc {
+      display: none;
+    }
+
+    &__text {
+      padding-left: 0;
+    }
+  }
+
+  .rv-cast {
+    justify-content: flex-start;
+    padding-top: 40px;
+
+    &__item {
+      font-size: 14px;
+    }
+  }
+
+
+  .rv-others__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-cast__item img,
+  .rv-others__item img {
+    transition: none;
+  }
+}
