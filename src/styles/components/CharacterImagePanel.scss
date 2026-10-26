@@ -1,0 +1,28 @@
+// 캐릭터 이미지 카드 (디자인 기준: 1920px 화면에서 1420 x 780px, 무도 퀴즈 패널과 같은 크기)
+.character-image-panel {
+  max-width: 1420px;
+  margin: 8px auto 72px;
+  animation: character-image-panel-open 0.3s ease-out;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1420 / 780;
+    background: rgba(255, 255, 255, 0.04);
+    object-fit: cover;
+  }
+}
+
+@keyframes character-image-panel-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character-image-panel {
+    animation: none;
+  }
+}
