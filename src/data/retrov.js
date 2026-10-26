@@ -3,10 +3,13 @@ import { weGotMarried } from "./weGotMarried";
 import { highKick } from "./highKick";
 import { boysOverFlowers } from "./boysOverFlowers";
 import { fullHouse } from "./fullHouse";
+import { dadWhere } from "./dadWhere";
 
 // 이미지 경로: public/images/retrov/ 폴더에 실제 파일을 넣어주세요.
-const IMG = "/images/retrov";
+const IMG = "/images/retrov/main";
+const IMG2 = "/images/retrov/infinite-challenge";
 
+// 순서: 레트로브 메인 디자인 순서 (동그란 필터·배너)
 // image: 레트로브 메인 동그란 필터용 / thumbnail: 상세페이지 하단 "또 다른 프로그램" 사진 썸네일
 export const programs = [
   {
@@ -16,12 +19,6 @@ export const programs = [
     thumbnail: `${IMG}/infinite-challenge-thumb.jpg`,
   },
   {
-    id: "full-house",
-    title: "풀하우스",
-    image: `${IMG}/full-house-logo.png`,
-    thumbnail: `${IMG}/full-house-thumb.jpg`,
-  },
-  {
     id: "high-kick",
     title: "거침없이 하이킥",
     image: `${IMG}/high-kick-logo.png`,
@@ -29,7 +26,7 @@ export const programs = [
   },
   {
     id: "dad-where-are-we-going",
-    title: "아빠! 어디가?",
+    title: "아빠! 어디가?", 
     image: `${IMG}/dad-where-logo.png`,
     thumbnail: `${IMG}/dad-where-thumb.jpg`,
   },
@@ -45,11 +42,17 @@ export const programs = [
     image: `${IMG}/boys-over-flowers-logo.png`,
     thumbnail: `${IMG}/boys-over-flowers-thumb.jpg`,
   },
+  {
+    id: "full-house",
+    title: "풀하우스",
+    image: `${IMG}/full-house-logo.png`,
+    thumbnail: `${IMG}/full-house-thumb.jpg`,
+  },
 ];
 
 // 상세페이지 상단 이벤트 배너 (가운데 + 양옆 미리보기)
 // title: [앞 문구, 강조 문구, 뒷 문구]
-export const eventBanners = [
+export const eventBanners  = [
   {
     id: "favorite-scene",
     label: "최애장면 선택",
@@ -76,8 +79,8 @@ export const eventBanners = [
 export const programDetails = {
   "infinite-challenge": {
     title: "무한도전",
-    logo: `${IMG}/infinite-challenge-logo.png`,
-    hero: `${IMG}/infinite-challenge-hero.jpg`,
+    logo: `${IMG2}/infinite-challenge-logo.png`,
+    hero: `${IMG2}/infinite-challenge-hero.png`,
     rating: "15",
     genre: "예능",
     tvFrame: "default", // RetroTvFrame 의 TV_FRAMES 키
@@ -92,13 +95,13 @@ export const programDetails = {
 
     // 퀴즈 데이터: src/data/characterQuizzes.js (키 = id)
     characters: [
-      { id: "myungsoo", name: "명수옹", image: `${IMG}/characters/myungsoo.png` },
-      { id: "luckyguy", name: "럭키가이", image: `${IMG}/characters/luckyguy.png` },
-      { id: "doni", name: "도니", image: `${IMG}/characters/doni.png` },
-      { id: "yubujang", name: "유부장", image: `${IMG}/characters/yubujang.png` },
-      { id: "junha", name: "주나", image: `${IMG}/characters/junha.png` },
-      { id: "haha", name: "상꼬맹이", image: `${IMG}/characters/haha.png` },
-      { id: "gil", name: "길", image: `${IMG}/characters/gil.png` },
+      { id: "myungsoo", name: "명수옹", image: `${IMG2}/characters/myungsoo.png` },
+      { id: "luckyguy", name: "럭키가이", image: `${IMG2}/characters/luckyguy.png` },
+      { id: "doni", name: "도니", image: `${IMG2}/characters/doni.png` },
+      { id: "yubujang", name: "유부장", image: `${IMG2}/characters/yubujang.png` },
+      { id: "junha", name: "주나", image: `${IMG2}/characters/junha.png` },
+      { id: "haha", name: "상꼬맹이", image: `${IMG2}/characters/haha.png` },
+      { id: "gil", name: "길", image: `${IMG2}/characters/gil.png` },
     ],
 
     // 테마별 영상 8개 (src/data/infiniteChallengeVideos.js)
@@ -109,4 +112,5 @@ export const programDetails = {
   "high-kick": highKick,
   "boys-over-flowers": boysOverFlowers,
   "full-house": fullHouse,
+  "dad-where-are-we-going": dadWhere,
 };
