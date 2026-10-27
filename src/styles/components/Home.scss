@@ -1,6 +1,6 @@
 .wavve-home {
   min-height: 100vh;
-  background: #0b0e14;
+  background: transparent;
   color: #fff;
 
   &__inner {
@@ -21,7 +21,9 @@
   min-height: 0;
   display: flex;
   align-items: center;
-  background: radial-gradient(circle at 70% 30%, #284f7b, transparent 40%), linear-gradient(120deg, #080b12, #162b49 65%, #101521);
+  background:
+    radial-gradient(circle at 70% 30%, #284f7b, transparent 40%),
+    linear-gradient(120deg, #080b12, #162b49 65%, #101521);
   background-size: cover;
   background-position: center;
   padding: 0;
@@ -484,7 +486,7 @@
 
 @media(max-width:768px) {
   .wavve-home__inner {
-    padding: 0 16px 50px
+    padding: 0 0 50px
   }
 
   .home-hero {

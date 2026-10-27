@@ -377,7 +377,7 @@
 
 @media (max-width: 768px) {
   .wavve-home__inner {
-    padding: 0 16px 50px;
+    padding: 0 0 50px;
   }
   .home-hero {
     min-height: 320px;
