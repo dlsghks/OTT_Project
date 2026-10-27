@@ -1,3 +1,5 @@
+@use "../retrov/variables" as *;
+
 // 유튜브 재생 팝업
 .yt-modal {
   position: fixed;
@@ -76,7 +78,7 @@
       display: block;
       margin-top: 6px;
       font-size: 13px;
-      color: #9a9a9a;
+      color: $retrov-text-muted;
     }
   }
 
@@ -84,7 +86,7 @@
     display: inline-block;
     margin-top: 12px;
     font-size: 13px;
-    color: #9a9a9a;
+    color: $retrov-text-muted;
     text-decoration: underline;
 
     &:hover {

@@ -1,0 +1,36 @@
+// 레트로브 공통 변수 (메인 · 프로그램 상세 · 퀴즈 · TV 카드 등)
+// 사용: @use "../retrov/variables" as *;   (파일 위치에 맞게 경로 조정)
+// 크기 값은 디자인 기준 1920px → vw 로 환산해 화면 크기에 비례, clamp 최소값으로 작은 화면 보호
+
+// ---------- 색상 ----------
+$retrov-blue: #1450ff; // 메인 포인트 (버튼, 선택 테두리)
+$retrov-blue-hover: #3d6dff; // 파란 버튼 hover
+$retrov-bg: #0b1120; // 메인 페이지 배경
+$retrov-gray: #8a8f99; // 메인 보조 텍스트
+$retrov-text-muted: #9a9a9a; // 날짜 등 흐린 텍스트 (상세 · TV 카드 · 영상 팝업)
+
+// ---------- 폰트 ----------
+$retrov-pixel: "DungGeunMo", "Noto Sans KR", sans-serif; // 둥근모 (제목 · 카드)
+$retrov-sans: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; // 일반 고딕 (퀴즈 · 메타 정보)
+
+// ---------- 레이아웃: inner 1920px 기준 1700px ----------
+$retrov-side: clamp(16px, 5.729vw, 110px); // 좌우 여백 (1920px 기준 110px)
+$retrov-inner: 88.54%; // 배너 · 히어로 너비 (1920px 기준 1700px)
+$retrov-inner-mobile: 92%; // 768px 이하 배너 · 히어로 너비
+
+// ---------- 간격 ----------
+$retrov-gap-100: clamp(48px, 5.208vw, 100px); // 섹션(목록) 사이
+$retrov-gap-80: clamp(40px, 4.2vw, 80px); // 메인: 배너 ↔ 필터 ↔ 랭킹
+$retrov-gap-60: clamp(32px, 3.125vw, 60px); // 상세: 캐릭터 아이콘 ↔ 퀴즈/카드 ↔ 섹션
+$retrov-gap-30: clamp(16px, 1.563vw, 30px); // 테마 제목 ↔ 카드
+$retrov-gap-20: clamp(12px, 1.042vw, 20px); // 카드 사이
+$retrov-gap-10: clamp(6px, 0.521vw, 10px); // 카드 안 제목 / 설명 / 날짜 사이
+
+// ---------- 글자 크기 ----------
+$retrov-font-30: clamp(20px, 1.563vw, 30px); // 테마 제목 (둥근모 30pt)
+$retrov-font-20: clamp(14px, 1.042vw, 20px); // 캐릭터 아이콘 이름 · 히어로 설명 (둥근모 20pt)
+
+// ---------- 컴포넌트 크기 ----------
+$retrov-card-width: clamp(200px, 17.083vw, 328px); // TV 카드 328 x 246 (4:3)
+$retrov-panel-width: 1420px; // 퀴즈 · 캐릭터 이미지 카드
+$retrov-panel-height: 780px;
