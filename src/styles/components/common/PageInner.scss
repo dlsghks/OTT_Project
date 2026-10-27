@@ -1,0 +1,13 @@
+/* 전체 페이지 공통 이너: 최대 1700px, 화면 너비의 최대 90%, 데스크톱 좌우 110px 확보 */
+/* Layout에서 <div className="site-inner"><Outlet /></div> 로 사용하세요. */
+.site-inner {
+  width: min(1700px, 90%, calc(100% - 220px));
+  margin-inline: auto;
+  box-sizing: border-box;
+  min-width: 0;
+}
+/* 이미 자체 max-width와 padding을 가진 페이지도 부모 이너를 넘지 않게 */
+.site-inner > * { max-width: 100%; box-sizing: border-box; }
+@media (max-width: 1200px) {
+  .site-inner { width: 90%; }
+}
