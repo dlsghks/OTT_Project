@@ -4,6 +4,7 @@ import { ChevronDown, Heart, Share } from 'lucide-react';
 
 import { programs, programDetails, eventBanners } from '../../data/retrov';
 import { characterQuizzes } from '../../data/characterQuizzes';
+import { getImagePath } from '../../utils/imagePath';
 
 import RetroVideoRow from '../../components/retrov/RetroVideoRow';
 import YoutubePlayerModal from '../../components/retrov/YoutubePlayerModal';
@@ -87,16 +88,22 @@ function ProgramFanPage({ programId, program }) {
   }
 
   return (
-    <div className="rv-detail" style={program.pageBackground ? { background: program.pageBackground } : undefined}>
+    <div className="rv-detail"
+      style={
+        program.pageBackground ? { background: program.pageBackground } : undefined}>
       {/* 프로그램 배너 */}
       <section
         className="rv-hero"
-        style={{ backgroundImage: `url("${program.hero}")` }}
+        style={{
+          backgroundImage: `url("${getImagePath(program.hero)}")`
+        }}
         aria-labelledby="rv-program-title"
       >
         <div className="rv-hero__content">
           <h1 id="rv-program-title" className="rv-hero__logo">
-            {program.logo ? <img src={program.logo} alt={program.title} /> : program.title}
+            {program.logo
+              ? <img src={getImagePath(program.logo)} alt={program.title} />
+              : program.title}
           </h1>
 
           <p className="rv-hero__meta">
@@ -185,7 +192,7 @@ function ProgramFanPage({ programId, program }) {
                 aria-controls={selectedCharacterId === character.id ? "character-panel" : undefined}
                 onClick={() => handleCharacterClick(character.id)}
               >
-                <img src={character.image} alt="" />
+                <img src={getImagePath(character.image)} alt="" />
                 <span>{character.name}</span>
               </button>
             ))}
@@ -228,7 +235,11 @@ function ProgramFanPage({ programId, program }) {
             {otherPrograms.slice(0, 5).map((item) => (
               <li key={item.id}>
                 <Link to={`/retrov/${item.id}`} className="rv-others__item">
-                  <img src={item.thumbnail ?? item.image} alt={item.title} loading="lazy" />
+                  <img
+                    src={getImagePath(item.thumbnail ?? item.image)}
+                    alt={item.title}
+                    loading="lazy"
+                  />
                 </Link>
               </li>
             ))}

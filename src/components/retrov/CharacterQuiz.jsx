@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Pencil, X } from "lucide-react";
 import { isCorrectAnswer } from "../../data/characterQuizzes";
 import "../../styles/components/CharacterQuiz.scss";
+import { getImagePath } from "../../utils/imagePath";
 
 // 캐릭터 아이콘 클릭 시 아래에 펼쳐지는 무도 퀴즈
 // 흐름: 시작(intro) → 문제 풀기(question: 입력 → 정답 공개) × N → 결과(result)
@@ -89,7 +90,7 @@ export default function CharacterQuiz({ character, quiz, onClose, onBackToList }
 function ProfileCard({ image, name, caption }) {
   return (
     <div className="mudo-quiz__profile">
-      <img src={image} alt="" />
+      <img src={getImagePath(image)} alt="" />
       <strong>{name}</strong>
       {caption && <span>{caption}</span>}
     </div>
@@ -173,8 +174,14 @@ function QuizQuestion({ name, question, index, total, result, onSubmit, onNext }
 
       <figure className="mudo-quiz__image">
         <img
-          src={revealed ? question.answerImage : question.questionImage}
-          alt={revealed ? `정답 장면: ${question.answer}` : "대사 일부가 가려진 장면"}
+          src={getImagePath(
+            revealed ? question.answerImage : question.questionImage
+          )}
+          alt={
+            revealed
+              ? `정답 장면: ${question.answer}`
+              : "대사 일부가 가려진 장면"
+          }
         />
       </figure>
 
@@ -236,7 +243,7 @@ function QuizResult({ quiz, image, total, correctCount, onRetry, onBackToList })
       </p>
 
       <div className="mudo-quiz__summary">
-        <img src={image} alt="" />
+        <img src={getImagePath(image)} alt="" />
         <div>
           <strong>{quiz.characterName} 편</strong>
           <p>

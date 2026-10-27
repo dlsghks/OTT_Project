@@ -16,71 +16,115 @@
   }
 }
 
+/* =========================
+   Home Hero
+========================= */
+
 .home-hero {
   position: relative;
+  display: block;
   min-height: 0;
-  display: flex;
-  align-items: center;
+  padding: 0;
+  overflow: hidden;
+
   background:
     radial-gradient(circle at 70% 30%, #284f7b, transparent 40%),
     linear-gradient(120deg, #080b12, #162b49 65%, #101521);
+
   background-size: cover;
   background-position: center;
-  padding: 0;
+
   cursor: pointer;
   user-select: none;
 
+  // Swiper 전체
+  &__swiper {
+    width: 100%;
+    height: 100%;
+  }
 
+  // 개별 배너
+  &__slide {
+    position: relative;
+    display: flex;
+    align-items: center;
 
-  .home-hero {
-    // 기존 스타일 유지
+    width: 100%;
+    min-height: 520px;
+    height: 100%;
 
-    img {
-      user-select: none;
-      -webkit-user-drag: none;
+    background-color: #080c16;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  // 텍스트 콘텐츠
+  &__content {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 600px;
+    padding: 0 110px;
+    box-sizing: content-box;
+
+    h2 {
+      font-size: clamp(32px, 4vw, 64px);
+      margin: 10px 0;
     }
 
-    &__content {
-      max-width: 600px;
-
-      h2 {
-        font-size: clamp(32px, 4vw, 64px);
-        margin: 10px 0;
-      }
-
-      p {
-        color: #d3d8e4;
-      }
+    p {
+      color: #d3d8e4;
     }
+  }
 
-    &__link {
-      display: inline-block;
-      margin-top: 22px;
-      padding: 12px 20px;
-      border-radius: 6px;
+  // 상세보기 버튼
+  &__link {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 12px 20px;
+
+    border-radius: 6px;
+    background: #1556e8;
+
+    color: white;
+    text-decoration: none;
+  }
+
+  // 이전/다음 버튼
+  &__controls {
+    position: absolute;
+    z-index: 10;
+    bottom: 32px;
+    right: 5%;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    button {
+      width: 32px;
+      height: 32px;
+
+      border: 0;
+      border-radius: 50%;
+      background: #ffffff30;
+
       color: white;
-      text-decoration: none;
-      background: #1556e8;
+      font-size: 24px;
+      cursor: pointer;
     }
+  }
 
-    &__controls {
-      position: absolute;
-      bottom: 24px;
-      right: 5%;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+  // 드래그 시 텍스트 선택 방지
+  .swiper-slide {
+    user-select: none;
+  }
 
-      button {
-        border: 0;
-        background: #ffffff30;
-        color: white;
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        font-size: 24px;
-      }
-    }
+  img {
+    user-select: none;
+    -webkit-user-drag: none;
   }
 }
 
@@ -491,7 +535,15 @@
 
   .home-hero {
     min-height: 320px;
-    padding: 36px 20px
+    padding: 0;
+
+    &__slide {
+      min-height: 320px;
+    }
+
+    &__content {
+      padding: 0 20px;
+    }
   }
 
   .home-section {
