@@ -778,58 +778,6 @@
   overscroll-behavior: contain
 }
 
-.live-login-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .78);
-  z-index: 1100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px
-}
-
-.live-login-modal {
-  position: relative;
-  width: min(420px, 100%);
-  box-sizing: border-box;
-  border-radius: 16px;
-  background: #232326;
-  text-align: center;
-  padding: 44px 28px 32px;
-  box-shadow: 0 18px 55px #0008
-}
-
-.live-login-modal h2 {
-  font-size: 22px;
-  margin: 0 0 14px
-}
-
-.live-login-modal p {
-  font-size: 14px;
-  color: #bdbdc4;
-  line-height: 1.6;
-  margin: 0 0 26px
-}
-
-.live-login-modal__close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  border: 0;
-  background: transparent;
-  font-size: 30px
-}
-
-.live-login-modal__link {
-  display: inline-block;
-  background: #2763f4;
-  color: white !important;
-  border-radius: 8px;
-  padding: 13px 40px;
-  font-weight: 700
-}
-
 @media(min-width:901px) {
   .live-chat.is-open {
     height: auto
@@ -883,4 +831,124 @@
   color: #e9e9ed;
   font-size: 13px;
   font-weight: 600;
+}
+
+/* Login popup redesign: matches the provided reference without changing other UI */
+
+/* 변경 디자인: 영상 호버 컨트롤 (로그인 + 데모 광고 완료 상태에서만 렌더링) */
+.live-player__overlay:empty {
+  display: none
+}
+
+.live-player__demo-label {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  color: #fff9;
+  font-size: 12px;
+  pointer-events: none
+}
+
+.live-player__controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px 18px;
+  background: linear-gradient(transparent 58%, rgba(0, 0, 0, .8));
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity .22s ease, transform .22s ease, visibility .22s;
+  pointer-events: none
+}
+
+.live-player:hover .live-player__controls,
+.live-player:focus-within .live-player__controls {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto
+}
+
+.live-player__controls-top {
+  margin-bottom: 10px
+}
+
+.live-player__live-badge {
+  background: #f04454;
+  border-radius: 4px;
+  padding: 4px 7px;
+  font-size: 12px;
+  font-weight: 700
+}
+
+.live-player__controls-bottom,
+.live-player__controls-left,
+.live-player__controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.live-player__controls-bottom {
+  justify-content: space-between
+}
+
+.live-player__controls button {
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 23px;
+  min-width: 32px;
+  min-height: 34px
+}
+
+.live-player__controls button:hover {
+  color: #c7d4ff
+}
+
+.live-player__volume {
+  width: 76px;
+  accent-color: #fff;
+  cursor: pointer
+}
+
+.live-player__settings {
+  position: absolute;
+  right: 18px;
+  bottom: 66px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #14151b;
+  color: #ddd;
+  font-size: 12px
+}
+
+@media(hover:none) {
+  .live-player__controls {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto
+  }
+}
+
+/* 공통 이너 레이아웃은 styles/common/PageInner.scss에서 관리 */
+.live-channel-page {
+  width: min(1700px, 90%);
+  max-width: 1700px;
+  margin-inline: auto;
+  padding: 48px 0 100px
+}
+
+@media(max-width:600px) {
+  .live-channel-page {
+    padding: 20px 0 60px
+  }
+
+  .live-player__volume {
+    width: 48px
+  }
 }

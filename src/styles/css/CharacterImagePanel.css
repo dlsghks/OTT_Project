@@ -1,0 +1,25 @@
+.character-image-panel {
+  max-width: 1px;
+  margin-inline: auto;
+  animation: character-image-panel-open 0.3s ease-out;
+}
+.character-image-panel img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/780;
+  background: rgba(255, 255, 255, 0.04);
+  object-fit: cover;
+}
+
+@keyframes character-image-panel-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .character-image-panel {
+    animation: none;
+  }
+}

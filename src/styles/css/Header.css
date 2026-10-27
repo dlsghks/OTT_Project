@@ -9,10 +9,10 @@ header > .inner {
   justify-content: space-between;
   gap: 40px;
   width: 100%;
-  max-width: 1800px;
-  min-height: 100px;
-  margin: 0 auto;
-  padding: 0 32px;
+  max-width: none;
+  min-height: 96px;
+  margin: 0;
+  padding: 0 110px;
   box-sizing: border-box;
 }
 header ul {
@@ -51,23 +51,24 @@ header .header-left h1 {
   line-height: 1;
 }
 header .header-left ul {
-  gap: 44px;
+  gap: 60px;
 }
 header .header-left li {
   flex-shrink: 0;
 }
 header .header-left li a {
   display: block;
-  padding: 12px 0;
-  font-size: 22px;
+  padding: 0;
+  font-size: 20px;
   font-weight: 400;
+  line-height: 96px;
   white-space: nowrap;
 }
 header .header-right {
   flex-shrink: 0;
 }
 header .header-right ul {
-  gap: 28px;
+  gap: 36px;
 }
 header .header-right li {
   font-size: 16px;
@@ -114,6 +115,7 @@ header .header-right button {
   }
   header .header-left li a {
     font-size: 16px;
+    line-height: 48px;
   }
   header .header-right {
     grid-column: 2;
