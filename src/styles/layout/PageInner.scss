@@ -1,0 +1,15 @@
+.site-inner {
+  width: 100%;
+  max-width: none;
+  padding-left: 110px;
+  padding-right: 110px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .site-inner {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

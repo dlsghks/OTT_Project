@@ -1,8 +1,12 @@
 .live-page {
+  width: 100%;
+  max-width: none;
   min-height: 100vh;
   background: #1b1b1b;
   color: #fff;
-  padding: 38px max(24px, 3vw) 100px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 .live-page a {
   color: inherit;
@@ -136,30 +140,44 @@
   font-size: 20px;
   margin: 0;
 }
-.live-section__head button {
-  background: transparent;
-  color: #aaa;
-  border: 1px solid #555;
-  border-radius: 4px;
-  font-size: 23px;
-  width: 36px;
-  height: 34px;
-  margin-left: 6px;
+.live-section__slider {
+  position: relative;
 }
-.live-section__head button:hover {
-  color: white;
-  border-color: white;
+.live-section__slider:hover .live-section__nav {
+  opacity: 1;
+  pointer-events: auto;
 }
 .live-section__track {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  user-select: none;
+  touch-action: pan-y;
 }
 .live-section__track::-webkit-scrollbar {
   display: none;
+}
+.live-section__nav {
+  position: absolute;
+  top: 0;
+  bottom: 28px;
+  width: 50px;
+  z-index: 2;
+  border: 0;
+  color: #fff;
+  font-size: 42px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.85), transparent);
+}
+.live-section__nav--prev {
+  left: 0;
+}
+.live-section__nav--next {
+  right: 0;
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0.85), transparent);
 }
 
 .live-card {
@@ -178,9 +196,11 @@
   background: #303745;
 }
 .live-card__thumb img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
 }
 .live-card__placeholder {
   position: absolute;
