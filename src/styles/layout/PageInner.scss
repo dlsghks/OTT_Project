@@ -1,0 +1,33 @@
+.site-inner {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+
+  margin: 0;
+  padding: 0 110px;
+  box-sizing: border-box;
+
+  // 모든 페이지 공통 배경
+  background: linear-gradient(180deg,
+      #071a2e 0%,
+      #000000 100%);
+}
+
+// 공통 그라데이션을 가리지 않도록
+.site-inner {
+
+  >.wavve-home,
+  >.live-page,
+  >.live-channel-page,
+  >.retrov-main,
+  >.shorts-page {
+    background: transparent;
+    background-image: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-inner {
+    padding: 0 20px;
+  }
+}

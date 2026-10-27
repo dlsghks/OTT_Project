@@ -1,5 +1,7 @@
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 import { useNavigate } from 'react-router-dom';
 import { getScheduleForDate, localDateKey } from '../../data/scheduleData';
 import '../../styles/pages/Schedule.scss';
@@ -30,6 +32,7 @@ const getVisibleStart = hour => {
 
 export const Schedule = () => {
   const navigate = useNavigate();
+  const swiperRef = useRef(null);
 
   // 페이지 진입 시각
   const [enteredAt] = useState(() => new Date());
@@ -101,18 +104,19 @@ export const Schedule = () => {
   // 시간 선택
   const handleSelectHour = hour => {
     setSelectedHour(hour);
+    swiperRef.current?.slideTo(hour);
     setSelectedProgram(null);
   };
 
   // 1시간 이전
   const handlePrevHour = () => {
-    setSelectedHour(prev => Math.max(0, prev - 1));
+    swiperRef.current?.slidePrev();
     setSelectedProgram(null);
   };
 
   // 1시간 다음
   const handleNextHour = () => {
-    setSelectedHour(prev => Math.min(23, prev + 1));
+    swiperRef.current?.slideNext();
     setSelectedProgram(null);
   };
 
@@ -208,7 +212,12 @@ export const Schedule = () => {
           handleReservation(program);
         }}
       >
-        {inPopover ? '시청예약' : '🔔'}
+        {inPopover ? '시청예약' : (
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+            <path d="M10 21h4" />
+          </svg>
+        )}
       </button>
     );
   };
@@ -296,58 +305,48 @@ export const Schedule = () => {
         ))}
       </div>
 
-      {/* 편성표 */}
+      {/* 편성표: 한 슬라이드가 3시간 범위의 전체 채널을 표시 */}
       <div className="schedule-guide">
+        <Swiper
+          onSwiper={swiper => {
+            swiperRef.current = swiper;
+            swiper.slideTo(selectedHour, 0);
+          }}
+          onSlideChange={swiper => {
+            setSelectedHour(swiper.activeIndex);
+            setSelectedProgram(null);
+          }}
+          slidesPerView={1}
+          slidesPerGroup={1}
+          speed={500}
+          grabCursor={true}
+          simulateTouch={true}
+          shortSwipes={true}
+          longSwipesRatio={0.1}
+          watchOverflow={true}
+          nested={true}
+          className="schedule-guide__swiper"
+        >
+          {Array.from({ length: 24 }, (_, slideHour) => {
+            const slideStart = getVisibleStart(slideHour);
+            const slideStartMinute = slideStart * 60;
+            const slideEndMinute = (slideStart + 3) * 60;
+            const slideVisibleHours = [slideStart, slideStart + 1, slideStart + 2];
 
-        {/* 편성표 시간 헤더 */}
-        <div className="schedule-guide__header">
-
-          {/* 채널 영역 */}
-          <div className="schedule-guide__channel-label">
-
-          </div>
-
-          {/* 시간 영역 */}
-          <div className="schedule-guide__time-area">
-
-            {/* 이전 시간 버튼 */}
-            <button
-              type="button"
-              className="schedule-guide__arrow schedule-guide__arrow--prev"
-              onClick={handlePrevHour}
-              disabled={selectedHour === 0}
-              aria-label="1시간 이전"
-            >
-              ‹
-            </button>
-
-            {/* 선택한 시간 기준 3시간 */}
-            <div className="schedule-guide__hours">
-              {visibleHours.map(hour => (
-                <div
-                  key={hour}
-                  className="schedule-guide__hour-label"
-                >
-                  {pad(hour)}:00
+            return (
+              <SwiperSlide key={slideHour}>
+                <div className="schedule-guide__header">
+                  <div className="schedule-guide__channel-label" />
+                  <div className="schedule-guide__time-area">
+                    <div className="schedule-guide__hours">
+                      {slideVisibleHours.map(hour => (
+                        <div key={hour} className="schedule-guide__hour-label">
+                          {pad(hour)}:00
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            {/* 다음 시간 버튼 */}
-            <button
-              type="button"
-              className="schedule-guide__arrow schedule-guide__arrow--next"
-              onClick={handleNextHour}
-              disabled={selectedHour === 23}
-              aria-label="1시간 다음"
-            >
-              ›
-            </button>
-
-          </div>
-        </div>
-
-
         {/* 채널별 편성표 */}
         {rows.map(channel => (
           <div
@@ -361,22 +360,22 @@ export const Schedule = () => {
             <div className="schedule-guide__timeline">
               {channel.programs
                 .filter(program =>
-                  program.end > visibleStartMinute &&
-                  program.start < visibleEndMinute
+                  program.end > slideStartMinute &&
+                  program.start < slideEndMinute
                 )
                 .map(program => {
                   const clippedStart = Math.max(
                     program.start,
-                    visibleStartMinute
+                    slideStartMinute
                   );
 
                   const clippedEnd = Math.min(
                     program.end,
-                    visibleEndMinute
+                    slideEndMinute
                   );
 
                   const left =
-                    (clippedStart - visibleStartMinute) /
+                    (clippedStart - slideStartMinute) /
                     180 * 100;
 
                   const width =
@@ -447,6 +446,24 @@ export const Schedule = () => {
             </div>
           </div>
         ))}
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+        <button
+          type="button"
+          className="schedule-guide__arrow schedule-guide__arrow--prev"
+          onClick={handlePrevHour}
+          disabled={selectedHour === 0}
+          aria-label="1시간 이전"
+        >‹</button>
+        <button
+          type="button"
+          className="schedule-guide__arrow schedule-guide__arrow--next"
+          onClick={handleNextHour}
+          disabled={selectedHour === 23}
+          aria-label="1시간 다음"
+        >›</button>
       </div>
 
       {/* 프로그램 상세 팝업 */}

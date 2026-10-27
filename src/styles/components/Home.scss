@@ -1,12 +1,14 @@
 .wavve-home {
   min-height: 100vh;
-  background: #0b0e14;
+  background: transparent;
   color: #fff;
 
   &__inner {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 32px 70px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   button {
@@ -16,22 +18,27 @@
 
 .home-hero {
   position: relative;
-  min-height: min(46vw, 590px);
+  min-height: 0;
   display: flex;
   align-items: center;
-  background: radial-gradient(circle at 70% 30%, #284f7b, transparent 40%), linear-gradient(120deg, #080b12, #162b49 65%, #101521);
+  background:
+    radial-gradient(circle at 70% 30%, #284f7b, transparent 40%),
+    linear-gradient(120deg, #080b12, #162b49 65%, #101521);
   background-size: cover;
   background-position: center;
-  padding: 50px max(32px, calc((100vw - 1376px) / 2));
+  padding: 0;
   cursor: pointer;
   user-select: none;
 
 
 
-  img {
-    user-select: none;
-    -webkit-user-drag: none;
+  .home-hero {
+    // 기존 스타일 유지
 
+    img {
+      user-select: none;
+      -webkit-user-drag: none;
+    }
 
     &__content {
       max-width: 600px;
@@ -45,34 +52,34 @@
         color: #d3d8e4;
       }
     }
-  }
 
-  &__link {
-    display: inline-block;
-    margin-top: 22px;
-    padding: 12px 20px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    background: #1556e8;
-  }
-
-  &__controls {
-    position: absolute;
-    bottom: 24px;
-    right: 5%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    button {
-      border: 0;
-      background: #ffffff30;
+    &__link {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 12px 20px;
+      border-radius: 6px;
       color: white;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      font-size: 24px;
+      text-decoration: none;
+      background: #1556e8;
+    }
+
+    &__controls {
+      position: absolute;
+      bottom: 24px;
+      right: 5%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      button {
+        border: 0;
+        background: #ffffff30;
+        color: white;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        font-size: 24px;
+      }
     }
   }
 }
@@ -479,7 +486,7 @@
 
 @media(max-width:768px) {
   .wavve-home__inner {
-    padding: 0 16px 50px
+    padding: 0 0 50px
   }
 
   .home-hero {

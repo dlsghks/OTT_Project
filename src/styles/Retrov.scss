@@ -6,7 +6,7 @@
   min-height: 100vh;
   overflow-x: clip; // 오른쪽으로 넘치는 카드 잘라내기
   padding-bottom: 120px;
-  background: $retrov-bg;
+  background: transparent;
   color: #fff;
   font-family: $retrov-sans;
 
@@ -251,7 +251,7 @@
 
       img {
         // transform: translateY(-4px);
-        box-shadow:0 10px 24px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
       }
     }
   }
@@ -271,9 +271,9 @@
 /* ---------------- 가로 목록 공통 ---------------- */
 .rv-main-row {
   margin-top: $retrov-gap-100;
-  padding-left: $retrov-side;
+  padding-left: 0;
 
-  .circle-navigation + & {
+  .circle-navigation+& {
     margin-top: $retrov-gap-80;
   }
 
@@ -546,8 +546,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .retrov-main *,
   .rv-main-hero * {
     transition: none !important;
   }
+}
+
+.site-inner>.retrov-main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 120px;
+  box-sizing: border-box;
 }
