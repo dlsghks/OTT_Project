@@ -1,5 +1,5 @@
-
 import { Link } from 'react-router-dom';
+import { getImagePath } from '../../utils/imagePath';
 import '../../styles/components/ContentCard.scss';
 
 export const ContentCard = ({ item, rank }) => {
@@ -13,7 +13,7 @@ export const ContentCard = ({ item, rank }) => {
         {/* 프로그램 썸네일 */}
         {item.poster && (
           <img
-            src={item.poster}
+            src={getImagePath(item.poster)}
             alt={item.title}
           />
         )}
@@ -21,10 +21,11 @@ export const ContentCard = ({ item, rank }) => {
         {/* 좌측 상단 상태 배지 */}
         {item.badge && (
           <span
-            className={`content-card__badge ${item.badge === '개별구매'
+            className={`content-card__badge ${
+              item.badge === '개별구매'
                 ? 'content-card__badge--purchase'
                 : 'content-card__badge--new'
-              }`}
+            }`}
           >
             {item.badge}
           </span>
@@ -34,7 +35,7 @@ export const ContentCard = ({ item, rank }) => {
         {item.isOriginal && (
           <img
             className="content-card__original"
-            src="/images/W-icon.svg"
+            src={getImagePath('/images/W-icon.svg')}
             alt="Wavve Original"
           />
         )}

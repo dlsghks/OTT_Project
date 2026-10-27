@@ -550,13 +550,34 @@
   .retrov-main *,
   .rv-main-hero * {
     transition: none !important;
+    position: relative;
   }
 }
 
+// RetroV 전체 영역을 화면 너비로 확장
 .site-inner>.retrov-main {
-  width: 100%;
+  width: calc(100% + var(--page-side-padding) * 2);
   max-width: none;
-  margin: 0;
-  padding: 0 0 120px;
+
+  margin-left: calc(var(--page-side-padding) * -1);
+  margin-right: calc(var(--page-side-padding) * -1);
+
+  padding: 0 var(--page-side-padding) 120px;
   box-sizing: border-box;
+
+  // 기존 디자인 유지
+  overflow-x: clip;
+}
+
+// 히어로만 좌우 패딩 제거
+.retrov-main__hero {
+  width: calc(100% + var(--page-side-padding) * 2);
+
+  margin-left: calc(var(--page-side-padding) * -1);
+  margin-right: calc(var(--page-side-padding) * -1);
+
+  .rv-main-hero {
+    width: 100%;
+    margin: 0;
+  }
 }
