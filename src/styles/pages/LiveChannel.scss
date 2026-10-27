@@ -2,7 +2,10 @@
   background: #09090b;
   color: #fff;
   min-height: 100vh;
-  padding: 48px max(24px, 4vw) 100px;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: none;
   box-sizing: border-box;
 
   button {
@@ -933,14 +936,6 @@
     transform: none;
     pointer-events: auto
   }
-}
-
-/* 공통 이너 레이아웃은 styles/common/PageInner.scss에서 관리 */
-.live-channel-page {
-  width: min(1700px, 90%);
-  max-width: 1700px;
-  margin-inline: auto;
-  padding: 48px 0 100px
 }
 
 @media(max-width:600px) {
