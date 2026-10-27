@@ -1,0 +1,406 @@
+@charset "UTF-8";
+.mudo-quiz {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1px;
+  height: 780px;
+  margin-inline: auto;
+  overflow: hidden;
+  background: #3734a0;
+  color: #fff;
+  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  animation: mudo-quiz-open 0.25s ease-out;
+}
+.mudo-quiz p,
+.mudo-quiz h3 {
+  margin: 0;
+}
+.mudo-quiz button {
+  font-family: inherit;
+}
+.mudo-quiz .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.mudo-quiz {
+  /* ---------- 상단 / 하단 바 ---------- */
+}
+.mudo-quiz__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 16px;
+  height: 60px;
+  padding: 0 36px;
+  background: #2a2784;
+  font-size: 13px;
+}
+.mudo-quiz__bar--bottom {
+  height: 46px;
+  font-size: 12px;
+  color: #b9b7ea;
+}
+.mudo-quiz__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.mudo-quiz__logo {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #1450ff;
+  font-size: 13px;
+}
+.mudo-quiz__bar-meta {
+  color: #b9b7ea;
+}
+.mudo-quiz {
+  /* ---------- 본문 ---------- */
+}
+.mudo-quiz__body {
+  position: relative;
+  flex: 1;
+  display: grid;
+  align-content: center;
+  min-height: 0;
+  padding: 32px 36px;
+  overflow-y: auto;
+}
+.mudo-quiz__actions {
+  position: absolute;
+  top: 32px;
+  right: 36px;
+  display: flex;
+  gap: 8px;
+}
+.mudo-quiz__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 14px;
+  border: 1px solid #4d73ff;
+  border-radius: 999px;
+  background: #0f1c8c;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.mudo-quiz__pill:hover {
+  background: #1450ff;
+}
+.mudo-quiz__stage {
+  display: grid;
+  justify-items: center;
+  width: min(490px, 100%);
+  margin-inline: auto;
+  text-align: center;
+}
+.mudo-quiz__stage--intro, .mudo-quiz__stage--result {
+  padding-top: 8px;
+}
+.mudo-quiz__eyebrow {
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #b9b7ea;
+}
+.mudo-quiz__eyebrow span {
+  opacity: 0.8;
+}
+.mudo-quiz__title {
+  display: grid;
+  margin-bottom: 14px;
+  font-size: clamp(26px, 2.1vw, 40px);
+  font-weight: 800;
+  line-height: 1.3;
+  outline: none;
+}
+.mudo-quiz__question {
+  margin-bottom: 20px;
+  font-size: clamp(20px, 1.4vw, 26px);
+  font-weight: 800;
+  outline: none;
+}
+.mudo-quiz__desc {
+  display: grid;
+  margin-bottom: 26px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #b9b7ea;
+}
+.mudo-quiz {
+  /* ---------- 캐릭터 카드 ---------- */
+}
+.mudo-quiz__profile {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 210px;
+  margin-bottom: 26px;
+  padding: 22px 16px 20px;
+  border-radius: 10px;
+  background: #0f1c8c;
+}
+.mudo-quiz__profile img {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 8px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #222;
+  object-fit: cover;
+}
+.mudo-quiz__profile strong {
+  font-size: 16px;
+}
+.mudo-quiz__profile span {
+  font-size: 11px;
+  color: #b9b7ea;
+}
+.mudo-quiz {
+  /* ---------- 버튼 ---------- */
+}
+.mudo-quiz__primary, .mudo-quiz__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+.mudo-quiz__primary {
+  background: #1450ff;
+}
+.mudo-quiz__primary:hover:not(:disabled) {
+  background: #4d73ff;
+}
+.mudo-quiz__primary:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.mudo-quiz__secondary {
+  margin-top: 10px;
+  background: #2a2784;
+}
+.mudo-quiz__secondary:hover {
+  background: #0f1c8c;
+}
+.mudo-quiz__hint {
+  margin-top: 12px;
+  font-size: 11px;
+  color: #b9b7ea;
+}
+.mudo-quiz {
+  /* ---------- 진행 바 ---------- */
+}
+.mudo-quiz__progress {
+  width: 100%;
+  margin-bottom: 26px;
+}
+.mudo-quiz__progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: #b9b7ea;
+}
+.mudo-quiz__progress-label span:last-child {
+  color: #fff;
+  font-weight: 700;
+}
+.mudo-quiz__progress-bar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mudo-quiz__progress-bar li {
+  height: 3px;
+  border-radius: 2px;
+  background: #5a56c4;
+  transition: background-color 0.3s;
+}
+.mudo-quiz__progress-bar li.is-done {
+  background: #4d73ff;
+}
+.mudo-quiz {
+  /* ---------- 문제 이미지 ---------- */
+}
+.mudo-quiz__image {
+  margin: 0 0 22px;
+}
+.mudo-quiz__image img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: clamp(200px, 15.625vw, 300px);
+  margin-inline: auto;
+  background: #1d1a6b;
+  object-fit: contain;
+}
+.mudo-quiz {
+  /* ---------- 입력 ---------- */
+}
+.mudo-quiz__form {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+.mudo-quiz__input {
+  position: relative;
+  display: block;
+}
+.mudo-quiz__input input {
+  width: 100%;
+  height: 44px;
+  padding: 0 40px 0 14px;
+  border: 0;
+  border-radius: 4px;
+  background: #f4f4fb;
+  color: #222;
+  font-family: inherit;
+  font-size: 14px;
+}
+.mudo-quiz__input input::placeholder {
+  color: #9a9ab0;
+}
+.mudo-quiz__input input:focus-visible {
+  outline: 3px solid #4d73ff;
+  outline-offset: 2px;
+}
+.mudo-quiz__input svg {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  color: #9a9ab0;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.mudo-quiz {
+  /* ---------- 정답 공개 ---------- */
+}
+.mudo-quiz__answer {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 18px;
+}
+.mudo-quiz__answer strong {
+  font-size: 16px;
+}
+.mudo-quiz__verdict {
+  font-size: 11px;
+}
+.mudo-quiz__verdict.is-correct {
+  color: #8fb0ff;
+}
+.mudo-quiz__verdict.is-wrong {
+  color: #ffb3c7;
+}
+.mudo-quiz__my-answer {
+  font-size: 12px;
+  color: #b9b7ea;
+}
+.mudo-quiz {
+  /* ---------- 결과 ---------- */
+}
+.mudo-quiz__check {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: #1450ff;
+  box-shadow: 0 0 0 8px rgba(20, 80, 255, 0.25);
+}
+.mudo-quiz__summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border: 1px solid #5a56c4;
+  border-radius: 8px;
+  background: rgba(15, 28, 140, 0.45);
+  text-align: left;
+}
+.mudo-quiz__summary img {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #222;
+  object-fit: cover;
+}
+.mudo-quiz__summary strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+.mudo-quiz__summary p {
+  font-size: 12px;
+}
+.mudo-quiz__summary em {
+  font-style: normal;
+  font-weight: 700;
+  color: #8fb0ff;
+}
+.mudo-quiz__summary-sub {
+  margin-top: 2px;
+  color: #b9b7ea;
+}
+.mudo-quiz button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+@keyframes mudo-quiz-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+@media (max-width: 1024px) {
+  .mudo-quiz {
+    height: auto;
+    min-height: 600px;
+  }
+  .mudo-quiz__bar {
+    padding: 0 16px;
+  }
+  .mudo-quiz__body {
+    padding: 76px 16px 28px;
+  }
+  .mudo-quiz__actions {
+    top: 20px;
+    right: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mudo-quiz {
+    animation: none;
+  }
+}

@@ -1,0 +1,8 @@
+// 레트로브 공통 폰트 (둥근모)
+// 사용: @use "./retrov/fonts";
+@font-face {
+  font-family: "DungGeunMo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff") format("woff");
+  font-weight: normal;
+  font-display: swap;
+}

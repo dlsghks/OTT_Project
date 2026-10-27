@@ -1,0 +1,130 @@
+.login-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.login-modal {
+  position: relative;
+  box-sizing: border-box;
+  width: min(620px, 100%);
+  padding: 79px 61px 66px;
+  border-radius: 48px;
+  background: linear-gradient(145deg, #0c0c1b, #0c0c16);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
+  color: #fff;
+  text-align: center;
+}
+.login-modal__close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #070711;
+  color: #fff;
+  font-size: 35px;
+  font-weight: 200;
+  cursor: pointer;
+}
+.login-modal h2 {
+  margin: 0 0 29px;
+  font-size: 34px;
+  font-weight: 750;
+  line-height: 1.45;
+  letter-spacing: -1.3px;
+}
+.login-modal p {
+  margin: 0 0 46px;
+  color: #9598ad;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.login-modal__signup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 76px;
+  border-radius: 13px;
+  background: #1852f5;
+  color: #fff;
+  font-size: 23px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.login-modal__signup:hover {
+  background: #3167ff;
+}
+.login-modal__social {
+  display: flex;
+  justify-content: center;
+  gap: 23px;
+  margin-top: 29px;
+}
+.login-modal__social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #262836;
+  text-decoration: none;
+}
+.login-modal__social-btn--naver {
+  color: #03ce5b;
+  font-size: 30px;
+  font-weight: 900;
+}
+.login-modal__social-btn--kakao, .login-modal__social-btn--apple {
+  color: #fff;
+}
+.login-modal__bottom {
+  margin-top: 42px;
+  color: #b4b7c9;
+  font-size: 18px;
+}
+.login-modal__bottom a {
+  margin-left: 7px;
+  color: #7a9cff;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .login-modal {
+    padding: 76px 24px 45px;
+    border-radius: 28px;
+  }
+  .login-modal h2 {
+    font-size: 26px;
+  }
+  .login-modal p {
+    margin-bottom: 30px;
+    font-size: 14px;
+  }
+  .login-modal__signup {
+    height: 62px;
+    font-size: 18px;
+  }
+  .login-modal__social-btn {
+    width: 60px;
+    height: 60px;
+  }
+  .login-modal__bottom {
+    font-size: 15px;
+  }
+}

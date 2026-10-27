@@ -1,12 +1,14 @@
 // 무도 퀴즈 패널 (디자인 기준: 1920px 화면에서 1420 x 780px)
-$quiz-width: 1420px;
-$quiz-height: 780px;
+@use "../retrov/variables" as *;
+
+$quiz-width: $retrov-panel-width;
+$quiz-height: $retrov-panel-height;
 $quiz-bar-height: 60px;
 $quiz-footer-height: 46px;
 $quiz-bg: #3734a0;
 $quiz-bar: #2a2784;
 $quiz-card: #0f1c8c;
-$quiz-blue: #1450ff;
+$quiz-blue: $retrov-blue;
 $quiz-blue-light: #4d73ff;
 $quiz-line: #5a56c4;
 $quiz-text-sub: #b9b7ea;
@@ -17,12 +19,12 @@ $quiz-text-sub: #b9b7ea;
   width: 100%;
   max-width: $quiz-width;
   height: $quiz-height;
-  margin: 8px auto 72px;
+  margin-inline: auto; // 위아래 간격은 RetrovDetail.scss 에서 지정
   overflow: hidden;
   background: $quiz-bg;
   color: #fff;
   // 페이지는 도트 폰트지만 퀴즈는 시안대로 일반 고딕
-  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: $retrov-sans;
   animation: mudo-quiz-open 0.25s ease-out;
 
   p,
