@@ -1,8 +1,10 @@
+import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/wavve_logo_w.svg'
 import bellIcon from '../assets/icons/lyra-icon-bell-02.svg'
 import searchIcon from '../assets/icons/lyra-icon-search.svg'
 import userIcon from '../assets/icons/lyra-icon-User06.svg'
+import { NotificationPopup } from './NotificationPopup'
 import '../styles/components/Header.scss'
 
 // 메인 메뉴
@@ -23,6 +25,15 @@ export const Header = ({
   onSearchClick,
   onProfileClick,
 }) => {
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+
+  const handleNotificationClick = (e) => {
+    setIsNotificationOpen(true)
+    onNotificationClick?.(e)
+  }
+
+  const closeNotification = useCallback(() => setIsNotificationOpen(false), [])
+
   return (
     <header>
       <div className="inner">
@@ -50,15 +61,15 @@ export const Header = ({
         <div className="header-right">
           <ul>
             <li>
-              <Link>
-                <button
-                  type="button"
-                  aria-label="알림"
-                  onClick={onNotificationClick}
-                >
-                  <img src={bellIcon} alt="" width="28" height="28" />
-                </button>
-              </Link>
+              <button
+                type="button"
+                aria-label="알림"
+                aria-haspopup="dialog"
+                aria-expanded={isNotificationOpen}
+                onClick={handleNotificationClick}
+              >
+                <img src={bellIcon} alt="" width="28" height="28" />
+              </button>
             </li>
             <li>
               <Link to='/search'>
@@ -83,6 +94,8 @@ export const Header = ({
           </ul>
         </div>
       </div>
+
+      {isNotificationOpen && <NotificationPopup onClose={closeNotification} />}
     </header>
   )
 }
