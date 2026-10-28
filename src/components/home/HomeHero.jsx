@@ -1,9 +1,10 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
+
+import { getImagePath } from '../../utils/imagePath';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -15,7 +16,10 @@ export const HomeHero = ({ items = [] }) => {
     if (!items.length) return null;
 
     return (
-        <section className="home-hero" aria-label="추천 배너">
+        <section
+            className="home-hero hero-full-width"
+            aria-label="추천 배너"
+        >
             <Swiper
                 modules={[Autoplay, Navigation]}
                 slidesPerView={1}
@@ -47,7 +51,7 @@ export const HomeHero = ({ items = [] }) => {
                             style={
                                 item.image
                                     ? {
-                                        backgroundImage: `linear-gradient(90deg, #080c16 8%, transparent), url("${item.image}")`
+                                        backgroundImage: `linear-gradient(90deg, #080c16 8%, transparent), url("${getImagePath(item.image)}")`
                                     }
                                     : undefined
                             }

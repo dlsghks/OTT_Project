@@ -1,0 +1,9 @@
+// 공통 전체 너비 히어로
+
+.hero-full-width {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: border-box;
+}

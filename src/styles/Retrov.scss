@@ -6,7 +6,7 @@
   min-height: 100vh;
   overflow-x: clip; // 오른쪽으로 넘치는 카드 잘라내기
   padding-bottom: 120px;
-  background: $retrov-bg;
+  background: transparent;
   color: #fff;
   font-family: $retrov-sans;
 
@@ -251,7 +251,7 @@
 
       img {
         // transform: translateY(-4px);
-        box-shadow:0 10px 24px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
       }
     }
   }
@@ -271,9 +271,9 @@
 /* ---------------- 가로 목록 공통 ---------------- */
 .rv-main-row {
   margin-top: $retrov-gap-100;
-  padding-left: $retrov-side;
+  padding-left: 0;
 
-  .circle-navigation + & {
+  .circle-navigation+& {
     margin-top: $retrov-gap-80;
   }
 
@@ -546,8 +546,38 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .retrov-main *,
   .rv-main-hero * {
     transition: none !important;
+    position: relative;
+  }
+}
+
+// RetroV 전체 영역을 화면 너비로 확장
+.site-inner>.retrov-main {
+  width: calc(100% + var(--page-side-padding) * 2);
+  max-width: none;
+
+  margin-left: calc(var(--page-side-padding) * -1);
+  margin-right: calc(var(--page-side-padding) * -1);
+
+  padding: 0 var(--page-side-padding) 120px;
+  box-sizing: border-box;
+
+  // 기존 디자인 유지
+  overflow-x: clip;
+}
+
+// 히어로만 좌우 패딩 제거
+.retrov-main__hero {
+  width: calc(100% + var(--page-side-padding) * 2);
+
+  margin-left: calc(var(--page-side-padding) * -1);
+  margin-right: calc(var(--page-side-padding) * -1);
+
+  .rv-main-hero {
+    width: 100%;
+    margin: 0;
   }
 }
