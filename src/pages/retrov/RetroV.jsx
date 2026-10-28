@@ -1,10 +1,12 @@
-// src/pages/RetroV.jsx
+// src/pages/retrov/RetroV.jsx
+
 import { Link } from "react-router-dom";
 
 import ProgramNavigation from "../../components/retrov/ProgramNavigation";
 import RetroMainHero from "../../components/retrov/RetroMainHero";
 import RetroMainRow from "../../components/retrov/RetroMainRow";
 import RetroEventCarousel from "../../components/retrov/RetroEventCarousel";
+
 import { programs, eventBanners } from "../../data/retrov";
 import {
   userName,
@@ -14,13 +16,19 @@ import {
   recommendations,
   shorts,
 } from "../../data/retrovMain";
+
+import { getImagePath } from "../../utils/imagePath";
+
 import "../../styles/Retrov.scss";
 
 export const RetroV = () => {
   return (
     <div className="retrov-main">
+
       {/* 메인 배너 */}
-      <RetroMainHero slides={heroSlides} />
+      <div className="retrov-main__hero">
+        <RetroMainHero slides={heroSlides} />
+      </div>
 
       {/* 프로그램 선택 (동그란 필터) */}
       <ProgramNavigation programs={programs} />
@@ -32,11 +40,26 @@ export const RetroV = () => {
         title="레트로브 TOP 랭킹"
         items={rankings}
         renderItem={(item, index) => (
-          <Link to={`/retrov/${item.id}`} className="rv-rank-card" aria-label={`${index + 1}위 ${item.title}`}>
+          <Link
+            to={`/retrov/${item.id}`}
+            className="rv-rank-card"
+            aria-label={`${index + 1}위 ${item.title}`}
+          >
             <span className="rv-rank-card__poster">
-              <img src={item.thumbnail} alt="" loading="lazy" draggable="false" />
-              <img className="rv-rank-card__logo" src={item.logo} alt="" draggable="false" />
+              <img
+                src={getImagePath(item.thumbnail)}
+                alt=""
+                loading="lazy"
+                draggable="false"
+              />
+              <img
+                className="rv-rank-card__logo"
+                src={getImagePath(item.logo)}
+                alt=""
+                draggable="false"
+              />
             </span>
+
             <span className="rv-rank-card__number" aria-hidden="true">
               {index + 1}
             </span>
@@ -52,10 +75,19 @@ export const RetroV = () => {
         title={`${userName}님이 시청 중인 콘텐츠`}
         items={watching}
         renderItem={(item) => (
-          <Link to={`/retrov/${item.programId}`} className="rv-thumb-card">
+          <Link
+            to={`/retrov/${item.programId}`}
+            className="rv-thumb-card"
+          >
             <span className="rv-thumb-card__image">
-              <img src={item.image} alt={item.title} loading="lazy" draggable="false" />
+              <img
+                src={getImagePath(item.image)}
+                alt={item.title}
+                loading="lazy"
+                draggable="false"
+              />
             </span>
+
             <span
               className="rv-thumb-card__progress"
               role="progressbar"
@@ -77,12 +109,28 @@ export const RetroV = () => {
         title="레트로브 추천 콘텐츠"
         items={recommendations}
         renderItem={(item) => (
-          <Link to={`/retrov/${item.programId}`} className="rv-thumb-card">
+          <Link
+            to={`/retrov/${item.programId}`}
+            className="rv-thumb-card"
+          >
             <span className="rv-thumb-card__image">
-              <img src={item.image} alt="" loading="lazy" draggable="false" />
+              <img
+                src={getImagePath(item.image)}
+                alt=""
+                loading="lazy"
+                draggable="false"
+              />
             </span>
-            <strong className="rv-thumb-card__title">{item.title}</strong>
-            {item.description && <span className="rv-thumb-card__desc">{item.description}</span>}
+
+            <strong className="rv-thumb-card__title">
+              {item.title}
+            </strong>
+
+            {item.description && (
+              <span className="rv-thumb-card__desc">
+                {item.description}
+              </span>
+            )}
           </Link>
         )}
       />
@@ -94,17 +142,34 @@ export const RetroV = () => {
         title="레트로브 쇼츠 모아보기"
         items={shorts}
         renderItem={(item) => {
-          const program = programs.find((p) => p.id === item.programId);
+          const program = programs.find(
+            (p) => p.id === item.programId
+          );
+
           return (
-            <Link to={`/retrov/${item.programId}`} className="rv-short-card">
+            <Link
+              to={`/retrov/${item.programId}`}
+              className="rv-short-card"
+            >
               <strong className="rv-short-card__caption">
                 <span>{item.caption[0]}</span>
                 <em>{item.caption[1]}</em>
               </strong>
+
               <span className="rv-short-card__image">
-                <img src={item.image} alt="" loading="lazy" draggable="false" />
-                <img className="rv-short-card__badge" src="/images/W-icon.svg" alt="" />
+                <img
+                  src={getImagePath(item.image)}
+                  alt=""
+                  loading="lazy"
+                  draggable="false"
+                />
+                <img
+                  className="rv-short-card__badge"
+                  src={getImagePath("/images/W-icon.svg")}
+                  alt=""
+                />
               </span>
+
               <span className="rv-short-card__footer">
                 {program?.title} | 오직 <b>wavve</b>에서
               </span>
