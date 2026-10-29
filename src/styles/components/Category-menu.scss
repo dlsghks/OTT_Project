@@ -1,0 +1,113 @@
+
+.home-categories {
+  width: 100%;
+  min-width: 0;
+  padding: 28px 0 20px;
+
+  &__slider {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+  }
+
+  &__swiper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .swiper-slide {
+    width: 198.85px;
+    height: 97px;
+    user-select: none;
+  }
+
+  &__card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 97px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #222;
+    text-decoration: none;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    // 모든 버튼에 동일한 기본 테두리
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid transparent;
+      border-radius: inherit;
+      pointer-events: none;
+      transition: border-color 0.2s ease;
+    }
+
+    // 모든 버튼 호버 시 파란색 테두리
+    &:hover::after {
+      border-color: #2057ec;
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    width: 65px;
+    padding: 0;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 54px;
+      background: rgba(20, 20, 20, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    &--prev {
+      left: 0;
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.8),
+        transparent
+      );
+    }
+
+    &--next {
+      right: 0;
+      background: linear-gradient(
+        to left,
+        rgba(0, 0, 0, 0.8),
+        transparent
+      );
+    }
+  }
+
+  &__slider:hover &__arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

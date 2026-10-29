@@ -129,31 +129,81 @@
 }
 
 .home-categories {
-  display: flex;
-  overflow-x: auto;
-  gap: 12px;
+  width: 100%;
+  min-width: 0;
   padding: 28px 0 20px;
-  scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  &__slider { position: relative; width: 100%; min-width: 0; }
+  &__swiper { width: 100%; overflow: hidden; }
+  .swiper-slide { height: auto; user-select: none; }
 
-  a {
-    white-space: nowrap;
+  &__card {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 400 / 200;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #222;
     text-decoration: none;
-    color: #e5e5e5;
-    padding: 10px 22px;
-    background: #242934;
-    border-radius: 999px;
-    font-size: 14px;
+    transition: box-shadow 0.2s ease;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    &.active { box-shadow: inset 0 0 0 3px #2057ec; }
+    &.active::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 3px solid #2057ec;
+      border-radius: inherit;
+      pointer-events: none;
+    }
   }
 
-  a.active {
-    background: #2057ec;
+  &__arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    width: 65px;
+    padding: 0;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #fff;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 54px;
+      background: rgba(20, 20, 20, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    &--prev { left: 0; background: linear-gradient(to right, rgba(0,0,0,.8), transparent); }
+    &--next { right: 0; background: linear-gradient(to left, rgba(0,0,0,.8), transparent); }
   }
+  &__slider:hover &__arrow { opacity: 1; pointer-events: auto; }
 }
+
 
 .home-section {
   margin: 24px 0 52px;
