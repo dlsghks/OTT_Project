@@ -6,27 +6,56 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 import { ContentCard } from './ContentCard';
+import '../../styles/components/ContentSection.scss';
+
+const CARD_TYPES = {
+    default: {
+        width: 318,
+        group: 5
+    },
+    wide: {
+        width: 379,
+        group: 4
+    },
+    'coming-soon': {
+        width: 407,
+        group: 4
+    }
+};
 
 export const ContentSection = ({
     title,
     items = [],
-    moreLink
+    moreLink,
+    more,
+    cardType = 'default'
 }) => {
     const swiperRef = useRef(null);
+
     const [canPrev, setCanPrev] = useState(false);
     const [canNext, setCanNext] = useState(false);
 
+    const config = CARD_TYPES[cardType] || CARD_TYPES.default;
+
     const updateNavigation = (swiper) => {
+        if (!swiper) return;
+
         setCanPrev(!swiper.isBeginning);
         setCanNext(!swiper.isEnd);
     };
 
     return (
-        <section className="content-section">
+        <section
+            className={`content-section content-section--${cardType}`}
+            style={{ '--content-card-width': `${config.width}px` }}
+        >
             <div className="content-section__header">
                 <div className="content-section__title">
                     <h2>{title}</h2>
-                    {moreLink && <Link to={moreLink}>더보기</Link>}
+
+                    {(moreLink || more) && (
+                        <Link to={moreLink || more}>더보기</Link>
+                    )}
                 </div>
             </div>
 
@@ -38,32 +67,17 @@ export const ContentSection = ({
                     }}
                     onSlideChange={updateNavigation}
                     onResize={updateNavigation}
-                    slidesPerView={2}
-                    slidesPerGroup={2}
-                    spaceBetween={12}
+                    onReachBeginning={updateNavigation}
+                    onReachEnd={updateNavigation}
+                    slidesPerView="auto"
+                    slidesPerGroup={config.group}
+                    spaceBetween={18}
                     speed={500}
                     grabCursor={true}
                     simulateTouch={true}
                     longSwipesRatio={0.1}
                     shortSwipes={true}
                     watchOverflow={true}
-                    breakpoints={{
-                        640: {
-                            slidesPerView: 3,
-                            slidesPerGroup: 3,
-                            spaceBetween: 14,
-                        },
-                        1024: {
-                            slidesPerView: 4,
-                            slidesPerGroup: 4,
-                            spaceBetween: 16,
-                        },
-                        1440: {
-                            slidesPerView: 5,
-                            slidesPerGroup: 5,
-                            spaceBetween: 20,
-                        },
-                    }}
                     className="content-section__swiper"
                 >
                     {items.map((item, index) => (
