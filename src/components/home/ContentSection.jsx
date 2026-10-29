@@ -38,9 +38,9 @@ export const ContentSection = ({
                     }}
                     onSlideChange={updateNavigation}
                     onResize={updateNavigation}
-                    slidesPerView={2}
+                    // 카드 크기는 공통 변수(--card-w)로 고정, 간격은 .card-slide 의 margin
+                    slidesPerView="auto"
                     slidesPerGroup={2}
-                    spaceBetween={12}
                     speed={500}
                     grabCursor={true}
                     simulateTouch={true}
@@ -49,25 +49,19 @@ export const ContentSection = ({
                     watchOverflow={true}
                     breakpoints={{
                         640: {
-                            slidesPerView: 3,
                             slidesPerGroup: 3,
-                            spaceBetween: 14,
                         },
                         1024: {
-                            slidesPerView: 4,
                             slidesPerGroup: 4,
-                            spaceBetween: 16,
                         },
                         1440: {
-                            slidesPerView: 5,
                             slidesPerGroup: 5,
-                            spaceBetween: 20,
                         },
                     }}
                     className="content-section__swiper"
                 >
                     {items.map((item, index) => (
-                        <SwiperSlide key={item.id ?? index}>
+                        <SwiperSlide key={item.id ?? index} className="card-slide">
                             <ContentCard item={item} />
                         </SwiperSlide>
                     ))}

@@ -1,11 +1,26 @@
+@use '../common/card' as card;
+
+// 카드 크기 변수 (--card-w, --card-h, --card-gap) · 공통 값은 common/_card.scss
+:root {
+  @include card.size-vars;
+}
+
+// 가로 슬라이드 한 칸 (홈 · 카테고리 페이지 공통, swiper 기본 width 보다 우선)
+.swiper-slide.card-slide {
+  @include card.slide;
+}
+
 .content-card {
+  // 배지 · 아이콘 · 순위 숫자를 카드 실제 너비에 비례시키기 위한 기준
+  container-type: inline-size;
+  position: relative;
   width: 100%;
   min-width: 0;
 
   &__thumbnail {
     position: relative;
     width: 100%;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: #{card.$base-w} / #{card.$base-h};
 
     overflow: hidden;
     border-radius: 12px;
@@ -39,19 +54,19 @@
     font-weight: 600;
   }
 
-  // 좌측 상단 상태 배지
+  // 좌측 상단 상태 배지 (318 카드 기준 값, 카드가 작아지면 같은 비율로 · 최소 크기 유지)
   .content-card {
     &__badge {
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: max(6px, #{card.in-card(10)});
+      left: max(6px, #{card.in-card(10)});
       z-index: 2;
 
-      padding: 5px 8px;
-      border-radius: 4px;
+      padding: max(3px, #{card.in-card(5)}) max(5px, #{card.in-card(8)});
+      border-radius: max(3px, #{card.in-card(4)});
 
       color: #fff;
-      font-size: 12px;
+      font-size: max(10px, #{card.in-card(12)});
       font-weight: 700;
       line-height: 1.2;
 
@@ -60,12 +75,12 @@
 
       // 새로운
       &--new {
-        background-color: #1765f5;
+        background-color: card.$badge-blue;
       }
 
       // 개별구매
       &--purchase {
-        background-color: #6b46c1;
+        background-color: card.$purchase-purple;
       }
     }
   }
@@ -77,23 +92,37 @@
     right: 0;
     z-index: 2;
 
-    width: 48px;
+    width: max(28px, #{card.in-card(48)});
     height: auto;
   }
 
-  // 랭킹 숫자
+  // TOP 20 순위 숫자 이미지 (1920 기준 높이 120, 숫자 1 = 84*120 / 10 이상은 폭만 늘어남)
+  // 카드 왼쪽 아래에 걸쳐 카드 밖으로 30px 내려옴
   &__rank {
     position: absolute;
-    left: 10px;
-    bottom: 5px;
+    top: card.in-card(card.$base-h - (card.$rank-h - card.$rank-overhang));
+    left: card.in-card(card.$rank-left);
     z-index: 2;
 
-    font-size: 48px;
-    font-weight: 800;
-    font-style: italic;
-    color: #fff;
+    width: auto;
+    height: card.in-card(card.$rank-h);
 
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // 순위 카드: 제목 숨기고, 숫자가 걸치는 만큼 아래 공간 확보
+  &--ranked {
+    .content-card__info {
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      display: block;
+      height: card.in-card(card.$rank-overhang);
+    }
   }
 
   // 제목

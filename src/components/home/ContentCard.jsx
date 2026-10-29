@@ -6,7 +6,7 @@ export const ContentCard = ({ item, rank }) => {
   return (
     <Link
       to={`/programdetail/${item.id}`}
-      className="content-card"
+      className={`content-card ${rank ? 'content-card--ranked' : ''}`}
     >
       <div className="content-card__thumbnail">
 
@@ -40,13 +40,6 @@ export const ContentCard = ({ item, rank }) => {
           />
         )}
 
-        {/* 랭킹 번호 */}
-        {rank && (
-          <span className="content-card__rank">
-            {rank}
-          </span>
-        )}
-
         {/* 이미지가 없을 때 임시 제목 */}
         {!item.poster && (
           <span className="content-card__placeholder">
@@ -59,6 +52,16 @@ export const ContentCard = ({ item, rank }) => {
       <div className="content-card__info">
         <h3>{item.title}</h3>
       </div>
+
+      {/* TOP 20 순위 숫자 이미지 (public/images/rank/wavve_rank1~20.svg) */}
+      {rank && rank <= 20 && (
+        <img
+          className="content-card__rank"
+          src={getImagePath(`/images/rank/wavve_rank${rank}.svg`)}
+          alt={`${rank}위`}
+          draggable="false"
+        />
+      )}
     </Link>
   );
 };

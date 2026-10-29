@@ -38,9 +38,9 @@ export const RankingSection = ({ items = [] }) => {
                     onBreakpoint={updateNavigation}
 
                     // 기본 슬라이드 설정
-                    slidesPerView={2}
+                    // 카드 크기는 공통 변수(--card-w)로 고정, 간격은 .card-slide 의 margin
+                    slidesPerView="auto"
                     slidesPerGroup={2}
-                    spaceBetween={12}
                     speed={500}
 
                     // 마우스 드래그
@@ -54,29 +54,23 @@ export const RankingSection = ({ items = [] }) => {
                     // 슬라이드 개수가 적으면 이동 방지
                     watchOverflow={true}
 
-                    // 화면 크기에 따른 카드 개수
+                    // 화면 크기에 따라 한 번에 넘길 카드 개수
                     breakpoints={{
                         640: {
-                            slidesPerView: 3,
                             slidesPerGroup: 3,
-                            spaceBetween: 14
                         },
                         1024: {
-                            slidesPerView: 4,
                             slidesPerGroup: 4,
-                            spaceBetween: 16
                         },
                         1440: {
-                            slidesPerView: 5,
                             slidesPerGroup: 5,
-                            spaceBetween: 20
                         }
                     }}
 
                     className="ranking-section__swiper"
                 >
                     {items.map((item, index) => (
-                        <SwiperSlide key={item.id ?? index}>
+                        <SwiperSlide key={item.id ?? index} className="card-slide">
                             <ContentCard
                                 item={item}
                                 rank={index + 1}

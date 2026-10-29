@@ -1,0 +1,57 @@
+// =========================
+// 콘텐츠 카드 공통 값 (홈 · 예능 · 드라마 · 영화 · 시사교양 · 애니 · 해외시리즈)
+// 사용: @use '../common/card' as card;
+// =========================
+
+@use 'sass:math';
+
+// 1920 기준 카드 318*464, 카드 간격 20px
+$base-w: 318;
+$base-h: 464;
+$gap: 20;
+$base-screen: 1920;
+
+// 작은 화면 최소값
+$min-w: 140px;
+$min-gap: 10px;
+
+// TOP 20 순위 숫자 이미지 (1920 기준 높이 120, 카드 아래로 30px 걸침, 카드 왼쪽에서 14px)
+$rank-h: 120;
+$rank-overhang: 30;
+$rank-left: 14;
+$rank-max: 20;
+
+// 카드 배지 · 웨이브 오리지널 아이콘 (318 카드 기준 값)
+$badge-blue: #1765f5;
+$purchase-purple: #6b46c1;
+
+// 1920 기준 px → 카드 너비 비례 값
+// - in-card: 카드(.content-card) 안 요소용, 카드 실제 너비 기준 (container query)
+// - by-var: 카드 밖 요소용 (슬라이드 여백, 화살표 위치 등), --card-w 기준
+@function in-card($px) {
+  @return math.div($px, $base-w) * 100cqw;
+}
+
+@function by-var($px) {
+  @return calc(var(--card-w) * #{$px} / #{$base-w});
+}
+
+// :root 에 한 번만 선언되는 카드 크기 변수
+// 1920 이하는 화면 너비에 비례해 작아지고, 1920 이상은 318*464 고정
+@mixin size-vars {
+  --card-w: clamp(#{$min-w}, #{math.div($base-w, $base-screen) * 100vw}, #{$base-w * 1px});
+  --card-h: calc(var(--card-w) * #{$base-h} / #{$base-w});
+  --card-gap: clamp(#{$min-gap}, #{math.div($gap, $base-screen) * 100vw}, #{$gap * 1px});
+}
+
+// 가로 슬라이드(Swiper slidesPerView="auto")의 슬라이드 한 칸
+@mixin slide {
+  width: var(--card-w);
+  height: auto;
+  margin-right: var(--card-gap);
+  user-select: none;
+
+  img {
+    -webkit-user-drag: none;
+  }
+}

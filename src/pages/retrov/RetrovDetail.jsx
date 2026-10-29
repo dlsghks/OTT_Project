@@ -87,7 +87,9 @@ function ProgramFanPage({ programId, program }) {
         return {
           ...section,
           title: seasonEpisodes.length ? `${section.title} ${seasonEpisodes.length}회` : section.title,
-          videos: seasonEpisodes.map((ep) => episodeToVideo(ep, tmdb, tmdbBackdrop, youtubeVideos, seasonYoutubeIds)),
+          videos: seasonEpisodes
+            .slice(0, section.maxEpisodes ?? seasonEpisodes.length) // maxEpisodes: 앞에서부터 N회까지만
+            .map((ep) => episodeToVideo(ep, tmdb, tmdbBackdrop, youtubeVideos, seasonYoutubeIds)),
         };
       }
 

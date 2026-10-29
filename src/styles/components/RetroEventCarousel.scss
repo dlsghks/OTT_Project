@@ -1,93 +1,49 @@
 // 레트로브 이벤트 배너 캐러셀 (메인·상세 공통)
+// 감싸는 inner 여백과 상관없이 화면 양쪽 끝까지 (양옆 배너는 화면 끝에서 잘림)
+$event-width: min(calc(1480 / 1920 * 100vw), 1480px); // 가운데 배너: 1920px 이상 1480 x 180, 그보다 작으면 비율대로
+$event-gap: 24px;
+
 .rv-event {
   position: relative;
+  margin-inline: calc(50% - 50vw);
   overflow: hidden;
 
   &__track {
     display: grid;
-    grid-template-columns: 1fr minmax(0, 77vw) 1fr;
-    gap: 24px;
-    margin-inline: -12vw; // 양옆 배너가 일부만 보이도록
+    grid-template-columns: 1fr $event-width 1fr;
+    gap: $event-gap;
   }
 
+  // 배너 이미지 1480 x 180
   &__slide {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: clamp(120px, 9.2vw, 177px);
-    padding-inline: clamp(24px, 5vw, 96px);
+    aspect-ratio: 1480 / 180;
+    min-height: 100px;
     overflow: hidden;
 
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      -webkit-user-drag: none;
+    }
+
+    // 양옆 미리보기: 가운데 배너와 같은 높이로, 가운데 쪽 끝부분이 보이도록
     &.is-prev,
     &.is-next {
+      aspect-ratio: auto;
       cursor: pointer;
-      opacity: 0.85;
-
-      .rv-event__text {
-        visibility: hidden;
-      }
+      opacity: 0.6;
     }
 
-    &--pink {
-      background:
-        radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.7) 0 8%, transparent 9%),
-        linear-gradient(90deg, #ffe3ee 0%, #fff5f9 50%, #ffe3ee 100%);
+    &.is-prev img {
+      object-position: right center;
     }
 
-    &--purple {
-      background: linear-gradient(90deg, #3a0ca3 0%, #7209b7 100%);
+    &.is-next img {
+      object-position: left center;
     }
-
-    &--mint {
-      background: linear-gradient(90deg, #d8fff1 0%, #f2fffa 50%, #d8fff1 100%);
-    }
-  }
-
-  &__text {
-    flex: 1;
-    padding-left: clamp(16px, 8vw, 200px);
-  }
-
-  &__label {
-    margin-bottom: 6px;
-    font-size: 15px;
-    color: #e3007b;
-  }
-
-  &__title {
-    display: block;
-    font-size: clamp(26px, 2.6vw, 50px);
-    font-weight: normal;
-    color: #222;
-
-    em {
-      font-style: normal;
-      color: #e3007b;
-    }
-  }
-
-  &__desc {
-    margin-top: 10px;
-    font-size: 15px;
-    color: #666;
-  }
-
-  &__slide--purple &__title,
-  &__slide--purple &__desc {
-    color: #fff;
-  }
-
-  &__slide--purple &__label,
-  &__slide--purple &__title em {
-    color: #ffd6f0;
-  }
-
-  &__deco {
-    font-size: clamp(48px, 6vw, 120px);
-    line-height: 1;
-    color: #ff4d8d;
-    filter: drop-shadow(0 6px 10px rgba(227, 0, 123, 0.35));
   }
 
   &__nav {
@@ -106,11 +62,11 @@
     transition: opacity 0.2s;
 
     &--prev {
-      left: calc(11.5vw - 20px);
+      left: calc((100% - #{$event-width}) / 4 - 20px); // 왼쪽 미리보기 가운데
     }
 
     &--next {
-      right: calc(11.5vw - 20px);
+      right: calc((100% - #{$event-width}) / 4 - 20px);
     }
   }
 

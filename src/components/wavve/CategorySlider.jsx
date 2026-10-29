@@ -7,9 +7,9 @@ import 'swiper/css';
 import { ContentCard } from '../home/ContentCard';
 
 // 카테고리 페이지 가로 슬라이드
-// - 카드 크기는 1920 기준 318*464 비율 (Category.scss)
+// - 카드 크기 · 배지 · 순위 숫자는 공통 (common/_card.scss, ContentCard.scss)
 // - 오른쪽은 화면 끝까지 이어지고, 다음 콘텐츠가 있으면 그라데이션 표시
-// - ranked: TOP 20 순위 숫자 표시
+// - ranked: TOP 20 순위 숫자 이미지 표시 (ContentCard rank)
 export const CategorySlider = ({ title, items = [], moreLink, headerExtra, ranked = false }) => {
   const swiperRef = useRef(null);
   const [canPrev, setCanPrev] = useState(false);
@@ -21,7 +21,7 @@ export const CategorySlider = ({ title, items = [], moreLink, headerExtra, ranke
   };
 
   return (
-    <section className={`category-row ${ranked ? 'category-row--rank' : ''}`}>
+    <section className="category-row">
       <div className="category-row__header">
         <div className="category-row__title">
           <h2>{title}</h2>
@@ -55,9 +55,8 @@ export const CategorySlider = ({ title, items = [], moreLink, headerExtra, ranke
           className="category-row__swiper"
         >
           {items.map((item, index) => (
-            <SwiperSlide key={item.id ?? index} className="category-row__slide">
-              <ContentCard item={item} />
-              {ranked && <span className="category-row__rank">{index + 1}</span>}
+            <SwiperSlide key={item.id ?? index} className="card-slide">
+              <ContentCard item={item} rank={ranked ? index + 1 : undefined} />
             </SwiperSlide>
           ))}
         </Swiper>
