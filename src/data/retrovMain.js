@@ -56,12 +56,13 @@ const icVideo = (sectionId, index) => {
 };
 
 // {userName}님이 시청 중인 콘텐츠 (progress: 시청 진행률 %)
+// play: { seasonId, episode } — 무한도전 외 프로그램은 누르면 TMDB 고유 id 로 해당 회차 영상 재생 (없으면 상세페이지로 이동)
 export const watching = [
   { id: "watching-1", programId: "infinite-challenge", title: icVideo("office", 1)?.title, image: icVideo("office", 1)?.image, progress: 54 },
-  { id: "watching-2", programId: "boys-over-flowers", title: "꽃보다 남자 3화", image: `${IMG}/boys-over-flowers-thumb.jpg`, progress: 20 },
+  { id: "watching-2", programId: "boys-over-flowers", title: "꽃보다 남자 3화", image: `${IMG}/boys-over-flowers-thumb.jpg`, progress: 20, play: { episode: 3 } },
   { id: "watching-3", programId: "infinite-challenge", title: icVideo("chase", 0)?.title, image: icVideo("chase", 0)?.image, progress: 82 },
-  { id: "watching-4", programId: "high-kick", title: "거침없이 하이킥 12화", image: `${IMG}/high-kick-thumb.jpg`, progress: 35 },
-  { id: "watching-5", programId: "full-house", title: "풀하우스 5화", image: `${IMG}/full-house-thumb.jpg`, progress: 10 },
+  { id: "watching-4", programId: "high-kick", title: "거침없이 하이킥 12화", image: `${IMG}/high-kick-thumb.jpg`, progress: 35, play: { seasonId: "season-1", episode: 12 } },
+  { id: "watching-5", programId: "full-house", title: "풀하우스 5화", image: `${IMG}/full-house-thumb.jpg`, progress: 10, play: { seasonId: "season-1", episode: 5 } },
   { id: "watching-6", programId: "infinite-challenge", title: icVideo("game", 0)?.title, image: icVideo("game", 0)?.image, progress: 100 },
 ];
 
@@ -74,6 +75,7 @@ export const recommendations = [
     title: "거침없이 하이킥 Season 2 : 3화",
     description: "거침없이 하이킥 Season 2 : 3화",
     image: `${IMG}/high-kick-thumb.jpg`,
+    play: { seasonId: "season-2", episode: 3 },
   },
   {
     id: "recommend-dad-where",
@@ -81,6 +83,7 @@ export const recommendations = [
     title: "아빠! 어디가? Season 1 : 31화",
     description: "아빠! 어디가? Season 1 : 31화",
     image: `${IMG}/dad-where-thumb.jpg`,
+    play: { seasonId: "season-1", episode: 31 },
   },
   {
     id: "recommend-we-got-married",
@@ -88,6 +91,7 @@ export const recommendations = [
     title: "우리 결혼했어요 Season 4 : 240화",
     description: "우리 결혼했어요 Season 4 : 240화",
     image: `${IMG}/we-got-married-thumb.jpg`,
+    play: { seasonId: "season-4", episode: 240 },
   },
   { ...icVideo("sports", 0), programId: "infinite-challenge" },
   { ...icVideo("tikitaka", 0), programId: "infinite-challenge" },

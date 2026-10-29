@@ -6,6 +6,7 @@ import ProgramNavigation from "../../components/retrov/ProgramNavigation";
 import RetroMainHero from "../../components/retrov/RetroMainHero";
 import RetroMainRow from "../../components/retrov/RetroMainRow";
 import RetroEventCarousel from "../../components/retrov/RetroEventCarousel";
+import YoutubePlayerModal from "../../components/retrov/YoutubePlayerModal";
 
 import { programs, eventBanners } from "../../data/retrov";
 import {
@@ -17,11 +18,39 @@ import {
   shorts,
 } from "../../data/retrovMain";
 
+import { getEpisodeSource } from "../../data/retrovTmdb";
+import { useRetrovPlayer } from "../../hooks/useRetrovPlayer";
 import { getImagePath } from "../../utils/imagePath";
 
 import "../../styles/Retrov.scss";
 
+// 카드: TMDB 로 재생할 수 있는 회차(item.play)면 누르면 바로 재생, 아니면 상세페이지로 이동
+function PlayableCard({ item, onPlay, className, children }) {
+  const source = item.play && getEpisodeSource(item.programId, item.play.seasonId, item.play.episode);
+
+  if (source) {
+    return (
+      <button
+        type="button"
+        className={`${className} ${className}--button`}
+        onClick={() => onPlay({ id: item.id, title: item.title, description: item.description, source })}
+        aria-label={`${item.title} 재생`}
+      >
+        {children}
+      </button>
+    );
+  }
+
+  return (
+    <Link to={`/retrov/${item.programId}`} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 export const RetroV = () => {
+  const { playingVideo, play, close } = useRetrovPlayer(); // 영상 재생 (유튜브 팝업)
+
   return (
     <div className="retrov-main">
 
@@ -75,10 +104,7 @@ export const RetroV = () => {
         title={`${userName}님이 시청 중인 콘텐츠`}
         items={watching}
         renderItem={(item) => (
-          <Link
-            to={`/retrov/${item.programId}`}
-            className="rv-thumb-card"
-          >
+          <PlayableCard item={item} onPlay={play} className="rv-thumb-card">
             <span className="rv-thumb-card__image">
               <img
                 src={getImagePath(item.image)}
@@ -98,7 +124,7 @@ export const RetroV = () => {
             >
               <span style={{ width: `${item.progress}%` }} />
             </span>
-          </Link>
+          </PlayableCard>
         )}
       />
 
@@ -109,10 +135,7 @@ export const RetroV = () => {
         title="레트로브 추천 콘텐츠"
         items={recommendations}
         renderItem={(item) => (
-          <Link
-            to={`/retrov/${item.programId}`}
-            className="rv-thumb-card"
-          >
+          <PlayableCard item={item} onPlay={play} className="rv-thumb-card">
             <span className="rv-thumb-card__image">
               <img
                 src={getImagePath(item.image)}
@@ -131,7 +154,7 @@ export const RetroV = () => {
                 {item.description}
               </span>
             )}
-          </Link>
+          </PlayableCard>
         )}
       />
 
@@ -182,6 +205,9 @@ export const RetroV = () => {
       <div className="retrov-main__event">
         <RetroEventCarousel banners={eventBanners} />
       </div>
+
+      {/* 유튜브 재생 팝업 */}
+      {playingVideo && <YoutubePlayerModal video={playingVideo} onClose={close} />}
     </div>
   );
 };

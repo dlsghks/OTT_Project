@@ -400,6 +400,18 @@
   display: grid;
   gap: 8px;
 
+  // 바로 재생되는 카드(button)도 링크 카드와 똑같이 보이도록 기본 버튼 스타일 제거
+  &--button {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
   &__image {
     display: block;
     aspect-ratio: 4 / 3;

@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@1,500&display=swap');
+
+/* =========================
+   카테고리 페이지 (예능·드라마·영화·시사교양·애니·해외시리즈)
+========================= */
+
+$chip-blue: #1f4ef5;
+$chip-blue-hover: #3561ff;
+$chip-gray: #2e2e30;
+$chip-gray-hover: #3c3c40;
+$chip-border: rgba(255, 255, 255, 0.08);
+
+// 장르 필터 / 요일 버튼 공통
+@mixin chip-button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid $chip-border;
+  border-radius: 8px;
+  background: $chip-gray;
+
+  color: #fff;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: $chip-gray-hover;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  &.is-active {
+    border-color: $chip-blue;
+    background: $chip-blue;
+    font-weight: 700;
+
+    &:hover {
+      background: $chip-blue-hover;
+    }
+  }
+}
+
+.category-page {
+  // 1920 기준 카드 318*464, 간격 20px, 순위 숫자 150px → 화면 너비에 비례
+  --card-w: max(140px, 16.5625vw);
+  --card-h: calc(var(--card-w) * 464 / 318);
+  --card-gap: max(10px, 1.0417vw);
+  --rank-size: calc(var(--card-w) * 150 / 318);
+
+  padding-bottom: 80px;
+
+  .content-card__thumbnail {
+    aspect-ratio: 318 / 464;
+  }
+}
+
+/* 테마별 가로 슬라이드 */
+.category-row {
+  margin: 0 0 max(40px, 3.6vw);
+
+  &__header {
+    margin-bottom: 20px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    h2 {
+      margin: 0;
+      font-size: clamp(18px, 1.25vw, 24px);
+    }
+
+    a {
+      color: #b9c3d4;
+      font-size: 13px;
+      text-decoration: none;
+    }
+  }
+
+  // 오른쪽은 페이지 여백을 넘어 화면 끝까지
+  &__slider {
+    position: relative;
+    margin-right: calc(var(--page-side-padding) * -1);
+  }
+
+  &__swiper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &__slide {
+    position: relative;
+    width: var(--card-w);
+    margin-right: var(--card-gap);
+    user-select: none;
+
+    img {
+      -webkit-user-drag: none;
+    }
+  }
+
+  // 다음 콘텐츠 그라데이션 (0% 투명 → 100% 검정)
+  &__fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+
+    width: calc(var(--card-w) + var(--card-gap));
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #000 100%);
+    pointer-events: none;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: calc(var(--card-h) / 2);
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 80px;
+    padding: 0 0 4px;
+
+    border: 0;
+    border-radius: 6px;
+    background: rgba(28, 28, 30, 0.85);
+
+    color: #fff;
+    font-size: 36px;
+    line-height: 1;
+    cursor: pointer;
+
+    transform: translateY(-50%);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: rgba(60, 60, 64, 0.95);
+    }
+
+    &--prev {
+      left: 8px;
+    }
+
+    &--next {
+      right: max(8px, calc(6.25vw - 22px));
+    }
+  }
+
+  // TOP 20: 순위 숫자 (Noto Sans Medium, 1920 기준 150px)
+  &--rank {
+    .category-row__slide {
+      padding-bottom: calc(var(--rank-size) * 0.2);
+    }
+
+    .content-card__info {
+      display: none;
+    }
+  }
+
+  &__rank {
+    position: absolute;
+    top: var(--card-h);
+    left: calc(var(--card-w) * 0.09);
+    z-index: 2;
+
+    color: #fff;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: var(--rank-size);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+
+    transform: translateY(-75%);
+    pointer-events: none;
+  }
+}
+
+/* 장르 필터 (히어로 아래 간격 60px) */
+.category-filter {
+  display: flex;
+  gap: 10px;
+  margin: 60px 0 40px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__button {
+    @include chip-button;
+
+    height: 44px;
+    padding: 0 20px;
+    font-size: 16px;
+  }
+}
+
+/* 요일별 콘텐츠 */
+.weekday-filter {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+
+  &__button {
+    @include chip-button;
+
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    font-size: 16px;
+  }
+}
+
+.weekday-row {
+  &__empty {
+    margin: -32px 0 48px;
+    color: #8b93a3;
+    font-size: 14px;
+  }
+}
+
+/* 전체 보기 그리드 */
+.collection-row {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 32px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__empty {
+    color: #8b93a3;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1439px) {
+  .collection-row__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 16px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .collection-row__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-filter {
+    margin: 32px 0 28px;
+    gap: 8px;
+
+    &__button {
+      height: 38px;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+  }
+
+  .weekday-filter__button {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .category-row {
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 639px) {
+  .collection-row__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 12px;
+  }
+}
