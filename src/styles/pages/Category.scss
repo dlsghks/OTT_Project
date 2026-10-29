@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@1,500&display=swap');
-
 /* =========================
    카테고리 페이지 (예능·드라마·영화·시사교양·애니·해외시리즈)
+   카드 크기 · 배지 · 순위 숫자는 공통(common/_card.scss, ContentCard.scss)
 ========================= */
 
 $chip-blue: #1f4ef5;
@@ -51,17 +50,7 @@ $chip-border: rgba(255, 255, 255, 0.08);
 }
 
 .category-page {
-  // 1920 기준 카드 318*464, 간격 20px, 순위 숫자 150px → 화면 너비에 비례
-  --card-w: max(140px, 16.5625vw);
-  --card-h: calc(var(--card-w) * 464 / 318);
-  --card-gap: max(10px, 1.0417vw);
-  --rank-size: calc(var(--card-w) * 150 / 318);
-
   padding-bottom: 80px;
-
-  .content-card__thumbnail {
-    aspect-ratio: 318 / 464;
-  }
 }
 
 /* 테마별 가로 슬라이드 */
@@ -98,17 +87,6 @@ $chip-border: rgba(255, 255, 255, 0.08);
   &__swiper {
     width: 100%;
     overflow: hidden;
-  }
-
-  &__slide {
-    position: relative;
-    width: var(--card-w);
-    margin-right: var(--card-gap);
-    user-select: none;
-
-    img {
-      -webkit-user-drag: none;
-    }
   }
 
   // 다음 콘텐츠 그라데이션 (0% 투명 → 100% 검정)
@@ -161,35 +139,6 @@ $chip-border: rgba(255, 255, 255, 0.08);
       right: max(8px, calc(6.25vw - 22px));
     }
   }
-
-  // TOP 20: 순위 숫자 (Noto Sans Medium, 1920 기준 150px)
-  &--rank {
-    .category-row__slide {
-      padding-bottom: calc(var(--rank-size) * 0.2);
-    }
-
-    .content-card__info {
-      display: none;
-    }
-  }
-
-  &__rank {
-    position: absolute;
-    top: var(--card-h);
-    left: calc(var(--card-w) * 0.09);
-    z-index: 2;
-
-    color: #fff;
-    font-family: 'Noto Sans', sans-serif;
-    font-size: var(--rank-size);
-    font-style: italic;
-    font-weight: 500;
-    line-height: 1;
-    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-
-    transform: translateY(-75%);
-    pointer-events: none;
-  }
 }
 
 /* 장르 필터 (히어로 아래 간격 60px) */
@@ -241,8 +190,8 @@ $chip-border: rgba(255, 255, 255, 0.08);
 .collection-row {
   &__grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 32px 20px;
+    grid-template-columns: repeat(auto-fill, var(--card-w));
+    gap: 32px var(--card-gap);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -251,20 +200,6 @@ $chip-border: rgba(255, 255, 255, 0.08);
   &__empty {
     color: #8b93a3;
     font-size: 14px;
-  }
-}
-
-@media (max-width: 1439px) {
-  .collection-row__grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 28px 16px;
-  }
-}
-
-@media (max-width: 1023px) {
-  .collection-row__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px 14px;
   }
 }
 
@@ -288,12 +223,5 @@ $chip-border: rgba(255, 255, 255, 0.08);
 
   .category-row {
     margin-bottom: 32px;
-  }
-}
-
-@media (max-width: 639px) {
-  .collection-row__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px 12px;
   }
 }

@@ -50,29 +50,26 @@ export const programs = [
   },
 ];
 
-// 상세페이지 상단 이벤트 배너 (가운데 + 양옆 미리보기)
-// title: [앞 문구, 강조 문구, 뒷 문구]
-export const eventBanners  = [
+// 이벤트 배너 (가운데 + 양옆 미리보기, 메인·상세 공통)
+// image: 1480 x 180 배너 이미지 (public/images/retrov/main/event/) / title·description: 대체 텍스트
+export const eventBanners = [
   {
     id: "favorite-scene",
-    label: "최애장면 선택",
-    title: ["나의 ", "최애", " 장면은?!"],
+    image: `${IMG}/event/favorite-scene.png`,
+    title: "나의 최애 장면은?!",
     description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",
-    theme: "pink",
   },
   {
-    id: "character-quiz",
-    label: "캐릭터 퀴즈",
-    title: ["", "찐팬", " 인증 퀴즈!"],
-    description: "멤버를 눌러 퀴즈를 풀고 추억 점수를 확인해보세요",
-    theme: "purple",
+    id: "next-line",
+    image: `${IMG}/event/next-line.png`,
+    title: "다음에 올 명대사는?",
+    description: "그때 그 대사, 아직 기억하나요?",
   },
   {
-    id: "retro-shorts",
-    label: "레트로브 쇼츠",
-    title: ["그때 그 ", "명장면", " 1분 요약"],
-    description: "짧게 보고 길게 웃는 레트로브 쇼츠 모아보기",
-    theme: "mint",
+    id: "what-next",
+    image: `${IMG}/event/what-next.png`,
+    title: "잠깐! 이다음에 무슨 일이?",
+    description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",
   },
 ];
 
