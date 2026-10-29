@@ -90,6 +90,8 @@ export const AppRouter = () => {
                 <Route path="/member" element={<Member />} />
                 <Route path="/profileselect" element={<ProfileSelect />} />
 
+                
+
             </Route>
         </Routes>
     );
