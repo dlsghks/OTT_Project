@@ -1,9 +1,6 @@
-import React from 'react'
+import { CategoryPage } from '../../components/wavve/CategoryPage';
+import { categoryPages } from '../../data/categoryData';
 
 export const Drama = () => {
-  return (
-    <div>
-      drama
-    </div>
-  )
-}
+  return <CategoryPage key="drama" page={categoryPages.drama} />;
+};

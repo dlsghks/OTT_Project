@@ -21,12 +21,30 @@ export const heroItems = [
   { id: 'hero-2', title: '놓치면 아쉬운 화제작', subtitle: '지금 인기 있는 작품을 만나보세요', image: '', link: '/movie' },
   { id: 'hero-3', title: '레트로브', subtitle: '그때 그 시절의 프로그램을 다시', image: '', link: '/retrov' },
 ];
+
+const categoryImage = (name) =>
+  `${import.meta.env.BASE_URL}images/category-buttons/${name}.png`;
+
 export const categories = [
-  { label: '전체', path: '/' }, { label: '예능', path: '/entertainment' },
-  { label: '드라마', path: '/drama' }, { label: '영화', path: '/movie' },
-  { label: '애니', path: '/animation' }, { label: '라이브', path: '/live' },
-  { label: '쇼츠', path: '/shorts' }, { label: '레트로브', path: '/retrov' },
+  { label: '키즈', image: categoryImage('kids') },
+  { label: 'CJ ENM', image: categoryImage('cj-enm') },
+  { label: 'MBC', image: categoryImage('mbc') },
+  { label: 'KBS', image: categoryImage('kbs') },
+  { label: 'JTBC', image: categoryImage('jtbc') },
+  { label: '뉴스', image: categoryImage('news') },
+  { label: '영화+', path: '/movie', image: categoryImage('movie-plus') },
+  { label: 'Wavve only', image: categoryImage('wavve-only') },
+  { label: '골프', image: categoryImage('golf') },
+  { label: '출석체크', image: categoryImage('attendance-check') },
+  { label: '너 말고 다른 연애', image: categoryImage('different-love') },
+  { label: '신인감독 김연경 2', image: categoryImage('rookie-coach-kim-yeon-koung-2') },
+  { label: '서바이벌', image: categoryImage('survival') },
+  { label: '그것이 알고 싶다', image: categoryImage('unsolved-mysteries') },
+  { label: '포식자들', image: categoryImage('forensic-investigators') },
+  { label: '티켓', image: categoryImage('ticket') },
+  { label: '출석체크 2', image: categoryImage('attendance-check-alt') },
 ];
+
 
 const samples = [
   // 새로운 프로그램
