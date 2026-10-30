@@ -1,9 +1,6 @@
-import React from 'react'
+import { CategoryPage } from '../../components/wavve/CategoryPage';
+import { categoryPages } from '../../data/categoryData';
 
 export const Currentaffairs = () => {
-  return (
-    <div>
-      시사교양
-    </div>
-  )
-}
+  return <CategoryPage key="currentaffairs" page={categoryPages.currentaffairs} />;
+};

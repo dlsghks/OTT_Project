@@ -1,7 +1,6 @@
-import React from 'react'
+import { CategorySlider } from './CategorySlider';
 
-export const RankRow = () => {
-  return (
-    <div>RankRow</div>
-  )
-}
+// TOP 20 랭킹 (카드 좌측 하단 순위 숫자)
+export const RankRow = ({ title, items = [] }) => {
+  return <CategorySlider title={title} items={items} ranked />;
+};

@@ -388,8 +388,8 @@ export const characterQuizzes = {
         text: "빈칸에 들어갈 한마디는?",
         questionImage: `${QUIZ_IMG}/gil/q1-question.jpg`,
         answerImage: `${QUIZ_IMG}/gil/q1-answer.jpg`,
-        answer: "먹은이는 아는데요 김경식 씨...", // TODO: 확인 필요
-        answers: ["먹은이는 아는데요 김경식 씨"],
+        answer: "엮은이는 아는데요 김경식 씨...", // TODO: 확인 필요
+        answers: ["엮은이는 아는데요 김경식 씨"],
       },
       {
         id: "gil-q2",
@@ -415,8 +415,8 @@ export const characterQuizzes = {
         text: "빈칸에 들어갈 한마디는?",
         questionImage: `${QUIZ_IMG}/gil/q4-question.jpg`,
         answerImage: `${QUIZ_IMG}/gil/q4-answer.jpg`,
-        answer: "나 이런 거 무서워해", // TODO: 확인 필요 (시안에서 "투셔하해"처럼 보임)
-        answers: ["나 이런 거 무서워해", "나 이런거 무서워해"],
+        answer: "나 이런 게 무서워하네", // TODO: 확인 필요 (시안에서 "투셔하해"처럼 보임)
+        answers: ["나 이런 거 무서워하네", "나 이런거 무서워해"],
       },
       {
         id: "gil-q5",
@@ -424,8 +424,8 @@ export const characterQuizzes = {
         text: "빈칸에 들어갈 한마디는?",
         questionImage: `${QUIZ_IMG}/gil/q5-question.jpg`,
         answerImage: `${QUIZ_IMG}/gil/q5-answer.jpg`,
-        answer: "가권(?)이네 가권(?)", // TODO: 확인 필요
-        answers: ["가권이네 가권"],
+        answer: "가관(?)이네 가관(?)", // TODO: 확인 필요
+        answers: ["가관이네 가관","가관이네"],
       },
     ],
     result: {
