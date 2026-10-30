@@ -6,6 +6,8 @@ import { CategoryMenu } from '../../components/home/CategoryMenu';
 import { ContentSection } from '../../components/home/ContentSection';
 import { RankingSection } from '../../components/home/RankingSection';
 import { EventBanner } from '../../components/home/EventBanner';
+import { HopeSection } from '../../components/home/HopeSection';
+import { WeeklyContentSection } from '../../components/home/WeeklyContentSection';
 
 import {
   heroItems,
@@ -54,18 +56,13 @@ export const Home = () => {
         <RankingSection items={rankingItems} />
 
         {/* 5. 요일별 콘텐츠 */}
-        {renderSection('weekly')}
+        <WeeklyContentSection />
 
         {/* 6. 해외로 떠나는 여행 예능 */}
         {renderSection('travel')}
 
         {/* 7. 영화 HOPE 특집 */}
-        <section className="home-hope">
-          <h2 className="home-hope__title">HOPE</h2>
-          <p className="home-hope__description">
-            &lt;호프&gt;의 감독과 배우들, 그들의 필모그래피
-          </p>
-        </section>
+        <HopeSection />
 
         {/* 8. 걱정은 잠시 잊게 만드는 음악 예능 */}
         {renderSection('music-entertainment')}
