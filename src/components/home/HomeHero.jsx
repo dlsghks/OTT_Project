@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,6 +13,52 @@ export const HomeHero = ({ items = [] }) => {
     const [current, setCurrent] = useState(0);
     const [swiperInstance, setSwiperInstance] = useState(null);
 
+    useEffect(() => {
+        if (!swiperInstance) return;
+
+        let frame = null;
+        let highlighted = null;
+        const updateBrightness = () => {
+            frame = null;
+            if (swiperInstance.destroyed) return;
+            const viewport = swiperInstance.el.getBoundingClientRect();
+            const center = viewport.left + viewport.width / 2;
+            let nearest = null;
+            let distance = Infinity;
+            swiperInstance.slides.forEach((slide) => {
+                const rect = slide.getBoundingClientRect();
+                const offset = Math.abs(rect.left + rect.width / 2 - center);
+                if (offset < distance) {
+                    nearest = slide;
+                    distance = offset;
+                }
+            });
+            // 실제 화면상의 중간 지점을 통과할 때만 밝기 클래스를 전환한다.
+            if (nearest !== highlighted) {
+                highlighted?.classList.remove('home-hero__bright');
+                highlighted = nearest;
+            }
+            // SwiperSlide가 자체 클래스를 다시 렌더링한 경우에도 복구한다.
+            if (nearest && !nearest.classList.contains('home-hero__bright')) {
+                nearest.classList.add('home-hero__bright');
+            }
+            if (swiperInstance.animating || swiperInstance.touchEventsData?.isTouched) {
+                frame = requestAnimationFrame(updateBrightness);
+            }
+        };
+        const schedule = () => {
+            if (frame === null) frame = requestAnimationFrame(updateBrightness);
+        };
+        const events = ['setTranslate', 'transitionStart', 'transitionEnd', 'loopFix', 'resize', 'touchEnd'];
+        events.forEach((event) => swiperInstance.on(event, schedule));
+        schedule();
+        return () => {
+            events.forEach((event) => swiperInstance.off(event, schedule));
+            if (frame !== null) cancelAnimationFrame(frame);
+            highlighted?.classList.remove('home-hero__bright');
+        };
+    }, [swiperInstance]);
+
     if (!items.length) return null;
 
     return (
@@ -22,8 +68,9 @@ export const HomeHero = ({ items = [] }) => {
         >
             <Swiper
                 modules={[Autoplay, Navigation]}
-                slidesPerView={1}
-                spaceBetween={0}
+                slidesPerView="auto"
+                centeredSlides={true}
+                spaceBetween={18}
                 loop={items.length > 1}
                 speed={600}
                 grabCursor={true}
@@ -46,35 +93,34 @@ export const HomeHero = ({ items = [] }) => {
             >
                 {items.map((item, index) => (
                     <SwiperSlide key={item.id ?? index}>
-                        <div
+                        <Link
                             className="home-hero__slide"
-                            style={
-                                item.image
-                                    ? {
-                                        backgroundImage: `linear-gradient(90deg, #080c16 8%, transparent), url("${getImagePath(item.image)}")`
-                                    }
-                                    : undefined
-                            }
+                            to={item.link || '/'}
+                            aria-label={item.title || `추천 배너 ${index + 1}`}
                         >
-                            <div className="home-hero__content">
-                                <p>WAVVE PICK</p>
-                                <h2>{item.title}</h2>
-                                <p>{item.subtitle}</p>
-
-                                <Link
-                                    className="home-hero__link"
-                                    to={item.link || '/'}
-                                >
-                                    자세히 보기 →
-                                </Link>
-                            </div>
-                        </div>
+                            <img
+                                className="home-hero__background"
+                                src={getImagePath(item.image)}
+                                alt={item.title || `추천 배너 ${index + 1}`}
+                                draggable={false}
+                            />
+                            {item.textImage && (
+                                <img
+                                    className="home-hero__text"
+                                    src={getImagePath(item.textImage)}
+                                    alt=""
+                                    aria-hidden="true"
+                                    draggable={false}
+                                />
+                            )}
+                        </Link>
                     </SwiperSlide>
                 ))}
             </Swiper>
 
             <div className="home-hero__controls">
                 <button
+                    className="home-hero__arrow home-hero__arrow--prev"
                     type="button"
                     aria-label="이전 배너"
                     disabled={items.length < 2}
@@ -83,11 +129,12 @@ export const HomeHero = ({ items = [] }) => {
                     ‹
                 </button>
 
-                <span>
+                <span className="home-hero__counter">
                     {current + 1} / {items.length}
                 </span>
 
                 <button
+                    className="home-hero__arrow home-hero__arrow--next"
                     type="button"
                     aria-label="다음 배너"
                     disabled={items.length < 2}
