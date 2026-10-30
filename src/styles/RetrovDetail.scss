@@ -10,7 +10,7 @@
 
   min-height: 100vh;
   overflow-x: hidden;
-  background: #000;
+  background: $retrov-detail-bg;
   color: #fff;
   font-family: $retrov-pixel;
   box-sizing: border-box;
@@ -83,8 +83,9 @@
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.85) 10%, rgba(0, 0, 0, 0) 32%),
-      linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.92) 7%, rgba(0, 0, 0, 0.6) 17%, rgba(0, 0, 0, 0.2) 28%, rgba(0, 0, 0, 0) 38%);
+      // 히어로 아래·왼쪽을 페이지 배경색으로 자연스럽게 이어지게
+      linear-gradient(0deg, $retrov-detail-bg 0%, rgba($retrov-detail-bg, 0.85) 10%, rgba($retrov-detail-bg, 0) 32%),
+      linear-gradient(90deg, $retrov-detail-bg 0%, rgba($retrov-detail-bg, 0.92) 7%, rgba($retrov-detail-bg, 0.6) 17%, rgba($retrov-detail-bg, 0.2) 28%, rgba($retrov-detail-bg, 0) 38%);
   }
 
   &__content {

@@ -1,4 +1,6 @@
 .wavve-home {
+  // 마지막 섹션의 하단 여백을 홈 배경 안에 유지한다.
+  display: flow-root;
   min-height: 100vh;
   background: transparent;
   color: #fff;
@@ -21,18 +23,16 @@
 ========================= */
 
 .home-hero {
+  --hero-max-width: 1702px;
+  // 1920px에서는 109px = 미리보기 91px + Swiper 간격 18px.
+  --hero-side-space: clamp(36px, 5.6770833333vw, 109px);
   position: relative;
   display: block;
   min-height: 0;
   padding: 0;
   overflow: hidden;
 
-  background:
-    radial-gradient(circle at 70% 30%, #284f7b, transparent 40%),
-    linear-gradient(120deg, #080b12, #162b49 65%, #101521);
-
-  background-size: cover;
-  background-position: center;
+  background: #080c16;
 
   cursor: pointer;
   user-select: none;
@@ -40,85 +40,124 @@
   // Swiper 전체
   &__swiper {
     width: 100%;
-    height: 100%;
+    height: auto;
+    padding: 0;
+
+    .swiper-wrapper {
+      height: auto;
+      align-items: flex-start;
+    }
   }
 
   // 개별 배너
   &__slide {
-    position: relative;
-    display: flex;
-    align-items: center;
-
+    position: absolute;
+    inset: 0;
+    display: block;
     width: 100%;
-    min-height: 520px;
+    min-height: 0;
     height: 100%;
-
+    overflow: hidden;
+    border-radius: 12px;
     background-color: #080c16;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: inherit;
+      background: #000;
+      opacity: 0.3;
+      transition: opacity 400ms ease;
+      pointer-events: none;
+    }
+
+    .home-hero__background {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
   }
 
-  // 텍스트 콘텐츠
-  &__content {
-    position: relative;
+  &__text {
+    position: absolute;
+    left: 0;
+    bottom: 0;
     z-index: 2;
-
+    display: block;
     width: 100%;
-    max-width: 600px;
-    padding: 0 110px;
-    box-sizing: content-box;
-
-    h2 {
-      font-size: clamp(32px, 4vw, 64px);
-      margin: 10px 0;
-    }
-
-    p {
-      color: #d3d8e4;
-    }
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: left bottom;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 600ms ease-out, transform 600ms ease-out;
   }
 
-  // 상세보기 버튼
-  &__link {
-    display: inline-block;
-    margin-top: 22px;
-    padding: 12px 20px;
-
-    border-radius: 6px;
-    background: #1556e8;
-
-    color: white;
-    text-decoration: none;
+  .home-hero__bright .home-hero__text {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   // 이전/다음 버튼
   &__controls {
     position: absolute;
+    inset: 0;
     z-index: 10;
-    bottom: 32px;
-    right: 5%;
+    pointer-events: none;
+  }
 
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  &__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 64px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 56px;
+    line-height: 1;
+    opacity: 0.8;
+    pointer-events: auto;
+    cursor: pointer;
 
-    button {
-      width: 32px;
-      height: 32px;
+    &:hover,
+    &:focus-visible { opacity: 1; }
 
-      border: 0;
-      border-radius: 50%;
-      background: #ffffff30;
+    &--prev { right: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 18px); }
+    &--next { left: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 18px); }
+  }
 
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-    }
+  &__counter {
+    position: absolute;
+    right: calc(max(var(--hero-side-space), (100% - var(--hero-max-width)) / 2) + 24px);
+    bottom: 20px;
+    color: #fff;
+    text-shadow: 0 1px 4px #000;
+  }
+
+  .home-hero__bright .home-hero__slide::after {
+    opacity: 0;
   }
 
   // 드래그 시 텍스트 선택 방지
   .swiper-slide {
+    width: min(var(--hero-max-width), calc(100% - var(--hero-side-space) * 2));
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1702 / 708;
+    flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
     user-select: none;
   }
 
@@ -369,61 +408,6 @@
 }
 
 
-.home-hero {
-  position: relative;
-  overflow: hidden;
-
-  // Swiper 전체
-  &__swiper {
-    width: 100%;
-    height: 100%;
-  }
-
-  // 각각의 배너
-  &__slide {
-    width: 100%;
-    height: 100%;
-    min-height: 520px;
-
-    display: flex;
-    align-items: center;
-
-    background-color: #080c16;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  // 기존 콘텐츠 영역
-  &__content {
-    position: relative;
-    z-index: 2;
-  }
-
-  // 이전/다음 버튼
-  &__controls {
-    position: absolute;
-    z-index: 10;
-    bottom: 32px;
-    right: 5%;
-
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    button {
-      cursor: pointer;
-    }
-  }
-
-  // 마우스 드래그 중 텍스트 선택 방지
-  .swiper-slide {
-    user-select: none;
-  }
-}
-
-
-
 /* =========================
    Ranking Section - Swiper
 ========================= */
@@ -560,15 +544,17 @@
   }
 
   .home-hero {
-    min-height: 320px;
+    min-height: 0;
     padding: 0;
 
-    &__slide {
-      min-height: 320px;
+    &__counter {
+      font-size: 12px;
     }
 
-    &__content {
-      padding: 0 20px;
+    &__arrow {
+      width: 18px;
+      height: 40px;
+      font-size: 32px;
     }
   }
 
@@ -587,33 +573,129 @@
 
 
 .home-hope {
+  --hope-intro-width: clamp(160px, 32%, 480px);
+  --hope-column-gap: 32px;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: var(--hope-intro-width) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--hope-column-gap);
 
   width: 100%;
-  min-height: 360px;
+  min-width: 0;
+  height: 444px;
   margin: 60px 0;
 
-  padding: 48px;
+  padding: 24px 0;
   box-sizing: border-box;
 
   overflow: hidden;
   border-radius: 12px;
   background: #1a1a1a;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)), var(--hope-background);
+  background-size: 100% 100%, auto 444px;
+  background-position: left center;
+  background-repeat: no-repeat;
   color: #fff;
+
+  &__intro {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    min-height: 0;
+    max-height: 100%;
+    padding: 100px 24px 0;
+    text-shadow: 0 2px 8px #000;
+  }
 
   &__title {
     margin: 0 0 16px;
-    font-size: 56px;
-    font-weight: 800;
-    letter-spacing: 0.12em;
+    width: 100%;
+    line-height: 0;
+
+    img {
+      display: block;
+      width: min(100%, 320px);
+      height: auto;
+    }
   }
 
   &__description {
     margin: 0;
     font-size: 16px;
     line-height: 1.6;
+  }
+
+  &__contents {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+
+    .content-section {
+      margin-bottom: 0;
+    }
+
+    .content-section__swiper .swiper-slide {
+      width: 216px;
+      flex-shrink: 0;
+      // 자동 너비 측정에 공통 카드 여백이 중복 포함되지 않도록 한다.
+      // 실제 카드 간격은 Swiper의 인라인 spaceBetween(18px)을 사용한다.
+      margin-right: 0;
+
+      &:last-child {
+        // 마지막 카드 뒤에는 Swiper가 지정하는 인라인 여백도 제거한다.
+        margin-right: 60px !important;
+      }
+    }
+
+    .content-section .content-card__thumbnail {
+      height: 324px;
+      aspect-ratio: 2 / 3;
+    }
+  }
+
+  .content-card__badges {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  &__more {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  @media (max-width: 767px) {
+    --hope-intro-width: 140px;
+    --hope-column-gap: 12px;
+
+    &__intro {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    &__description {
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    &__more {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
   }
 }

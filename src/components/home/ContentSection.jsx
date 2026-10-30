@@ -29,7 +29,8 @@ export const ContentSection = ({
     items = [],
     moreLink,
     more,
-    cardType = 'default'
+    cardType = 'default',
+    showHeader = true
 }) => {
     const swiperRef = useRef(null);
 
@@ -54,7 +55,7 @@ export const ContentSection = ({
             }}
         >
             {/* 섹션 제목 */}
-            <div className="content-section__header">
+            {showHeader && <div className="content-section__header">
                 <div className="content-section__title">
                     <h2>{title}</h2>
 
@@ -64,7 +65,7 @@ export const ContentSection = ({
                         </Link>
                     )}
                 </div>
-            </div>
+            </div>}
 
             {/* Swiper 슬라이드 영역 */}
             <div className="content-section__slider">

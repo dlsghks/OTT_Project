@@ -1,3 +1,5 @@
+import { withContent } from './contentCatalog';
+
 // 예능·드라마·영화·시사교양·애니·해외시리즈 페이지 데이터
 // - filters: 장르 필터 버튼 (첫 번째는 "전체")
 // - sections: 테마별 섹션 (type: rank | weekday | poster | collection)
@@ -33,6 +35,7 @@ const byGenre = (items, genre) => items.filter((item) => item.genre === genre);
    예능
 ========================= */
 const entertainmentItems = [
+  // https://www.themoviedb.org/tv/33238?language=en-US — SBS, 2010
   program('ent-01', '런닝맨', 'variety', ['sun'], '', false),
   program('ent-02', '나 혼자 산다', 'reality', ['fri']),
   program('ent-03', '놀면 뭐하니?', 'variety', ['sat']),
@@ -44,7 +47,10 @@ const entertainmentItems = [
   program('ent-09', '복면가왕', 'music', ['sun']),
   program('ent-10', '살림하는 남자들', 'life', ['wed']),
   program('ent-11', '나는 SOLO', 'reality', ['wed']),
+  // https://www.themoviedb.org/tv/155951 — 요즘 남자 라이프 - 신랑수업 (2022)
   program('ent-12', '신랑수업', 'reality', ['wed']),
+  // 허용된 포스터 대체: 강철부대 TV ID만 사용하고 표시 제목과 앱의 콘텐츠 ID는 유지한다.
+  // https://www.themoviedb.org/tv/121591 — 강철부대 (2021), W는 시즌 4
   program('ent-13', '강철부대W', 'survival', ['tue'], '새로운'),
   program('ent-14', '피의 게임 3', 'survival', [], '', true),
   program('ent-15', '좀비버스: 뉴 블러드', 'survival', [], '', true),
@@ -57,6 +63,7 @@ const entertainmentItems = [
   program('ent-22', '비긴어게인', 'music', ['thu']),
   program('ent-23', '유 퀴즈 온 더 블럭', 'talk', ['wed']),
   program('ent-24', '아는 형님', 'talk', ['sat']),
+  // 정확한 시즌/시리즈 ID를 확인하기 전에는 사용자 지정 정식 제목으로만 검색한다.
   program('ent-25', '동상이몽2', 'family', ['mon']),
   program('ent-26', '슈퍼맨이 돌아왔다', 'family', ['wed']),
   program('ent-27', '동물농장', 'pet', ['sun']),
@@ -65,7 +72,7 @@ const entertainmentItems = [
   program('ent-30', '최강야구', 'sports', ['mon']),
   program('ent-31', '나는 솔로 라이브', 'dating', ['thu']),
   program('ent-32', '연예대상', 'award'),
-];
+].map((entry) => withContent(entry, 'category'));
 
 /* =========================
    드라마
@@ -99,7 +106,7 @@ const dramaItems = [
   program('dra-26', '닥터 차정숙', 'medical', ['sat', 'sun']),
   program('dra-27', '하이퍼나이프', 'medical', ['wed']),
   program('dra-28', '소년시대', 'comedy'),
-];
+].map((entry) => withContent(entry, 'category'));
 
 /* =========================
    영화
@@ -129,7 +136,7 @@ const movieItems = [
   program('mov-22', '너의 결혼식', 'romance'),
   program('mov-23', '인사이드 아웃 2', 'animation', [], '개별구매'),
   program('mov-24', '마당을 나온 암탉', 'family'),
-];
+].map((entry) => withContent(entry, 'category'));
 
 /* =========================
    시사교양
@@ -152,12 +159,13 @@ const currentAffairsItems = [
   program('cur-15', '한국인의 밥상', 'food', ['thu']),
   program('cur-16', '생로병사의 비밀', 'health', ['wed']),
   program('cur-17', '귀하신 몸', 'health', ['sun']),
+  // https://www.themoviedb.org/tv/120550 — EBS 1, 극한 직업 (2008); 동명 영화 제외
   program('cur-18', '극한직업 EBS', 'culture', ['wed']),
   program('cur-19', '나는 자연인이다', 'nature', ['wed']),
   program('cur-20', '역사저널 그날', 'history', ['tue']),
   program('cur-21', '과학하고 앉아있네', 'science', [], '', true),
   program('cur-22', '돈 되는 경제', 'economy', ['fri']),
-];
+].map((entry) => withContent(entry, 'category'));
 
 /* =========================
    애니
@@ -165,6 +173,7 @@ const currentAffairsItems = [
 const animationItems = [
   program('ani-01', '명탐정 코난', 'japan', ['sat']),
   program('ani-02', '짱구는 못말려', 'kids', ['mon', 'tue', 'wed', 'thu', 'fri']),
+  // https://www.themoviedb.org/tv/37854?language=en-US — ワンピース, Fuji TV, 1999 애니메이션
   program('ani-03', '원피스', 'japan', ['sun']),
   program('ani-04', '나 혼자만 레벨업', 'action', ['sat'], '새로운'),
   program('ani-05', '귀멸의 칼날', 'action', ['sun']),
@@ -185,7 +194,7 @@ const animationItems = [
   program('ani-20', '너의 이름은.', 'theater'),
   program('ani-21', '슬램덩크', 'sports'),
   program('ani-22', '진격의 거인', 'action'),
-];
+].map((entry) => withContent(entry, 'category'));
 
 /* =========================
    해외시리즈
@@ -198,6 +207,7 @@ const globalItems = [
   program('glo-05', '화이트 로투스', 'us', ['mon'], '새로운'),
   program('glo-06', '유포리아', 'us'),
   program('glo-07', '셜록', 'uk'),
+  // https://www.themoviedb.org/tv/57243-doctor-who — 2005 BBC 리바이벌 시리즈 선택
   program('glo-08', '닥터 후', 'uk', ['sat']),
   program('glo-09', '피키 블라인더스', 'uk'),
   program('glo-10', '경여년', 'china', ['tue', 'wed']),
@@ -213,7 +223,7 @@ const globalItems = [
   program('glo-20', '체르노빌', 'thriller'),
   program('glo-21', '빅뱅 이론', 'comedy'),
   program('glo-22', '프렌즈', 'comedy'),
-];
+].map((entry) => withContent(entry, 'category'));
 
 // 요일별 섹션이 들어가는 페이지는 weekday 섹션을 포함
 export const categoryPages = {
