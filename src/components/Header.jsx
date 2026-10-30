@@ -35,7 +35,7 @@ export const Header = ({
   const closeNotification = useCallback(() => setIsNotificationOpen(false), [])
 
   return (
-    <header>
+    <header className="site-header">
       <div className="inner">
         <div className="header-left">
           <h1>

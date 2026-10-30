@@ -84,12 +84,18 @@ function ProgramFanPage({ programId, program }) {
     return list.map((section) => {
       // "tmdb-episodes": TMDB 회차 목록을 그대로 카드로 (선택한 시즌 기준)
       if (section.source === "tmdb-episodes") {
+        // firstSeasonOnly: 시즌을 바꿔도 첫 시즌 회차로 고정 (다른 시즌 영상 ID 가 아직 없을 때)
+        const target = section.firstSeasonOnly ? baseTmdb : tmdb;
+        const list = section.firstSeasonOnly ? baseEpisodes : seasonEpisodes;
+        const ids = section.firstSeasonOnly ? baseYoutubeIds : seasonYoutubeIds;
+        const common = commonSentences(list); // 매회 반복되는 소개 문구 (설명에서 제외)
         return {
           ...section,
-          title: seasonEpisodes.length ? `${section.title} ${seasonEpisodes.length}회` : section.title,
-          videos: seasonEpisodes
-            .slice(0, section.maxEpisodes ?? seasonEpisodes.length) // maxEpisodes: 앞에서부터 N회까지만
-            .map((ep) => episodeToVideo(ep, tmdb, tmdbBackdrop, youtubeVideos, seasonYoutubeIds)),
+          title: list.length ? `${section.title} ${list.length}회` : section.title,
+          videos: list
+            .slice(0, section.maxEpisodes ?? list.length) // maxEpisodes: 앞에서부터 N회까지만
+            .filter((ep) => !section.onlyWithVideo || ids[ep.episode_number]) // onlyWithVideo: 영상 ID 있는 회차만
+            .map((ep) => episodeToVideo(ep, target, tmdbBackdrop, youtubeVideos, ids, common, program.descriptionStrip)),
         };
       }
 
@@ -104,20 +110,31 @@ function ProgramFanPage({ programId, program }) {
           return {
             ...video,
             videoId,
-            // 썸네일: TMDB 장면 사진(고유 id·회차) → 확인된 유튜브 ID → 이미 찾은 유튜브 영상 → 프로그램 배경
-            fallbackImage: tmdbImage(tmdbEpisode?.still_path, "w500") ?? youtubeThumb(videoId) ?? youtubeThumb(youtubeVideos[query]) ?? tmdbBackdrop,
+            // 썸네일: 카드에 직접 넣은 클립 videoId → TMDB 장면 사진(고유 id·회차) → 회차별 유튜브 ID → 이미 찾은 유튜브 영상 → 프로그램 배경
+            //   (같은 회차의 클립이 여러 개여도 카드마다 다른 썸네일이 나오도록 클립 ID 를 가장 먼저 사용)
+            fallbackImage:
+              youtubeThumb(video.videoId) ??
+              tmdbImage(tmdbEpisode?.still_path, "w500") ??
+              youtubeThumb(videoId) ??
+              youtubeThumb(youtubeVideos[query]) ??
+              tmdbBackdrop,
             source: { tmdbId: baseTmdb.id, season: baseTmdb.season, episode, query },
           };
         }),
       };
     });
-  }, [program.sections, program.youtubeIds, firstSeasonId, seasonId, tmdb, baseTmdb, episodes, youtubeVideos, tmdbBackdrop]);
+  }, [program.sections, program.youtubeIds, program.descriptionStrip, firstSeasonId, seasonId, tmdb, baseTmdb, episodes, youtubeVideos, tmdbBackdrop]);
 
-  // 히어로 "1화 보기": 선택한 시즌의 1화 재생 (TMDB 프로그램만)
+  // 히어로 재생 버튼: playVideoId 가 있으면 테마별 영상 중 그 영상(무한도전), 없으면 선택한 시즌의 1화 (TMDB 프로그램)
   function playFirstEpisode() {
+    if (program.playVideoId) {
+      const target = sections.flatMap((section) => section.videos).find((video) => video.id === program.playVideoId);
+      if (target) play(target);
+      return;
+    }
     if (!tmdb) return;
     const first = (episodes[`${tmdb.id}_${tmdb.season}`] ?? [])[0];
-    play(first ? episodeToVideo(first, tmdb, tmdbBackdrop, youtubeVideos, program.youtubeIds?.[seasonId]) : {
+    play(first ? episodeToVideo(first, tmdb, tmdbBackdrop, youtubeVideos, program.youtubeIds?.[seasonId], undefined, program.descriptionStrip) : {
       id: `${tmdb.id}-s${tmdb.season}-e1`,
       title: `${tmdb.searchTitle} 1회`,
       source: { tmdbId: tmdb.id, season: tmdb.season, episode: 1, query: `${tmdb.searchTitle} 1회` },
@@ -159,9 +176,8 @@ function ProgramFanPage({ programId, program }) {
   }
 
   return (
-    <div className="rv-detail"
-      style={
-        program.pageBackground ? { background: program.pageBackground } : undefined}>
+    // 배경색은 모든 프로그램 공통: src/styles/retrov/_variables.scss 의 $retrov-detail-bg
+    <div className="rv-detail">
       {/* 프로그램 배너 */}
       <section
         className="rv-hero"
@@ -333,15 +349,61 @@ function youtubeThumb(videoId) {
 }
 
 // TMDB 에피소드 → 영상 카드 데이터
-function episodeToVideo(ep, tmdb, fallbackImage, youtubeVideos = {}, youtubeIds = {}) {
+// ---------- TMDB 회차 제목·줄거리 → 카드용 짧은 제목 / 회차마다 다른 설명 ----------
+const normText = (s) => (s || "").replace(/[\s~!?.,'"‘’“”<>♬♪·-]/g, "");
+const splitSentences = (s) =>
+  (s || "").replace(/\s+/g, " ").trim().split(/(?<=[.!?…♬])\s*/).map((x) => x.trim()).filter(Boolean);
+const PART_STORY = /(두|세|네|다섯)\s?번째\s?이야기/;
+
+// 제목: ‘장소’ 또는 <장소> 를 꺼내고, "두 번째 이야기" 같은 회차 구분을 붙임
+function shortEpisodeTitle(name) {
+  const s = (name || "").replace(/\s+/g, " ").trim();
+  const quoted = s.match(/[‘'<]([^’'>]+)(?:[’'>]|$)/);
+  let base = quoted ? quoted[1] : s.replace(/^-[^-]+-\s*/, "").split(/[~!]/)[0];
+  base = base.replace(/[-–]\s*(두|세|네|다섯)\s?번째\s?이야기.*$/, "").replace(/[!~\s]+$/, "").trim() || s;
+  const part = s.match(PART_STORY);
+  return part ? `${base} · ${part[1]} 번째 이야기` : base;
+}
+
+// 시즌 회차의 20% 이상에서 반복되는 문장 (예: 매회 같은 프로그램 소개 문구)
+function commonSentences(episodeList) {
+  const count = new Map();
+  for (const ep of episodeList) {
+    for (const x of new Set(splitSentences(ep.overview).map(normText))) count.set(x, (count.get(x) || 0) + 1);
+  }
+  const limit = Math.max(3, episodeList.length * 0.2);
+  return new Set([...count].filter(([, c]) => c >= limit).map(([x]) => x));
+}
+
+// 데이터의 descriptionStrip 문구를 줄거리에서 제거 (띄어쓰기 차이는 무시)
+function stripPhrases(text, phrases = []) {
+  return phrases.reduce((s, phrase) => {
+    const pattern = phrase.trim().split(/\s+/).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("\\s*");
+    return s.replace(new RegExp(pattern, "g"), " ");
+  }, text || "").replace(/\s+/g, " ").trim();
+}
+
+// 설명: 반복 소개 문구 · 제목과 같은 문장 · 장소 소개 문장을 빼고 그 회차만의 내용만
+function episodeDescription(ep, common, strip = []) {
+  const overview = stripPhrases(ep.overview, strip);
+  const title = normText(ep.name);
+  const place = normText(shortEpisodeTitle(ep.name).split(" · ")[0]);
+  const rest = splitSentences(overview).filter((x) => {
+    const n = normText(x);
+    return n.length > 3 && !common.has(n) && !title.includes(n) && !(place.length >= 2 && n.includes(place)) && !/번째(여정|여행)/.test(n.slice(0, 16));
+  });
+  return rest.join(" ").replace(/^[’'>\s]+/, "").trim() || overview;
+}
+
+function episodeToVideo(ep, tmdb, fallbackImage, youtubeVideos = {}, youtubeIds = {}, common = new Set(), strip = []) {
   const n = ep.episode_number;
   const query = `${tmdb.searchTitle} ${n}회`;
   const videoId = youtubeIds[n] ?? null; // 확인된 유튜브 영상 ID
   const hasName = ep.name && !/^(에피소드|Episode)\s*\d+$/.test(ep.name); // "에피소드 1" 같은 기본 제목은 생략
   return {
     id: `tmdb-${tmdb.id}-s${tmdb.season}-e${n}`,
-    title: hasName ? `[${n}회] ${ep.name}` : `${n}회`,
-    description: ep.overview,
+    title: hasName ? `[${n}회] ${shortEpisodeTitle(ep.name)}` : `${n}회`,
+    description: episodeDescription(ep, common, strip),
     date: ep.air_date?.replaceAll("-", "."),
     videoId,
     fallbackImage: tmdbImage(ep.still_path, "w500") ?? youtubeThumb(videoId) ?? youtubeThumb(youtubeVideos[query]) ?? fallbackImage,

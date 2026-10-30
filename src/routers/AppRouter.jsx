@@ -42,9 +42,10 @@ import { Notice } from "../pages/notice/Notice";
 import { NoticeView } from "../pages/notice/NoticeView";
 
 // 회원 페이지
-import { Login } from "../pages/member/Login";
+import Login from "../pages/member/Login";
 import { Member } from "../pages/member/Member";
 import { ProfileSelect } from "../pages/member/ProfileSelect";
+import { MyPage } from "../pages/member/MyPage";
 
 export const AppRouter = () => {
     return (
@@ -89,6 +90,7 @@ export const AppRouter = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/member" element={<Member />} />
                 <Route path="/profileselect" element={<ProfileSelect />} />
+                <Route path="/mypage" element={<MyPage />} />
 
                 
 
