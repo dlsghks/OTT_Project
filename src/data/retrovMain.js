@@ -1,7 +1,8 @@
 // 레트로브 메인 페이지 데이터 (디자인 기준: 1920px)
 // 이미지: public/images/retrov/main/ (로고 -logo-w.png = 흰색 로고, -thumb.jpg = 1920x1080 배너 사진)
-import { programs } from "./retrov";
+import { programs, programDetails } from "./retrov";
 import { infiniteChallengeSections } from "./infiniteChallengeVideos";
+import { getTmdbTarget, getEpisodeNumber } from "./retrovTmdb";
 
 const IMG = "/images/retrov/main";
 
@@ -39,7 +40,7 @@ export const heroSlides = heroCopy.map(([id, description]) => ({
   description,
 }));
 
-// 레트로브 TOP 랭킹 (포스터 = 배너 사진 + 흰색 로고)
+// 레트로브 TOP 랭킹 (포스터 = 배너 사진 + 흰색 로고, rankImage = 순위 숫자 이미지)
 export const rankings = [
   "infinite-challenge",
   "high-kick",
@@ -47,7 +48,10 @@ export const rankings = [
   "we-got-married",
   "full-house",
   "dad-where-are-we-going",
-].map(getProgram);
+].map((id, index) => ({
+  ...getProgram(id),
+  rankImage: `${IMG}/rank/number-${index + 1}.svg`,
+}));
 
 // 무한도전 테마별 영상에서 n번째 영상 꺼내기
 const icVideo = (sectionId, index) => {
@@ -66,36 +70,65 @@ export const watching = [
   { id: "watching-6", programId: "infinite-challenge", title: icVideo("game", 0)?.title, image: icVideo("game", 0)?.image, progress: 100 },
 ];
 
-// 레트로브 추천 콘텐츠
-export const recommendations = [
-  { ...icVideo("mission", 0), programId: "infinite-challenge" },
-  {
-    id: "recommend-high-kick",
-    programId: "high-kick",
-    title: "거침없이 하이킥 Season 2 : 3화",
-    description: "거침없이 하이킥 Season 2 : 3화",
-    image: `${IMG}/high-kick-thumb.jpg`,
-    play: { seasonId: "season-2", episode: 3 },
-  },
-  {
-    id: "recommend-dad-where",
-    programId: "dad-where-are-we-going",
-    title: "아빠! 어디가? Season 1 : 31화",
-    description: "아빠! 어디가? Season 1 : 31화",
-    image: `${IMG}/dad-where-thumb.jpg`,
-    play: { seasonId: "season-1", episode: 31 },
-  },
-  {
-    id: "recommend-we-got-married",
-    programId: "we-got-married",
-    title: "우리 결혼했어요 Season 4 : 240화",
-    description: "우리 결혼했어요 Season 4 : 240화",
-    image: `${IMG}/we-got-married-thumb.jpg`,
-    play: { seasonId: "season-4", episode: 240 },
-  },
-  { ...icVideo("sports", 0), programId: "infinite-challenge" },
-  { ...icVideo("tikitaka", 0), programId: "infinite-challenge" },
-];
+// 레트로브 추천 콘텐츠 — 상세페이지 테마별 영상에서 프로그램마다 골라 20개
+// count: 프로그램별 개수 (테마마다 1개씩 돌아가며 뽑음)
+const RECOMMEND_COUNT = {
+  "infinite-challenge": 5,
+  "high-kick": 3,
+  "dad-where-are-we-going": 3,
+  "we-got-married": 3,
+  "boys-over-flowers": 3,
+  "full-house": 3,
+};
+
+// 테마(section)를 돌아가며 영상 n개 꺼내기 — 무한상사 1편, 추격전 1편, … 처럼 골고루
+function pickVideos(sections, count) {
+  const lists = sections.map((section) => section.videos ?? []).filter((videos) => videos.length);
+  const picked = [];
+  for (let i = 0; picked.length < count && lists.some((videos) => videos[i]); i++) {
+    lists.forEach((videos) => {
+      if (picked.length < count && videos[i]) picked.push(videos[i]);
+    });
+  }
+  return picked;
+}
+
+// 영상 → 추천 카드
+// - 무한도전: 엑셀 이미지 + 유튜브 id 그대로
+// - 그 외: tmdb(고유 id·시즌·회차)로 장면 사진을 찾고(RetroV.jsx), source 로 영상을 찾아 재생
+function toRecommendation(programId, video) {
+  const program = getProgram(programId);
+  const detail = programDetails[programId];
+  const target = getTmdbTarget(programId, detail.seasons?.[0]?.id);
+  const episode = target ? getEpisodeNumber(video) : null;
+  const query = target && (episode ? `${target.searchTitle} ${episode}회` : `${target.searchTitle} ${video.title}`);
+
+  return {
+    id: `recommend-${programId}-${video.id}`,
+    programId,
+    title: programId === "infinite-challenge" ? video.title : `${program.title} ${video.title}`,
+    description: video.description,
+    image: video.image ?? null,
+    fallbackImage: program.thumbnail,
+    videoId: video.videoId ?? (episode && detail.youtubeIds?.[detail.seasons?.[0]?.id]?.[episode]) ?? null,
+    tmdb: target && episode ? { id: target.id, season: target.season, episode } : null,
+    source: target ? { tmdbId: target.id, season: target.season, episode, query } : null,
+  };
+}
+
+// 테마가 달라도 같은 회차(제목)는 한 번만
+const recommendGroups = Object.entries(RECOMMEND_COUNT).map(([programId, count]) =>
+  pickVideos(programDetails[programId]?.sections ?? [], count * 3)
+    .map((video) => toRecommendation(programId, video))
+    .filter((item, index, list) => list.findIndex((other) => other.title === item.title) === index)
+    .slice(0, count)
+);
+
+// 프로그램이 섞이도록 한 개씩 번갈아 배치
+export const recommendations = pickVideos(
+  recommendGroups.map((videos) => ({ videos })),
+  recommendGroups.reduce((sum, videos) => sum + videos.length, 0)
+);
 
 // 레트로브 쇼츠 모아보기 (caption: [윗줄, 파란 강조줄])
 export const shorts = [

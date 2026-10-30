@@ -338,12 +338,11 @@
 .rv-rank-card {
   position: relative;
   display: block;
-  padding-bottom: 6%; // 숫자가 포스터 아래로 살짝 내려오는 공간
 
   &__poster {
     position: relative;
     display: block;
-    aspect-ratio: 318 / 466;
+    aspect-ratio: 318 / 464; // 1920px 기준 318 x 464
     overflow: hidden;
     border-radius: 4px;
     background: #1b2233;
@@ -367,27 +366,26 @@
 
   &__logo.rv-rank-card__logo {
     position: absolute;
-    right: 8%;
-    bottom: 7%;
+    right: 6%;
+    bottom: 6%;
     z-index: 1;
-    width: 62%;
-    height: 24%;
+    width: 48%; // 왼쪽 순위 숫자와 겹치지 않도록 오른쪽에만
+    height: 22%;
     object-fit: contain;
     object-position: right bottom;
   }
 
+  // 순위 숫자 이미지 (1920px 이상: 높이 160px, left 22px / bottom 0, 그보다 작으면 비율대로 줄어듦)
+  // SVG 여백은 숫자 크기에 맞게 잘라둠 (public/images/retrov/main/rank)
   &__number {
     position: absolute;
     bottom: 0;
-    left: -0.06em;
+    left: min(22px, 1.15vw);
     z-index: 2;
-    font-family: $retrov-pixel;
-    font-size: clamp(72px, 9vw, 172px);
-    line-height: 0.8;
-    color: #fff;
-    -webkit-text-stroke: 3px $retrov-bg;
-    paint-order: stroke fill;
-    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+    display: block;
+    width: auto;
+    height: clamp(76px, 8.33vw, 160px);
+    pointer-events: none;
   }
 
   &:hover &__poster img:not(.rv-rank-card__logo) {
