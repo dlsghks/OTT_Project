@@ -1,3 +1,5 @@
+import { withContent } from './contentCatalog';
+
 
 export const popularKeywords = [
     { rank: 1, keyword: '나의 완벽한 비서', change: 'same' },
@@ -20,4 +22,4 @@ export const searchContents = [
     { id: 4, title: '수사반장 1958', image: '', badge: '', isOriginal: false },
     { id: 5, title: '우리들의 블루스', image: '', badge: '', isOriginal: false },
     { id: 6, title: '악귀', image: '', badge: '독점', isOriginal: false },
-];
+].map((entry) => withContent(entry, 'search'));
