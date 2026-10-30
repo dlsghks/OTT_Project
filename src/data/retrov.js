@@ -84,6 +84,7 @@ export const programDetails = {
     characterMode: "quiz", // 캐릭터 클릭 시: "quiz"(퀴즈) | "image"(이미지 카드)
     othersTitle: "또 다른 그때 그시절 프로그램보기",
     playLabel: "돈가방을 갖고 튀어라, 2화 보기",
+    playVideoId: "chase-02", // 재생 버튼 → 테마별 영상(infiniteChallengeVideos.js) 중 이 id 의 영상 재생
     description: [
       "돈 가방을 갖고 튀어라 특집 금일봉 삼백만원을 차지하기 위한 여섯 남자의 액션 활극이 시작됐다.",
       "서울 시내 한복판에서 펼쳐지는 리얼 코믹 서스펜스!",
