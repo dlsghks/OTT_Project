@@ -6,6 +6,7 @@
 $retrov-blue: #1450ff; // 메인 포인트 (버튼, 선택 테두리)
 $retrov-blue-hover: #3d6dff; // 파란 버튼 hover
 $retrov-bg: #0b1120; // 메인 페이지 배경
+$retrov-detail-bg: #000000; // 프로그램 상세페이지 배경 (모든 프로그램 공통, 히어로 아래 페이드 색도 이 값)
 $retrov-gray: #8a8f99; // 메인 보조 텍스트
 $retrov-text-muted: #9a9a9a; // 날짜 등 흐린 텍스트 (상세 · TV 카드 · 영상 팝업)
 
@@ -17,7 +18,6 @@ $retrov-sans: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothi
 $retrov-side: clamp(16px, 5.729vw, 110px); // 좌우 여백 (1920px 기준 110px)
 $retrov-inner: 88.54%; // 배너 · 히어로 너비 (1920px 기준 1700px)
 $retrov-inner-mobile: 92%; // 768px 이하 배너 · 히어로 너비
-
 // ---------- 간격 ----------
 $retrov-gap-100: clamp(48px, 5.208vw, 100px); // 섹션(목록) 사이
 $retrov-gap-80: clamp(40px, 4.2vw, 80px); // 메인: 배너 ↔ 필터 ↔ 랭킹
