@@ -1,9 +1,6 @@
-import React from 'react'
+import { CategoryPage } from '../../components/wavve/CategoryPage';
+import { categoryPages } from '../../data/categoryData';
 
 export const Global = () => {
-  return (
-    <div>
-      해외시리즈
-    </div>
-  )
-}
+  return <CategoryPage key="global" page={categoryPages.global} />;
+};

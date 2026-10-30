@@ -1,9 +1,6 @@
-import React from 'react'
+import { CategoryPage } from '../../components/wavve/CategoryPage';
+import { categoryPages } from '../../data/categoryData';
 
 export const Animation = () => {
-  return (
-    <div>
-      animation
-    </div>
-  )
-}
+  return <CategoryPage key="animation" page={categoryPages.animation} />;
+};
