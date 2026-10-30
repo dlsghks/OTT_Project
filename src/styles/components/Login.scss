@@ -1,0 +1,220 @@
+// Layout의 공통 헤더(100px)를 제외한 로그인 화면입니다.
+// .site-inner의 기존 배경/패딩은 다른 페이지에 그대로 유지됩니다.
+.site-inner > .login-page {
+  width: calc(100% + var(--page-side-padding, 110px) * 2);
+  margin-inline: calc(var(--page-side-padding, 110px) * -1);
+}
+
+.login-page {
+  --login-header-height: 100px;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100svh - var(--login-header-height));
+  padding: 129px 24px 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: #090a14;
+  color: #f7f8fc;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+
+  &, * { box-sizing: border-box; }
+  button, input, a { font: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  button { cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+  button:focus-visible, a:focus-visible, input:focus-visible {
+    outline: 2px solid #7fa8ff;
+    outline-offset: 4px;
+  }
+
+  &__glows {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  // Figma SVG의 블러를 포함한 실제 내보내기 영역
+  &__glow { position: absolute; display: block; max-width: none; }
+  &__glow--left {
+    width: 1190px;
+    height: 366px;
+    left: calc(50% - 773px);
+    top: -100px;
+  }
+  &__glow--right {
+    width: 912px;
+    height: 306px;
+    left: calc(50% - 179px);
+    top: -100px;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    width: 480px;
+    max-width: 100%;
+  }
+  &__brand { margin: 0; line-height: 0; }
+  &__brand > img { display: block; width: 180px; height: auto; }
+  &__accounts, &__social {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+  }
+  &__button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 60px;
+    padding: 16px 24px;
+    border: 0;
+    border-radius: 10px;
+    background: #242631;
+    color: #f7f8fc;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    transition: background-color 160ms ease;
+    &:hover { background: #303341; }
+    &:disabled { cursor: wait; opacity: 0.65; }
+    &--primary { background: #1351f9; }
+    &--primary:hover { background: #3068ff; }
+    &--social > img {
+      position: absolute;
+      left: calc(50% - 136px);
+      top: 19px;
+      display: block;
+      max-width: none;
+    }
+  }
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: calc(100% - 8px);
+    color: #858ca3;
+    font-size: 14px;
+    line-height: 21px;
+    &::before, &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #2c2f3f;
+    }
+  }
+  &__help {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #a3abc2;
+    font-size: 14px;
+    line-height: 21px;
+    button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      &:hover { color: #fff; }
+    }
+  }
+  &__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: auto;
+    padding-top: 80px;
+    color: #7c869f;
+    font-size: 13px;
+    line-height: 20px;
+    button { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; }
+    button:hover { color: #fff; }
+  }
+  &__email-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+    label { font-size: 14px; color: #a3abc2; }
+    input {
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 16px;
+      border: 1px solid #3e4358;
+      border-radius: 10px;
+      background: #161823;
+      color: #f7f8fc;
+      font-size: 16px;
+      &::placeholder { color: #858ca3; }
+    }
+  }
+  &__message {
+    width: 100%;
+    margin: -16px 0 0;
+    color: #b8ccff;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 80px 20px 32px;
+    &__content { gap: 28px; }
+    &__button { font-size: 16px; }
+    &__button--social > img { left: calc(50% - 120px); }
+    &__legal { gap: 12px; padding-top: 64px; font-size: 12px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-page__button { transition: none; }
+}
+
+.login-page .login-page__button--social {
+    position: relative;
+
+    > img {
+        position: absolute;
+        top: 50%;
+        left: calc(50% - 136px);
+        transform: translateY(-50%);
+
+        width: 22px;
+        height: 22px;
+        min-width: 22px;
+        max-width: 22px;
+        max-height: 22px;
+        object-fit: contain;
+        margin: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-page .login-page__button--social > img {
+        left: calc(50% - 120px);
+    }
+}
