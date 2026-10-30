@@ -21,68 +21,148 @@ export const heroItems = [
   { id: 'hero-2', title: '놓치면 아쉬운 화제작', subtitle: '지금 인기 있는 작품을 만나보세요', image: '', link: '/movie' },
   { id: 'hero-3', title: '레트로브', subtitle: '그때 그 시절의 프로그램을 다시', image: '', link: '/retrov' },
 ];
+
+const categoryImage = (name) =>
+  `${import.meta.env.BASE_URL}images/category-buttons/${name}.png`;
+
 export const categories = [
-  { label: '전체', path: '/' }, { label: '예능', path: '/entertainment' },
-  { label: '드라마', path: '/drama' }, { label: '영화', path: '/movie' },
-  { label: '애니', path: '/animation' }, { label: '라이브', path: '/live' },
-  { label: '쇼츠', path: '/shorts' }, { label: '레트로브', path: '/retrov' },
+  { label: '신인감독 김연경 2', image: categoryImage('rookie-coach-kim-yeon-koung-2') },
+  { label: '출석체크', image: categoryImage('attendance-check') },
+  { label: '티켓', image: categoryImage('ticket') },
+  { label: '골프', image: categoryImage('golf') },
+  { label: '영화+', path: '/movie', image: categoryImage('movie-plus') },
+  { label: '뉴스', image: categoryImage('news') },
+  { label: '그것이 알고 싶다', image: categoryImage('unsolved-mysteries') },
+  { label: '너 말고 다른 연애', image: categoryImage('different-love') },
+  { label: '포식자들', image: categoryImage('forensic-investigators') },
+  { label: 'Wavve only', image: categoryImage('wavve-only') },
+  { label: '서바이벌', image: categoryImage('survival') },
+  { label: '키즈', image: categoryImage('kids') },
+  { label: 'KBS', image: categoryImage('kbs') },
+  { label: 'MBC', image: categoryImage('mbc') },
+  { label: 'CJ ENM', image: categoryImage('cj-enm') },
+  { label: 'JTBC', image: categoryImage('jtbc') },
 ];
 
+
+
 const samples = [
-  // 새로운 프로그램
   item('101', '지금 뜨는 드라마', 'series', '', '새로운'),
-
-  // 웨이브 오리지널
   item('102', '화제의 예능', 'series', '', '', true),
-
-  // 개별구매 콘텐츠
   item('103', '주말 추천 영화', 'movie', '', '개별구매'),
-
-  // 새로운 + 웨이브 오리지널
   item('104', '정주행 추천작', 'series', '', '새로운', true),
-
-  // 일반 콘텐츠
   item('105', '새로운 이야기'),
   item('106', '인기 시리즈'),
   item('107', '오늘의 발견'),
   item('108', '추억의 프로그램'),
 ];
 
-export const homeSections = [
-  { id: 'today', title: '오늘의 추천', items: samples },
-  { id: 'drama', title: '인기 드라마', items: samples.slice(2).concat(samples.slice(0, 2)) },
-  { id: 'movie', title: '인기 영화', items: samples.slice(4).concat(samples.slice(0, 4)) },
-  { id: 'original', title: '웨이브 오리지널', items: samples },
-  { id: 'retro', title: '레트로브 추천 콘텐츠', items: samples, more: '/retrov' },
-  { id: 'animation', title: '애니메이션 추천', items: samples },
-  { id: 'shorts', title: '지금 볼 만한 쇼츠', items: samples, more: '/shorts' },
+// 기존에 작성한 드라마 데이터 보존
+const dramaItems = [
+  {
+    id: 'drama-1',
+    title: '드라마 제목 1',
+    kind: 'series',
+    tmdbId: null,
+    image: '',
+    badge: '',
+    isOriginal: false
+  },
+  {
+    id: 'drama-2',
+    title: '드라마 제목 2',
+    kind: 'series',
+    tmdbId: null,
+    image: '',
+    badge: '',
+    isOriginal: false
+  }
 ];
+
+// 메인 페이지 콘텐츠 섹션
+export const homeSections = [
+  {
+    id: 'weekly',
+    title: '요일별 콘텐츠',
+    cardType: 'default',
+    items: dramaItems
+  },
+  {
+    id: 'travel',
+    title: '해외로 떠나는 여행 예능',
+    cardType: 'default',
+    items: samples
+  },
+  {
+    id: 'music-entertainment',
+    title: '걱정은 잠시 잊게 만드는 음악 예능',
+    cardType: 'default',
+    items: samples
+  },
+  {
+    id: 'jung-hyung-don',
+    title: '정형돈의 제목없음 TV',
+    cardType: 'wide',
+    items: samples
+  },
+  {
+    id: 'variety',
+    title: '#버라이어티',
+    cardType: 'default',
+    items: samples
+  },
+  {
+    id: 'coming-soon',
+    title: '두근두근 Coming Soon',
+    cardType: 'coming-soon',
+    items: samples
+  },
+  {
+    id: 'talk',
+    title: '#토크',
+    cardType: 'default',
+    items: samples
+  },
+  {
+    id: 'music',
+    title: '#뮤직',
+    cardType: 'default',
+    items: samples
+  },
+  {
+    id: 'all-entertainment',
+    title: '예능 전체보기',
+    cardType: 'default',
+    items: samples,
+    more: '/entertainment'
+  }
+];
+
+
 
 export const rankingItems = [
-  { id: 1, title: '프로그램 1', image: '', badge: '새로운', isOriginal: true },
-  { id: 2, title: '프로그램 2', image: '', badge: '', isOriginal: false },
-  { id: 3, title: '프로그램 3', image: '', badge: '개별구매', isOriginal: false },
-  { id: 4, title: '프로그램 4', image: '', badge: '', isOriginal: true },
-  { id: 5, title: '프로그램 5', image: '', badge: '새로운', isOriginal: false },
-
-  { id: 6, title: '프로그램 6', image: '', badge: '', isOriginal: false },
-  { id: 7, title: '프로그램 7', image: '', badge: '개별구매', isOriginal: true },
-  { id: 8, title: '프로그램 8', image: '', badge: '', isOriginal: false },
-  { id: 9, title: '프로그램 9', image: '', badge: '새로운', isOriginal: false },
-  { id: 10, title: '프로그램 10', image: '', badge: '', isOriginal: true },
-
-  { id: 11, title: '프로그램 11', image: '', badge: '', isOriginal: false },
-  { id: 12, title: '프로그램 12', image: '', badge: '새로운', isOriginal: true },
-  { id: 13, title: '프로그램 13', image: '', badge: '', isOriginal: false },
-  { id: 14, title: '프로그램 14', image: '', badge: '개별구매', isOriginal: false },
-  { id: 15, title: '프로그램 15', image: '', badge: '', isOriginal: true },
-
-  { id: 16, title: '프로그램 16', image: '', badge: '새로운', isOriginal: false },
-  { id: 17, title: '프로그램 17', image: '', badge: '', isOriginal: false },
-  { id: 18, title: '프로그램 18', image: '', badge: '개별구매', isOriginal: true },
-  { id: 19, title: '프로그램 19', image: '', badge: '', isOriginal: false },
-  { id: 20, title: '프로그램 20', image: '', badge: '새로운', isOriginal: false },
+  { id: 1, title: "가족관계증명서", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 2, title: "욕망의 덫", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 3, title: "엄마가 미쳤어요", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 4, title: "놀면 뭐하니?", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 5, title: "라디오스타", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 6, title: "나 혼자 산다", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 7, title: "스모킹 건", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 8, title: "심야괴담회", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 9, title: "너 말고 다른 연애", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 10, title: "신인감독 김연경", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 11, title: "이혼숙려캠프", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 12, title: "미스트롯", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 13, title: "유 퀴즈 온 더 블럭", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 14, title: "개와 늑대의 시간", kind: "series", tmdbId: 297561, image: "", badge: "", isOriginal: false },
+  { id: 15, title: "전지적 참견 시점", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 16, title: "탐정들의 영업비밀", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 17, title: "전설의 사내", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 18, title: "1박 2일", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 19, title: "슈퍼맨이 돌아왔다", kind: "series", image: "", badge: "", isOriginal: false },
+  { id: 20, title: "더 커뮤니티", kind: "series", image: "", badge: "", isOriginal: false },
 ];
+
 
 export const eventBanners = [
   { id: 'event-1', title: '이달의 이벤트', subtitle: '웨이브 이벤트를 확인해 보세요', link: '/event' },

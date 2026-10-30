@@ -1,83 +1,348 @@
-.footer {
-  background: #000;
-  color: #f5f5f5;
-  padding: 44px 24px 88px;
-  font-family: Arial, 'Noto Sans KR', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.7;
-  text-align: center;
+// 기존 웨이브 푸터 (1920 기준)
+$footer-line: #2b2b2b;
+$footer-text: #8c8c8c;
+$footer-box: #2a2a2a;
 
-  &__inner {
-    max-width: 1440px;
-    margin: 0 auto;
-  }
+.footer {
+  --footer-side: 135px;
+
+  background: #000;
+  color: $footer-text;
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
 
   a {
     color: inherit;
     text-decoration: none;
 
-    &:hover { text-decoration: underline; }
-    &:focus-visible { outline: 2px solid #1351f9; outline-offset: 5px; }
+    &:focus-visible {
+      outline: 2px solid #1351f9;
+      outline-offset: 3px;
+    }
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* =========================
+     공지사항 바
+  ========================= */
+  &__notice {
+    border-top: 1px solid $footer-line;
+    border-bottom: 1px solid $footer-line;
+  }
+
+  &__notice-inner {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    height: 70px;
+    padding-left: calc(var(--footer-side) + 12px);
+  }
+
+  &__notice-label {
+    flex: 0 0 auto;
+    color: #c8c8c8 !important;
+    font-size: 22px;
+  }
+
+  &__notice-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: #b4b4b4 !important;
+    font-size: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    &:hover {
+      color: #fff !important;
+    }
+  }
+
+  &__notice-controls {
+    display: flex;
+    align-self: stretch;
+    margin-right: calc(var(--footer-side) + 12px);
+    border-left: 1px solid $footer-line;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      padding: 0;
+      border: 0;
+      border-right: 1px solid $footer-line;
+      background: transparent;
+      color: #8c8c8c;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  /* =========================
+     하단 정보
+  ========================= */
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 26px var(--footer-side) 140px;
+  }
+
+  &__left {
+    min-width: 0;
   }
 
   &__nav {
-    margin-bottom: 40px;
+    margin-bottom: 14px;
 
     ul {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 18px 60px;
+      gap: 8px 33px;
       margin: 0;
       padding: 0;
       list-style: none;
     }
 
-    a { font-size: 19px; }
-    .footer__privacy { color: #1351f9; font-weight: 700; }
+    a {
+      color: #9a9a9a;
+      font-size: 19px;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    .footer__privacy {
+      color: #fff;
+      font-weight: 700;
+    }
   }
 
+  // 회사 정보 (항목 사이 | 구분선)
   &__info {
-    p { margin: 0 0 20px; }
-    span { display: inline-block; }
-    a:not([href^='tel:']) { text-decoration: underline; text-underline-offset: 3px; }
-    a { overflow-wrap: anywhere; }
+    font-style: normal;
+
+    p {
+      margin: 0;
+    }
+
+    p > span + span::before {
+      content: '|';
+      margin: 0 9px;
+    }
+
+    a[href^='http'],
+    a[href^='mailto'] {
+      overflow-wrap: anywhere;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
-  &__copyright { margin: 42px 0 34px; font-size: 15px; }
+  &__slash {
+    margin: 0 4px 0 14px;
+  }
+
+  &__inquiry {
+    color: #c8c8c8 !important;
+    font-weight: 700;
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+  }
+
+  &__copyright {
+    margin: 10px 0 0;
+  }
+
+  /* =========================
+     사업자용 웨이브 가입 + SNS
+  ========================= */
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 0 0 auto;
+  }
+
+  &__business {
+    position: relative;
+    display: flex;
+    height: 50px;
+  }
+
+  &__business-logo {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    width: 128px;
+    padding-left: 10px;
+    box-sizing: border-box;
+    background: #333;
+
+    img {
+      width: 58px;
+      height: auto;
+    }
+
+    // "on" 배지
+    span {
+      padding: 0 4px;
+      border-radius: 999px;
+      background: #fff;
+      color: #333;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 14px;
+    }
+  }
+
+  &__business-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 304px;
+    padding: 0 16px 0 20px;
+    border: 0;
+    border-left: 2px solid #000;
+    background: $footer-box;
+    color: #c8c8c8;
+    font-size: 18px;
+
+    svg {
+      color: #8c8c8c;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  &__business.is-open &__business-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  &__business-menu {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 4px);
+    left: 0;
+    z-index: 20;
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    background: $footer-box;
+
+    a {
+      display: block;
+      padding: 8px 20px;
+      color: #c8c8c8;
+      font-size: 15px;
+
+      &:hover {
+        background: #3a3a3a;
+        color: #fff;
+      }
+    }
+  }
 
   &__social {
     display: flex;
-    justify-content: center;
-    gap: 48px;
+    gap: 8px;
 
     a {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 52px;
-      height: 52px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: #252525;
-      transition: background-color 150ms ease;
+      background: $footer-box;
+      color: #fff;
+      transition: background-color 0.2s ease;
 
-      &:hover { background: #414141; }
+      &:hover {
+        background: #414141;
+      }
+    }
+  }
+
+  @media (max-width: 1280px) {
+    &__inner {
+      flex-direction: column-reverse;
+      gap: 28px;
     }
   }
 
   @media (max-width: 768px) {
-    padding: 32px 20px 48px;
-    font-size: 13px;
+    --footer-side: 20px;
 
-    &__nav {
-      margin-bottom: 28px;
-      ul { gap: 14px 24px; }
-      a { font-size: 15px; }
+    font-size: 12px;
+
+    &__notice-inner {
+      gap: 16px;
+      height: 52px;
+      padding-left: var(--footer-side);
     }
 
-    &__info p { margin-bottom: 16px; }
-    &__copyright { margin: 28px 0; font-size: 12px; }
-    &__social { gap: 28px; }
+    &__notice-label {
+      font-size: 15px;
+    }
+
+    &__notice-title {
+      font-size: 14px;
+    }
+
+    &__notice-controls {
+      margin-right: 0;
+
+      button {
+        width: 44px;
+
+        svg {
+          width: 12px;
+        }
+      }
+    }
+
+    &__inner {
+      padding-bottom: 60px;
+    }
+
+    &__nav {
+      ul {
+        gap: 6px 18px;
+      }
+
+      a {
+        font-size: 14px;
+      }
+    }
+
+    &__right {
+      flex-wrap: wrap;
+    }
+
+    &__business {
+      height: 44px;
+    }
+
+    &__business-logo {
+      width: 100px;
+    }
+
+    &__business-toggle {
+      width: 200px;
+      font-size: 14px;
+    }
   }
 }

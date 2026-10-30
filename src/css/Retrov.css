@@ -9,7 +9,7 @@
   min-height: 100vh;
   overflow-x: clip;
   padding-bottom: 120px;
-  background: #0b1120;
+  background: transparent;
   color: #fff;
   font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 }
@@ -230,7 +230,7 @@
 /* ---------------- 가로 목록 공통 ---------------- */
 .rv-main-row {
   margin-top: clamp(48px, 5.208vw, 100px);
-  padding-left: clamp(16px, 5.729vw, 110px);
+  padding-left: 0;
 }
 .circle-navigation + .rv-main-row {
   margin-top: clamp(40px, 4.2vw, 80px);
@@ -283,12 +283,11 @@
 .rv-rank-card {
   position: relative;
   display: block;
-  padding-bottom: 6%;
 }
 .rv-rank-card__poster {
   position: relative;
   display: block;
-  aspect-ratio: 318/466;
+  aspect-ratio: 318/464;
   overflow: hidden;
   border-radius: 4px;
   background: #1b2233;
@@ -309,26 +308,23 @@
 }
 .rv-rank-card__logo.rv-rank-card__logo {
   position: absolute;
-  right: 8%;
-  bottom: 7%;
+  right: 6%;
+  bottom: 6%;
   z-index: 1;
-  width: 62%;
-  height: 24%;
+  width: 48%;
+  height: 22%;
   object-fit: contain;
   object-position: right bottom;
 }
 .rv-rank-card__number {
   position: absolute;
   bottom: 0;
-  left: -0.06em;
+  left: min(22px, 1.15vw);
   z-index: 2;
-  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
-  font-size: clamp(72px, 9vw, 172px);
-  line-height: 0.8;
-  color: #fff;
-  -webkit-text-stroke: 3px #0b1120;
-  paint-order: stroke fill;
-  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+  display: block;
+  width: auto;
+  height: clamp(76px, 8.33vw, 160px);
+  pointer-events: none;
 }
 .rv-rank-card:hover .rv-rank-card__poster img:not(.rv-rank-card__logo) {
   transform: scale(1.05);
@@ -338,6 +334,16 @@
 .rv-thumb-card {
   display: grid;
   gap: 8px;
+}
+.rv-thumb-card--button {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 .rv-thumb-card__image {
   display: block;
@@ -466,5 +472,25 @@
   .retrov-main *,
   .rv-main-hero * {
     transition: none !important;
+    position: relative;
   }
+}
+.site-inner > .retrov-main {
+  width: calc(100% + var(--page-side-padding) * 2);
+  max-width: none;
+  margin-left: calc(var(--page-side-padding) * -1);
+  margin-right: calc(var(--page-side-padding) * -1);
+  padding: 0 var(--page-side-padding) 120px;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+.retrov-main__hero {
+  width: calc(100% + var(--page-side-padding) * 2);
+  margin-left: calc(var(--page-side-padding) * -1);
+  margin-right: calc(var(--page-side-padding) * -1);
+}
+.retrov-main__hero .rv-main-hero {
+  width: 100%;
+  margin: 0;
 }
