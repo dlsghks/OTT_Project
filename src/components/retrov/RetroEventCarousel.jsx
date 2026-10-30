@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getImagePath } from "../../utils/imagePath";
 import "../../styles/components/RetroEventCarousel.scss";
 
 // 가운데 배너 + 양옆 배너가 살짝 보이는 캐러셀
@@ -18,31 +19,15 @@ export default function RetroEventCarousel({ banners }) {
         {slots.map((offset) => {
           const banner = getBanner(offset);
           const isCenter = offset === 0;
-          const [before, highlight, after] = banner.title;
 
           return (
             <article
               key={`${banner.id}-${offset}`}
-              className={`rv-event__slide rv-event__slide--${banner.theme} ${isCenter ? "is-active" : offset < 0 ? "is-prev" : "is-next"
-                }`}
+              className={`rv-event__slide ${isCenter ? "is-active" : offset < 0 ? "is-prev" : "is-next"}`}
               aria-hidden={!isCenter}
               onClick={isCenter ? undefined : () => move(offset)}
             >
-              <span className="rv-event__deco rv-event__deco--left" aria-hidden="true">
-                ❤
-              </span>
-              <div className="rv-event__text">
-                <p className="rv-event__label">{banner.label}</p>
-                <strong className="rv-event__title">
-                  {before}
-                  <em>{highlight}</em>
-                  {after}
-                </strong>
-                <p className="rv-event__desc">{banner.description}</p>
-              </div>
-              <span className="rv-event__deco rv-event__deco--right" aria-hidden="true">
-                ❤
-              </span>
+              <img src={getImagePath(banner.image)} alt={`${banner.title} ${banner.description}`} draggable="false" />
             </article>
           );
         })}

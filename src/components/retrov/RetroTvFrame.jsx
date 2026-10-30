@@ -21,13 +21,21 @@ const TV_FRAMES = {
 };
 
 // 브라운관 TV 테두리 + 화면 속 썸네일
-export default function RetroTvFrame({ src, alt = "", frame = "default", className = "" }) {
+// fallbackSrc: src 이미지가 없을 때(404) 대신 보여줄 이미지 (예: TMDB 장면 사진)
+export default function RetroTvFrame({ src, fallbackSrc, alt = "", frame = "default", className = "" }) {
   const tvFrame = TV_FRAMES[frame] ?? TV_FRAMES.default;
+  const imageSrc = src || fallbackSrc;
+
+  function handleError(e) {
+    if (fallbackSrc && e.currentTarget.src !== fallbackSrc) e.currentTarget.src = fallbackSrc;
+  }
 
   return (
     <div className={`retro-tv ${className}`.trim()} style={{ "--tv-screen-inset": tvFrame.inset }}>
       <div className="retro-tv__screen">
-        {src && <img src={src} alt={alt} loading="lazy" draggable="false" />}
+        {imageSrc && (
+          <img key={imageSrc} src={imageSrc} alt={alt} loading="lazy" draggable="false" onError={handleError} />
+        )}
       </div>
       <img className="retro-tv__frame" src={tvFrame.src} alt="" aria-hidden="true" draggable="false" />
     </div>

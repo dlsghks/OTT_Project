@@ -18,6 +18,7 @@ export const ContentCard = ({ item, rank }) => {
     setTmdbPoster(null);
     setImageError(false);
 
+    // 로컬 이미지가 있거나 제목이 없으면 TMDB 검색 생략
     if (localPoster || !item.title) return;
 
     getTmdbPoster(item).then((poster) => {
@@ -31,16 +32,18 @@ export const ContentCard = ({ item, rank }) => {
     };
   }, [item.title, item.kind, item.tmdbId, localPoster]);
 
+  // 최종 포스터 경로
   const poster = localPoster
     ? getImagePath(localPoster)
     : tmdbPoster;
 
+  // 이미지 표시 가능 여부
   const showPoster = Boolean(poster) && !imageError;
 
   return (
     <Link
       to={`/programdetail/${item.id}`}
-      className="content-card"
+      className={`content-card ${rank ? "content-card--ranked" : ""}`}
     >
       <div className="content-card__thumbnail">
 
@@ -57,10 +60,11 @@ export const ContentCard = ({ item, rank }) => {
         {/* 좌측 상단 상태 배지 */}
         {item.badge && (
           <span
-            className={`content-card__badge ${item.badge === "개별구매"
+            className={`content-card__badge ${
+              item.badge === "개별구매"
                 ? "content-card__badge--purchase"
                 : "content-card__badge--new"
-              }`}
+            }`}
           >
             {item.badge}
           </span>
@@ -75,14 +79,7 @@ export const ContentCard = ({ item, rank }) => {
           />
         )}
 
-        {/* 랭킹 번호 */}
-        {rank && (
-          <span className="content-card__rank">
-            {rank}
-          </span>
-        )}
-
-        {/* 이미지가 없을 때 기존 플레이스홀더 */}
+        {/* 이미지가 없거나 불러오기 실패한 경우 */}
         {!showPoster && (
           <span className="content-card__placeholder">
             {item.title}
@@ -91,9 +88,23 @@ export const ContentCard = ({ item, rank }) => {
 
       </div>
 
+      {/* 카드 하단 제목 */}
       <div className="content-card__info">
         <h3>{item.title}</h3>
       </div>
+
+      {/* TOP 20 순위 SVG 이미지 */}
+      {rank && rank <= 20 && (
+        <img
+          className="content-card__rank"
+          src={getImagePath(
+            `/images/rank/wavve_rank${rank}.svg`
+          )}
+          alt={`${rank}위`}
+          draggable="false"
+        />
+      )}
+
     </Link>
   );
 };
