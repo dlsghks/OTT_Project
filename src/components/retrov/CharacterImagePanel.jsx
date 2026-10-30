@@ -1,3 +1,5 @@
+
+import { getImagePath } from "../../utils/imagePath";
 import "../../styles/components/CharacterImagePanel.scss";
 
 // 캐릭터 아이콘 클릭 시 아래에 나오는 이미지 카드 (1420 x 780)
@@ -5,7 +7,10 @@ import "../../styles/components/CharacterImagePanel.scss";
 export default function CharacterImagePanel({ character, label = "소개" }) {
   return (
     <figure id="character-panel" className="character-image-panel">
-      <img src={character.panelImage} alt={`${character.name} ${label}`} />
+      <img
+        src={getImagePath(character.panelImage)}
+        alt={`${character.name} ${label}`}
+      />
     </figure>
   );
 }

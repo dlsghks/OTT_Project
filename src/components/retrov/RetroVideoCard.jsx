@@ -3,7 +3,8 @@ import { getImagePath } from "../../utils/imagePath";
 
 // TV 썸네일 + 제목 / 설명 / 방영일 카드 (썸네일 클릭 시 onPlay 호출)
 export default function RetroVideoCard({ video, frame, onPlay }) {
-  const canPlay = Boolean(video.videoId && onPlay);
+  // 재생 가능: 유튜브 id 가 있거나(무한도전), TMDB 고유 id 로 찾을 수 있는 영상(source)
+  const canPlay = Boolean((video.videoId || video.source) && onPlay);
 
   return (
     <article className="retro-video-card">
@@ -20,6 +21,7 @@ export default function RetroVideoCard({ video, frame, onPlay }) {
       >
         <RetroTvFrame
           src={getImagePath(video.image)}
+          fallbackSrc={video.fallbackImage}
           alt=""
           frame={frame}
         />
