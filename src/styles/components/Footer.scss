@@ -137,7 +137,7 @@ $footer-box: #2a2a2a;
       margin: 0;
     }
 
-    p > span + span::before {
+    p>span+span::before {
       content: '|';
       margin: 0 9px;
     }
@@ -343,6 +343,80 @@ $footer-box: #2a2a2a;
     &__business-toggle {
       width: 200px;
       font-size: 14px;
+    }
+  }
+}
+
+// 푸터 글꼴 크기 통일
+.footer {
+  // 기본 글꼴
+  font-size: 14px;
+
+  // 공지사항
+  &__notice-label {
+    font-size: 18px;
+  }
+
+  &__notice-title {
+    font-size: 16px;
+  }
+
+  // 하단 메뉴
+  &__nav a {
+    font-size: 14px;
+  }
+
+  // 사업자 정보
+  &__info {
+    font-size: 12px;
+  }
+
+  // 저작권
+  &__copyright {
+    font-size: 12px;
+  }
+
+  // 사업자용 웨이브 가입
+  &__business-toggle {
+    font-size: 14px;
+  }
+
+  &__business-menu a {
+    font-size: 14px;
+  }
+
+  // 모바일
+  @media (max-width: 768px) {
+    &__notice-label {
+      font-size: 15px;
+    }
+
+    &__notice-title {
+      font-size: 14px;
+    }
+
+    &__nav a {
+      font-size: 14px;
+    }
+
+    &__info,
+    &__copyright {
+      font-size: 12px;
+    }
+  }
+}
+
+// 고객센터 페이지 전용 푸터 배경색
+body:has(.notice-page, .inquiry-write) {
+  .footer {
+    background: #1b1b1b;
+
+    &__notice {
+      background: #1b1b1b;
+    }
+
+    &__inner {
+      background: #1b1b1b;
     }
   }
 }
