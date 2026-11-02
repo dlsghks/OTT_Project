@@ -39,6 +39,8 @@ import { Search } from "../pages/Search";
 import { Shorts } from "../pages/Shorts";
 
 // 공지사항 페이지
+import { Company } from '../pages/customer/Company';
+import { Service } from '../pages/customer/Service';
 import { Notice } from "../pages/notice/Notice";
 import { NoticeView } from "../pages/notice/NoticeView";
 import Support from "../pages/support/Support";
@@ -90,6 +92,8 @@ export const AppRouter = () => {
                 <Route path="/shorts" element={<Shorts />} />
 
                 {/* 공지사항 */}
+                <Route path="/company" element={<Company />} />
+                <Route path="/service" element={<Service />} />
                 <Route path="/notice" element={<Notice />} />
                 <Route path="/noticeview" element={<NoticeView />} />
                 <Route path="/support" element={<Support />} />

@@ -11,14 +11,8 @@ const notices = [
 ]
 
 const links = [
-  {
-    label: '회사소개',
-    href: 'https://www.wavve.com/customer/company',
-  },
-  {
-    label: '서비스 소개',
-    href: 'https://www.wavve.com/customer/service',
-  },
+  { label: '회사소개', to: '/company' },
+  { label: '서비스 소개', to: '/service' },
   {
     label: '이용약관',
     path: '/terms',
@@ -103,22 +97,12 @@ export const Footer = () => {
         <div className="footer__left">
           <nav aria-label="하단 메뉴" className="footer__nav">
             <ul>
-              {links.map(({ label, href, path, privacy }) => (
+              {links.map(({ label, href, to, privacy }) => (
                 <li key={label}>
-                  {path ? (
-                    <Link
-                      to={path}
-                      className={privacy ? 'footer__privacy' : undefined}
-                    >
-                      {label}
-                    </Link>
+                  {to ? (
+                    <Link to={to} className={privacy ? 'footer__privacy' : undefined}>{label}</Link>
                   ) : (
-                    <a
-                      href={href}
-                      className={privacy ? 'footer__privacy' : undefined}
-                    >
-                      {label}
-                    </a>
+                    <a href={href} className={privacy ? 'footer__privacy' : undefined}>{label}</a>
                   )}
                 </li>
               ))}
