@@ -40,7 +40,7 @@ const ContentCardBody = ({ item, rank }) => {
 
   return (
     <Link
-      to={`/programdetail/${item.id}`}
+      to={item.link || `/programdetail/${item.id}`}
       className={`content-card ${rank ? "content-card--ranked" : ""}`}
     >
       <div className="content-card__thumbnail">
