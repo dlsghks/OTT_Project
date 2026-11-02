@@ -47,6 +47,8 @@ import { Member } from "../pages/member/Member";
 import { ProfileSelect } from "../pages/member/ProfileSelect";
 import { MyPage } from "../pages/member/MyPage";
 
+
+
 export const AppRouter = () => {
     return (
         <Routes>
