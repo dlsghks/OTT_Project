@@ -136,7 +136,7 @@ const movieItems = [
   program('mov-22', '너의 결혼식', 'romance'),
   program('mov-23', '인사이드 아웃 2', 'animation', [], '개별구매'),
   program('mov-24', '마당을 나온 암탉', 'family'),
-].map((entry) => withContent(entry, 'category'));
+].map((entry) => ({ ...withContent(entry, 'category'), link: `/moviedetail/${entry.id}` }));
 
 /* =========================
    시사교양
@@ -306,9 +306,9 @@ export const categoryPages = {
   movie: {
     name: '영화',
     heroItems: [
-      { id: 'mov-hero-1', title: '범죄도시 4', subtitle: '지금 바로 구매하고 감상하세요', image: '', link: '/programdetail/mov-01' },
-      { id: 'mov-hero-2', title: '서울의 봄', subtitle: '1979년 12월 12일, 그날 밤', image: '', link: '/programdetail/mov-02' },
-      { id: 'mov-hero-3', title: '파일럿', subtitle: '새로 들어온 코미디 영화', image: '', link: '/programdetail/mov-07' },
+      { id: 'mov-hero-1', title: '범죄도시 4', subtitle: '지금 바로 구매하고 감상하세요', image: '', link: '/moviedetail/mov-01' },
+      { id: 'mov-hero-2', title: '서울의 봄', subtitle: '1979년 12월 12일, 그날 밤', image: '', link: '/moviedetail/mov-02' },
+      { id: 'mov-hero-3', title: '파일럿', subtitle: '새로 들어온 코미디 영화', image: '', link: '/moviedetail/mov-07' },
     ],
     filters: [
       { id: 'all', label: '영화전체' },

@@ -20,6 +20,7 @@ import { Category } from "../pages/category/Category";
 
 // 콘텐츠 상세 페이지
 import { ProgramDetail } from "../pages/contents/ProgramDetail";
+import { MovieDetail } from "../pages/contents/MovieDetail";
 
 // 라이브 페이지
 import { LiveChannel } from "../pages/live/LiveChannel";
@@ -69,6 +70,7 @@ export const AppRouter = () => {
                 <Route path="/global" element={<Global />} />
                 <Route path="/category" element={<Category />} />
                 <Route path="/programdetail/:programId" element={<ProgramDetail />} />
+                <Route path="/moviedetail/:movieId" element={<MovieDetail />} />
 
                 {/* LIVE */}
                 <Route path="/live" element={<Live />} />
