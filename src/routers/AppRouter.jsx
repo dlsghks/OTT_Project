@@ -20,6 +20,7 @@ import { Category } from "../pages/category/Category";
 
 // 콘텐츠 상세 페이지
 import { ProgramDetail } from "../pages/contents/ProgramDetail";
+import { MovieDetail } from "../pages/contents/MovieDetail";
 
 // 라이브 페이지
 import { LiveChannel } from "../pages/live/LiveChannel";
@@ -40,12 +41,17 @@ import { Shorts } from "../pages/Shorts";
 // 공지사항 페이지
 import { Notice } from "../pages/notice/Notice";
 import { NoticeView } from "../pages/notice/NoticeView";
+import Support from "../pages/support/Support";
+import Inquiry from "../pages/support/Inquiry";
+import InquiryWrite from "../pages/support/InquiryWrite";
+import { Terms } from "../pages/support/Terms";
 
 // 회원 페이지
 import Login from "../pages/member/Login";
 import { Member } from "../pages/member/Member";
 import { ProfileSelect } from "../pages/member/ProfileSelect";
 import { MyPage } from "../pages/member/MyPage";
+
 
 export const AppRouter = () => {
     return (
@@ -64,6 +70,7 @@ export const AppRouter = () => {
                 <Route path="/global" element={<Global />} />
                 <Route path="/category" element={<Category />} />
                 <Route path="/programdetail/:programId" element={<ProgramDetail />} />
+                <Route path="/moviedetail/:movieId" element={<MovieDetail />} />
 
                 {/* LIVE */}
                 <Route path="/live" element={<Live />} />
@@ -85,6 +92,9 @@ export const AppRouter = () => {
                 {/* 공지사항 */}
                 <Route path="/notice" element={<Notice />} />
                 <Route path="/noticeview" element={<NoticeView />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/inquiry" element={<Inquiry />} />
+                <Route path="/terms" element={<Terms />} />
 
                 {/* 회원 */}
                 <Route path="/login" element={<Login />} />
@@ -92,10 +102,17 @@ export const AppRouter = () => {
                 <Route path="/profileselect" element={<ProfileSelect />} />
                 <Route path="/mypage" element={<MyPage />} />
 
-                
+
 
             </Route>
-        </Routes>
+
+            {/* 1:1 문의 작성 - 공통 Layout 미적용 */}
+            <Route
+                path="/inquiry/write"
+                element={<InquiryWrite />}
+            />
+
+        </Routes >
     );
 };
 
