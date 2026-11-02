@@ -9,6 +9,18 @@ header {
   background: #000;
   color: #8b8b8b;
 
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    width: 100%;
+    background: #000;
+    color: #8b8b8b;
+
+    // 기존 header 내부 스타일을 이 안으로 이동
+  }
+
   >.inner {
     display: flex;
     align-items: center;
@@ -179,5 +191,12 @@ header {
     .header-right li {
       font-size: 14px;
     }
+  }
+}
+
+// 고객센터 페이지 전용 헤더 배경색
+body:has(.notice-page, .inquiry-write) {
+  .site-header {
+    background: #1b1b1b;
   }
 }

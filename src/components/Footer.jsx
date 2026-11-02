@@ -11,13 +11,32 @@ const notices = [
 ]
 
 const links = [
-  { label: '회사소개', href: 'https://www.wavve.com/customer/company' },
-  { label: '서비스 소개', href: 'https://www.wavve.com/customer/service' },
-  { label: '이용약관', href: 'https://www.wavve.com/customer/agreement' },
-  { label: '개인정보 처리방침', href: 'https://www.wavve.com/customer/privacy', privacy: true },
-  { label: '고객센터', href: 'https://www.wavve.com/customer' },
-  { label: '이벤트', href: 'https://www.wavve.com/customer/event' },
-]
+  {
+    label: '회사소개',
+    href: 'https://www.wavve.com/customer/company',
+  },
+  {
+    label: '서비스 소개',
+    href: 'https://www.wavve.com/customer/service',
+  },
+  {
+    label: '이용약관',
+    path: '/terms',
+  },
+  {
+    label: '개인정보 처리방침',
+    path: '/terms',
+    privacy: true,
+  },
+  {
+    label: '고객센터',
+    path: '/support',
+  },
+  {
+    label: '이벤트',
+    path: '/event',
+  },
+];
 
 // 사업자용 웨이브 가입 메뉴
 const businessMenu = [
@@ -84,9 +103,23 @@ export const Footer = () => {
         <div className="footer__left">
           <nav aria-label="하단 메뉴" className="footer__nav">
             <ul>
-              {links.map(({ label, href, privacy }) => (
+              {links.map(({ label, href, path, privacy }) => (
                 <li key={label}>
-                  <a href={href} className={privacy ? 'footer__privacy' : undefined}>{label}</a>
+                  {path ? (
+                    <Link
+                      to={path}
+                      className={privacy ? 'footer__privacy' : undefined}
+                    >
+                      {label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={href}
+                      className={privacy ? 'footer__privacy' : undefined}
+                    >
+                      {label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -99,7 +132,9 @@ export const Footer = () => {
               <span>
                 고객센터 <a href="tel:15993709">1599-3709</a> (평일 09:00~17:00 / 점심시간 12:00~13:00 / 주말 및 공휴일 휴무)
                 <span className="footer__slash">/</span>
-                <a href="https://www.wavve.com/customer/inquiry" className="footer__inquiry">1:1 문의</a>
+                <Link to="/inquiry" className="footer__inquiry">
+                  1:1 문의
+                </Link>
               </span>
             </p>
             <p>
