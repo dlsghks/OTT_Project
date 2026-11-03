@@ -5,7 +5,7 @@
 }
 
 .wavve-mypage {
-  padding: 60px 0 80px;
+  padding: 95px 0 80px;
   min-width: 0;
   background: #000;
   color: #fff;
@@ -57,13 +57,13 @@
 }
 .wavve-mypage .mypage__retro-summary dt { font-weight: 400; }
 .wavve-mypage .mypage__library { margin-top: 65px; }
-.wavve-mypage .mypage__tabs { display: flex; gap: 56px; min-height: 72px; border-bottom: 1px solid #919191; overflow-x: auto; scrollbar-width: none; }
+.wavve-mypage .mypage__tabs { display: flex; gap: 56px; min-height: 52px; border-bottom: 0; overflow-x: auto; scrollbar-width: none; }
 .wavve-mypage .mypage__tabs::-webkit-scrollbar { display: none; }
 .wavve-mypage .mypage__tabs > button {
   position: relative;
   flex: 0 0 auto;
   min-width: 140px;
-  padding: 0 12px 35px;
+  padding: 0 12px 15px;
   border: 0;
   background: transparent;
   color: #a5a5a5;
@@ -71,16 +71,18 @@
   font-weight: 500;
   line-height: 36px;
   white-space: nowrap;
+  transition: color 160ms ease;
 }
 .wavve-mypage .mypage__tabs > button:nth-child(2) { min-width: 160px; }
+.wavve-mypage .mypage__tabs > button:hover { color: #fff; }
 .wavve-mypage .mypage__tabs > button[aria-selected="true"] { color: #fff; font-weight: 700; }
-.wavve-mypage .mypage__tabs > button[aria-selected="true"]::after { content: ""; position: absolute; inset: auto 0 -1px; height: 3px; background: #fff; }
-.wavve-mypage .mypage__library-panel { min-height: 571px; padding-top: 22px; }
+.wavve-mypage .mypage__tabs > button[aria-selected="true"]::after { content: ""; position: absolute; inset: auto 0 0; height: 3px; background: #1351f9; }
+.wavve-mypage .mypage__library-panel { min-height: 571px; padding-top: 40px; }
 .wavve-mypage .mypage__filter-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; }
-.wavve-mypage .mypage__filters { display: flex; align-items: center; gap: 12px; }
-.wavve-mypage .mypage__filters > button { min-width: 86px; height: 48px; padding: 0 25px; border: 0; border-radius: 6px; background: transparent; font-size: 16px; font-weight: 500; }
-.wavve-mypage .mypage__filters > button:hover { background: #141414; }
-.wavve-mypage .mypage__filters > button[aria-pressed="true"] { font-weight: 700; color: #fff; }
+.wavve-mypage .mypage__filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.wavve-mypage .mypage__filters > button { min-width: 86px; height: 48px; padding: 0 25px; border: 0; border-radius: 8px; background: transparent; color: #999; font-size: 16px; font-weight: 500; transition: background-color 160ms ease, color 160ms ease; }
+.wavve-mypage .mypage__filters > button:hover { background: #141414; color: #fff; }
+.wavve-mypage .mypage__filters > button[aria-pressed="true"] { background: #1351f9; font-weight: 700; color: #fff; }
 .wavve-mypage .mypage__total { flex-shrink: 0; color: #c9c9c9; font-size: 16px; }
 .wavve-mypage .mypage__empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-height: 340px; margin-top: 46px; text-align: center; }
 .wavve-mypage .mypage__empty-icon { position: static; display: block; width: 64px; min-width: 64px; max-width: 64px; height: 64px; object-fit: contain; }
@@ -184,13 +186,13 @@
   .wavve-mypage .mypage__summary dt { font-size: 14px; }
   .wavve-mypage .mypage__summary dd { margin-top: 12px; font-size: 18px; }
   .wavve-mypage .mypage__library { margin-top: 36px; }
-  .wavve-mypage .mypage__tabs { gap: 12px; min-height: 56px; }
-  .wavve-mypage .mypage__tabs > button, .wavve-mypage .mypage__tabs > button:nth-child(2) { min-width: max-content; padding: 0 8px 20px; font-size: 16px; line-height: 28px; }
+  .wavve-mypage .mypage__tabs { gap: 12px; min-height: 44px; }
+  .wavve-mypage .mypage__tabs > button, .wavve-mypage .mypage__tabs > button:nth-child(2) { min-width: max-content; padding: 0 8px 12px; font-size: 16px; line-height: 28px; }
   .wavve-mypage .mypage__filter-row { flex-wrap: wrap; gap: 10px; }
   .wavve-mypage .mypage__filters { gap: 4px; }
   .wavve-mypage .mypage__filters > button { min-width: 0; height: 40px; padding: 0 12px; font-size: 13px; }
   .wavve-mypage .mypage__total { margin-left: auto; font-size: 13px; }
-  .wavve-mypage .mypage__library-panel { min-height: 420px; padding-top: 16px; }
+  .wavve-mypage .mypage__library-panel { min-height: 420px; padding-top: 32px; }
   .wavve-mypage .mypage__empty { gap: 14px; min-height: 300px; margin-top: 24px; }
   .wavve-mypage .mypage__empty > h2 { font-size: 18px; line-height: 28px; }
   .wavve-mypage .mypage__empty > p { max-width: 290px; font-size: 14px; line-height: 23px; }
