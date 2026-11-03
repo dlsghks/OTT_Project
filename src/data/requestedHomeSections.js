@@ -174,7 +174,7 @@ export const requestedHomeSections = [
       {
         "id": "home-new-series-08",
         "title": "정형돈의 제목없음 TV",
-        "image": "",
+        "image": "/images/home/section/jung/JungThumbnail.jpg",
         "badge": "",
         "isOriginal": false
       },
@@ -397,12 +397,94 @@ const varietyTitles = [
   '백수 이세돌', '동네스타 K3', '지구마불 세계여행3', '정형돈의 제목없음 TV', '퀸덤 2',
 ];
 
+// 정형돈의 제목없음 TV 전용 썸네일
+
+const jungVideoData = [
+  {
+    title: '솔직히 중국만 가만히 있었으면 수백만명을 살리는거 아님? 💥 ... 국제정세의 복잡함😮',
+    updatedAt: '2026-10-23',
+  },
+  {
+    title: "그런 거 잘 몰라욥! 국어 선생님께 찰지게 듣는 '나쁜 말' 어원!",
+    updatedAt: '2023-07-28',
+  },
+  {
+    title: '이게 그런 뜻이었다고...? 국어쌤 킹받게 만든 논란의 말은?',
+    updatedAt: '2023-08-04',
+  },
+  {
+    title: '진짜 이거 몰라요?? 국어쌤 vs 정형돈 맞혀야 본전... 자강두천 퀴즈대결!',
+    updatedAt: '2023-08-11',
+  },
+  {
+    title: '요즘 이혼 트렌드는 전과자 만들기ㅋㅋ (간통은 되고 사매매는 안되는 이상한 논리?)',
+    updatedAt: '2026-08-07',
+  },
+  {
+    title: '사랑 아닙니다 진짜 😣 불륜 전문가들도 경악한 최악의 학체 🚨',
+    updatedAt: '2026-08-14',
+  },
+  {
+    title: '우리는 단군의 자손이 아니다!? 😺 단일민족의 함정, 신화의 본질',
+    updatedAt: '2026-07-10',
+  },
+  {
+    title: '전 국민이 홍길동전을 최초의 한글 소설로 알게 된 사연은?!! 🤔🔥 촬영 중 전분노 터진 선생님 😡',
+    updatedAt: '2026-07-17',
+  },
+  {
+    title: '중국이 은폐한 진실... 👁 한자가 중국 것이 아니라고! 진짜 주인은 누구인가 😲',
+    updatedAt: '2026-10-09',
+  },
+
+  {
+    title: '김진명 曰 "평생 추적, 취재한거 다 말씀드리겠습니다" 📷 이휘소 사망사건/김재규와 CIA/광개토대왕릉비',
+    updatedAt: '2026-10-16',
+  },
+
+
+
+
+];
+
+const jungHyungDonItems = jungVideoData.map((video, index) => {
+  const number = index + 1;
+  const filename = number === 10
+    ? 'jung010.jpg'
+    : `jung${String(number).padStart(2, '0')}.jpg`;
+
+  return {
+    id: `jung-hyung-don-${number}`,
+    title: video.title,
+    updatedAt: video.updatedAt,
+    kind: 'series',
+    image: `/images/home/section/jung/${filename}`,
+    badge: '',
+    isOriginal: false,
+  };
+});
+
+
+
 export const homeContentBySection = {
   travel: selectItems(['지구마불 세계여행3']),
+
   'music-entertainment': selectItems(['동네스타 K3', '퀸덤 2']),
-  'jung-hyung-don': selectItems(['정형돈의 제목없음 TV']),
+
+  // 정형돈의 제목없음 TV 전용 썸네일 10개
+  'jung-hyung-don': jungHyungDonItems,
+
   variety: selectItems(varietyTitles),
-  talk: selectItems(['더 커뮤니티 2: 보이지 않는 손', '포식자들', '동네스타 K3', '정형돈의 제목없음 TV']),
+
+  talk: selectItems([
+    '더 커뮤니티 2: 보이지 않는 손',
+    '포식자들',
+    '동네스타 K3',
+    '정형돈의 제목없음 TV'
+  ]),
+
   music: selectItems(['동네스타 K3', '퀸덤 2']),
+
   'all-entertainment': selectItems(varietyTitles),
 };
+

@@ -17,7 +17,10 @@ const ContentCardBody = ({ item, rank }) => {
     let cancelled = false;
 
     // 로컬 이미지가 있거나 제목이 없으면 TMDB 검색 생략
-    if ((localPoster && !localFailed) || !(item.title || item.tmdbTitle || item.tmdbId)) return;
+    if (
+      (localPoster && !localFailed) ||
+      !(item.title || item.tmdbTitle || item.tmdbId)
+    ) return;
 
     getTmdbPoster(item, { skipLocal: true }).then((poster) => {
       if (!cancelled) {
@@ -31,16 +34,17 @@ const ContentCardBody = ({ item, rank }) => {
   }, [item, localPoster, localFailed]);
 
   // 최종 포스터 경로
-  const poster = localPoster && !localFailed
-    ? getImagePath(localPoster)
-    : tmdbPoster;
+  const poster =
+    localPoster && !localFailed
+      ? getImagePath(localPoster)
+      : tmdbPoster;
 
   // 이미지 표시 가능 여부
   const showPoster = Boolean(poster) && !imageError;
 
   return (
     <Link
-      to={`/programdetail/${item.id}`}
+      to={item.link || `/programdetail/${item.id}`}
       className={`content-card ${rank ? "content-card--ranked" : ""}`}
     >
       <div className="content-card__thumbnail">
@@ -53,10 +57,10 @@ const ContentCardBody = ({ item, rank }) => {
             loading="lazy"
             onError={() => {
               if (localPoster && !localFailed) {
-                logTmdbDiagnostic('local_image_error');
+                logTmdbDiagnostic("local_image_error");
                 setLocalFailed(true);
               } else {
-                logTmdbDiagnostic('tmdb_image_error');
+                logTmdbDiagnostic("tmdb_image_error");
                 setImageError(true);
               }
             }}
@@ -69,22 +73,28 @@ const ContentCardBody = ({ item, rank }) => {
             {item.badges.map((badge) => (
               <span
                 key={badge}
-                className={`content-card__badge ${badge === "개별구매" ? "content-card__badge--purchase" : "content-card__badge--new"}`}
+                className={`content-card__badge ${
+                  badge === "개별구매"
+                    ? "content-card__badge--purchase"
+                    : "content-card__badge--new"
+                }`}
               >
                 {badge}
               </span>
             ))}
           </div>
-        ) : item.badge && (
-          <span
-            className={`content-card__badge ${
-              item.badge === "개별구매"
-                ? "content-card__badge--purchase"
-                : "content-card__badge--new"
-            }`}
-          >
-            {item.badge}
-          </span>
+        ) : (
+          item.badge && (
+            <span
+              className={`content-card__badge ${
+                item.badge === "개별구매"
+                  ? "content-card__badge--purchase"
+                  : "content-card__badge--new"
+              }`}
+            >
+              {item.badge}
+            </span>
+          )
         )}
 
         {/* 우측 상단 Wavve Original 로고 */}
@@ -105,9 +115,19 @@ const ContentCardBody = ({ item, rank }) => {
 
       </div>
 
-      {/* 카드 하단 제목 */}
+      {/* 카드 하단 정보 */}
       <div className="content-card__info">
+
+        {/* 콘텐츠 제목 */}
         <h3>{item.title}</h3>
+
+        {/* 업데이트 날짜가 있는 콘텐츠만 표시 */}
+        {item.updatedAt && (
+          <p className="content-card__date">
+            {item.updatedAt.replaceAll("-", ".")}(금)
+          </p>
+        )}
+
       </div>
 
       {/* TOP 20 순위 SVG 이미지 */}
@@ -127,10 +147,26 @@ const ContentCardBody = ({ item, rank }) => {
 };
 
 export const ContentCard = ({ item, rank }) => {
-  // 이미지 식별 정보가 바뀌면 오류 상태와 진행 중 콜백을 이전 카드와 분리한다.
   const imageKey = JSON.stringify([
-    item.id, item.title, item.kind, item.tmdbId, item.tmdbTitle,
-    item.tmdbYear, item.year, item.tmdbSeason, item.poster, item.image, item.isPlaceholder,
+    item.id,
+    item.title,
+    item.kind,
+    item.tmdbId,
+    item.tmdbTitle,
+    item.tmdbYear,
+    item.year,
+    item.tmdbSeason,
+    item.poster,
+    item.image,
+    item.isPlaceholder,
+    item.updatedAt,
   ]);
-  return <ContentCardBody key={imageKey} item={item} rank={rank} />;
+
+  return (
+    <ContentCardBody
+      key={imageKey}
+      item={item}
+      rank={rank}
+    />
+  );
 };
