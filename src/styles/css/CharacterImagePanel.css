@@ -1,5 +1,5 @@
 .character-image-panel {
-  max-width: 1px;
+  max-width: 1420px;
   margin-inline: auto;
   animation: character-image-panel-open 0.3s ease-out;
 }
@@ -7,7 +7,7 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1/780;
+  aspect-ratio: 1420/780;
   background: rgba(255, 255, 255, 0.04);
   object-fit: cover;
 }

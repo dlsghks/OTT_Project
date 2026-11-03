@@ -573,7 +573,7 @@
 }
 @media (max-width: 600px) {
   .live-channel-page {
-    padding: 0;
+    padding: 20px 14px 60px;
   }
   .live-sidebar {
     display: flex;
@@ -913,6 +913,9 @@
   }
 }
 @media (max-width: 600px) {
+  .live-channel-page {
+    padding: 20px 0 60px;
+  }
   .live-player__volume {
     width: 48px;
   }
