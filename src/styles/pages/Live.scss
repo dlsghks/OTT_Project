@@ -327,7 +327,8 @@
 // ========================================
 
 .live-section {
-  margin-bottom: 48px;
+  margin-bottom: 0;
+  padding-bottom: 48px;
 
   &__head {
     display: flex;
