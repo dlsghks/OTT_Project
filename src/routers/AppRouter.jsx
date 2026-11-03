@@ -95,7 +95,7 @@ export const AppRouter = () => {
                 <Route path="/company" element={<Company />} />
                 <Route path="/service" element={<Service />} />
                 <Route path="/notice" element={<Notice />} />
-                <Route path="/noticeview" element={<NoticeView />} />
+                <Route path="/notice/:id" element={<NoticeView />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/inquiry" element={<Inquiry />} />
                 <Route path="/terms" element={<Terms />} />

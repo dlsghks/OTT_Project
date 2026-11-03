@@ -22,6 +22,8 @@ $footer-box: #2a2a2a;
     }
   }
 
+
+
   button {
     font-family: inherit;
     cursor: pointer;
@@ -49,12 +51,42 @@ $footer-box: #2a2a2a;
     font-size: 22px;
   }
 
+
+  // 공지사항 세로 Swiper
+
+  &__notice-slider {
+    flex: 1;
+    min-width: 0;
+    height: 50px;
+    overflow: hidden;
+  }
+
+  &__notice-swiper {
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+
+    .swiper-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      height: 50px;
+      overflow: hidden;
+    }
+  }
+
   &__notice-title {
-    flex: 1 1 auto;
+    display: block;
+    width: 100%;
     min-width: 0;
     overflow: hidden;
     color: #b4b4b4 !important;
-    font-size: 20px;
+    font-size: 16px;
     white-space: nowrap;
     text-overflow: ellipsis;
 
@@ -63,8 +95,12 @@ $footer-box: #2a2a2a;
     }
   }
 
+
+  // 기존 좌우 화살표 배치 유지
   &__notice-controls {
     display: flex;
+    flex-direction: row;
+    flex: 0 0 auto;
     align-self: stretch;
     margin-right: calc(var(--footer-side) + 12px);
     border-left: 1px solid $footer-line;
@@ -73,6 +109,7 @@ $footer-box: #2a2a2a;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex: 0 0 70px;
       width: 70px;
       padding: 0;
       border: 0;
@@ -86,6 +123,7 @@ $footer-box: #2a2a2a;
       }
     }
   }
+
 
   /* =========================
      하단 정보
@@ -387,22 +425,39 @@ $footer-box: #2a2a2a;
 
   // 모바일
   @media (max-width: 768px) {
+
+    &__notice-inner {
+      gap: 16px;
+      height: 52px;
+      padding-left: var(--footer-side);
+    }
+
     &__notice-label {
       font-size: 15px;
+    }
+
+    &__notice-slider {
+      height: 40px;
     }
 
     &__notice-title {
       font-size: 14px;
     }
 
-    &__nav a {
-      font-size: 14px;
+    &__notice-controls {
+      flex-direction: row;
+      margin-right: 0;
+
+      button {
+        flex: 0 0 44px;
+        width: 44px;
+
+        svg {
+          width: 12px;
+        }
+      }
     }
 
-    &__info,
-    &__copyright {
-      font-size: 12px;
-    }
   }
 }
 
