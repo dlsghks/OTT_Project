@@ -326,6 +326,24 @@
   height: clamp(76px, 8.33vw, 160px);
   pointer-events: none;
 }
+.rv-rank-card__number[src$="number-1.svg"] {
+  transform: translate(-29.1%, 6.1%);
+}
+.rv-rank-card__number[src$="number-2.svg"] {
+  transform: translate(-28.9%, 13.1%);
+}
+.rv-rank-card__number[src$="number-3.svg"] {
+  transform: translate(-28.4%, 10.8%);
+}
+.rv-rank-card__number[src$="number-4.svg"] {
+  transform: translate(-19.5%, 6.6%);
+}
+.rv-rank-card__number[src$="number-5.svg"] {
+  transform: translate(-26.4%, 7.1%);
+}
+.rv-rank-card__number[src$="number-6.svg"] {
+  transform: translate(-27.9%, 9.7%);
+}
 .rv-rank-card:hover .rv-rank-card__poster img:not(.rv-rank-card__logo) {
   transform: scale(1.05);
 }
