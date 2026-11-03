@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
@@ -45,60 +44,62 @@ import { NoticeView } from "../pages/notice/NoticeView";
 import Login from "../pages/member/Login";
 import { Member } from "../pages/member/Member";
 import { ProfileSelect } from "../pages/member/ProfileSelect";
+import { ProfileEdit } from "../pages/member/ProfileEdit";
 import { MyPage } from "../pages/member/MyPage";
 
-
-
 export const AppRouter = () => {
-    return (
-        <Routes>
-            <Route path="/" element={<Layout />}>
+  return (
+    <Routes>
+      {/* 프로필 전환·수정: 공통 헤더와 푸터 없이 표시 */}
+      <Route path="/profileselect" element={<ProfileSelect />} />
+      <Route path="/profileedit" element={<ProfileEdit />} />
 
-                {/* 메인 */}
-                <Route index element={<Home />} />
+      {/* 공통 레이아웃 사용 */}
+      <Route path="/" element={<Layout />}>
+        {/* 메인 */}
+        <Route index element={<Home />} />
 
-                {/* 웨이브 콘텐츠 */}
-                <Route path="/entertainment" element={<Entertainment />} />
-                <Route path="/drama" element={<Drama />} />
-                <Route path="/movie" element={<Movie />} />
-                <Route path="/currentaffairs" element={<Currentaffairs />} />
-                <Route path="/animation" element={<Animation />} />
-                <Route path="/global" element={<Global />} />
-                <Route path="/category" element={<Category />} />
-                <Route path="/programdetail/:programId" element={<ProgramDetail />} />
+        {/* 웨이브 콘텐츠 */}
+        <Route path="/entertainment" element={<Entertainment />} />
+        <Route path="/drama" element={<Drama />} />
+        <Route path="/movie" element={<Movie />} />
+        <Route path="/currentaffairs" element={<Currentaffairs />} />
+        <Route path="/animation" element={<Animation />} />
+        <Route path="/global" element={<Global />} />
+        <Route path="/category" element={<Category />} />
+        <Route
+          path="/programdetail/:programId"
+          element={<ProgramDetail />}
+        />
 
-                {/* LIVE */}
-                <Route path="/live" element={<Live />} />
-                <Route path="/livechannel" element={<LiveChannel />} />
-                <Route path="/schedule" element={<Schedule />} />
+        {/* LIVE */}
+        <Route path="/live" element={<Live />} />
+        <Route path="/livechannel" element={<LiveChannel />} />
+        <Route path="/schedule" element={<Schedule />} />
 
-                {/* 레트로브 */}
-                <Route path="/retrov" element={<RetroV />} />
-                <Route path="/retrov/:programId" element={<RetrovDetail />} />
+        {/* 레트로브 */}
+        <Route path="/retrov" element={<RetroV />} />
+        <Route path="/retrov/:programId" element={<RetrovDetail />} />
 
-                {/* 이벤트 */}
-                <Route path="/event" element={<Event />} />
-                <Route path="/eventdetail" element={<EventDetail />} />
+        {/* 이벤트 */}
+        <Route path="/event" element={<Event />} />
+        <Route path="/eventdetail" element={<EventDetail />} />
 
-                {/* 검색 및 숏폼 */}
-                <Route path="/search" element={<Search />} />
-                <Route path="/shorts" element={<Shorts />} />
+        {/* 검색 및 숏폼 */}
+        <Route path="/search" element={<Search />} />
+        <Route path="/shorts" element={<Shorts />} />
 
-                {/* 공지사항 */}
-                <Route path="/notice" element={<Notice />} />
-                <Route path="/noticeview" element={<NoticeView />} />
+        {/* 공지사항 */}
+        <Route path="/notice" element={<Notice />} />
+        <Route path="/noticeview" element={<NoticeView />} />
 
-                {/* 회원 */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/member" element={<Member />} />
-                <Route path="/profileselect" element={<ProfileSelect />} />
-                <Route path="/mypage" element={<MyPage />} />
-
-                
-
-            </Route>
-        </Routes>
-    );
+        {/* 회원 */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/member" element={<Member />} />
+        <Route path="/mypage" element={<MyPage />} />
+      </Route>
+    </Routes>
+  );
 };
 
 export default AppRouter;

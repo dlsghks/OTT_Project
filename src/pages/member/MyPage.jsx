@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { shortsData } from "../../data/shortsData";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
 import emptyImage from "../../assets/mypage/empty-play.png";
@@ -13,6 +14,38 @@ import linesGraphic from "../../assets/mypage/quiz-lines.png";
 import heartImage from "../../assets/mypage/heart.png";
 import heartGlowImage from "../../assets/mypage/heart-glow.png";
 import "../../styles/components/MyPage.scss";
+
+const SHORTS_LIKE_KEY = "wavve-shorts-liked";
+const PROFILE_KEY = "wavve-active-profile";
+
+// 프로필 전환·수정 페이지에서 저장한 이름과 사진을 읽습니다.
+const readSelectedProfile = () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "null");
+    if (!saved || typeof saved !== "object" || Array.isArray(saved)) {
+      return null;
+    }
+
+    return {
+      name: typeof saved.name === "string" ? saved.name.trim() : "",
+      image: typeof saved.image === "string" ? saved.image.trim() : "",
+    };
+  } catch {
+    return null;
+  }
+};
+
+// Shorts.jsx에서 저장한 좋아요 목록을 읽습니다.
+const readShortsLikes = () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SHORTS_LIKE_KEY) || "[]");
+    return Array.isArray(saved)
+      ? saved.filter((id) => typeof id === "string")
+      : [];
+  } catch {
+    return [];
+  }
+};
 
 const EMPTY_ITEMS = [];
 const TABS = [
@@ -59,7 +92,7 @@ const EVENTS = [
   { id: "lines", eyebrow: "풀하우스 명대사 퀴즈", title: "다음에 올", accent: "명대사는?", description: "그때 그 대사, 아직 기억하나요?", image: linesGraphic },
 ];
 
-// 실제 스토어 연결 전에는 Figma의 프로필1 / 전체 0개 상태로 표시됩니다.
+// 숏츠 좋아요는 현재 브라우저에 저장한 목록을 사용합니다.
 // 목록 item 형식: { id, title, image, type: "program" | "movie" | "shorts", to? }
 export const MyPage = ({
   profileName = "프로필1", avatar = profileImage, passName = "", coinCount = 0,
@@ -68,13 +101,77 @@ export const MyPage = ({
   downloadItems = EMPTY_ITEMS, retroPicks = RETRO_PICKS,
   onAction, onOpenContent,
 } = {}) => {
+  const location = useLocation();
+  const [selectedProfile, setSelectedProfile] = useState(readSelectedProfile);
+  const displayedName = selectedProfile?.name || profileName;
+  const displayedAvatar = selectedProfile?.image || avatar;
+
+  // 프로필 설정에서 돌아오거나 다른 탭에서 수정하면 표시를 갱신합니다.
+  useEffect(() => {
+    setSelectedProfile(readSelectedProfile());
+  }, [location.key]);
+
+  useEffect(() => {
+    const refreshProfile = () => setSelectedProfile(readSelectedProfile());
+    const handleStorage = (event) => {
+      if (event.key === PROFILE_KEY || event.key === null) {
+        refreshProfile();
+      }
+    };
+
+    window.addEventListener("focus", refreshProfile);
+    window.addEventListener("storage", handleStorage);
+    return () => {
+      window.removeEventListener("focus", refreshProfile);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, []);
+
   const [activeTab, setActiveTab] = useState("history");
   const [activeFilter, setActiveFilter] = useState("all");
   const [activeEvent, setActiveEvent] = useState(1);
   const [dialogTitle, setDialogTitle] = useState("");
   const dialogRef = useRef(null);
   const id = useId();
-  const lists = { history: historyItems, favorites: favoriteItems, purchases: purchasedItems, downloads: downloadItems };
+  const [likedShortsIds, setLikedShortsIds] = useState(readShortsLikes);
+
+  // 마이페이지 진입 시 저장된 목록을 읽고, 다른 탭의 변경도 반영합니다.
+  useEffect(() => {
+    const refreshLikes = () => setLikedShortsIds(readShortsLikes());
+    const handleStorage = (event) => {
+      if (event.key === SHORTS_LIKE_KEY || event.key === null) {
+        refreshLikes();
+      }
+    };
+
+    window.addEventListener("focus", refreshLikes);
+    window.addEventListener("storage", handleStorage);
+    return () => {
+      window.removeEventListener("focus", refreshLikes);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, []);
+
+  const likedShorts = shortsData
+    .filter((item) => item && likedShortsIds.includes(item.id))
+    .map((item) => ({
+      id: `shorts-${item.id}`,
+      title: item.title,
+      image: item.mypageImage || item.programImage || emptyImage,
+      type: "shorts",
+      to: `/shorts?short=${encodeURIComponent(item.id)}`,
+    }));
+
+  const lists = {
+    history: historyItems,
+    // 전체에서는 모두 표시하고, 숏츠 필터에서는 좋아요한 숏츠만 표시합니다.
+    favorites: [
+      ...favoriteItems.filter((item) => item.type !== "shorts"),
+      ...likedShorts,
+    ],
+    purchases: purchasedItems,
+    downloads: downloadItems,
+  };
   const currentItems = lists[activeTab];
   const visibleItems = activeFilter === "all" ? currentItems : currentItems.filter((item) => item.type === activeFilter);
   const currentTab = TABS.find((tab) => tab.key === activeTab);
@@ -101,11 +198,24 @@ export const MyPage = ({
   };
 
   const renderCard = (item, retro = false) => {
-    const body = <><img className="mypage__poster" src={item.image} alt="" loading="lazy" width="261" height="375" /><span className="mypage__card-title">{item.title}</span></>;
+    const isShorts = item.type === "shorts";
+    const body = (
+      <>
+        <img
+          className="mypage__poster"
+          src={item.image}
+          alt={isShorts ? item.title || "저장한 숏츠 재생" : ""}
+          loading="lazy"
+          width="261"
+          height="375"
+        />
+        {!isShorts && <span className="mypage__card-title">{item.title}</span>}
+      </>
+    );
     const className = `mypage__content-card${retro ? " mypage__content-card--retro" : ""}`;
     return (
       <li key={item.id}>
-        {onOpenContent ? <button className={className} type="button" onClick={() => onOpenContent(item)}>{body}</button>
+        {onOpenContent && item.type !== "shorts" ? <button className={className} type="button" onClick={() => onOpenContent(item)}>{body}</button>
           : <Link className={className} to={item.to || (retro ? "/retrov" : "/category")}>{body}</Link>}
       </li>
     );
@@ -115,11 +225,11 @@ export const MyPage = ({
     <section className="wavve-mypage" aria-label="마이페이지">
       <div className="mypage__inner">
         <div className="mypage__profile-row">
-          <img className="mypage__profile-img" src={avatar} alt={`${profileName} 프로필`} width="90" height="90" />
+          <img className="mypage__profile-img" src={displayedAvatar} alt={`${displayedName} 프로필`} width="90" height="90" />
           <div className="mypage__profile-copy">
             <div className="mypage__profile-heading">
-              <h1>{profileName}<span>님</span></h1>
-              <Link className="mypage__edit" to="/profileselect" aria-label="프로필 변경">
+              <h1>{displayedName}<span>님</span></h1>
+              <Link className="mypage__edit" to="/profileedit" aria-label="프로필 수정">
                 <img src={pencilImage} alt="" width="25" height="25" />
               </Link>
             </div>
@@ -170,7 +280,7 @@ export const MyPage = ({
         <section className="mypage__management" aria-labelledby={`${id}-management`}>
           <h2 id={`${id}-management`}>계정 · 서비스 관리</h2>
           <div className="mypage__management-grid">
-            <Link to="/profileselect">프로필 관리<span aria-hidden="true">›</span></Link>
+            <Link to="/profileedit">프로필 관리<span aria-hidden="true">›</span></Link>
             <button type="button" onClick={() => requestAction("billing", "이용권 · 결제 내역")}>이용권 · 결제 내역<span aria-hidden="true">›</span></button>
             <button type="button" onClick={() => requestAction("coupon", "쿠폰 등록")}>쿠폰 등록<span aria-hidden="true">›</span></button>
             <button type="button" onClick={() => requestAction("support", "고객센터")}>고객센터<span aria-hidden="true">›</span></button>

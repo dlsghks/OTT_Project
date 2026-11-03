@@ -1,151 +1,442 @@
+// 공통 본문의 좌우 패딩만큼 배경 확장
 .site-inner > .shorts-page {
   width: calc(100% + var(--page-side-padding, 110px) * 2);
   margin-inline: calc(var(--page-side-padding, 110px) * -1);
 }
 
 .shorts-page {
-  --shorts-player-height: min(828px, max(420px, calc(100svh - 252px)));
+  --shorts-header-height: 96px;
+  --shorts-top-space: 46px;
+  --shorts-bottom-space: 16px;
+  --shorts-action-size: 40.041px;
+  --shorts-action-gap: 36px;
+  --shorts-poster-size: 80px;
+
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: calc(100svh - 96px);
-  padding: 48px 28px 108px;
+  display: block;
+
+  height: calc(100svh - var(--shorts-header-height));
+  min-height: 0;
+  margin-block: 0;
+  padding: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+
   background: linear-gradient(180deg, #071a2e 0%, #000 84%);
   color: #fff;
   font-family: "Noto Sans KR", "Pretendard", sans-serif;
-  &, *, *::before, *::after { box-sizing: border-box; }
-  h2, p { margin: 0; }
-  button, input { font-family: inherit; }
-  button { cursor: pointer; }
-  button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid #7fa8ff; outline-offset: 4px; }
-  button:disabled { cursor: default; opacity: .4; }
-  &__viewer { position: relative; width: calc(var(--shorts-player-height) * 474.842 / 828); max-width: calc(100% - 100px); flex: 0 0 auto; }
-  &__viewer--multiple .shorts-player__info, &__viewer--multiple .shorts-player__top { touch-action: pan-x; }
-  &__actions { position: absolute; bottom: 0; left: calc(100% + 36px); display: flex; flex-direction: column; align-items: center; gap: 18px; width: 40.041px; }
+
+  &,
+  &::before,
+  &::after,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  button,
+  input {
+    font-family: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
+
+  &:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #7fa8ff;
+    outline-offset: 4px;
+  }
+
+  // 영상 하나가 차지하는 스크롤 영역
+  &__slide {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding:
+      var(--shorts-top-space)
+      28px
+      var(--shorts-bottom-space);
+
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  // 영상 크기와 가로 중앙 정렬
+  &__viewer {
+    position: relative;
+    display: block;
+    align-self: flex-start;
+    flex: 0 0 auto;
+
+    width: min(
+      24.73125vw,
+      calc(
+        (
+          100svh - var(--shorts-header-height) -
+          var(--shorts-top-space) - var(--shorts-bottom-space)
+        ) * 474.84 / 828
+      ),
+      calc(
+        100% -
+        (
+          var(--shorts-action-gap) +
+          (var(--shorts-action-size) + var(--shorts-poster-size)) / 2
+        ) * 2
+      )
+    );
+
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  // 영상 오른쪽: 하트·공유·포스터
+  &__actions {
+    position: absolute;
+    bottom: 16px;
+    left: calc(100% + var(--shorts-action-gap));
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+
+    width: var(--shorts-action-size);
+    margin: 0;
+    padding: 0;
+  }
+
+  // 화면 오른쪽 중앙: 이전·다음 버튼
+  &__navigation {
+    position: fixed;
+    top: calc(50% + var(--shorts-header-height) / 2);
+    right: 32px;
+    z-index: 50;
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+
+    button {
+      display: grid;
+      place-items: center;
+
+      width: 56px;
+      height: 56px;
+      margin: 0;
+      padding: 0;
+
+      border: 0;
+      border-radius: 50%;
+      background: #282828;
+      color: #fff;
+      font-size: 30px;
+      line-height: 1;
+
+      transition: background-color 160ms ease;
+
+      &:hover:not(:disabled) {
+        background: #444;
+      }
+
+      &:disabled {
+        opacity: 0.3;
+        cursor: default;
+      }
+    }
+  }
+
   &__action {
-    display: flex; flex-direction: column; align-items: center; gap: 7.508px;
-    width: 100%; margin: 0; padding: 0; border: 0; background: transparent;
-    color: #fff; font-size: 14px; font-weight: 500; line-height: 20px;
-    &:hover { opacity: .8; }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7.5px;
+
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
-  &__action-icon { display: grid; place-items: center; width: 40.041px; height: 40.041px;
-    > img { position: static; display: block; max-width: none; object-fit: contain; }
+
+  &__action-icon {
+    display: grid;
+    place-items: center;
+
+    width: var(--shorts-action-size);
+    height: var(--shorts-action-size);
+
+    > img {
+      position: static;
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
   }
-  &__navigation { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;
-    button { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid #fff3; border-radius: 50%; background: #ffffff0d; color: #fff; font-size: 24px; }
+
+  // 프로그램 포스터: PC 88 × 88px
+  &__program-image {
+    position: static;
+    display: block;
+    flex: 0 0 var(--shorts-poster-size);
+
+    width: var(--shorts-poster-size);
+    min-width: var(--shorts-poster-size);
+    max-width: var(--shorts-poster-size);
+    height: var(--shorts-poster-size);
+
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 5px;
+    object-fit: cover;
+
+    // 안쪽 테두리로 표시해서 호버 시 크기가 바뀌지 않음
+    outline: 4px solid transparent;
+    outline-offset: -4px;
+    transition: outline-color 160ms ease;
+
+    &:hover {
+      outline-color: #fff;
+    }
+
+    transform: translateX(6px);
   }
-  &__share-notice { width: min(475px, 100%); margin-top: 24px; color: #b8ccff; font-size: 14px; line-height: 1.6; text-align: center;
-    input { width: 100%; margin-top: 8px; padding: 10px; border: 1px solid #444; border-radius: 6px; background: #171717; color: #fff; }
+
+  // 공유 안내
+  &__feed-message {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+
+    color: #b8ccff;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+    overflow-wrap: anywhere;
+
+    input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 8px;
+
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #171717;
+      color: #fff;
+    }
   }
-  &__sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  &__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
+// 플레이어와 안내 영역의 기준
+.shorts-player-wrapper {
+  position: relative;
+  display: block;
+
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+// 유튜브 프레임
 .shorts-player {
   position: relative;
+  display: block;
+
   width: 100%;
-  aspect-ratio: 474.842 / 828;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+
+  aspect-ratio: 474.84 / 828;
   overflow: hidden;
-  border-radius: 16.469px;
-  background: #21080d;
+  border-radius: 16.47px;
+  background: #000;
   color: #fff;
-  container-type: inline-size;
-  &__media { position: relative; width: 100%; height: 89.724%; background: #090909;
-    > video, > .shorts-player__poster { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
-  }
-  &__empty { display: grid; place-items: center; width: 100%; height: 100%; color: #a5a5a5; }
-  &__tap { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; background: transparent; color: #fff; }
-  &__paused { display: grid; place-items: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; border-radius: 50%; background: #0008; font-size: 30px; }
-  &__top { position: absolute; top: 2.8%; left: 4.625%; right: 4.625%; display: flex; align-items: flex-start; justify-content: space-between; pointer-events: none; }
-  &__brand { display: flex; align-items: center; gap: 8px; height: 28px;
-    > img { position: static; display: block; width: 90px; height: 19.5px; max-width: none; }
-    > span { padding: 3px 7px; border-radius: 6px; background: #1351f9; color: #fff; font-size: 11px; font-weight: 700; line-height: 16px; }
-  }
-  &__brand--in-poster, &__in-poster { visibility: hidden; }
-  &__options { position: relative; pointer-events: auto; }
-  &__more { display: grid; place-items: center; width: 28px; height: 32px; margin: 0; padding: 0; border: 0; background: transparent; color: #fff; font-size: 28px; line-height: 1; }
-  &__options-panel { position: absolute; top: 36px; right: 0; display: flex; flex-direction: column; width: 140px; padding: 8px; border-radius: 8px; background: #171717f5;
-    button { padding: 10px; border: 0; background: transparent; color: #fff; font-size: 14px; text-align: left; }
-    button:hover { background: #ffffff10; }
-  }
-  &__notice { position: absolute; top: 42%; left: 6%; right: 6%; padding: 14px; border-radius: 8px; background: #000c; color: #fff; font-size: 14px; line-height: 1.6; text-align: center; pointer-events: none; }
+
+  // 자체 로고·제목·재생 바 숨기기
+  &__top,
   &__info {
-    position: absolute; inset: auto 0 0; width: 100%; height: 10.276%;
-    margin: 0; padding: 0 4.625%; background: #21080d;
-    h2 { overflow: hidden; margin: 0; font-size: 3.66cqw; font-weight: 700; line-height: 1.5; text-overflow: ellipsis; white-space: nowrap; }
+    display: none;
   }
-  &__play { display: flex; align-items: center; gap: 8px; max-width: 100%; margin: 1.1cqw 0 0; padding: 0; border: 0; background: transparent; color: #fff; font-size: 3.66cqw; font-weight: 700; line-height: 1.5;
-    > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  // 유튜브 플레이어가 프레임 전체를 채움
+  &__youtube-host {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: #000;
+
+    > iframe {
+      position: static;
+      display: block;
+
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
   }
-  &__progress { position: absolute; bottom: .7cqw; left: 4.625%; right: 4.625%; display: flex; align-items: center; height: 16px;
-    input { appearance: none; -webkit-appearance: none; display: block; width: 100%; height: 3.66px; margin: 0; padding: 0; border: 0; border-radius: 2px;
-      background: linear-gradient(to right, #fff var(--shorts-progress), #666 var(--shorts-progress)); cursor: pointer;
-      &::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 10px; height: 10px; border: 0; border-radius: 50%; background: transparent; }
-      &::-moz-range-thumb { width: 10px; height: 10px; border: 0; border-radius: 50%; background: transparent; }
-      &:hover::-webkit-slider-thumb, &:focus-visible::-webkit-slider-thumb { background: #fff; }
-      &:hover::-moz-range-thumb, &:focus-visible::-moz-range-thumb { background: #fff; }
-      &:disabled { opacity: 1; cursor: default; }
+
+  // 오류 및 재시도 안내
+  &__youtube-feedback {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    right: 0;
+
+    color: #d8e4ff;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+    overflow-wrap: anywhere;
+
+    a {
+      color: #b8ccff;
+      text-underline-offset: 3px;
+    }
+
+    button {
+      padding: 6px 10px;
+      border: 1px solid #ffffff40;
+      border-radius: 5px;
+      background: #171717;
+      color: #fff;
+      font: inherit;
+    }
+  }
+
+  &__youtube-options,
+  &__youtube-notice > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  &__youtube-notice {
+    margin-top: 8px;
+
+    p {
+      margin-bottom: 6px;
     }
   }
 }
 
+// 모바일
 @media (max-width: 768px) {
   .shorts-page {
-    padding: 24px 16px 48px;
-    &__viewer { align-self: flex-start; width: calc(100% - 52px); max-width: 475px; }
-    &__actions { left: calc(100% + 12px); }
-  }
-  .shorts-player { border-radius: 14px; }
-}
+    --shorts-action-size: 32px;
+    --shorts-action-gap: 20px;
+    --shorts-poster-size: 64px;
 
-// YouTube 전용: 로고와 조작부는 iframe 밖에 배치합니다.
-.shorts-player-wrapper { position: relative; width: 100%; }
-.shorts-player--youtube {
-  .shorts-player__top {
-    position: relative; inset: auto; display: flex; align-items: center;
-    height: 48px; padding: 0 4.625%; pointer-events: auto; background: #21080d;
-  }
-  .shorts-player__youtube-host { height: calc(89.724% - 48px); min-height: 200px; }
-  .shorts-player__youtube-host > iframe {
-    position: static; display: block; width: 100%; height: 100%; margin: 0;
-    border: 0; border-radius: 0;
-  }
-}
-.shorts-player__youtube-feedback {
-  position: absolute; top: calc(100% + 12px); left: 0; right: 0;
-  color: #d8e4ff; font-size: 13px; line-height: 1.6; text-align: center;
-  a { color: #b8ccff; text-underline-offset: 3px; }
-  button { padding: 6px 10px; border: 1px solid #ffffff40; border-radius: 5px; background: #171717; color: #fff; font: inherit; }
-}
-.shorts-player__youtube-options, .shorts-player__youtube-notice > div {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px;
-}
-.shorts-player__youtube-notice { margin-top: 8px; p { margin-bottom: 6px; } }
-// 자체 프레임을 숨기고 유튜브 영상으로 채우기
-.shorts-player.shorts-player--youtube {
-  aspect-ratio: 9 / 16;
-  background: #000;
-  border-radius: 0;
+    &__slide {
+      padding-inline: 16px;
+    }
 
-  // 우리가 만든 상단·하단 영역 숨기기
-  .shorts-player__top,
-  .shorts-player__info {
-    display: none;
-  }
+    // 모바일에서는 PC용 vw 제한을 제외
+    &__viewer {
+      width: min(
+        calc(
+          (
+            100svh - var(--shorts-header-height) -
+            var(--shorts-top-space) - var(--shorts-bottom-space)
+          ) * 474.84 / 828
+        ),
+        calc(
+          100% -
+          (
+            var(--shorts-action-gap) +
+            (var(--shorts-action-size) + var(--shorts-poster-size)) / 2
+          ) * 2
+        )
+      );
+    }
 
-  // 유튜브 플레이어가 전체 영역 차지
-  .shorts-player__youtube-host {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
+    &__actions {
+      gap: 14px;
+    }
 
-    > iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: 0;
+    &__action {
+      gap: 5px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    &__navigation {
+      right: 12px;
+      gap: 10px;
+
+      button {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+      }
     }
   }
 }
