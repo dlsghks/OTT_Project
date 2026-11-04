@@ -1,15 +1,14 @@
+
 .site-header {
   position: sticky;
   top: 0;
   z-index: 100;
-}
 
-header {
   width: 100%;
   background: #000;
   color: #8b8b8b;
 
-  >.inner {
+  > .inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -101,6 +100,46 @@ header {
     }
   }
 
+  // member-5: 헤더 오른쪽 아이콘 정렬
+  .header-right {
+    > ul {
+      display: flex;
+      align-items: center;
+    }
+
+    > ul > li {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    > ul > li > button,
+    > ul > li > a,
+    > ul > li > a > button,
+    .my-hover,
+    .my-hover__trigger {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      margin: 0;
+      border: 0;
+
+      background: transparent;
+      line-height: 1;
+    }
+
+    > ul > li > button > img,
+    > ul > li > a > button > img {
+      display: block;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
   // 중간 화면: 간격과 글자 크기 축소
   @media (max-width: 1600px) {
     .header-left {
@@ -122,7 +161,7 @@ header {
 
   // 태블릿: 로고/아이콘과 메뉴를 2줄로 배치
   @media (max-width: 1280px) {
-    >.inner {
+    > .inner {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 16px 24px;
@@ -160,7 +199,7 @@ header {
 
   // 모바일
   @media (max-width: 480px) {
-    >.inner {
+    > .inner {
       padding: 16px;
     }
 
@@ -179,5 +218,12 @@ header {
     .header-right li {
       font-size: 14px;
     }
+  }
+}
+
+// develop: 고객센터 페이지 전용 헤더 배경색
+body:has(.notice-page, .inquiry-write) {
+  .site-header {
+    background: #1b1b1b;
   }
 }

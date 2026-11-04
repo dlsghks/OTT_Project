@@ -8,6 +8,7 @@ import { RankingSection } from '../../components/home/RankingSection';
 import { EventBanner } from '../../components/home/EventBanner';
 import { HopeSection } from '../../components/home/HopeSection';
 import { WeeklyContentSection } from '../../components/home/WeeklyContentSection';
+import { ComingSoonSection } from '../../components/home/ComingSoonSection';
 
 import {
   heroItems,
@@ -26,17 +27,26 @@ export const Home = () => {
 
   // 기존 ContentSection 재사용
   const renderSection = (id) => {
-    const section = getSection(id);
+  const section = getSection(id);
 
-    if (!section) return null;
+  if (!section) return null;
 
+  if (id === 'coming-soon') {
     return (
-      <ContentSection
+      <ComingSoonSection
         key={section.id}
         {...section}
       />
     );
-  };
+  }
+
+  return (
+    <ContentSection
+      key={section.id}
+      {...section}
+    />
+  );
+};
 
   return (
     <div className="wavve-home">
