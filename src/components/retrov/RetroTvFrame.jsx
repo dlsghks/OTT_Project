@@ -4,7 +4,7 @@ import tvFrameFullHouse from "../../assets/retrov/tv-frame-full-house.png";
 import tvFrameHighKick from "../../assets/retrov/tv-frame-high-kick.png";
 import tvFrameDadWhere from "../../assets/retrov/tv-frame-dad-where.png";
 import tvFrameBoysOverFlowers from "../../assets/retrov/tv-frame-boys-over-flowers.png";
-import "../../styles/components/RetroTv.scss";
+import "../../styles/Retrov.scss";
 
 // 썸네일 위치 (top right bottom left) — 프레임의 투명한 화면 영역보다 살짝 크게 잡아 테두리 아래로 숨김
 const INSET_NARROW = "5.6% 6.2% 6.9% 6.2%"; // 무한도전·우결 (화면 영역 6.3% 6.7% 7.5% 6.7%)

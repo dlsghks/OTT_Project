@@ -1,0 +1,153 @@
+import { useRef, useState } from 'react';
+import { Heart, Share, ChevronDown, ChevronUp } from 'lucide-react';
+
+// 상세 페이지 상단 히어로 (영화 · 시리즈 공통)
+// - select: 시청하기 왼쪽 선택 박스 (영화: 자막, 시리즈: 시즌)
+// - info: 펼치기를 누르면 나오는 상세 정보 [{ label, value }] (없으면 펼치기 숨김)
+//   펼치면 로고 · 버튼 위치는 그대로, 출연 아래로 상세 정보가 내려오고 아래 테마가 밀림
+// - actions: useDetailActions() 결과 (로그인 · 관심 · 공유)
+export const DetailHero = ({
+  title,
+  backdrop,
+  logo,
+  meta,
+  age,
+  genres,
+  overview,
+  cast = [],
+  info = [],
+  select,
+  onWatch,
+  actions,
+}) => {
+  const [expanded, setExpanded] = useState(false);
+  // 펼치기 직전의 히어로 높이 · 내용 시작 위치 (펼친 뒤에도 같은 자리에 고정)
+  const [frame, setFrame] = useState(null);
+  const heroRef = useRef(null);
+  const contentRef = useRef(null);
+  const { user, isLiked, onLogin, onLike, onShare } = actions;
+  const infoRows = info.filter((row) => row.value);
+
+  const expand = () => {
+    setFrame({
+      heroHeight: heroRef.current?.offsetHeight ?? 0,
+      contentTop: contentRef.current?.offsetTop ?? 0,
+    });
+    setExpanded(true);
+  };
+
+  return (
+    <>
+      <section
+        ref={heroRef}
+        className={`movie-hero ${expanded ? 'is-expanded' : ''}`}
+        style={expanded && frame
+          ? { '--hero-height': `${frame.heroHeight}px`, '--content-top': `${frame.contentTop}px` }
+          : undefined}
+      >
+        {backdrop && <img className="movie-hero__background" src={backdrop} alt="" />}
+
+        <div ref={contentRef} className="movie-hero__content">
+          {logo ? (
+            <h1 className="movie-hero__logo">
+              <img src={logo} alt={title} />
+            </h1>
+          ) : (
+            <h1 className="movie-hero__title">{title}</h1>
+          )}
+
+          <p className="movie-hero__meta">
+            {meta}
+            {age && <span className={`movie-hero__age movie-hero__age--${age.toLowerCase()}`}>{age}</span>}
+            {genres}
+          </p>
+
+          <div className="movie-hero__actions">
+            {/* 로그인 전에는 로그인 버튼만 표시 */}
+            {user ? (
+              <>
+                {select}
+                <button type="button" className="movie-hero__buy" onClick={onWatch}>시청하기</button>
+              </>
+            ) : (
+              <button
+                type="button"
+                className="movie-hero__buy movie-hero__buy--login"
+                onClick={onLogin}
+              >
+                로그인
+              </button>
+            )}
+
+            <button
+              type="button"
+              className={`movie-hero__icon ${isLiked ? 'is-active' : ''}`}
+              aria-pressed={isLiked}
+              onClick={onLike}
+            >
+              <Heart size={24} fill={isLiked ? 'currentColor' : 'none'} />
+              <span>관심</span>
+            </button>
+
+            <button type="button" className="movie-hero__icon" onClick={onShare}>
+              <Share size={24} />
+              <span>공유</span>
+            </button>
+          </div>
+
+          {/* 줄거리: 평소 2줄, 펼치면 전체 (로고 위치는 그대로, 아래로 늘어남) */}
+          {overview && (
+            <p className={`movie-hero__overview ${expanded ? 'is-expanded' : ''}`}>{overview}</p>
+          )}
+
+          {cast.length > 0 && (
+            <p className="movie-hero__cast">
+              <span>출연 :</span>
+              {cast.map((person, index) => (
+                <span key={person.id}>
+                  <u>{person.name}</u>
+                  {index < cast.length - 1 && ', '}
+                </span>
+              ))}
+            </p>
+          )}
+
+          {/* 펼치기: 출연 아래로 상세 정보(개요 · 장르 · 감독 · 작가) → 아래 테마는 그만큼 밀림 */}
+          {expanded && (
+            <dl className="detail-info">
+              {infoRows.map((row) => (
+                <div key={row.label} className="detail-info__row">
+                  <dt>{row.label}:</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+
+        {/* 펼치기: 히어로 아래 가운데 / 접기: 상세 정보 아래 가운데 */}
+        {infoRows.length > 0 && (expanded ? (
+          <button
+            type="button"
+            className="detail-toggle detail-info__fold"
+            aria-expanded={true}
+            onClick={() => setExpanded(false)}
+          >
+            <ChevronUp size={16} aria-hidden="true" />
+            접기
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="detail-toggle movie-hero__toggle"
+            aria-expanded={false}
+            onClick={expand}
+          >
+            <ChevronDown size={16} aria-hidden="true" />
+            펼치기
+          </button>
+        ))}
+      </section>
+    </>
+  );
+};
