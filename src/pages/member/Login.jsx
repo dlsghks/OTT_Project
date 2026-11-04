@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
 import wavveLogo from "../../assets/login/wavve-logo.png";
 import naverIcon from "../../assets/login/naver.png";
 import kakaoIcon from "../../assets/login/kakao.png";
@@ -19,6 +18,7 @@ const providers = [
 // 실제 인증 함수를 연결할 수 있도록 콜백으로 분리했습니다.
 export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
   const navigate = useNavigate();
+  const onLogin = useAuthStore((state) => state.onLogin);
   const location = useLocation();
   const returnTo = location.state?.returnTo || '/';
   const [emailFormOpen, setEmailFormOpen] = useState(false);
@@ -29,27 +29,15 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
 
   const handleEmailLogin = async (event) => {
     event.preventDefault();
-
     if (isSubmitting) return;
 
     setMessage("");
     setIsSubmitting(true);
 
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        email.trim(),
-        password
-      );
-
-      // 로그인 성공 → 프로필 선택
-      navigate('/profileselect', {
-        replace: true,
-        state: { returnTo },
-      });
+      await onLogin(email, password);
+      navigate("/profileselect", { replace: true });
     } catch (error) {
-      console.error("로그인 오류:", error.code);
-
       if (error.code === "auth/too-many-requests") {
         setMessage("시도가 너무 많습니다. 잠시 후 다시 시도해주세요.");
       } else if (error.code === "auth/network-request-failed") {
@@ -61,7 +49,6 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
       setIsSubmitting(false);
     }
   };
-
   const handleSocialLogin = async (provider) => {
     if (!onSocialLogin) {
       setMessage("소셜 로그인 기능은 아직 연결되지 않았습니다.");
