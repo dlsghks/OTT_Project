@@ -183,7 +183,7 @@ export const contentCatalog = {
   "home:home-wavve-only-05": { "title": "옆자리 프란체스카", "kind": "tv", "tmdbId": 332269, "tmdbTitle": "옆자리, 프란체스카", "tmdbYear": 2026, "isPlaceholder": false, "tmdbMatchStatus": "확인됨", "tmdbSource": "https://www.themoviedb.org/tv/332269" },
   "home:home-wavve-only-06": { "title": "포식자들", "kind": "tv", "tmdbId": 338734, "tmdbTitle": "포식자들: 사이버 레커, 전쟁의 기록", "tmdbYear": 2026, "isPlaceholder": false, "tmdbMatchStatus": "확인됨", "tmdbSource": "https://www.themoviedb.org/tv/338734" },
   "home:home-wavve-only-07": { "title": "하절기", "kind": "tv", "tmdbId": 321984, "tmdbTitle": "하절기", "tmdbYear": 2026, "isPlaceholder": false, "tmdbMatchStatus": "확인됨", "tmdbSource": "https://www.themoviedb.org/tv/321984" },
-  "home:home-wavve-only-08": { "title": "연애남매2", "isPlaceholder": true, "tmdbMatchStatus": "미확인" },
+  "home:home-wavve-only-08": { "title": "연애남매2","kind": "tv", "tmdbTitle": "연애남매"},
   "home:home-wavve-only-09": { "title": "피의 게임X", "kind": "tv", "tmdbId": 327298, "tmdbTitle": "피의 게임X", "tmdbYear": 2026, "isPlaceholder": false, "tmdbMatchStatus": "확인됨", "tmdbSource": "https://www.themoviedb.org/tv/327298" },
   "home:home-wavve-only-10": { "title": "비광", "kind": "movie", "tmdbId": 665669, "tmdbTitle": "비광", "tmdbYear": 2026, "isPlaceholder": false, "tmdbMatchStatus": "확인됨", "tmdbSource": "https://www.themoviedb.org/movie/665669" },
   "home:home-wavve-only-11": { "title": "사이비 헌터", "kind": "tv", "tmdbId": 322922, "tmdbTitle": "사이비 헌터", "tmdbYear": 2026, "isPlaceholder": false, "tmdbMatchStatus": "확인됨", "tmdbSource": "https://www.themoviedb.org/tv/322922" },

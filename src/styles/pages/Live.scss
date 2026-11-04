@@ -2,10 +2,10 @@
   width: 100%;
   max-width: none;
   min-height: 100vh;
-  background: #1b1b1b;
+  background: transparent;
   color: #fff;
 
-  // 페이지 자체 여백 제거
+  // 공통 site-inner의 여백을 사용
   margin: 0;
   padding: 0;
 
@@ -27,130 +27,308 @@
     margin-bottom: 28px;
 
     h1 {
-      font-size: 24px;
       margin: 0;
+      font-size: 24px;
     }
 
     a {
       font-size: 14px;
       color: #bbb;
+
+      &:hover {
+        color: #fff;
+      }
     }
   }
 }
 
-.live-hero {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-bottom: 36px;
+// ========================================
+// 라이브 히어로 TOP 10
+// ========================================
 
-  &__slide {
-    position: relative;
-    aspect-ratio: 2.1/1;
-    overflow: hidden;
-    border-radius: 7px;
-    background: linear-gradient(120deg, #21558d, #081a35 80%);
-    background-position: center;
-    background-size: cover
+.live-hero {
+  position: relative;
+
+  // 화면 전체 너비로 확장
+  width: calc(100% + 220px);
+  margin-left: -110px;
+  margin-bottom: 56px;
+
+  overflow: hidden;
+
+  &__swiper {
+    width: 100%;
+    overflow: visible;
   }
 
+  .swiper-slide {
+    width: min(54.5vw, 1090px);
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  // 히어로 카드
+  &__slide {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2.28 / 1;
+
+    overflow: hidden;
+    border-radius: 10px;
+
+    background: linear-gradient(120deg,
+        #21558d,
+        #081a35 80%);
+    background-position: center;
+    background-size: cover;
+    cursor: pointer;
+  }
+
+  &__video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+
+    iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+  }
+
+  // 카드 이미지 위 그라데이션
   &__slide::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(0, 35, 84, .97) 0%, rgba(0, 35, 84, .72) 35%, transparent 85%)
+    z-index: 1;
+
+    background: linear-gradient(90deg,
+        rgba(0, 25, 65, 0.96) 0%,
+        rgba(0, 25, 65, 0.72) 30%,
+        rgba(0, 25, 65, 0.18) 65%,
+        transparent 100%);
+
+    pointer-events: none;
   }
 
+  // 카드 내부 정보
   &__info {
     position: absolute;
-    left: 4%;
+    z-index: 2;
+
+    left: 3.5%;
     top: 5%;
-    bottom: 7%;
+    bottom: 8%;
     width: 60%;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
-    gap: 7px
+    gap: 8px;
+
+    p {
+      white-space: pre-line;
+    }
   }
 
+  // LIVE 배지
   &__badge {
     position: absolute;
     top: 0;
     left: 0;
-    background: #fa3f48;
+
     padding: 4px 7px;
+    border-radius: 3px;
+
+    background: #fa3f48;
+    color: #fff;
+
     font-size: 11px;
-    border-radius: 3px
+    font-weight: 700;
   }
 
+  // 시청률 순위
   &__rank {
-    font-size: 38px;
+    font-size: 44px;
+    font-weight: 800;
     font-style: italic;
-    line-height: 1
+    line-height: 1;
   }
 
   h2 {
-    font-size: 25px;
-    margin: 0
+    margin: 0;
+    font-size: 27px;
+    font-weight: 700;
   }
 
   p {
-    font-size: 15px;
     margin: 0;
-    font-weight: 600
+    font-size: 17px;
+    font-weight: 600;
   }
 
   small {
-    color: #c7d6eb
+    color: #c7d6eb;
+    font-size: 13px;
   }
 
+  // 방송 진행률
   &__progress {
     width: 70%;
     height: 3px;
-    background: #ffffff50;
-    margin: 7px 0 10px;
+    margin: 8px 0 12px;
+
+    background: rgba(255, 255, 255, 0.3);
 
     span {
       display: block;
       height: 100%;
-      background: #fff
+      background: #fff;
+      transition: width 0.3s ease;
     }
   }
 
+  // 시청하기 버튼
   a {
-    background: #ffffff2a;
-    padding: 8px 13px;
-    border-radius: 4px;
-    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 16px;
+    border-radius: 5px;
+
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+
+    font-size: 13px;
+    text-decoration: none;
+
+    transition: background 0.2s ease;
 
     &:hover {
-      background: #ffffff55
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  // 좌우 슬라이드 버튼
+  &__arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    padding: 0;
+    border: 0;
+
+    background: transparent;
+    color: #fff;
+
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+
+    transition: opacity 0.25s ease;
+
+    &--prev {
+      left: 0;
+      background: linear-gradient(90deg,
+          rgba(0, 0, 0, 0.6),
+          transparent);
+    }
+
+    &--next {
+      right: 0;
+      background: linear-gradient(270deg,
+          rgba(0, 0, 0, 0.6),
+          transparent);
+    }
+
+    svg {
+      width: 22px;
+      height: 36px;
+    }
+  }
+
+  // 호버 또는 키보드 포커스 시 화살표 표시
+  &:hover &__arrow,
+  &:focus-within &__arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  // 현재 슬라이드 순위
+  &__pagination {
+    position: absolute;
+    right: 24px;
+    bottom: 20px;
+    z-index: 10;
+
+    padding: 6px 14px;
+    border-radius: 20px;
+
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+
+    font-size: 13px;
+    pointer-events: none;
+
+    span {
+      color: #aaa;
     }
   }
 }
 
+// ========================================
+// 라이브 배너
+// ========================================
+
 .live-banner {
-  height: 90px;
-  margin: 0 0 44px;
-  background: linear-gradient(100deg, #080808, #17366d, #090909);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
 
+  height: 90px;
+  margin: 0 0 44px;
+
+  background: linear-gradient(100deg,
+      #080808,
+      #17366d,
+      #090909);
+
+  background-position: center;
+  background-size: cover;
+
   strong {
-    font-size: 21px
+    font-size: 21px;
   }
 
   span {
     font-size: 13px;
-    color: #ddd
+    color: #ddd;
   }
 }
 
+// ========================================
+// 카테고리별 라이브 섹션
+// ========================================
+
 .live-section {
-  margin-bottom: 48px;
+  margin-bottom: 0;
+  padding-bottom: 48px;
 
   &__head {
     display: flex;
@@ -159,8 +337,8 @@
     margin-bottom: 15px;
 
     h2 {
+      margin: 0;
       font-size: 20px;
-      margin: 0
     }
   }
 
@@ -169,20 +347,22 @@
 
     &:hover .live-section__nav {
       opacity: 1;
-      pointer-events: auto
+      pointer-events: auto;
     }
   }
 
   &__track {
     display: flex;
     gap: 12px;
+
     overflow-x: auto;
     scrollbar-width: none;
+
     user-select: none;
     touch-action: pan-y;
 
     &::-webkit-scrollbar {
-      display: none
+      display: none;
     }
   }
 
@@ -190,40 +370,55 @@
     position: absolute;
     top: 0;
     bottom: 28px;
-    width: 50px;
     z-index: 2;
+
+    width: 50px;
     border: 0;
+
     color: #fff;
     font-size: 42px;
+
     opacity: 0;
     pointer-events: none;
-    transition: opacity .2s;
-    background: linear-gradient(90deg, rgba(0, 0, 0, .85), transparent);
+    transition: opacity 0.2s;
+
+    background: linear-gradient(90deg,
+        rgba(0, 0, 0, 0.85),
+        transparent);
 
     &--prev {
-      left: 0
+      left: 0;
     }
 
     &--next {
       right: 0;
-      background: linear-gradient(270deg, rgba(0, 0, 0, .85), transparent)
+      background: linear-gradient(270deg,
+          rgba(0, 0, 0, 0.85),
+          transparent);
     }
   }
 }
 
+// ========================================
+// 라이브 콘텐츠 카드
+// ========================================
+
 .live-card {
-  flex: 0 0 calc((100% - 5 * 12px)/6);
+  flex: 0 0 calc((100% - 5 * 12px) / 6);
   min-width: 0;
+
   scroll-snap-align: start;
+
   display: flex;
   flex-direction: column;
   gap: 5px;
 
   &__thumb {
     position: relative;
-    aspect-ratio: 16/9;
-    border-radius: 6px;
+    aspect-ratio: 16 / 9;
+
     overflow: hidden;
+    border-radius: 6px;
     background: #303745;
 
     img {
@@ -231,89 +426,146 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      pointer-events: none
+      pointer-events: none;
     }
   }
 
   &__placeholder {
     position: absolute;
     inset: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-size: 19px;
     font-weight: 700;
-    color: #c5cfdf
+    color: #c5cfdf;
   }
 
   &__badge {
     position: absolute;
     left: 5px;
     top: 5px;
+
+    padding: 2px 4px;
+    border-radius: 2px;
+
     background: #222c;
     color: #fff;
-    border-radius: 2px;
+
     font-size: 10px;
-    padding: 2px 4px
   }
 
   &__progress {
     position: absolute;
     bottom: 0;
     left: 0;
+
     width: 100%;
     height: 3px;
+
     background: #101b2b;
 
     span {
       display: block;
       height: 100%;
-      background: #2459ed
+      background: #2459ed;
     }
   }
 
   &__channel {
     font-size: 13px;
     font-weight: 500;
+
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis
+    text-overflow: ellipsis;
   }
 
   &__title {
     font-size: 12px;
     color: #aaa;
+
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis
+    text-overflow: ellipsis;
   }
 
   &:hover .live-card__thumb {
-    outline: 2px solid #668cff
+    outline: 2px solid #668cff;
   }
 }
 
-@media(max-width:1100px) {
-  .live-card {
-    flex-basis: calc((100% - 3 * 12px)/4)
-  }
-}
+// ========================================
+// 반응형 - 태블릿
+// ========================================
 
-@media(max-width:700px) {
+@media (max-width: 1200px) {
   .live-hero {
-    grid-template-columns: 1fr
+    .swiper-slide {
+      width: 65vw;
+    }
   }
+}
 
+@media (max-width: 1100px) {
   .live-card {
-    flex-basis: calc((100% - 12px)/2)
+    flex-basis: calc((100% - 3 * 12px) / 4);
+  }
+}
+
+// ========================================
+// 반응형 - 모바일
+// ========================================
+
+@media (max-width: 768px) {
+  .live-hero {
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-bottom: 36px;
+
+    .swiper-slide {
+      width: 88vw;
+    }
+
+    &__rank {
+      font-size: 30px;
+    }
+
+    h2 {
+      font-size: 21px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+
+    &__arrow {
+      width: 36px;
+
+      svg {
+        width: 14px;
+        height: 24px;
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .live-card {
+    flex-basis: calc((100% - 12px) / 2);
   }
 
   .live-banner {
     flex-direction: column;
-    gap: 5px
+    gap: 5px;
   }
+}
 
-  .live-hero__rank {
-    font-size: 26px
-  }
+// LIVE 페이지에서 공통 배경 하단을 검은색으로 연결
+.site-inner:has(> .live-page) {
+  background: linear-gradient(180deg,
+      #071a2e 0%,
+      #000000 80%);
 }

@@ -267,3 +267,13 @@
     left: calc(50% - 120px);
   }
 }
+.login-page {
+  min-height: calc(100svh - 100px);
+  padding: max(48px, (100svh - 1080px) / 2 + 109.286px) 24px 60px;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 48px 20px 32px;
+  }
+}
