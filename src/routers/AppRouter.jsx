@@ -21,6 +21,11 @@ import { Category } from "../pages/category/Category";
 // 콘텐츠 상세 페이지
 import { ProgramDetail } from "../pages/contents/ProgramDetail";
 import { MovieDetail } from "../pages/contents/MovieDetail";
+import { EntertainmentDetail } from "../pages/contents/EntertainmentDetail";
+import { DramaDetail } from "../pages/contents/DramaDetail";
+import { CurrentaffairsDetail } from "../pages/contents/CurrentaffairsDetail";
+import { AnimationDetail } from "../pages/contents/AnimationDetail";
+import { GlobalDetail } from "../pages/contents/GlobalDetail";
 
 // 라이브 페이지
 import { LiveChannel } from "../pages/live/LiveChannel";
@@ -103,6 +108,26 @@ export const AppRouter = () => {
         <Route
           path="/moviedetail/:movieId"
           element={<MovieDetail />}
+        />
+        <Route
+          path="/entertainmentdetail/:programId"
+          element={<EntertainmentDetail />}
+        />
+        <Route
+          path="/dramadetail/:programId"
+          element={<DramaDetail />}
+        />
+        <Route
+          path="/currentaffairsdetail/:programId"
+          element={<CurrentaffairsDetail />}
+        />
+        <Route
+          path="/animationdetail/:programId"
+          element={<AnimationDetail />}
+        />
+        <Route
+          path="/globaldetail/:programId"
+          element={<GlobalDetail />}
         />
 
         {/* LIVE */}
