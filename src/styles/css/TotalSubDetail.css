@@ -261,7 +261,7 @@
   display: block;
   aspect-ratio: 16/9;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 0.5em;
   background: #202532;
 }
 .movie-videos__thumb img {
@@ -273,11 +273,11 @@
 }
 .movie-videos__desc {
   color: #aaaaaa;
-  font-size: 14px;
+  font-size: 0.88em;
 }
 .movie-videos__date {
   color: #7d8596;
-  font-size: 12px;
+  font-size: 0.75em;
 }
 .movie-videos__desc--clamp {
   display: -webkit-box;
@@ -289,17 +289,17 @@
 
 /* 펼치기 상세 정보 (줄거리 · 개요 · 장르 · 감독 · 작가) – 히어로 출연 아래 */
 .detail-info {
-  margin: 14px 0 0;
+  margin: 0.88em 0 0;
 }
 .detail-info__row {
   display: flex;
-  gap: 12px;
-  padding: 4px 0;
-  font-size: clamp(14px, 0.94vw, 17px);
+  gap: 0.75em;
+  padding: 0.25em 0;
+  font-size: clamp(0.88em, 0.94vw, 1.06em);
   line-height: 1.6;
 }
 .detail-info__row dt {
-  flex: 0 0 64px;
+  flex: 0 0 4em;
   color: #fff;
 }
 .detail-info__row dd {
@@ -307,28 +307,28 @@
   color: #fff;
 }
 .detail-info__fold {
-  margin: 40px auto 0;
+  margin: 2.5em auto 0;
 }
 
 /* 펼치기 · 접기 버튼 (타이포그래피: 버튼M(Default) – Noto Sans KR Regular 16 / Auto / 0%) */
 .detail-toggle {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
+  gap: 0.25em;
+  padding: 0.25em 0.5em;
   border: 0;
   background: none;
   color: #fff;
   font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
-  font-size: 16px;
+  font-size: 1em;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0;
   cursor: pointer;
 }
 .detail-toggle:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
+  outline: 0.13em solid #fff;
+  outline-offset: 0.13em;
 }
 
 /* 시즌별 회차 */
