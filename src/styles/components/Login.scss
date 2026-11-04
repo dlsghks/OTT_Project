@@ -218,3 +218,18 @@
         left: calc(50% - 120px);
     }
 }
+// 회원가입 페이지와 세로 배치 통일
+.login-page {
+  min-height: calc(100svh - 100px);
+
+  padding:
+    max(48px, calc((100svh - 1080px) / 2 + 109.286px))
+    24px
+    60px;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    padding: 48px 20px 32px;
+  }
+}

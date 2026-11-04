@@ -1,3 +1,9 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 header {
   width: 100%;
   background: #000;
@@ -138,4 +144,36 @@ header .header-right button {
   header .header-right li {
     font-size: 14px;
   }
+}
+
+.site-header .header-right > ul {
+  display: flex;
+  align-items: center;
+}
+.site-header .header-right > ul > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.site-header .header-right > ul > li > button,
+.site-header .header-right > ul > li > a,
+.site-header .header-right > ul > li > a > button,
+.site-header .header-right .my-hover,
+.site-header .header-right .my-hover__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  line-height: 1;
+}
+.site-header .header-right > ul > li > button > img,
+.site-header .header-right > ul > li > a > button > img {
+  display: block;
+  width: 28px;
+  height: 28px;
 }
