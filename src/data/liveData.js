@@ -2,17 +2,14 @@
 const thumbnailPath = '/images/live/thumbnail/';
 
 // 하단 라이브 썸네일 30개
-const liveThumbnails = Array.from(
-  { length: 30 },
-  (_, index) => {
-    const number = `0${index + 1}`;
+const liveThumbnails = Array.from({ length: 30 }, (_, index) => {
+  const number = String(index + 1).padStart(2, '0');
 
-    // 25번만 webp
-    const extension = index + 1 === 25 ? 'webp' : 'jpg';
+  // 25번만 webp
+  const extension = index + 1 === 25 ? 'webp' : 'jpg';
 
-    return `/images/live/thumbnail/livethumbnail${number}.${extension}`;
-  }
-);;
+  return `${thumbnailPath}livethumbnail${number}.${extension}`;
+});
 
 // TOP 10의 기본 이미지
 // 유튜브 썸네일이 검색되면 LiveHero에서 해당 이미지 우선 표시
@@ -122,19 +119,15 @@ export const livePrograms = definitions.flatMap(
       return {
         id: `${ci}-${i}`,
 
-        channelId: channels[i % 5]
-          .toLowerCase()
-          .replace(/\s/g, '-'),
+        // 카테고리와 순번을 조합하여 중복 방지
+        channelId: `${ci}-${i}`,
 
         channel: channels[i % 5],
         title: titles[i % 5],
         category,
 
         // 준비된 30개 이미지 순환 배정
-        image:
-          liveThumbnails[
-          (rank - 1) % liveThumbnails.length
-          ],
+        image: liveThumbnails[(rank - 1) % liveThumbnails.length],
 
         start: stamp(-25 - i * 2),
         end: stamp(35 + i * 2),
@@ -147,6 +140,9 @@ export const livePrograms = definitions.flatMap(
             ? demoRatings[rank - 1]
             : undefined,
 
+        // 실제 재생 가능한 영상 주소 연결 시 사용
+        streamUrl: null,
+        videoUrl: null,
         youtubeLiveId: null,
       };
     })
@@ -208,32 +204,33 @@ const top10Data = [
   },
 ];
 
-export const liveTop10 = top10Data.map(
-  (program, index) => ({
-    id: `top-${index + 1}`,
+export const liveTop10 = top10Data.map((program, index) => ({
+  id: `top-${index + 1}`,
 
-    channelId: program.channel
-      .toLowerCase()
-      .replace(/\s/g, '-'),
+  channelId: program.channel
+    .toLowerCase()
+    .replace(/\s/g, '-'),
 
-    channel: program.channel,
-    title: program.title,
-    category: '인기 라이브',
+  channel: program.channel,
+  title: program.title,
+  category: '인기 라이브',
 
-    image: program.image || heroImages[index],
+  image: program.image || heroImages[index],
 
-    start: stamp(-25 - index * 2),
-    end: stamp(35 + index * 2),
+  start: stamp(-25 - index * 2),
+  end: stamp(35 + index * 2),
 
-    rank: index + 1,
-    viewerRank: index + 1,
+  rank: index + 1,
+  viewerRank: index + 1,
 
-    rating: demoRatings[index],
+  rating: demoRatings[index],
 
-    youtubeChannelId: program.youtubeChannelId,
-    youtubeLiveId: null,
-  })
-);
+  youtubeChannelId: program.youtubeChannelId,
+  youtubeLiveId: null,
+
+  streamUrl: null,
+  videoUrl: null,
+}));
 
 // 카테고리
 export const liveCategories = definitions.map(

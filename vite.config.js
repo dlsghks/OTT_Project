@@ -4,14 +4,13 @@ import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// Vercel은 /, GitHub Pages는 /OTT_Project/ 사용
 export default defineConfig({
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] }),
-    tailwindcss()
+    tailwindcss(),
   ],
 
-  // GitHub Pages 배포 경로
-  base: '/OTT_Project/',
+  base: process.env.VERCEL === '1' ? '/' : '/OTT_Project/',
 })

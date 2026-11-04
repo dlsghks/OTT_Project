@@ -21,8 +21,10 @@ export const RankingSection = ({ items = [] }) => {
     return (
         <section className="home-section ranking-section">
             {/* 섹션 제목 */}
-            <div className="home-section__head">
-                <h2>오늘의 TOP 랭킹</h2>
+            <div className="content-section__header">
+                <div className="content-section__title">
+                    <h2 id="weekly-content-title">오늘의 TOP 랭킹</h2>
+                </div>
             </div>
 
             {/* Swiper 슬라이드 영역 */}
