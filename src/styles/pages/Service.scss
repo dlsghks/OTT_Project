@@ -1,0 +1,93 @@
+.service-page {
+  --blue: #1954ff;
+  width: calc(100% + var(--page-side-padding, 110px) * 2);
+  margin-inline: calc(var(--page-side-padding, 110px) * -1);
+  background: #fff;
+  color: #25232b;
+  overflow: hidden;
+  text-align: center;
+  font-size: 16px;
+
+  h1, h2, h3, p { margin-top: 0; }
+  h2 { font-size: 48px; line-height: 1.3; letter-spacing: -1.8px; }
+  em { color: var(--blue); font-style: normal; }
+
+  &__hero {
+    height: 560px;
+    display: flex;
+    align-items: center;
+    background-color: #111;
+    background-position: center;
+    background-size: cover;
+    color: #fff;
+  }
+  &__hero-copy { width: min(1200px, 90%); margin: auto; text-align: left; }
+  &__hero h1 { font-size: 52px; line-height: 1.15; }
+  &__hero h1 img { display: block; width: 185px; height: auto; margin-top: 8px; }
+  &__hero p { font-size: 16px; line-height: 1.8; }
+
+  &__intro { height: 600px; background: #fff; }
+  &__intro .swiper { height: 100%; }
+  &__intro-slide { height: 100%; max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 35px 80px; gap: 50px; text-align: left; box-sizing: border-box; }
+  &__intro-copy { flex: 1; min-width: 0; }
+  &__intro-slide h2 { font-size: 42px; }
+  &__intro-slide p { max-width: 390px; line-height: 1.8; color: #777; }
+  &__intro-image { height: 100%; width: auto; max-width: 55%; object-fit: contain; object-position: bottom; align-self: flex-end; }
+  &__intro .swiper-pagination-bullet-active { background: var(--blue); }
+  &__intro .swiper-button-next, &__intro .swiper-button-prev { color: #777; }
+
+  &__feature { background: #f7f7f8; padding: 100px 24px 120px; }
+  &__feature > small, &__download > small, &__ticket > small { font-weight: 700; font-size: 13px; }
+  &__feature > p, &__download > p, &__ticket > p { color: #777; margin: 25px auto 50px; }
+  &__devices-image { display: block; width: min(100%, 1120px); height: auto; margin: 65px auto 50px; }
+  &__two-col { display: flex; justify-content: center; gap: 150px; }
+  &__two-col h3, &__style-grid h3 { font-size: 20px; }
+  &__two-col p, &__style-grid p { color: #777; font-size: 14px; }
+  &__style { padding-top: 85px; }
+  &__style-image { display: block; width: min(100%, 1050px); height: auto; margin: 65px auto 25px; }
+  &__style-grid { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 1000px; margin: 0 auto; gap: 40px; }
+
+  &__download { padding: 100px 20px 70px; }
+  &__download-art { position: relative; display: grid; place-items: center; height: 400px; overflow: hidden; }
+  &__brand-text { position: absolute; width: min(1200px, 120%); max-width: none; height: auto; opacity: .09; }
+  &__download-phone { position: relative; height: 340px; width: auto; object-fit: contain; }
+  &__store-links { display: flex; justify-content: center; gap: 14px; }
+  &__store-links a { display: inline-flex; align-items: center; }
+  &__store-links img { width: 155px; height: auto; }
+  &__ticket { padding: 80px 20px 100px; }
+  &__button { display: inline-block; border-radius: 35px; background: var(--blue); padding: 16px 60px; color: #fff; text-decoration: none; font-weight: 700; }
+  &__social { border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; text-align: left; padding: 30px max(30px, calc((100vw - 1200px) / 2)); gap: 20px; }
+  &__social h3 { margin: 10px 0 0; }
+  &__social > div:last-child { display: flex; align-items: center; gap: 20px; }
+  &__social a { display: inline-flex; }
+  &__social a img { width: 28px; height: 28px; object-fit: contain; }
+  &__disclaimer { margin: 0; background: #f7f7f7; padding: 18px; color: #888; font-size: 12px; }
+}
+
+@media (max-width: 768px) {
+  .service-page {
+    h2 { font-size: 30px; }
+    &__hero { height: 380px; background-position: 65% center; }
+    &__hero-copy { width: 90%; }
+    &__hero h1 { font-size: 30px; }
+    &__hero h1 img { width: 115px; }
+    &__hero p { max-width: 170px; font-size: 12px; }
+    &__intro { height: 460px; }
+    &__intro-slide { padding: 35px 35px 15px; gap: 0; }
+    &__intro-slide h2 { font-size: 25px; }
+    &__intro-slide p { font-size: 12px; }
+    &__intro-image { max-width: 52%; height: 80%; }
+    &__feature { padding: 70px 15px; }
+    &__devices-image { margin: 30px auto; }
+    &__two-col { gap: 25px; }
+    &__two-col h3, &__style-grid h3 { font-size: 14px; }
+    &__two-col p, &__style-grid p { font-size: 11px; }
+    &__style-grid { gap: 10px; }
+    &__style-image { margin: 30px auto 15px; }
+    &__download-art { height: 340px; }
+    &__download-phone { height: 290px; }
+    &__store-links img { width: 125px; }
+    &__social { padding: 24px; flex-wrap: wrap; }
+    &__social h3 { font-size: 15px; }
+  }
+}

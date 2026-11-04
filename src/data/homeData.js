@@ -104,6 +104,44 @@ export const hopeItems = [
   item('hope-interstellar', '인터스텔라', 'movie', '', '개별구매'),
 ].map((entry) => withContent(entry, 'home'));
 
+
+const comingSoonItems = [
+  {
+    id: "coming-soon-01",
+    title: "웨이브 라인업",
+    description: "11월에도 JUST DIVE, Wavve!",
+    image: "/images/home/section/preview01.jpg",
+  },
+  {
+    id: "coming-soon-02",
+    title: "연애남매2",
+    description: "11월, 웨이브 독점 공개",
+    image: "/images/home/section/preview02.jpg",
+    isOriginal: true
+  },
+  {
+    id: "coming-soon-03",
+    title: "옆자리, 프란체스카",
+    description: "11월 6일, 오전 11시 공개",
+    image: "/images/home/section/preview03.jpg",
+    isOriginal: true
+  },
+  {
+    id: "coming-soon-04",
+    title: "문무",
+    description: "11월 14일, 오후 9시 20분 첫 방송",
+    image: "/images/home/section/preview04.jpg",
+  },
+  {
+    id: "coming-soon-05",
+    title: "2026 멜론뮤직어워드",
+    description: "11월 14일, 웨이브 OTT 독점 생중계",
+    image: "/images/home/section/preview05.jpg",
+    isOriginal: true
+  },
+];
+
+
 // 메인 페이지 콘텐츠 섹션
 export const homeSections = [
   {
@@ -140,7 +178,7 @@ export const homeSections = [
     id: 'coming-soon',
     title: '두근두근 Coming Soon',
     cardType: 'coming-soon',
-    items: samples
+    items: comingSoonItems
   },
   {
     id: 'talk',
