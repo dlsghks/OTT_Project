@@ -1,3 +1,4 @@
+import { MyHover } from "../pages/member/MyHover";
 import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/wavve_logo_w.svg'
@@ -83,13 +84,7 @@ export const Header = ({
               </Link>
             </li>
             <li>
-              <button
-                type="button"
-                aria-label="프로필"
-                onClick={onProfileClick}
-              >
-                <img src={userIcon} alt="" width="28" height="28" />
-              </button>
+              <MyHover />
             </li>
           </ul>
         </div>

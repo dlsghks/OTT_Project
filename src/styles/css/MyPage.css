@@ -4,7 +4,7 @@
 }
 
 .wavve-mypage {
-  padding: 60px 0 80px;
+  padding: 95px 0 80px;
   min-width: 0;
   background: #000;
   color: #fff;
@@ -177,8 +177,8 @@
 .wavve-mypage .mypage__tabs {
   display: flex;
   gap: 56px;
-  min-height: 72px;
-  border-bottom: 1px solid #919191;
+  min-height: 52px;
+  border-bottom: 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -191,7 +191,7 @@
   position: relative;
   flex: 0 0 auto;
   min-width: 140px;
-  padding: 0 12px 35px;
+  padding: 0 12px 15px;
   border: 0;
   background: transparent;
   color: #a5a5a5;
@@ -199,10 +199,15 @@
   font-weight: 500;
   line-height: 36px;
   white-space: nowrap;
+  transition: color 160ms ease;
 }
 
 .wavve-mypage .mypage__tabs > button:nth-child(2) {
   min-width: 160px;
+}
+
+.wavve-mypage .mypage__tabs > button:hover {
+  color: #fff;
 }
 
 .wavve-mypage .mypage__tabs > button[aria-selected=true] {
@@ -213,14 +218,14 @@
 .wavve-mypage .mypage__tabs > button[aria-selected=true]::after {
   content: "";
   position: absolute;
-  inset: auto 0 -1px;
+  inset: auto 0 0;
   height: 3px;
-  background: #fff;
+  background: #1351f9;
 }
 
 .wavve-mypage .mypage__library-panel {
   min-height: 571px;
-  padding-top: 22px;
+  padding-top: 40px;
 }
 
 .wavve-mypage .mypage__filter-row {
@@ -233,6 +238,7 @@
 
 .wavve-mypage .mypage__filters {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
 }
@@ -242,17 +248,21 @@
   height: 48px;
   padding: 0 25px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   background: transparent;
+  color: #999;
   font-size: 16px;
   font-weight: 500;
+  transition: background-color 160ms ease, color 160ms ease;
 }
 
 .wavve-mypage .mypage__filters > button:hover {
   background: #141414;
+  color: #fff;
 }
 
 .wavve-mypage .mypage__filters > button[aria-pressed=true] {
+  background: #1351f9;
   font-weight: 700;
   color: #fff;
 }
@@ -778,11 +788,11 @@
   }
   .wavve-mypage .mypage__tabs {
     gap: 12px;
-    min-height: 56px;
+    min-height: 44px;
   }
   .wavve-mypage .mypage__tabs > button, .wavve-mypage .mypage__tabs > button:nth-child(2) {
     min-width: max-content;
-    padding: 0 8px 20px;
+    padding: 0 8px 12px;
     font-size: 16px;
     line-height: 28px;
   }
@@ -805,7 +815,7 @@
   }
   .wavve-mypage .mypage__library-panel {
     min-height: 420px;
-    padding-top: 16px;
+    padding-top: 32px;
   }
   .wavve-mypage .mypage__empty {
     gap: 14px;
