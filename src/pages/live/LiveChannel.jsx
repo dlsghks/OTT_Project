@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { livePrograms } from '../../data/liveData';
 import { LoginModal } from '../../components/common/LoginModal';
+import { getImagePath } from '../../utils/imagePath';
 import '../../styles/pages/LiveChannel.scss';
 
 const formatTime = (value) => {
@@ -16,8 +17,21 @@ const progressOf = (program, now) => {
   return end > start ? Math.max(0, Math.min(100, (now - start) / (end - start) * 100)) : 0;
 };
 
-// 실제 인증 연결 시 아래 prop에 Firebase/Zustand 로그인 상태를 전달하세요.
-export const LiveChannel = ({ isLoggedIn = false }) => {
+// isLoggedIn: 현재 프로젝트의 로그인/비로그인 테스트 상태를 그대로 사용합니다.
+// chatAdapter (선택): { subscribe(channelId, callback) => unsubscribe, send(channelId, message) => Promise }
+// 어댑터 없이도 브라우저 내 채팅 UI 테스트는 가능합니다. (다른 사용자에게 전송되지 않음)
+const imageSrc = (path) => path ? getImagePath(path) : '';
+
+function ChannelImage({ program, className = '' }) {
+  const [failed, setFailed] = useState(false);
+  const src = imageSrc(program?.image || program?.thumbnail || program?.poster);
+  useEffect(() => { setFailed(false); }, [src]);
+  return src && !failed
+    ? <img className={className} src={src} alt={program?.title || program?.channel || '채널 이미지'} loading="lazy" onError={() => setFailed(true)} />
+    : <span className="live-image-fallback">{program?.channel || program?.title || 'WAVVE LIVE'}</span>;
+}
+
+export const LiveChannel = ({ isLoggedIn = false, chatAdapter = null }) => {
   const [loginOpen, setLoginOpen] = useState(false);
 
   const onLoginRequired = () => {
@@ -56,6 +70,8 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
   const [chatOpen, setChatOpen] = useState(false);
   const [chatText, setChatText] = useState('');
   const [messages, setMessages] = useState([]);
+  const [chatError, setChatError] = useState('');
+  const [chatSending, setChatSending] = useState(false);
   const [category, setCategory] = useState('전체');
   const [adComplete, setAdComplete] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -64,6 +80,9 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
   const [playerSettingsOpen, setPlayerSettingsOpen] = useState(false);
   const scheduleSwiper = useRef(null);
   const playerRef = useRef(null);
+  const videoRef = useRef(null);
+  const chatBottomRef = useRef(null);
+  const [streamError, setStreamError] = useState('');
   const top20Ref = useRef(null);
   const layoutRef = useRef(null);
   const [panelHeight, setPanelHeight] = useState(680);
@@ -77,7 +96,7 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
   const updateScheduleNav = swiper => { setSchedulePrev(!swiper.isBeginning); setScheduleNext(!swiper.isEnd); };
 
   useEffect(() => { const id = setInterval(() => setNow(Date.now()), 30000); return () => clearInterval(id); }, []);
-  useEffect(() => { setAdComplete(false); setLiked(false); setIsPlaying(true); setPlayerSettingsOpen(false); }, [selected?.channelId]);
+  useEffect(() => { setAdComplete(false); setLiked(false); setIsPlaying(true); setPlayerSettingsOpen(false); setStreamError(''); }, [selected?.channelId]);
   useEffect(() => { scheduleSwiper.current?.slideTo(0, 0); }, [selected?.channelId, displayCurrentIndex]);
   useEffect(() => {
     const measure = () => {
@@ -100,18 +119,69 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [shareOpen]);
+  // 채널을 변경하면 채팅을 초기화하고, 어댑터가 있으면 해당 채널의 메시지를 구독합니다.
+  useEffect(() => {
+    setMessages([]);
+    setChatError('');
+    if (!selected?.channelId || !chatAdapter?.subscribe) return;
+    try {
+      return chatAdapter.subscribe(String(selected.channelId), next => setMessages(Array.isArray(next) ? next : []));
+    } catch {
+      setChatError('채팅 연결에 실패했습니다.');
+    }
+  }, [selected?.channelId, chatAdapter]);
+  useEffect(() => { chatBottomRef.current?.scrollIntoView({ block: 'nearest' }); }, [messages, chatOpen]);
+
+  const streamUrl = selected?.streamUrl || selected?.videoUrl || '';
+  // 실제 라이브 URL이 있어야 재생할 수 있습니다. mp4 및 브라우저 기본 HLS 재생을 지원합니다.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isLoggedIn || !adComplete || !streamUrl) return;
+    video.volume = volume / 100;
+    video.muted = isMuted;
+    if (isPlaying) video.play().catch(() => setIsPlaying(false));
+  }, [selected?.channelId, isLoggedIn, adComplete, streamUrl]);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.volume = volume / 100;
+    video.muted = isMuted;
+  }, [volume, isMuted]);
+  const togglePlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) video.play().then(() => setIsPlaying(true)).catch(() => setStreamError('영상 재생을 시작할 수 없습니다.'));
+    else { video.pause(); setIsPlaying(false); }
+  };
+  const restartLive = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.seekable.length) video.currentTime = video.seekable.end(video.seekable.length - 1);
+    video.play().then(() => setIsPlaying(true)).catch(() => {});
+  };
+
   if (!selected) return <main className="live-channel-page">표시할 라이브 채널이 없습니다.</main>;
 
   const filteredChannels = category === '전체' ? channels : channels.filter(p => p.category === category);
   const categories = ['전체', ...new Set(channels.map(p => p.category).filter(Boolean))];
   const top20 = channels.slice(0, 20);
   const changeChannel = program => { setSearchParams({ channel: String(program.channelId) }); };
-  const sendChat = e => {
+  const sendChat = async e => {
     e.preventDefault();
     if (!isLoggedIn) { onLoginRequired(); return; }
-    if (!chatText.trim()) return;
-    setMessages(prev => [...prev, { id: Date.now(), text: chatText.trim() }]);
-    setChatText('');
+    const text = chatText.trim();
+    if (!text || chatSending) return;
+    if (text.length > 300) { setChatError('메시지는 300자 이내로 입력해 주세요.'); return; }
+    setChatError('');
+    setChatSending(true);
+    const message = { id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, name: '나', text, createdAt: Date.now() };
+    try {
+      if (chatAdapter?.send) await chatAdapter.send(String(selected.channelId), message);
+      else setMessages(prev => [...prev, message]); // 프런트엔드 테스트 모드
+      setChatText('');
+    } catch {
+      setChatError('메시지를 전송하지 못했습니다. 다시 시도해 주세요.');
+    } finally { setChatSending(false); }
   };
   const shareTo = (url) => window.open(url, '_blank', 'noopener,noreferrer,width=640,height=520');
   const copyShareUrl = async () => {
@@ -141,21 +211,36 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
     <main className="live-channel-page">
       <div className="live-channel-layout" ref={layoutRef}>
         <div className="live-channel-main">
-          <div className="live-player" ref={playerRef} style={selected.image ? { backgroundImage: `url(${selected.image})` } : undefined}>
+          <div className="live-player" ref={playerRef} style={selected.image ? { backgroundImage: `url("${imageSrc(selected.image)}")` } : undefined}>
+            {isLoggedIn && adComplete && streamUrl && (
+              <video
+                key={`${selected.channelId}-${streamUrl}`}
+                ref={videoRef}
+                className="live-player__video"
+                src={streamUrl}
+                playsInline
+                autoPlay
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                onError={() => setStreamError('영상 주소를 확인해 주세요. HLS(.m3u8)는 브라우저에 따라 별도 플레이어 연결이 필요합니다.')}
+              />
+            )}
             <div className="live-player__overlay">
               {!isLoggedIn ? <><h2>라이브를 시청하려면 로그인이 필요해요</h2><button type="button" className="live-player__button" onClick={() => onLoginRequired()}>로그인</button></>
                 : !adComplete ? <><h2>광고 시청 후 라이브를 시청할 수 있어요</h2><p>실제 광고 연동 전 미리보기입니다.</p><button className="live-player__button" onClick={() => setAdComplete(true)}>광고 시청 완료 (데모)</button></>
+                  : !streamUrl ? <><h2>연결된 라이브 영상이 없습니다</h2><p>liveData에 streamUrl을 등록하면 여기에서 재생됩니다.</p></>
+                  : streamError ? <><h2>영상을 재생할 수 없습니다</h2><p>{streamError}</p></>
                   : null}
             </div>
-            {isLoggedIn && adComplete && (
+            {isLoggedIn && adComplete && !!streamUrl && !streamError && (
               <>
-                <div className="live-player__demo-label">미리보기 · 실제 스트림 미연결</div>
+                <div className="live-player__demo-label">LIVE</div>
                 <div className="live-player__controls" aria-label="영상 플레이어 컨트롤">
                   <div className="live-player__controls-top"><span className="live-player__live-badge">● 라이브</span></div>
                   <div className="live-player__controls-bottom">
                     <div className="live-player__controls-left">
-                      <button type="button" onClick={() => setIsPlaying(v => !v)} aria-label={isPlaying ? '일시정지 (데모)' : '재생 (데모)'}>{isPlaying ? 'Ⅱ' : '▶'}</button>
-                      <button type="button" onClick={() => window.alert('실제 영상 연결 후 다시보기 기능을 사용할 수 있습니다.')} aria-label="다시보기 (데모)">↶</button>
+                      <button type="button" onClick={togglePlayback} aria-label={isPlaying ? '일시정지' : '재생'}>{isPlaying ? 'Ⅱ' : '▶'}</button>
+                      <button type="button" onClick={restartLive} aria-label="실시간 위치로 이동">↶</button>
                       <button type="button" onClick={() => setIsMuted(v => !v)} aria-label={isMuted ? '음소거 해제' : '음소거'}>{isMuted ? '🔇' : '◖))'}</button>
                       <input className="live-player__volume" type="range" min="0" max="100" value={isMuted ? 0 : volume} aria-label="볼륨" onChange={e => { setVolume(Number(e.target.value)); setIsMuted(Number(e.target.value) === 0); }} />
                     </div>
@@ -165,7 +250,7 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
                     </div>
                   </div>
                 </div>
-                {playerSettingsOpen && <div className="live-player__settings">화질 · 실제 스트림 연결 후 설정 가능</div>}
+                {playerSettingsOpen && <div className="live-player__settings">화질은 방송 스트림에서 제공하는 설정을 따릅니다.</div>}
               </>
             )}
           </div>
@@ -232,7 +317,7 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
               >
                 {top20.map((p, i) => <SwiperSlide key={p.channelId}>
                   <button className="live-top20__card" onClick={() => changeChannel(p)}>
-                    <div className="live-top20__image">{p.image && <img src={p.image} alt="" />}</div>
+                    <div className="live-top20__image"><ChannelImage program={p} /></div>
                     <div className="live-top20__meta"><em>{i + 1}</em><div><strong>{p.channel}</strong><span>{p.title}</span></div></div>
                   </button>
                 </SwiperSlide>)}
@@ -246,9 +331,9 @@ export const LiveChannel = ({ isLoggedIn = false }) => {
         <aside className="live-sidebar" style={{ height: panelHeight }}>
           <section className={`live-chat ${chatOpen ? 'is-open' : ''}`} style={chatOpen ? { height: playerHeight } : undefined}>
             <button className="live-sidebar__heading live-chat__toggle" onClick={() => setChatOpen(v => !v)} aria-expanded={chatOpen}><strong>웨이브 실시간</strong><span>{chatOpen ? '⌃' : '⌄'}</span></button>
-            {chatOpen ? <><div className="live-chat__messages" aria-live="polite"><p>실시간 채팅에 참여해보세요.</p>{messages.map(m => <p key={m.id}><b>나</b> {m.text}</p>)}</div><form onSubmit={sendChat} className="live-chat__form"><input value={chatText} onChange={e => setChatText(e.target.value)} placeholder={isLoggedIn ? '메시지를 입력하세요' : '로그인 후 채팅할 수 있어요'} disabled={!isLoggedIn} /><button disabled={!isLoggedIn || !chatText.trim()} aria-label="채팅 전송">↑</button></form></> : <p className="live-chat__preview" onClick={() => setChatOpen(true)}>실시간 채팅에 참여해보세요</p>}
+            {chatOpen ? <><div className="live-chat__messages" aria-live="polite"><p>실시간 채팅에 참여해보세요.</p>{!chatAdapter && <p className="live-chat__demo-note">현재는 화면 테스트용 채팅입니다. 다른 사용자와 대화하려면 채팅 서버를 연결해야 합니다.</p>}{messages.map(m => <p key={m.id}><b>{m.name || '사용자'}</b> {m.text}</p>)}<div ref={chatBottomRef} /></div>{chatError && <p className="live-chat__error" role="status">{chatError}</p>}<form onSubmit={sendChat} className="live-chat__form"><input value={chatText} maxLength={300} onChange={e => setChatText(e.target.value)} onFocus={() => { if (!isLoggedIn) onLoginRequired(); }} placeholder={isLoggedIn ? '메시지를 입력하세요' : '로그인 후 채팅할 수 있어요'} readOnly={!isLoggedIn} /><button type="submit" disabled={!isLoggedIn || !chatText.trim() || chatSending} aria-label="채팅 전송">↑</button></form></> : <button type="button" className="live-chat__preview" onClick={() => setChatOpen(true)}>실시간 채팅에 참여해보세요</button>}
           </section>
-          <section className="live-channel-list"><div className="live-sidebar__heading"><strong>전체 채널</strong><Link to="/schedule">전체 편성표 ›</Link></div><div className="live-channel-list__filters">{categories.map(c => <button className={category === c ? 'active' : ''} onClick={() => setCategory(c)} key={c}>{c}</button>)}</div><div className="live-channel-list__scroll">{filteredChannels.map(p => <button className={`live-channel-list__item ${selected.channelId === p.channelId ? 'active' : ''}`} onClick={() => changeChannel(p)} key={p.channelId}><div className="live-channel-list__thumb">{p.image && <img src={p.image} alt="" />}<span>무료</span><div className="live-channel-list__progress" style={{ width: `${progressOf(p, now)}%` }} /></div><div><strong>{p.title}{p.isDemo && <span className="live-schedule__demo"> (예시)</span>}</strong><small>{p.channel}</small></div></button>)}</div></section>
+          <section className="live-channel-list"><div className="live-sidebar__heading"><strong>전체 채널</strong><Link to="/schedule">전체 편성표 ›</Link></div><div className="live-channel-list__filters">{categories.map(c => <button className={category === c ? 'active' : ''} onClick={() => setCategory(c)} key={c}>{c}</button>)}</div><div className="live-channel-list__scroll">{filteredChannels.map(p => <button className={`live-channel-list__item ${selected.channelId === p.channelId ? 'active' : ''}`} onClick={() => changeChannel(p)} key={p.channelId}><div className="live-channel-list__thumb"><ChannelImage program={p} /><span>무료</span><div className="live-channel-list__progress" style={{ width: `${progressOf(p, now)}%` }} /></div><div><strong>{p.title}{p.isDemo && <span className="live-schedule__demo"> (예시)</span>}</strong><small>{p.channel}</small></div></button>)}</div></section>
         </aside>
       </div>
 

@@ -947,3 +947,71 @@
     width: 48px
   }
 }
+
+/* 2026-11-04: 라이브 영상, 이미지 대체 표시, 채팅 UX, 푸터 여백 */
+.live-channel-page {
+  padding-bottom: 120px;
+}
+.live-player__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+.live-player__overlay:has(> h2),
+.live-player__overlay:has(> p) {
+  z-index: 2;
+}
+.live-player__overlay:not(:has(> *)) { display: none; }
+.live-image-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  box-sizing: border-box;
+  color: #bfc8dd;
+  font-weight: 700;
+  font-size: 14px;
+  background: linear-gradient(135deg, #172a49, #070b15);
+  overflow-wrap: anywhere;
+}
+.live-channel-list__thumb .live-image-fallback { font-size: 12px; }
+.live-chat__preview {
+  display: block;
+  width: calc(100% - 28px);
+  text-align: left;
+  border: 0;
+}
+.live-chat__demo-note {
+  color: #9da9c5;
+  font-size: 12px;
+}
+.live-chat__error {
+  margin: 4px 14px;
+  color: #ffb9c7;
+  font-size: 12px;
+}
+@media (max-width: 600px) {
+  .live-channel-page { padding-bottom: 80px; }
+}
+
+/* 로그인 완료 상태: 영상 미연결 채널은 정상적인 미리보기 화면으로 표시 */
+.live-player__preview-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+.live-player__overlay p {
+  max-width: 460px;
+  line-height: 1.65;
+}
