@@ -2,12 +2,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getYoutubeLive } from '../../services/youtube';
+import {
+  getYoutubeLive,
+  getCachedYoutubeLive,
+} from '../../services/youtube';
+import { getImagePath } from '../../utils/imagePath';
+
 
 import 'swiper/css';
 
-const liveCache = new Map();
-const CACHE_TIME = 5 * 60 * 1000;
 
 export const LiveHero = ({
   programs = [],
@@ -15,11 +18,23 @@ export const LiveHero = ({
 }) => {
   const swiperRef = useRef(null);
   const navigate = useNavigate();
-
-  const [activeIndex, setActiveIndex] = useState(0);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
-  const [youtubeVideos, setYoutubeVideos] = useState({});
+  const [youtubeVideos, setYoutubeVideos] = useState(() => {
+    const videos = {};
+
+    programs.forEach((program) => {
+      const cached = getCachedYoutubeLive(
+        program.youtubeChannelId
+      );
+
+      if (cached?.thumbnail) {
+        videos[program.id] = cached;
+      }
+    });
+
+    return videos;
+  });
 
   const sortedPrograms = useMemo(
     () =>
@@ -48,28 +63,9 @@ export const LiveHero = ({
       // 모든 방송을 동시에 조회
       const results = await Promise.all(
         targets.map(async (program) => {
-          const channelId = program.youtubeChannelId;
-
-          // 캐시 확인
-          const cached = liveCache.get(channelId);
-
-          if (
-            cached &&
-            Date.now() - cached.time < CACHE_TIME
-          ) {
-            return {
-              id: program.id,
-              data: cached.data,
-            };
-          }
-
-          // API 요청
-          const result = await getYoutubeLive(channelId);
-
-          liveCache.set(channelId, {
-            data: result,
-            time: Date.now(),
-          });
+          const result = await getYoutubeLive(
+            program.youtubeChannelId
+          );
 
           return {
             id: program.id,
@@ -87,7 +83,21 @@ export const LiveHero = ({
         videos[id] = data;
       });
 
-      setYoutubeVideos(videos);
+      setYoutubeVideos((previous) => {
+        const next = { ...previous };
+
+        results.forEach(({ id, data }) => {
+          if (data?.thumbnail) {
+            next[id] = data;
+          }
+        });
+
+        return next;
+      });
+      // 다른 영역에서도 갱신된 썸네일 캐시를 읽도록 알림
+      window.dispatchEvent(
+        new Event('ott-live-thumbnails-updated')
+      );
     };
 
     loadAllLives();
@@ -136,9 +146,9 @@ export const LiveHero = ({
         {sortedPrograms.map((program, index) => {
           const youtubeVideo = youtubeVideos[program.id];
 
-          const thumbnail =
-            youtubeVideo?.thumbnail ||
-            program.image;
+          const thumbnail = getImagePath(
+            youtubeVideo?.thumbnail || program.image || ''
+          );
 
           return (
             <SwiperSlide key={program.id}>

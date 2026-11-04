@@ -10,7 +10,7 @@ import { useRetrovPlayer } from '../../hooks/useRetrovPlayer';
 import { getImagePath } from '../../utils/imagePath';
 
 import RetroVideoRow from '../../components/retrov/RetroVideoRow';
-import YoutubePlayerModal from '../../components/retrov/YoutubePlayerModal';
+import YoutubePlayerModal from '../../components/common/YoutubePlayerModal';
 import CharacterQuiz from '../../components/retrov/CharacterQuiz';
 import CharacterImagePanel from '../../components/retrov/CharacterImagePanel';
 import RetroEventCarousel from '../../components/retrov/RetroEventCarousel';

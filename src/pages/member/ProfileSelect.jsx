@@ -8,6 +8,16 @@ import logo from "../../assets/wavve_logo_w.svg";
 import "../../styles/components/ProfileSelect.scss";
 
 export const ProfileSelect = () => {
+  const location = useLocation();
+
+  const requestedPath = location.state?.returnTo;
+
+  const returnTo =
+    typeof requestedPath === 'string' &&
+      requestedPath.startsWith('/') &&
+      !requestedPath.startsWith('//')
+      ? requestedPath
+      : '/';
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const profiles = useAccountStore((state) => state.profiles);
@@ -18,9 +28,12 @@ export const ProfileSelect = () => {
   const busyRef = useRef(false);
 
   const enterProfile = async (profile) => {
-    await chooseProfile(profile.id, user.uid);
-    if (useAuthStore.getState().user?.uid === user.uid) navigate("/");
-  };
+  await chooseProfile(profile.id, user.uid);
+
+  if (useAuthStore.getState().user?.uid === user.uid) {
+    navigate(returnTo, { replace: true });
+  }
+};
 
   const selectProfile = async (profile) => {
     if (busyRef.current || !user) return;

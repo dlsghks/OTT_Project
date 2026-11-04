@@ -19,6 +19,8 @@ const providers = [
 export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
   const navigate = useNavigate();
   const onLogin = useAuthStore((state) => state.onLogin);
+  const location = useLocation();
+  const returnTo = location.state?.returnTo || '/';
   const [emailFormOpen, setEmailFormOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -5,7 +5,7 @@ export const SubPageHeader = ({ heroItems = [], filters = [], activeFilter, onFi
   return (
     <>
       <HomeHero items={heroItems} />
-
+      {/* 장르 필터 버튼 영역 */}
       <nav className="category-filter" aria-label="장르 필터">
         {filters.map((filter) => (
           <button
