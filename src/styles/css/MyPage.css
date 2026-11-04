@@ -423,10 +423,6 @@
   font-family: "DungGeunMo", "Pretendard", sans-serif;
 }
 
-.wavve-mypage .mypage__content-card:hover .mypage__card-title {
-  color: #a9c0ff;
-}
-
 .wavve-mypage .mypage__library-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 261px));
@@ -870,6 +866,32 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .wavve-mypage .mypage__event-track {
+    transition: none;
+  }
+}
+.wavve-mypage .mypage__poster-frame {
+  width: 100%;
+  aspect-ratio: 261/375;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.wavve-mypage .mypage__poster-frame > .mypage__poster {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.wavve-mypage .mypage__content-card:hover .mypage__poster-frame > .mypage__poster {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wavve-mypage .mypage__poster-frame > .mypage__poster {
     transition: none;
   }
 }
