@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -7,15 +6,21 @@ import { Footer } from "../components/Footer";
 import { TopButton } from "../components/TopButton";
 import { ScrollToTop } from "../components/ScrollToTop";
 
+import {
+  MobileHeader,
+  MobileFooter,
+  MobileBottomNav,
+} from "../components/mobile";
+
 import "../styles/layout/PageInner.scss";
+import "../styles/components/MobileChrome.scss";
 
 export const Layout = () => {
   const { pathname } = useLocation();
 
-  // Shorts 페이지 여부 확인
-  const isShorts = pathname.replace(/\/$/, "") === "/shorts";
+  const isShorts = pathname.replace(/\/+$/, "") === "/shorts";
 
-  // Shorts 페이지에서는 전체 스크롤 차단
+  // 숏츠에서는 영상 피드 내부만 스크롤
   useEffect(() => {
     if (!isShorts) return;
 
@@ -29,20 +34,37 @@ export const Layout = () => {
 
   return (
     <>
-      {/* 페이지 이동 시 스크롤 최상단 */}
       <ScrollToTop />
 
-      {/* 공통 헤더 */}
-      <Header />
+      {/* PC 헤더 */}
+      <div className="mobile-chrome-desktop">
+        <Header />
+      </div>
 
-      {/* 페이지 콘텐츠 */}
+      {/* 모바일 헤더 */}
+      <MobileHeader />
+
+      {/* 공통 본문 */}
       <main className="site-inner">
         <Outlet />
       </main>
 
-      {/* Shorts 페이지에서는 Footer, TopButton 숨김 */}
-      {!isShorts && <Footer />}
-      {!isShorts && <TopButton />}
+      {/* 숏츠에서는 풋터 숨김 */}
+      {!isShorts && (
+        <>
+          <div className="mobile-chrome-desktop">
+            <Footer />
+          </div>
+
+          <MobileFooter />
+          <TopButton />
+        </>
+      )}
+
+      {/* 모바일 하단 고정 메뉴 */}
+      <MobileBottomNav />
     </>
   );
 };
+
+export default Layout;
