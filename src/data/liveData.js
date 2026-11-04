@@ -154,6 +154,9 @@ const top10Data = [
     channel: 'YTN',
     title: '뉴스ON',
     youtubeChannelId: 'UChlgI3UHCOnwUGzWzbJ3H5w',
+    youtubeLiveId: null,
+    videoUrl: '/videos/live-demo.mp4',
+    isDemo: true,
   },
   {
     channel: 'MBN',
@@ -215,7 +218,7 @@ export const liveTop10 = top10Data.map((program, index) => ({
   title: program.title,
   category: '인기 라이브',
 
-  image: program.image || heroImages[index],
+  image: program.image || null,
 
   start: stamp(-25 - index * 2),
   end: stamp(35 + index * 2),
@@ -226,10 +229,11 @@ export const liveTop10 = top10Data.map((program, index) => ({
   rating: demoRatings[index],
 
   youtubeChannelId: program.youtubeChannelId,
-  youtubeLiveId: null,
+  youtubeLiveId: program.youtubeLiveId || null,
 
-  streamUrl: null,
-  videoUrl: null,
+  streamUrl: program.streamUrl || null,
+  videoUrl: program.videoUrl || null,
+  isDemo: program.isDemo || false,
 }));
 
 // 카테고리

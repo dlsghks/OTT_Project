@@ -464,19 +464,362 @@
 .live-share-backdrop {
   position: fixed;
   inset: 0;
-  background: #000c;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px
+  padding: 16px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.72);
 }
 
 .live-share-modal {
-  width: min(440px, 100%);
-  background: #222;
-  border-radius: 14px;
-  padding: 24px
+  position: relative;
+  display: block;
+  flex: 0 1 475px;
+  width: 475px;
+  min-width: 0;
+  max-width: 100%;
+  height: 280px;
+  min-height: 0;
+  padding: 82px 24px 16px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  border: 0;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 50% 0,
+      rgba(30, 53, 145, 0.3),
+      transparent 55%),
+    #0c0d18;
+  color: #fff;
+
+  h2 {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+
+    display: flex;
+    align-items: center;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__close {
+    position: absolute;
+    inset: 18px 18px auto auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    cursor: pointer;
+
+    svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__sns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    width: 100%;
+    height: 54px;
+    margin: 18px 0 0;
+    padding: 0;
+
+    button {
+      position: static;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 54px;
+
+      width: 54px;
+      height: 54px;
+      min-width: 54px;
+      max-width: 54px;
+      min-height: 54px;
+      max-height: 54px;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      aspect-ratio: 1;
+
+      border: 0;
+      border-radius: 25px;
+      background: #252632;
+      cursor: pointer;
+
+      img {
+        display: block;
+        flex: 0 0 auto;
+        width: 24px;
+        height: 24px;
+        max-width: none;
+        margin: 0;
+        object-fit: contain;
+      }
+    }
+  }
+
+  &__copy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 422px;
+    max-width: 100%;
+    height: 52px;
+    margin: 25px auto 0;
+    padding: 8px 16px;
+    box-sizing: border-box;
+
+    border: 1px solid #505050;
+    border-radius: 10px;
+    background: #000;
+
+    input {
+      display: block;
+      flex: 1 1 0;
+      width: 0;
+      min-width: 0;
+      height: 34px;
+      margin: 0;
+      padding: 0;
+
+      border: 0;
+      border-radius: 0;
+      background: #000;
+      box-shadow: none;
+      color: #a0a0a0;
+
+      font-family: inherit;
+      font-size: 14px;
+      line-height: normal;
+      text-overflow: ellipsis;
+    }
+
+    button {
+      position: static;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 56px;
+
+      width: 56px;
+      min-width: 56px;
+      height: 34px;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+
+      border: 1px solid #505050;
+      border-radius: 8px;
+      background: #000;
+      box-shadow: none;
+      color: #fff;
+
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+
+      &:hover,
+      &:active {
+        background: #000;
+        border-color: #999;
+      }
+    }
+  }
+
+  &__feedback {
+    min-height: 18px;
+    margin: 12px 0 0;
+    padding: 0 4px;
+  }
+
+  &__message {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+
+    svg {
+      display: block;
+      flex: 0 0 12px;
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid #7da7ff;
+    outline-offset: 2px;
+  }
+}
+
+/* 기존 주소창 스타일보다 우선 적용 */
+.live-share-modal .live-share-modal__copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 422px;
+  max-width: 100%;
+  height: 52px;
+  margin: 22px auto 0;
+  padding: 8px 10px 8px 16px;
+  box-sizing: border-box;
+
+  background: #000;
+  border: 1px solid #505050;
+  border-radius: 12px;
+
+  input {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    background: #000;
+    background-image: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    color: #a0a0a0;
+    font-size: 14px;
+    text-overflow: ellipsis;
+  }
+
+  button {
+    flex: 0 0 56px;
+    width: 56px;
+    min-width: 56px;
+    height: 34px;
+    margin: 0;
+    padding: 0;
+
+    background: #000;
+    background-image: none;
+    border: 1px solid #626262;
+    border-radius: 8px;
+    box-shadow: none;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: #000;
+      color: #fff;
+    }
+  }
+}
+
+.live-share-modal .live-share-modal__feedback {
+  min-height: 20px;
+  margin-top: 12px;
+}
+
+.live-share-modal .live-share-modal__message {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 20px;
+
+  svg {
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 640px) {
+  .live-share-modal {
+    padding: 70px 22px 22px;
+    border-radius: 22px;
+
+    h2 {
+      font-size: 26px;
+    }
+
+    &__close {
+      top: 18px;
+      right: 18px;
+      width: 40px;
+      height: 40px;
+    }
+
+    &__sns {
+      gap: 20px;
+
+      button {
+        flex-basis: 64px;
+        width: 64px;
+        height: 64px;
+      }
+
+      img {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    &__copy {
+      height: 66px;
+      margin-top: 26px;
+      padding: 10px 12px;
+      gap: 10px;
+
+      input {
+        font-size: 15px;
+      }
+
+      button {
+        height: 42px;
+        padding: 0 16px;
+        font-size: 16px;
+      }
+    }
+
+    &__message {
+      font-size: 14px;
+    }
+  }
 }
 
 .live-share-modal__heading {
@@ -952,6 +1295,7 @@
 .live-channel-page {
   padding-bottom: 120px;
 }
+
 .live-player__video {
   position: absolute;
   inset: 0;
@@ -960,11 +1304,16 @@
   object-fit: contain;
   background: #000;
 }
+
 .live-player__overlay:has(> h2),
 .live-player__overlay:has(> p) {
   z-index: 2;
 }
-.live-player__overlay:not(:has(> *)) { display: none; }
+
+.live-player__overlay:not(:has(> *)) {
+  display: none;
+}
+
 .live-image-fallback {
   width: 100%;
   height: 100%;
@@ -980,24 +1329,33 @@
   background: linear-gradient(135deg, #172a49, #070b15);
   overflow-wrap: anywhere;
 }
-.live-channel-list__thumb .live-image-fallback { font-size: 12px; }
+
+.live-channel-list__thumb .live-image-fallback {
+  font-size: 12px;
+}
+
 .live-chat__preview {
   display: block;
   width: calc(100% - 28px);
   text-align: left;
   border: 0;
 }
+
 .live-chat__demo-note {
   color: #9da9c5;
   font-size: 12px;
 }
+
 .live-chat__error {
   margin: 4px 14px;
   color: #ffb9c7;
   font-size: 12px;
 }
+
 @media (max-width: 600px) {
-  .live-channel-page { padding-bottom: 80px; }
+  .live-channel-page {
+    padding-bottom: 80px;
+  }
 }
 
 /* 로그인 완료 상태: 영상 미연결 채널은 정상적인 미리보기 화면으로 표시 */
@@ -1005,13 +1363,321 @@
   display: inline-flex;
   align-items: center;
   padding: 6px 12px;
-  border: 1px solid rgba(255,255,255,.6);
+  border: 1px solid rgba(255, 255, 255, .6);
   border-radius: 30px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: .08em;
 }
+
 .live-player__overlay p {
   max-width: 460px;
   line-height: 1.65;
+}
+
+/* 유튜브 기본 컨트롤 사용 */
+iframe.live-player__video {
+  border: 0;
+  z-index: 1;
+}
+
+/* 유튜브 영상 + 자체 컨트롤 */
+.live-player.is-youtube {
+  --control-height: 88px;
+  background-color: #000;
+}
+
+.live-player__youtube {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: var(--control-height);
+  left: 0;
+  z-index: 1;
+  background: #000;
+
+  >div,
+  iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+/* 영상 위를 덮지 않고 아래 영역에 컨트롤 배치 */
+/* MP4 플레이어 컨트롤 */
+.live-player .live-player__controls {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  padding: 28px;
+  box-sizing: border-box;
+
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.65),
+      transparent 32%);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: none;
+  pointer-events: none;
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.live-player:hover .live-player__controls,
+.live-player:focus-within .live-player__controls {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+}
+
+/* 왼쪽: 라이브 이미지 위 / 버튼 아래 */
+.live-player .live-player__controls-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.live-player__live-image {
+  display: block;
+  width: 61px;
+  height: auto;
+  object-fit: contain;
+}
+
+.live-player__button-row,
+.live-player .live-player__controls-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+}
+
+/* 영상 전체 클릭을 막지 않고 버튼 영역만 활성화 */
+.live-player__button-row,
+.live-player .live-player__controls-right {
+  pointer-events: auto;
+}
+
+.live-player .live-player__controls button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.live-player .live-player__controls button:hover {
+  background: transparent;
+  opacity: 0.8;
+}
+
+.live-player .live-player__controls button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.live-player__controls button img,
+.live-player__controls button svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* 음량 */
+.live-player__sound {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-player .live-player__volume {
+  width: 0;
+  min-width: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  accent-color: #fff;
+  cursor: pointer;
+
+  transition:
+    width 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.live-player__sound:hover .live-player__volume,
+.live-player__sound:focus-within .live-player__volume {
+  width: 90px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.live-player__mute-line {
+  position: absolute;
+  width: 31px;
+  height: 2px;
+  background: #fff;
+  transform: rotate(-45deg);
+  box-shadow: 0 0 2px #000;
+  pointer-events: none;
+}
+
+/* 화질 안내 */
+.live-player__settings-wrap {
+  position: relative;
+}
+
+.live-player__quality-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 16px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 220px;
+  padding: 18px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: rgba(20, 20, 20, 0.95);
+  color: #fff;
+}
+
+.live-player__quality-panel strong {
+  font-size: 16px;
+}
+
+.live-player__quality-panel span {
+  font-size: 14px;
+}
+
+.live-player__quality-panel p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #aaa;
+}
+
+/* 전체화면 */
+.live-player:fullscreen {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  background: #000;
+}
+
+@media (max-width: 640px) {
+  .live-player .live-player__controls {
+    padding: 16px;
+  }
+
+  .live-player .live-player__controls-left {
+    gap: 10px;
+  }
+
+  .live-player__button-row,
+  .live-player .live-player__controls-right {
+    gap: 10px;
+  }
+
+  .live-player__controls button img,
+  .live-player__controls button svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .live-player__sound:hover .live-player__volume,
+  .live-player__sound:focus-within .live-player__volume {
+    width: 60px;
+  }
+}
+
+@media (hover: none) {
+  .live-player .live-player__controls {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .live-player .live-player__volume {
+    width: 60px;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+.live-player.is-youtube .live-player__controls-top {
+  margin-bottom: 6px;
+}
+
+.live-player.is-youtube .live-player__settings {
+  z-index: 4;
+  bottom: var(--control-height);
+}
+
+/* 별도 LIVE 라벨 대신 컨트롤 안의 라이브 표시 사용 */
+.live-player.is-youtube .live-player__demo-label {
+  display: none;
+}
+
+/* 터치 기기에서는 항상 버튼 표시 */
+@media (hover: none) {
+  .live-player.is-youtube .live-player__controls {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+/* 유튜브 재생 중 기존 채널 썸네일 제거 */
+.live-player.is-youtube {
+  background-image: none !important;
+  background-color: #000;
+}
+
+.live-player:not(.is-youtube) {
+  background-color: #000;
+}
+
+.live-player:not(.is-youtube) .live-player__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.live-player:not(.is-youtube) .live-player__controls {
+  z-index: 3;
+}
+
+.live-player:not(.is-youtube) .live-player__demo-label,
+.live-player:not(.is-youtube) .live-player__settings {
+  z-index: 4;
 }
