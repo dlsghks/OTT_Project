@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/wavve_logo_w.svg";
 import "../../styles/components/ProfileSelect.scss";
 
@@ -7,6 +7,8 @@ const PROFILE_KEY = "wavve-active-profile";
 const SETTINGS_KEY = "wavve-profile-settings";
 
 const defaultProfiles = [
+
+
   { id: "profile1", name: "프로필1", file: "profile1.png" },
   { id: "profile2", name: "프로필2", file: "profile2.png" },
   { id: "profile3", name: "프로필3", file: "profile3.png" },
@@ -55,6 +57,16 @@ const readProfiles = () => {
 };
 
 export const ProfileSelect = () => {
+  const location = useLocation();
+
+  const requestedPath = location.state?.returnTo;
+
+  const returnTo =
+    typeof requestedPath === 'string' &&
+      requestedPath.startsWith('/') &&
+      !requestedPath.startsWith('//')
+      ? requestedPath
+      : '/';
   const navigate = useNavigate();
 
   const [profiles, setProfiles] = useState(readProfiles);
@@ -95,7 +107,7 @@ export const ProfileSelect = () => {
         })
       );
 
-      navigate("/");
+      navigate(returnTo, { replace: true });
     } catch {
       setMessage("프로필을 저장하지 못했어요. 다시 시도해주세요.");
     }
