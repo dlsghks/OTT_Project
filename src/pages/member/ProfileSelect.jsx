@@ -1,155 +1,92 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ProfilePinModal } from "../../components/ProfilePinModal";
+import { useAccountStore, chooseProfile, verifyProfilePin } from "../../store/useAccountStore";
+import { useAuthStore } from "../../store/useAuthStore";
+import lockIcon from "../../assets/lock.png";
 import logo from "../../assets/wavve_logo_w.svg";
 import "../../styles/components/ProfileSelect.scss";
 
-const PROFILE_KEY = "wavve-active-profile";
-const SETTINGS_KEY = "wavve-profile-settings";
-
-const defaultProfiles = [
-  { id: "profile1", name: "프로필1", file: "profile1.png" },
-  { id: "profile2", name: "프로필2", file: "profile2.png" },
-  { id: "profile3", name: "프로필3", file: "profile3.png" },
-  { id: "profile4", name: "프로필4", file: "profile4.png" },
-].map((profile) => ({
-  id: profile.id,
-  name: profile.name,
-  image: `${import.meta.env.BASE_URL}images/profiles/${profile.file}`,
-}));
-
-const readJSON = (key, fallback) => {
-  try {
-    return JSON.parse(localStorage.getItem(key) || "null") ?? fallback;
-  } catch {
-    return fallback;
-  }
-};
-
-// 기본 목록에 저장된 수정 내용을 반영합니다.
-const readProfiles = () => {
-  const settings = readJSON(SETTINGS_KEY, {});
-  const activeProfile = readJSON(PROFILE_KEY, null);
-
-  return defaultProfiles.map((profile) => {
-    const saved = settings?.[profile.id];
-
-    // 현재 선택한 프로필 정보도 반영합니다.
-    const current =
-      activeProfile?.id === profile.id ? activeProfile : null;
-
-    const name = current?.name ?? saved?.name;
-    const image = current?.image ?? saved?.image;
-
-    return {
-      ...profile,
-      name:
-        typeof name === "string" && name.trim()
-          ? name.trim()
-          : profile.name,
-      image:
-        typeof image === "string" && image.trim()
-          ? image
-          : profile.image,
-    };
-  });
-};
-
 export const ProfileSelect = () => {
   const navigate = useNavigate();
-
-  const [profiles, setProfiles] = useState(readProfiles);
+  const user = useAuthStore((state) => state.user);
+  const profiles = useAccountStore((state) => state.profiles);
   const [message, setMessage] = useState("");
+  const [pendingProfile, setPendingProfile] = useState(null);
+  const [pinError, setPinError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const busyRef = useRef(false);
 
-  useEffect(() => {
-    const refreshProfiles = () => {
-      setProfiles(readProfiles());
-    };
-
-    const handleStorage = (event) => {
-      if (
-        event.key === PROFILE_KEY ||
-        event.key === SETTINGS_KEY ||
-        event.key === null
-      ) {
-        refreshProfiles();
-      }
-    };
-
-    window.addEventListener("focus", refreshProfiles);
-    window.addEventListener("storage", handleStorage);
-
-    return () => {
-      window.removeEventListener("focus", refreshProfiles);
-      window.removeEventListener("storage", handleStorage);
-    };
-  }, []);
-
-  const selectProfile = (profile) => {
-    try {
-      localStorage.setItem(
-        PROFILE_KEY,
-        JSON.stringify({
-          id: profile.id,
-          name: profile.name,
-          image: profile.image,
-        })
-      );
-
-      navigate("/");
-    } catch {
-      setMessage("프로필을 저장하지 못했어요. 다시 시도해주세요.");
-    }
+  const enterProfile = async (profile) => {
+    await chooseProfile(profile.id, user.uid);
+    if (useAuthStore.getState().user?.uid === user.uid) navigate("/");
   };
+
+  const selectProfile = async (profile) => {
+    if (busyRef.current || !user) return;
+    setMessage("");
+    setPinError("");
+    const latest = useAccountStore.getState().profiles.find((p) => p.id === profile.id);
+    if (latest.locked) {
+      setPendingProfile(latest);
+      return;
+    }
+    busyRef.current = true;
+    setBusy(true);
+    try { await enterProfile(latest); }
+    catch { setMessage("프로필을 저장하지 못했어요. 연결을 확인하고 다시 시도해주세요."); }
+    finally { busyRef.current = false; setBusy(false); }
+  };
+
+  const verifyPin = async (enteredPin) => {
+    if (!pendingProfile || !user || busyRef.current) return;
+    busyRef.current = true;
+    setBusy(true);
+    setPinError("");
+    try {
+      if (!(await verifyProfilePin(pendingProfile.id, enteredPin, user.uid))) {
+        setPinError("비밀번호가 맞지 않아요. 다시 입력해주세요.");
+        return;
+      }
+      await enterProfile(pendingProfile);
+    } catch {
+      setPinError("프로필을 확인하지 못했어요. 연결을 확인하고 다시 시도해주세요.");
+    } finally { busyRef.current = false; setBusy(false); }
+  };
+
+  const cancelPin = () => {
+    if (busyRef.current) return;
+    setPendingProfile(null);
+    setPinError("");
+  };
+
+  if (!user) return <p role="status">로그인 후 프로필을 선택해주세요. <Link to="/login">로그인</Link></p>;
 
   return (
     <main className="profile-select">
-      <Link
-        className="profile-select__logo"
-        to="/"
-        aria-label="웨이브 홈"
-      >
-        <img src={logo} alt="wavve" />
-      </Link>
-
-      <section
-        className="profile-select__content"
-        aria-labelledby="profile-select-title"
-      >
-        <h1 id="profile-select-title">사용자 선택</h1>
-
-        <p className="profile-select__description">
-          시청할 프로필을 선택하세요.
-        </p>
-
+      <Link className="profile-select__logo" to="/" aria-label="웨이브 홈"><img src={logo} alt="wavve" /></Link>
+      <section className="profile-select__content" aria-labelledby="profile-select-title" aria-busy={busy}>
+        <h1 id="profile-select-title">사용자 변경</h1>
+        <p className="profile-select__description">시청할 프로필을 선택하세요.</p>
         <ul className="profile-select__list">
           {profiles.map((profile) => (
             <li key={profile.id}>
-              <button
-                className="profile-select__profile"
-                type="button"
-                onClick={() => selectProfile(profile)}
-              >
-                <span className="profile-select__avatar">
+              <button className="profile-select__profile" type="button" disabled={busy}
+                aria-label={`${profile.name}${profile.locked ? " · 잠김" : ""}`}
+                onClick={() => selectProfile(profile)}>
+                <span className={`profile-select__avatar${profile.locked ? " profile-select__avatar--locked" : ""}`}>
                   <img src={profile.image} alt="" />
+                  {profile.locked && <span className="profile-select__lock-overlay" aria-hidden="true"><img src={lockIcon} alt="" /></span>}
                 </span>
-
-                <span className="profile-select__name">
-                  {profile.name}
-                </span>
+                <span className="profile-select__name">{profile.name}</span>
               </button>
             </li>
           ))}
         </ul>
-
-        <p className="profile-select__notice">
-          • 이용권 유/무에 상관없이 프로필 4개가 기본으로 제공됩니다.
-        </p>
-
-        {message && (
-          <p className="profile-select__message" role="alert">
-            {message}
-          </p>
-        )}
+        {pendingProfile && <ProfilePinModal key={pendingProfile.id} error={pinError} onConfirm={verifyPin} onClose={cancelPin} />}
+        <p className="profile-select__notice">• 이용권 유/무에 상관없이 프로필 4개가 기본으로 제공됩니다.</p>
+        {busy && <p role="status">프로필을 확인하고 있어요.</p>}
+        {message && <p className="profile-select__message" role="alert">{message}</p>}
       </section>
     </main>
   );

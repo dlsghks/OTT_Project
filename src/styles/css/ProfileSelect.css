@@ -1,4 +1,7 @@
 .profile-select {
+  --profile-size: 160px;
+  --lock-top: 50%;
+  --lock-left: 53%;
   position: relative;
   display: grid;
   place-items: center;
@@ -16,19 +19,25 @@
 }
 .profile-select__logo {
   position: absolute;
-  top: 48px;
-  left: 80px;
-  display: block;
-  width: 90px;
+  top: 0;
+  left: 110px;
+  display: flex;
+  align-items: center;
+  width: 112px;
+  height: 96px;
 }
 .profile-select__logo > img {
   position: static;
   display: block;
-  width: 100%;
-  height: auto;
+  width: 112px;
+  max-width: none;
+  height: 24px;
+  margin: 0;
+  object-fit: contain;
 }
 .profile-select__content {
   width: 100%;
+  min-width: 0;
   padding: 0;
   text-align: center;
 }
@@ -53,6 +62,10 @@
   padding: 0;
   list-style: none;
 }
+.profile-select__list > li {
+  margin: 0;
+  padding: 0;
+}
 .profile-select__profile {
   display: flex;
   flex-direction: column;
@@ -70,7 +83,7 @@
   color: #fff;
 }
 .profile-select__profile:hover .profile-select__avatar {
-  outline-color: #fff;
+  outline-color: #1351f9;
 }
 .profile-select__profile:focus-visible {
   outline: 2px solid #1351f9;
@@ -78,24 +91,59 @@
   border-radius: 8px;
 }
 .profile-select__avatar {
+  position: relative;
   display: block;
-  width: 128px;
-  height: 128px;
+  flex: 0 0 auto;
+  width: var(--profile-size);
+  min-width: var(--profile-size);
+  max-width: var(--profile-size);
+  height: var(--profile-size);
+  overflow: hidden;
   border-radius: 50%;
   outline: 3px solid transparent;
-  outline-offset: 5px;
+  outline-offset: -3px;
   transition: outline-color 160ms ease;
 }
 .profile-select__avatar > img {
   position: static;
   display: block;
   width: 100%;
-  max-width: none;
+  min-width: 0;
+  max-width: 100%;
   height: 100%;
+  margin: 0;
   border-radius: inherit;
   object-fit: cover;
 }
+.profile-select__lock-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  border-radius: inherit;
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+.profile-select__lock-overlay > img {
+  position: absolute;
+  top: var(--lock-top);
+  left: var(--lock-left);
+  right: auto;
+  bottom: auto;
+  display: block;
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
+  height: 28px;
+  max-height: 28px;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  filter: brightness(0) invert(1);
+}
 .profile-select__name {
+  display: block;
   font-size: 14px;
   line-height: 20px;
   transition: color 160ms ease;
@@ -113,14 +161,216 @@
   font-size: 14px;
 }
 
+.profile-edit .profile-pin,
+.profile-select .profile-pin {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(384px, 100%);
+  margin: 24px auto 0;
+  padding: 24px;
+  box-sizing: border-box;
+  border: 1px solid #383838;
+  border-radius: 12px;
+  background: #222;
+  color: #fff;
+  text-align: left;
+}
+.profile-edit .profile-pin h2,
+.profile-select .profile-pin h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.profile-edit .profile-pin p,
+.profile-select .profile-pin p {
+  margin: 0;
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.profile-edit .profile-pin > input,
+.profile-select .profile-pin > input {
+  width: 100%;
+  height: 46px;
+  margin: 0;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid #505050;
+  border-radius: 6px;
+  background: #303030;
+  color: #fff;
+  font: inherit;
+}
+.profile-edit .profile-pin > input:focus,
+.profile-select .profile-pin > input:focus {
+  outline: 2px solid #1351f9;
+  outline-offset: 2px;
+}
+.profile-edit .profile-pin .profile-pin__error,
+.profile-select .profile-pin .profile-pin__error {
+  color: #ff8989;
+}
+.profile-edit .profile-pin .profile-pin__buttons,
+.profile-select .profile-pin .profile-pin__buttons {
+  display: flex;
+  gap: 10px;
+}
+.profile-edit .profile-pin .profile-pin__buttons > button,
+.profile-select .profile-pin .profile-pin__buttons > button {
+  flex: 1;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: #414141;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.profile-edit .profile-pin .profile-pin__buttons > button:last-child,
+.profile-select .profile-pin .profile-pin__buttons > button:last-child {
+  background: #1351f9;
+}
+.profile-edit .profile-pin .profile-pin__buttons > button:disabled,
+.profile-select .profile-pin .profile-pin__buttons > button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.profile-pin-modal {
+  position: fixed;
+  inset: 0;
+  width: min(560px, 100vw - 32px);
+  max-width: none;
+  max-height: calc(100svh - 32px);
+  margin: auto;
+  padding: 56px 32px 32px;
+  box-sizing: border-box;
+  overflow: auto;
+  border: 0;
+  border-radius: 20px;
+  background: radial-gradient(ellipse 70% 140px at 50% 0, rgba(19, 81, 249, 0.2), transparent 100%), #0c0d19;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.0941176471);
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  text-align: center;
+}
+.profile-pin-modal *,
+.profile-pin-modal *::before,
+.profile-pin-modal *::after {
+  box-sizing: border-box;
+}
+.profile-pin-modal::backdrop {
+  background: rgba(0, 0, 0, 0.7333333333);
+}
+.profile-pin-modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #090a13;
+  color: #e9ecf5;
+  cursor: pointer;
+}
+.profile-pin-modal__close > span {
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1;
+}
+.profile-pin-modal__close:hover {
+  background: #252735;
+}
+.profile-pin-modal > h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.profile-pin-modal > p {
+  margin: 16px 0 0;
+  color: #a5a5a5;
+  font-size: 15px;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+.profile-pin-modal__inputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 36px;
+}
+.profile-pin-modal__inputs > input {
+  display: block;
+  flex: 0 1 58px;
+  width: 58px;
+  min-width: 0;
+  height: 64px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #494949;
+  border-radius: 8px;
+  background: #252735;
+  color: #fff;
+  font: inherit;
+  font-size: 28px;
+  text-align: center;
+  caret-color: #fff;
+}
+.profile-pin-modal__inputs > input:focus {
+  border-color: #7fa8ff;
+  outline: 2px solid #1351f9;
+  outline-offset: 2px;
+}
+.profile-pin-modal__error {
+  min-height: 22px;
+  margin: 14px 0 0;
+  color: #ff8989;
+  font-size: 13px;
+  line-height: 22px;
+}
+.profile-pin-modal__confirm {
+  width: 160px;
+  height: 44px;
+  margin-top: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: #1351f9;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.profile-pin-modal__confirm:disabled {
+  background: #252735;
+  color: #777;
+  cursor: default;
+}
+.profile-pin-modal button:focus-visible {
+  outline: 2px solid #7fa8ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1280px) {
+  .profile-select__logo {
+    top: 20px;
+    left: 24px;
+    height: 40px;
+  }
+}
 @media (max-width: 768px) {
   .profile-select {
+    --profile-size: 112px;
     padding: 100px 24px 60px;
-  }
-  .profile-select__logo {
-    top: 28px;
-    left: 24px;
-    width: 90px;
   }
   .profile-select__content > h1 {
     font-size: 26px;
@@ -130,18 +380,38 @@
   }
   .profile-select__list {
     display: grid;
-    grid-template-columns: repeat(2, 112px);
+    grid-template-columns: repeat(2, var(--profile-size));
     gap: 32px;
     margin-top: 36px;
-  }
-  .profile-select__avatar {
-    width: 112px;
-    height: 112px;
   }
   .profile-select__profile {
     gap: 16px;
   }
   .profile-select__notice {
     margin-top: 36px;
+  }
+}
+@media (max-width: 480px) {
+  .profile-select__logo {
+    top: 16px;
+    left: 16px;
+  }
+  .profile-pin-modal {
+    padding: 52px 20px 28px;
+  }
+  .profile-pin-modal > h2 {
+    font-size: 21px;
+  }
+  .profile-pin-modal > p {
+    font-size: 13px;
+  }
+  .profile-pin-modal__inputs {
+    gap: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .profile-select__avatar,
+  .profile-select__name {
+    transition: none;
   }
 }
