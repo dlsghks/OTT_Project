@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
-import { X } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import "../../styles/components/YoutubePlayerModal.scss";
 
-// 카드 클릭 시 뜨는 유튜브 재생 팝업 (ESC / 배경 클릭 / X 버튼으로 닫기)
+// 유튜브 영상 전체화면 플레이어 (ESC / 뒤로가기 버튼으로 닫기)
+// 사용: 영화 · 시리즈 상세(시청하기 · 관련영상 · 회차), 레트로브 메인 · 상세
 export default function YoutubePlayerModal({ video, onClose }) {
   const closeRef = useRef(null);
 
@@ -33,33 +34,15 @@ export default function YoutubePlayerModal({ video, onClose }) {
   const status = video.videoId ? "ready" : video.status ?? "loading"; // loading | notFound | ready
 
   return (
-    <div className="yt-modal" role="dialog" aria-modal="true" aria-labelledby="yt-modal-title" onClick={onClose}>
-      <div className="yt-modal__box" onClick={(e) => e.stopPropagation()}>
-        <div className="yt-modal__head">
-          <h2 id="yt-modal-title">{video.title}</h2>
-          <button ref={closeRef} type="button" className="yt-modal__close" onClick={onClose} aria-label="영상 닫기">
-            <X size={28} />
-          </button>
-        </div>
-
-        <div className="yt-modal__player">
-          {status === "ready" ? (
-            <iframe
-              src={src}
-              title={video.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          ) : (
-            <p className="yt-modal__status" role="status">
-              {status === "loading" ? "영상을 찾는 중이에요…" : "재생할 수 있는 영상을 찾지 못했어요."}
-            </p>
-          )}
-        </div>
+    <div className="yt-modal" role="dialog" aria-modal="true" aria-labelledby="yt-modal-title">
+      {/* 상단: 뒤로가기 + 제목 / 오른쪽: 날짜 · 유튜브 링크 */}
+      <div className="yt-modal__head">
+        <button ref={closeRef} type="button" className="yt-modal__close" onClick={onClose} aria-label="영상 닫기">
+          <ChevronLeft size={32} />
+        </button>
+        <h2 id="yt-modal-title">{video.title}</h2>
 
         <div className="yt-modal__info">
-          {video.description && <p>{video.description}</p>}
           {video.date && <time dateTime={video.date.replaceAll(".", "-")}>{video.date}</time>}
 
           {/* 퍼가기가 막힌 영상 · 못 찾은 영상일 때를 위한 유튜브 링크 */}
@@ -69,6 +52,22 @@ export default function YoutubePlayerModal({ video, onClose }) {
             </a>
           )}
         </div>
+      </div>
+
+      <div className="yt-modal__player">
+        {status === "ready" ? (
+          <iframe
+            src={src}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        ) : (
+          <p className="yt-modal__status" role="status">
+            {status === "loading" ? "영상을 찾는 중이에요…" : "재생할 수 있는 영상을 찾지 못했어요."}
+          </p>
+        )}
       </div>
     </div>
   );

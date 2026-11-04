@@ -7,7 +7,7 @@ import ProgramNavigation from "../../components/retrov/ProgramNavigation";
 import RetroMainHero from "../../components/retrov/RetroMainHero";
 import RetroMainRow from "../../components/retrov/RetroMainRow";
 import RetroEventCarousel from "../../components/retrov/RetroEventCarousel";
-import YoutubePlayerModal from "../../components/retrov/YoutubePlayerModal";
+import YoutubePlayerModal from "../../components/common/YoutubePlayerModal";
 
 import { programs, eventBanners } from "../../data/retrov";
 import {

@@ -72,7 +72,7 @@ const entertainmentItems = [
   program('ent-30', '최강야구', 'sports', ['mon']),
   program('ent-31', '나는 솔로 라이브', 'dating', ['thu']),
   program('ent-32', '연예대상', 'award'),
-].map((entry) => withContent(entry, 'category'));
+].map((entry) => ({ ...withContent(entry, 'category'), link: `/entertainmentdetail/${entry.id}` }));
 
 /* =========================
    드라마
@@ -106,7 +106,7 @@ const dramaItems = [
   program('dra-26', '닥터 차정숙', 'medical', ['sat', 'sun']),
   program('dra-27', '하이퍼나이프', 'medical', ['wed']),
   program('dra-28', '소년시대', 'comedy'),
-].map((entry) => withContent(entry, 'category'));
+].map((entry) => ({ ...withContent(entry, 'category'), link: `/dramadetail/${entry.id}` }));
 
 /* =========================
    영화
@@ -165,7 +165,7 @@ const currentAffairsItems = [
   program('cur-20', '역사저널 그날', 'history', ['tue']),
   program('cur-21', '과학하고 앉아있네', 'science', [], '', true),
   program('cur-22', '돈 되는 경제', 'economy', ['fri']),
-].map((entry) => withContent(entry, 'category'));
+].map((entry) => ({ ...withContent(entry, 'category'), link: `/currentaffairsdetail/${entry.id}` }));
 
 /* =========================
    애니
@@ -194,7 +194,7 @@ const animationItems = [
   program('ani-20', '너의 이름은.', 'theater'),
   program('ani-21', '슬램덩크', 'sports'),
   program('ani-22', '진격의 거인', 'action'),
-].map((entry) => withContent(entry, 'category'));
+].map((entry) => ({ ...withContent(entry, 'category'), link: `/animationdetail/${entry.id}` }));
 
 /* =========================
    해외시리즈
@@ -223,7 +223,7 @@ const globalItems = [
   program('glo-20', '체르노빌', 'thriller'),
   program('glo-21', '빅뱅 이론', 'comedy'),
   program('glo-22', '프렌즈', 'comedy'),
-].map((entry) => withContent(entry, 'category'));
+].map((entry) => ({ ...withContent(entry, 'category'), link: `/globaldetail/${entry.id}` }));
 
 // 요일별 섹션이 들어가는 페이지는 weekday 섹션을 포함
 export const categoryPages = {

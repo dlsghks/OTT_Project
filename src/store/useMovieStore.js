@@ -2,45 +2,13 @@ import { create } from "zustand";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 
-// 영화 상세 페이지 TMDB 데이터
-// .env: VITE_TMDB_API_KEY
-const TMDB_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const TMDB_URL = "https://api.themoviedb.org/3";
-export const TMDB_IMG = "https://image.tmdb.org/t/p/";
+import { TMDB_IMG, fetchTmdb, cleanList, toCard } from "../services/tmdbDetail";
 
-async function fetchTmdb(path, params = {}) {
-  if (!TMDB_KEY) {
-    console.warn("VITE_TMDB_API_KEY 가 없어 TMDB 를 불러올 수 없습니다.");
-    return null;
-  }
-  const query = new URLSearchParams({ api_key: TMDB_KEY, language: "ko-KR", ...params });
-  try {
-    const res = await fetch(`${TMDB_URL}${path}?${query}`);
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
+// 영화 상세 페이지 TMDB 데이터 (공통 도우미: services/tmdbDetail.js)
+export { TMDB_IMG };
 
 // TMDB 영화 → 카드(ContentCard)용 데이터
-export const toMovieCard = (movie) => ({
-  id: `tmdb-${movie.id}`,
-  title: movie.title,
-  kind: "movie",
-  poster: movie.poster_path ? `${TMDB_IMG}w500${movie.poster_path}` : "",
-  link: `/moviedetail/${movie.id}`,
-});
-
-// 포스터 있는 영화만, 현재 영화 제외, 중복 제거
-const cleanList = (list = [], excludeId) => {
-  const seen = new Set();
-  return list.filter((movie) => {
-    if (!movie.poster_path || movie.id === excludeId || seen.has(movie.id)) return false;
-    seen.add(movie.id);
-    return true;
-  });
-};
+export const toMovieCard = (movie) => toCard(movie, "/moviedetail");
 
 // 인물 필모그래피 (출연작 / 감독작) 인기순
 async function fetchPersonMovies(personId, excludeId, role) {
