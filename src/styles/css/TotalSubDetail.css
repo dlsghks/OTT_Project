@@ -7,7 +7,7 @@
 .movie-detail {
   width: calc(100% + var(--page-side-padding) * 2);
   margin: 0 calc(var(--page-side-padding) * -1);
-  padding-bottom: 7.5em;
+  padding-bottom: 7.5rem;
   box-sizing: border-box;
   background: #000000;
   color: #fff;
@@ -17,7 +17,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1em;
+  gap: 1rem;
   min-height: 60vh;
   color: #aaaaaa;
 }
@@ -27,8 +27,8 @@
 .movie-detail__sections {
   display: flex;
   flex-direction: column;
-  gap: 5em;
-  padding: 5em var(--page-side-padding) 0;
+  gap: 5rem;
+  padding: 5rem var(--page-side-padding) 0;
 }
 .movie-detail__sections .category-row {
   margin: 0;
@@ -39,7 +39,7 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  height: clamp(32.5em, 51vw, 61.25em);
+  height: clamp(32.5rem, 51vw, 61.25rem);
   overflow: hidden;
 }
 .movie-hero__background {
@@ -60,8 +60,8 @@
 .movie-hero__content {
   position: relative;
   z-index: 1;
-  width: min(1000px, 100%);
-  padding: 0 var(--page-side-padding) clamp(2.5em, 4vw, 5em);
+  width: min(62.5rem, 100%);
+  padding: 0 var(--page-side-padding) clamp(2.5rem, 4vw, 5rem);
   box-sizing: border-box;
 }
 .movie-hero.is-expanded {
@@ -76,22 +76,22 @@
   height: var(--hero-height);
 }
 .movie-hero.is-expanded .movie-hero__content {
-  width: min(87.5em, 100%);
+  width: min(87.5rem, 100%);
   padding-bottom: 0;
 }
 .movie-hero__logo {
-  margin: 0 0 26.25em;
+  margin: 0 0 26.25rem;
 }
 .movie-hero__logo img {
   display: block;
-  max-width: min(26.25em, 70%);
-  max-height: 11.25em;
+  max-width: min(26.25rem, 70%);
+  max-height: 11.25rem;
   object-fit: contain;
   object-position: left bottom;
 }
 .movie-hero__title {
-  margin: 0 0 1.25em;
-  font-size: clamp(2.25em, 3.4vw, 4em);
+  margin: 0 0 1.25rem;
+  font-size: clamp(2.25rem, 3.4vw, 4rem);
   font-weight: 800;
   line-height: 1.2;
 }
@@ -99,22 +99,22 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.63em;
-  margin: 0 0 1.75em;
+  gap: 0.63rem;
+  margin: 0 0 1.75rem;
   color: #aaaaaa;
-  font-size: clamp(0.88em, 0.94vw, 1.13em);
+  font-size: clamp(0.88rem, 0.94vw, 1.13rem);
 }
 .movie-hero__age {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.38em;
-  height: 1.38em;
-  padding: 0 0.25em;
-  border-radius: 0.25em;
+  min-width: 1.38rem;
+  height: 1.38rem;
+  padding: 0 0.25rem;
+  border-radius: 4px;
   background: #f5b800;
   color: #000;
-  font-size: 0.75em;
+  font-size: 0.75rem;
   font-weight: 800;
   line-height: 1;
   box-sizing: border-box;
@@ -135,19 +135,19 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1em;
-  margin-bottom: 1.75em;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
 }
 .movie-hero__select {
-  height: 3.5em;
-  min-width: 15em;
-  padding: 0 2.75em 0 1.13em;
-  border: 0.06em solid rgba(255, 255, 255, 0.4);
-  border-radius: 0.38em;
+  height: 3.5rem;
+  min-width: 15rem;
+  padding: 0 2.75rem 0 1.13rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
   background: rgba(0, 0, 0, 0.6) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23fff' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center;
   color: #fff;
   font-family: inherit;
-  font-size: 1em;
+  font-size: 1rem;
   appearance: none;
   cursor: pointer;
 }
@@ -155,14 +155,14 @@
   background: #1c1c1e;
 }
 .movie-hero__buy {
-  width: clamp(15em, 22vw, 26.25em);
-  height: 3.5em;
+  width: clamp(15rem, 22vw, 26.25rem);
+  height: 3.5rem;
   border: 0;
-  border-radius: 0.38em;
+  border-radius: 6px;
   background: #1f4ef5;
   color: #fff;
   font-family: inherit;
-  font-size: 1em;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -171,23 +171,23 @@
   background: #0F40C6;
 }
 .movie-hero__buy--login {
-  width: 18.06em;
-  height: 4.06em;
-  border-radius: 0.63em;
-  font-size: 1.25em;
+  width: 18.06rem;
+  height: 4.06rem;
+  border-radius: 10px;
+  font-size: 1.25rem;
 }
 .movie-hero__icon {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25em;
-  padding: 0 0.38em;
+  gap: 0.25rem;
+  padding: 0 0.38rem;
   border: 0;
   background: none;
   color: #fff;
   font-family: inherit;
-  font-size: 0.69em;
+  font-size: 0.69rem;
   cursor: pointer;
 }
 .movie-hero__icon.is-active {
@@ -195,11 +195,11 @@
 }
 .movie-hero__overview {
   display: -webkit-box;
-  max-width: 51.25em;
-  margin: 0 0 0.88em;
+  max-width: 51.25rem;
+  margin: 0 0 0.88rem;
   overflow: hidden;
   color: #fff;
-  font-size: clamp(0.88em, 0.94vw, 1.06em);
+  font-size: clamp(0.88rem, 0.94vw, 1.06rem);
   line-height: 1.6;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -210,7 +210,7 @@
 }
 .movie-hero__toggle {
   position: absolute;
-  bottom: 0.75em;
+  bottom: 0.75rem;
   left: 50%;
   z-index: 1;
   transform: translateX(-50%);
@@ -218,26 +218,26 @@
 .movie-hero__cast {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25em;
+  gap: 0.25rem;
   margin: 0;
-  font-size: clamp(0.88em, 0.94vw, 1.06em);
+  font-size: clamp(0.88rem, 0.94vw, 1.06rem);
 }
 .movie-hero__cast > span:first-child {
-  margin-right: 0.5em;
+  margin-right: 0.5rem;
 }
 .movie-hero__cast u {
-  text-underline-offset: 0.19em;
+  text-underline-offset: 3px;
 }
 
 /* 관련영상 */
 .movie-videos__title {
-  margin: 0 0 1.25em;
-  font-size: clamp(1.13em, 1.25vw, 1.5em);
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.13rem, 1.25vw, 1.5rem);
 }
 .movie-videos__card {
   display: flex;
   flex-direction: column;
-  gap: 0.38em;
+  gap: 0.38rem;
   width: 100%;
   padding: 0;
   border: 0;
@@ -249,8 +249,8 @@
 }
 .movie-videos__card strong {
   overflow: hidden;
-  margin-top: 0.63em;
-  font-size: 1em;
+  margin-top: 0.63rem;
+  font-size: 1rem;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -261,7 +261,7 @@
   display: block;
   aspect-ratio: 16/9;
   overflow: hidden;
-  border-radius: 0.5em;
+  border-radius: 0.5rem;
   background: #202532;
 }
 .movie-videos__thumb img {
@@ -273,11 +273,11 @@
 }
 .movie-videos__desc {
   color: #aaaaaa;
-  font-size: 0.88em;
+  font-size: 0.88rem;
 }
 .movie-videos__date {
   color: #7d8596;
-  font-size: 0.75em;
+  font-size: 0.75rem;
 }
 .movie-videos__desc--clamp {
   display: -webkit-box;
@@ -289,17 +289,17 @@
 
 /* 펼치기 상세 정보 (줄거리 · 개요 · 장르 · 감독 · 작가) – 히어로 출연 아래 */
 .detail-info {
-  margin: 0.88em 0 0;
+  margin: 0.88rem 0 0;
 }
 .detail-info__row {
   display: flex;
-  gap: 0.75em;
-  padding: 0.25em 0;
-  font-size: clamp(0.88em, 0.94vw, 1.06em);
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+  font-size: clamp(0.88rem, 0.94vw, 1.06rem);
   line-height: 1.6;
 }
 .detail-info__row dt {
-  flex: 0 0 4em;
+  flex: 0 0 4rem;
   color: #fff;
 }
 .detail-info__row dd {
@@ -307,28 +307,28 @@
   color: #fff;
 }
 .detail-info__fold {
-  margin: 2.5em auto 0;
+  margin: 2.5rem auto 0;
 }
 
 /* 펼치기 · 접기 버튼 (타이포그래피: 버튼M(Default) – Noto Sans KR Regular 16 / Auto / 0%) */
 .detail-toggle {
   display: flex;
   align-items: center;
-  gap: 0.25em;
-  padding: 0.25em 0.5em;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
   border: 0;
   background: none;
   color: #fff;
   font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
-  font-size: 1em;
+  font-size: 1rem;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0;
   cursor: pointer;
 }
 .detail-toggle:focus-visible {
-  outline: 0.13em solid #fff;
-  outline-offset: 0.13em;
+  outline: 0.13rem solid #fff;
+  outline-offset: 0.13rem;
 }
 
 /* 시즌별 회차 */
@@ -336,29 +336,29 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 .episode-row__header .movie-videos__title {
   margin: 0;
 }
 .episode-row__count {
-  margin-left: 8px;
-  font-size: 14px;
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 500;
 }
 .episode-row__order {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   color: #7d8596;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .episode-row__order button {
   padding: 0;
   border: 0;
   background: none;
-  color: #7d8596;
+  color: #aaaaaa;
   font-family: inherit;
   font-size: inherit;
   cursor: pointer;
@@ -375,7 +375,7 @@
 /* 16:9 영상 카드 가로 슬라이드 (관련영상 · 시즌별 회차 공통, VideoSlider.jsx)
    오른쪽 화면 끝까지는 .category-row__slider 공통 */
 .video-slider {
-  --video-w: clamp(240px, 20.6vw, 396px);
+  --video-w: clamp(15rem, 20.6vw, 24.75rem);
 }
 .video-slider__slide {
   width: var(--video-w);
