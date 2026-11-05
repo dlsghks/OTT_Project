@@ -231,6 +231,16 @@ export const rankingItems = [
 
 
 export const eventBanners = [
-  { id: 'event-1', title: '이달의 이벤트', subtitle: '웨이브 이벤트를 확인해 보세요', link: '/event' },
-  { id: 'event-2', title: '레트로브 스페셜', subtitle: '추억의 콘텐츠를 다시 만나보세요', link: '/retrov' },
+  {
+    id: 'event-mma',
+    title: 'MMA 이벤트',
+    image: '/images/events/event-banner-MMA.jpg',
+    link: '/event',
+  },
+  {
+    id: 'event-2',
+    title: '레트로브 스페셜',
+    subtitle: '추억의 콘텐츠를 다시 만나보세요',
+    link: '/retrov',
+  },
 ];
