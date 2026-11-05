@@ -1,0 +1,348 @@
+.company-page {
+  --blue: #1954ff;
+  position: relative;
+  width: calc(100% + var(--page-side-padding, 110px) * 2);
+  margin-inline: calc(var(--page-side-padding, 110px) * -1);
+  background: #fff;
+  color: #171717;
+  font-size: 16px;
+  overflow: hidden;
+  scroll-margin-top: 110px;
+}
+.company-page h1,
+.company-page h2,
+.company-page h3,
+.company-page p {
+  margin-top: 0;
+}
+.company-page h2 {
+  font-size: 32px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 48px;
+}
+.company-page button {
+  font: inherit;
+  cursor: pointer;
+}
+.company-page .company-page__hero {
+  height: 420px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(110deg, rgba(111, 38, 9, 0.8), rgba(40, 27, 21, 0.6)), radial-gradient(ellipse at 70% 40%, #c7a98c, #60371f 65%);
+  font-size: 32px;
+  line-height: 1.5;
+}
+.company-page .company-page__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px 15px;
+  position: sticky;
+  top: 90px;
+  z-index: 5;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.company-page .company-page__tabs button {
+  border: 0;
+  background: transparent;
+  padding: 12px 2px;
+  color: #666;
+  font-size: 14px;
+}
+.company-page .company-page__tabs button.is-active {
+  color: #171717;
+  border-bottom: 2px solid var(--blue);
+  font-weight: 700;
+}
+.company-page .company-page__section {
+  max-width: 1100px;
+  margin: auto;
+  padding: 125px 24px;
+  scroll-margin-top: 155px;
+}
+.company-page .company-page__about {
+  text-align: center;
+}
+.company-page .company-page__about h1 {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.company-page .company-page__about > p {
+  font-size: 15px;
+  color: #666;
+}
+.company-page .company-page__bubble-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  max-width: 900px;
+  margin: 65px auto 110px;
+}
+.company-page .company-page__bubble {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  background: #143cff;
+}
+.company-page .company-page__bubble--1 {
+  background: #ec16a3;
+  width: 72px;
+  height: 72px;
+}
+.company-page .company-page__bubble--2 {
+  background: #5c20ce;
+  width: 110px;
+  height: 110px;
+}
+.company-page .company-page__bubble--3 {
+  background: #ed5b12;
+  width: 75px;
+  height: 75px;
+}
+.company-page .company-page__bubble--4 {
+  background: #167fc9;
+  width: 84px;
+  height: 84px;
+}
+.company-page .company-page__business {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.company-page .company-page__business span {
+  display: block;
+  font-size: 70px;
+  font-weight: 200;
+}
+.company-page .company-page__business p {
+  font-size: 17px;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+.company-page .company-page__history {
+  background: var(--blue);
+  color: #fff;
+  padding: 90px max(24px, (100vw - 1400px) / 2);
+  scroll-margin-top: 145px;
+}
+.company-page .company-page__history-wrap {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.company-page .company-page__history-wrap .swiper {
+  min-width: 0;
+  flex: 1;
+  padding-top: 30px;
+}
+.company-page .company-page__arrow {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 30px;
+}
+.company-page .company-page__history-card {
+  height: 160px;
+  background: #fff;
+  color: #4b4b4b;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.company-page .company-page__history-card ul {
+  margin: 0;
+  padding-left: 15px;
+}
+.company-page .company-page__history-card small {
+  color: #888;
+}
+.company-page .company-page__year {
+  margin-top: 25px;
+  text-align: center;
+  display: grid;
+  gap: 17px;
+  font-size: 15px;
+}
+.company-page .company-page__dot {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  margin: auto;
+  background: var(--blue);
+}
+.company-page .company-page__bi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+.company-page .company-page__brand {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  font-size: 96px;
+  font-weight: 900;
+  letter-spacing: -9px;
+  color: var(--blue);
+  background: linear-gradient(90deg, #fafafa, #fff);
+}
+.company-page .company-page__bi h3 {
+  font-size: 20px;
+}
+.company-page .company-page__bi p {
+  line-height: 1.9;
+  color: #555;
+}
+.company-page .company-page__awards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background: #f7f7f7;
+  padding: 75px 25px;
+}
+.company-page .company-page__awards > div {
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  color: #b59c4b;
+}
+.company-page .company-page__awards > div:first-child {
+  color: #745e35;
+}
+.company-page .company-page__awards strong {
+  font-size: 40px;
+}
+.company-page .company-page__awards small {
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+.company-page .company-page__muted {
+  color: #999;
+  font-size: 13px;
+  margin-top: 25px;
+}
+.company-page .company-page__map {
+  min-height: 350px;
+  border: 1px solid #ddd;
+  background: linear-gradient(30deg, #f9fafb, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+}
+.company-page .company-page__map a {
+  color: var(--blue);
+}
+.company-page .company-page__address {
+  display: flex;
+  gap: 30px;
+  padding-top: 25px;
+  color: #666;
+}
+.company-page .company-page__disclaimer {
+  font-size: 12px;
+  text-align: center;
+  color: #888;
+  padding: 20px;
+  margin: 0;
+  background: #f7f7f7;
+}
+
+@media (max-width: 768px) {
+  .company-page {
+    width: calc(100% + 40px);
+    margin-inline: -20px;
+  }
+  .company-page__hero {
+    height: 250px;
+    font-size: 24px;
+  }
+  .company-page__tabs {
+    gap: 10px;
+    top: 64px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-inline: 20px;
+  }
+  .company-page__tabs button {
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  .company-page__section {
+    padding: 70px 20px;
+  }
+  .company-page h2 {
+    font-size: 25px;
+  }
+  .company-page__about h1 {
+    font-size: 23px;
+  }
+  .company-page__bubble {
+    width: 60px;
+    height: 60px;
+    font-size: 11px;
+  }
+  .company-page__business {
+    gap: 10px;
+  }
+  .company-page__business span {
+    font-size: 42px;
+  }
+  .company-page__business p {
+    font-size: 12px;
+  }
+  .company-page__history {
+    padding: 60px 12px;
+  }
+  .company-page__history-wrap {
+    gap: 7px;
+  }
+  .company-page__arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 23px;
+  }
+  .company-page__bi {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .company-page__brand {
+    font-size: 72px;
+  }
+  .company-page__awards {
+    padding: 30px 10px;
+  }
+  .company-page__awards strong {
+    font-size: 23px;
+  }
+  .company-page__awards small {
+    font-size: 10px;
+  }
+  .company-page__address {
+    font-size: 12px;
+  }
+}

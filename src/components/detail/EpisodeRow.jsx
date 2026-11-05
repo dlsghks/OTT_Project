@@ -7,8 +7,13 @@ import { VideoSlider } from './VideoSlider';
 // 시즌별 회차 목록 (첫화부터 / 최신화부터 정렬)
 // - 가로 슬라이드는 VideoSlider (관련영상과 공통)
 // - fallbackImage: 회차 이미지가 없을 때 보여줄 이미지 (작품 배경)
-export const EpisodeRow = ({ title, seasonNumber, episodes, fallbackImage, onSelect }) => {
+export const EpisodeRow = ({ title, seasonNumber, episodes, fallbackImage, onSelect, sourceNote }) => {
   const [order, setOrder] = useState('first');
+  const [visibleCount, setVisibleCount] = useState(24);
+  const changeOrder = (next) => {
+    setOrder(next);
+    setVisibleCount(24);
+  };
 
   if (!episodes) {
     return <p className="episode-row__status" role="status">회차 정보를 불러오는 중이에요…</p>;
@@ -16,6 +21,7 @@ export const EpisodeRow = ({ title, seasonNumber, episodes, fallbackImage, onSel
   if (!episodes.length) return null;
 
   const list = order === 'first' ? episodes : [...episodes].reverse();
+  const visibleEpisodes = list.slice(0, visibleCount);
 
   return (
     <section className="movie-videos episode-row">
@@ -30,7 +36,7 @@ export const EpisodeRow = ({ title, seasonNumber, episodes, fallbackImage, onSel
             type="button"
             className={order === 'first' ? 'is-active' : ''}
             aria-pressed={order === 'first'}
-            onClick={() => setOrder('first')}
+            onClick={() => changeOrder('first')}
           >
             첫화부터
           </button>
@@ -39,18 +45,20 @@ export const EpisodeRow = ({ title, seasonNumber, episodes, fallbackImage, onSel
             type="button"
             className={order === 'latest' ? 'is-active' : ''}
             aria-pressed={order === 'latest'}
-            onClick={() => setOrder('latest')}
+            onClick={() => changeOrder('latest')}
           >
             최신화부터
           </button>
         </div>
       </div>
 
-      {/* 정렬을 바꾸면 첫 회차부터 다시 (key) */}
+      {/* {sourceNote && <p className="tv-hero-detail__episode-note">{sourceNote}</p>} */}
+
+      {/* 수백 회차를 한번에 DOM에 생성하지 않도록 24개씩 추가 */}
       <VideoSlider
         key={order}
         label={`${title} 시즌${seasonNumber} 회차`}
-        items={list}
+        items={visibleEpisodes}
         renderItem={(episode) => {
           const image = episode.still_path ? `${TMDB_IMG}w500${episode.still_path}` : fallbackImage;
 
@@ -72,6 +80,12 @@ export const EpisodeRow = ({ title, seasonNumber, episodes, fallbackImage, onSel
           );
         }}
       />
+      {/* {visibleCount < list.length && (
+        <button type="button" className="tv-hero-detail__more"
+          onClick={() => setVisibleCount((count) => count + 24)}>
+          회차 더보기 ({Math.min(visibleCount, list.length)}/{list.length})
+        </button>
+      )} */}
     </section>
   );
 };
