@@ -2,14 +2,11 @@
   position: sticky;
   top: 0;
   z-index: 100;
-}
-
-header {
   width: 100%;
   background: #000;
   color: #8b8b8b;
 }
-header > .inner {
+.site-header > .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -21,32 +18,32 @@ header > .inner {
   padding: 0 110px;
   box-sizing: border-box;
 }
-header ul {
+.site-header ul {
   display: flex;
   align-items: center;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-header a {
+.site-header a {
   color: inherit;
   text-decoration: none;
 }
-header a:hover {
+.site-header a:hover {
   color: #fff;
 }
-header a:focus-visible {
+.site-header a:focus-visible {
   outline: 2px solid #1351f9;
   outline-offset: 4px;
   border-radius: 4px;
 }
-header .header-left {
+.site-header .header-left {
   display: flex;
   align-items: center;
   gap: 60px;
   min-width: 0;
 }
-header .header-left h1 {
+.site-header .header-left h1 {
   flex-shrink: 0;
   margin: 0;
   color: #fff;
@@ -56,13 +53,13 @@ header .header-left h1 {
   letter-spacing: -3px;
   line-height: 1;
 }
-header .header-left ul {
+.site-header .header-left ul {
   gap: 60px;
 }
-header .header-left li {
+.site-header .header-left li {
   flex-shrink: 0;
 }
-header .header-left li a {
+.site-header .header-left li a {
   display: block;
   padding: 0;
   font-size: 20px;
@@ -70,82 +67,19 @@ header .header-left li a {
   line-height: 96px;
   white-space: nowrap;
 }
-header .header-right {
+.site-header .header-right {
   flex-shrink: 0;
 }
-header .header-right ul {
+.site-header .header-right ul {
   gap: 36px;
 }
-header .header-right li {
+.site-header .header-right li {
   font-size: 16px;
   white-space: nowrap;
 }
-header .header-right button {
+.site-header .header-right button {
   cursor: pointer;
 }
-@media (max-width: 1600px) {
-  header .header-left {
-    gap: 36px;
-  }
-  header .header-left ul {
-    gap: 28px;
-  }
-  header .header-left li a {
-    font-size: 18px;
-  }
-  header .header-right ul {
-    gap: 20px;
-  }
-}
-@media (max-width: 1280px) {
-  header > .inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 16px 24px;
-    padding: 20px 24px;
-  }
-  header .header-left {
-    display: contents;
-  }
-  header .header-left h1 {
-    grid-column: 1;
-    grid-row: 1;
-    font-size: 40px;
-  }
-  header .header-left ul {
-    grid-column: 1/-1;
-    grid-row: 2;
-    min-width: 0;
-    gap: 28px;
-    overflow-x: auto;
-  }
-  header .header-left li a {
-    font-size: 16px;
-    line-height: 48px;
-  }
-  header .header-right {
-    grid-column: 2;
-    grid-row: 1;
-  }
-}
-@media (max-width: 480px) {
-  header > .inner {
-    padding: 16px;
-  }
-  header .header-left h1 {
-    font-size: 34px;
-  }
-  header .header-left ul {
-    gap: 24px;
-  }
-  header .header-right ul {
-    gap: 16px;
-  }
-  header .header-right li {
-    font-size: 14px;
-  }
-}
-
 .site-header .header-right > ul {
   display: flex;
   align-items: center;
@@ -176,4 +110,70 @@ header .header-right button {
   display: block;
   width: 28px;
   height: 28px;
+}
+@media (max-width: 1600px) {
+  .site-header .header-left {
+    gap: 36px;
+  }
+  .site-header .header-left ul {
+    gap: 28px;
+  }
+  .site-header .header-left li a {
+    font-size: 18px;
+  }
+  .site-header .header-right ul {
+    gap: 20px;
+  }
+}
+@media (max-width: 1280px) {
+  .site-header > .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px 24px;
+    padding: 20px 24px;
+  }
+  .site-header .header-left {
+    display: contents;
+  }
+  .site-header .header-left h1 {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 40px;
+  }
+  .site-header .header-left ul {
+    grid-column: 1/-1;
+    grid-row: 2;
+    min-width: 0;
+    gap: 28px;
+    overflow-x: auto;
+  }
+  .site-header .header-left li a {
+    font-size: 16px;
+    line-height: 48px;
+  }
+  .site-header .header-right {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+@media (max-width: 480px) {
+  .site-header > .inner {
+    padding: 16px;
+  }
+  .site-header .header-left h1 {
+    font-size: 34px;
+  }
+  .site-header .header-left ul {
+    gap: 24px;
+  }
+  .site-header .header-right ul {
+    gap: 16px;
+  }
+  .site-header .header-right li {
+    font-size: 14px;
+  }
+}
+
+body:has(.notice-page, .inquiry-write) .site-header {
+  background: #1b1b1b;
 }

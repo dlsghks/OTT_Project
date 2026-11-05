@@ -25,7 +25,7 @@ export default function RetroMainHero({ slides = [] }) {
         modules={[Autoplay]}
         slidesPerView="auto"
         centeredSlides
-        spaceBetween={24}
+        spaceBetween={18}
         loop={total > 2}
         speed={700}
         grabCursor

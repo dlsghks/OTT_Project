@@ -1,3 +1,4 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -7,11 +8,11 @@ import 'swiper/css';
 
 import { auth } from '../../firebase/firebase';
 import { liveChatAdapter } from '../../services/liveChat';
-import { livePrograms, liveTop10 } from '../../data/liveData';
+import { livePrograms, liveTop10 } from '../../data/live/liveData';
 import { LoginModal } from '../../components/common/LoginModal';
 import { getImagePath } from '../../utils/imagePath';
 
-import '../../styles/pages/LiveChannel.scss';
+import '../../styles/pages/live/LiveChannel.scss';
 
 import { getCachedYoutubeLive } from '../../services/youtube';
 
@@ -897,7 +898,7 @@ export const LiveChannel = ({
             aria-label="선택한 채널 편성표"
           >
             <div className="live-schedule__heading">
-              <h2>{selected.channel} 편성표</h2>
+              <SectionTitle>{selected.channel} 편성표</SectionTitle>
               <Link to="/schedule">전체 편성표 ›</Link>
             </div>
 
@@ -1026,7 +1027,7 @@ export const LiveChannel = ({
 
           {/* TOP10: 기존 SCSS 클래스 유지 */}
           <section className="live-top20" ref={top10Ref}>
-            <h2>실시간 채널 TOP 10</h2>
+            <SectionTitle>실시간 채널 TOP 10</SectionTitle>
 
             <div className="live-top20__slider">
               <Swiper

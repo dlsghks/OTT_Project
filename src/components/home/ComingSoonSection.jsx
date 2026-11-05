@@ -4,7 +4,7 @@ import { ComingSoonCard } from "./ComingSoonCard";
 import { ContentSection } from "./ContentSection";
 import { LoginModal } from "../common/LoginModal";
 import { useAuthState } from "../../hooks/useAuthState";
-import "../../styles/components/ComingSoonCard.scss";
+import "../../styles/components/home/ComingSoonCard.scss";
 
 export const ComingSoonSection = ({
   title,

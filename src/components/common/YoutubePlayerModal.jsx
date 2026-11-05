@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ChevronLeft } from "lucide-react";
-import "../../styles/components/YoutubePlayerModal.scss";
+import "../../styles/components/common/YoutubePlayerModal.scss";
 
 // 유튜브 영상 전체화면 플레이어 (ESC / 뒤로가기 버튼으로 닫기)
 // 사용: 영화 · 시리즈 상세(시청하기 · 관련영상 · 회차), 레트로브 메인 · 상세

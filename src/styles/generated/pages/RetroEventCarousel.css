@@ -1,0 +1,58 @@
+.rv-event {
+  position: relative;
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+}
+.rv-event__track {
+  display: grid;
+  grid-template-columns: 1fr min(77.0833333333vw, 1480px) 1fr;
+  gap: 24px;
+}
+.rv-event__slide {
+  position: relative;
+  aspect-ratio: 1480/180;
+  min-height: 100px;
+  overflow: hidden;
+}
+.rv-event__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+.rv-event__slide.is-prev, .rv-event__slide.is-next {
+  aspect-ratio: auto;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.rv-event__slide.is-prev img {
+  object-position: right center;
+}
+.rv-event__slide.is-next img {
+  object-position: left center;
+}
+.rv-event__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  font-size: 28px;
+  line-height: 1;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.rv-event__nav--prev {
+  left: calc((100% - min(77.0833333333vw, 1480px)) / 4 - 20px);
+}
+.rv-event__nav--next {
+  right: calc((100% - min(77.0833333333vw, 1480px)) / 4 - 20px);
+}
+.rv-event:hover .rv-event__nav, .rv-event__nav:focus-visible {
+  opacity: 1;
+}
