@@ -519,57 +519,13 @@
     pointer-events: auto;
   }
 
-  // 모바일 반응형
-  @media (max-width: 767px) {
-    &__swiper .swiper-slide {
-      width: min(318px, 65vw);
-    }
 
-    &__arrow {
-      width: 36px;
-
-      span {
-        font-size: 36px;
-      }
-    }
-  }
 }
 
 
 
 
-@media(max-width:768px) {
-  .wavve-home__inner {
-    padding: 0 0 50px
-  }
 
-  .home-hero {
-    min-height: 0;
-    padding: 0;
-
-    &__counter {
-      font-size: 12px;
-    }
-
-    &__arrow {
-      width: 18px;
-      height: 40px;
-      font-size: 32px;
-    }
-  }
-
-  .home-section {
-    margin-bottom: 32px
-  }
-
-  .home-card {
-    flex-basis: 140px
-  }
-
-  .home-events__banner {
-    min-height: 110px
-  }
-}
 
 
 .home-hope {
@@ -679,23 +635,5 @@
     }
   }
 
-  @media (max-width: 767px) {
-    --hope-intro-width: 140px;
-    --hope-column-gap: 12px;
 
-    &__intro {
-      padding-left: 16px;
-      padding-right: 16px;
-    }
-
-    &__description {
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    &__more {
-      padding: 10px 12px;
-      font-size: 14px;
-    }
-  }
 }

@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="32.1235" height="31.2785" viewBox="0 0 32.1235 31.2785" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Heart decoration" opacity="0.32" filter="url(#filter0_f_0_150)">
+<path id="Vector" d="M16.0617 25.328C13.6211 23.0965 5.95052 17.5179 5.95052 11.5674C5.95052 5.24499 13.2724 3.75736 16.0617 9.70787C18.8511 3.75736 26.173 5.24499 26.173 11.5674C26.173 17.5179 18.5024 23.0965 16.0617 25.328Z" fill="#D94D84"/>
+</g>
+<defs>
+<filter id="filter0_f_0_150" x="-1.04661" y="-1.0747" width="34.2155" height="34.2155" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="2.97526" result="effect1_foregroundBlur_0_150"/>
+</filter>
+</defs>
+</svg>

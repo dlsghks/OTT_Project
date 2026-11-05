@@ -3,7 +3,7 @@ import { ContentSection } from './ContentSection';
 import { weekdays, weeklyContentByDay } from '../../data/weeklyContentData';
 import '../../styles/components/WeeklyContentSection.scss';
 
-export const WeeklyContentSection = ({ itemsByDay = weeklyContentByDay }) => {
+export const WeeklyContentSection = ({ itemsByDay = weeklyContentByDay, appResponsive = false }) => {
   const [selectedDay, setSelectedDay] = useState(
     () => weekdays[(new Date().getDay() + 6) % 7].id
   );
@@ -34,7 +34,7 @@ export const WeeklyContentSection = ({ itemsByDay = weeklyContentByDay }) => {
       <div id="weekly-content-list" className="weekly-content__list">
         {items.length ? (
           // 요일별로 다시 마운트해 카드 위치와 화살표 상태를 함께 초기화한다.
-          <ContentSection key={selectedDay} items={items} cardType="default" showHeader={false} />
+          <ContentSection key={selectedDay} appResponsive={appResponsive} items={items} cardType="default" showHeader={false} />
         ) : (
           <p className="weekly-content__empty" role="status">등록된 콘텐츠가 없습니다.</p>
         )}

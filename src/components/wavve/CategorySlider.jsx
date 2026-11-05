@@ -48,9 +48,10 @@ export const CategorySlider = ({ title, items = [], moreLink, headerExtra, ranke
           longSwipesRatio={0.1}
           watchOverflow={true}
           breakpoints={{
-            640: { slidesPerGroup: 3 },
-            1024: { slidesPerGroup: 4 },
-            1440: { slidesPerGroup: 5 },
+            0: { slidesPerGroup: 1, spaceBetween: 8 },
+            601: { slidesPerGroup: 3, spaceBetween: 12 },
+            1025: { slidesPerGroup: 4, spaceBetween: 0 },
+            1440: { slidesPerGroup: 5, spaceBetween: 0 },
           }}
           className="category-row__swiper"
         >

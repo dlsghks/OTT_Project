@@ -19,6 +19,8 @@ import {
 } from '../../data/homeData';
 
 import '../../styles/components/Home.scss';
+import '../../styles/components/HomeResponsive.scss';
+import { HomeGenreNav } from '../../components/home/HomeGenreNav';
 
 export const Home = () => {
   // 섹션 ID로 데이터 조회
@@ -36,6 +38,7 @@ export const Home = () => {
       <ComingSoonSection
         key={section.id}
         {...section}
+        appResponsive
       />
     );
   }
@@ -44,6 +47,7 @@ export const Home = () => {
     <ContentSection
       key={section.id}
       {...section}
+        appResponsive
     />
   );
 };
@@ -52,7 +56,8 @@ export const Home = () => {
     <div className="wavve-home">
 
       {/* 1. 메인 히어로 */}
-      <HomeHero items={heroItems} />
+      <HomeGenreNav />
+      <HomeHero items={heroItems} appResponsive />
 
       <div className="wavve-home__inner">
 
@@ -66,13 +71,13 @@ export const Home = () => {
         <RankingSection items={rankingItems} />
 
         {/* 5. 요일별 콘텐츠 */}
-        <WeeklyContentSection />
+        <WeeklyContentSection appResponsive />
 
         {/* 6. 해외로 떠나는 여행 예능 */}
         {renderSection('travel')}
 
         {/* 7. 영화 HOPE 특집 */}
-        <HopeSection />
+        <HopeSection appResponsive />
 
         {/* 8. 걱정은 잠시 잊게 만드는 음악 예능 */}
         {renderSection('music-entertainment')}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { hopeItems } from '../../data/homeData';
 import { getImagePath } from '../../utils/imagePath';
 
-export const HopeSection = () => (
+export const HopeSection = ({ appResponsive = false }) => (
   <section
     className="home-hope"
     aria-labelledby="home-hope-title"
@@ -20,7 +20,7 @@ export const HopeSection = () => (
       <Link to="/movie" className="home-hope__more">자세히 보기</Link>
     </div>
     <div className="home-hope__contents">
-      <ContentSection items={hopeItems} cardType="default" showHeader={false} />
+      <ContentSection appResponsive={appResponsive} items={hopeItems} cardType="default" showHeader={false} />
     </div>
   </section>
 );
