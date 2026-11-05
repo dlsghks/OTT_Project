@@ -11,6 +11,8 @@ import { Home } from "../pages/home/Home";
 // 카테고리 페이지
 import { Entertainment } from "../pages/category/Entertainment";
 import { EntertainmentAll } from "../pages/category/EntertainmentAll";
+import { CategoryAll } from "../pages/category/CategoryAll";
+import { CollectionAll } from "../pages/category/CollectionAll";
 import { Drama } from "../pages/category/Drama";
 import { Movie } from "../pages/category/Movie";
 import { Currentaffairs } from "../pages/category/Currentaffairs";
@@ -92,6 +94,10 @@ export const AppRouter = () => {
           element={<Entertainment />}
         />
         <Route path="/entertainment/all" element={<EntertainmentAll />} />
+        {/* 6개 카테고리 전체보기 (예능은 위의 기존 주소를 사용) */}
+        <Route path="/:category/all" element={<CategoryAll />} />
+        {/* 메인 섹션별 더보기: 동일한 섹션의 목록을 보여줍니다. */}
+        <Route path="/collection/:sectionId" element={<CollectionAll />} />
         <Route path="/drama" element={<Drama />} />
         <Route path="/movie" element={<Movie />} />
         <Route
