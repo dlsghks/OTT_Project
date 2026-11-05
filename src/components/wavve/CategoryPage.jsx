@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { BrowsePageHeader } from '../common/BrowsePageHeader';
 import { SubPageHeader } from './SubPageHeader';
 import { SectionRenderer } from './SectionRenderer';
 import { CollectionRow } from './CollectionRow';
@@ -13,6 +13,8 @@ import {
 
 import '../../styles/pages/home/Home.scss';
 import '../../styles/pages/category/Category.scss';
+import '../../styles/components/HomeResponsive.scss';
+import '../../styles/responsive/CategoryResponsive.scss';
 
 export const CategoryPage = ({ page }) => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -45,6 +47,7 @@ export const CategoryPage = ({ page }) => {
 
   return (
     <div className="wavve-home category-page">
+      <BrowsePageHeader title={page.name} />
       <SubPageHeader
         heroItems={page.heroItems}
         filters={page.filters}

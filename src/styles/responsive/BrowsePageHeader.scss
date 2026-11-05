@@ -1,0 +1,26 @@
+.browse-page-header { display: none; }
+
+@media (max-width: 1024px) {
+  // 장르/레트로브 페이지에서는 이 50px 헤더가 공통 로고 헤더를 대신합니다.
+  body:has(.browse-page-header) .wavve-mobile-header { display: none; }
+
+  .browse-page-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    height: 50px;
+    min-height: 50px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    background: #000;
+    color: #fff;
+
+    > a { display: grid; place-items: center; flex: 0 0 17px; height: 44px; padding-left: 2px; }
+    > a > img { position: static; display: block; width: 15px; min-width: 15px; max-width: 15px; height: 15px; margin: 0; transform: none; }
+    > h1 { margin: 0; font-size: 14px; font-weight: 500; line-height: 21px; }
+    &--retro > h1 { font-family: 'DungGeunMo', 'Noto Sans KR', sans-serif; font-weight: 400; }
+  }
+}

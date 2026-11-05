@@ -9,8 +9,16 @@ import { getImagePath } from '../../utils/imagePath';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-export const HomeHero = ({ items = [] }) => {
+export const HomeHero = ({ items = [], appResponsive = false }) => {
     const [current, setCurrent] = useState(0);
+
+    // 가운데 정렬 + 양옆 미리보기에는 실제 배너보다 많은 슬라이드가 필요합니다.
+    // 원본 순서를 반복하고 가운데 묶음의 첫 배너에서 시작합니다.
+    // 첫 화면부터 양쪽 미리보기를 채우며 카운터는 원본 개수만 표시합니다.
+    const repeatCount = items.length > 1 ? Math.max(3, Math.ceil(9 / items.length)) : 1;
+    const slides = Array.from({ length: Math.max(1, repeatCount) }, (_, copy) =>
+        items.map((item, sourceIndex) => ({ item, sourceIndex, copy }))
+    ).flat();
     const [swiperInstance, setSwiperInstance] = useState(null);
 
     useEffect(() => {
@@ -70,8 +78,16 @@ export const HomeHero = ({ items = [] }) => {
                 modules={[Autoplay, Navigation]}
                 slidesPerView="auto"
                 centeredSlides={true}
+                initialSlide={items.length > 1 ? items.length * Math.floor(repeatCount / 2) : 0}
                 spaceBetween={18}
+                breakpoints={appResponsive ? {
+                    0: { spaceBetween: 12 },
+                    601: { spaceBetween: 16 },
+                    1025: { spaceBetween: 18 },
+                } : undefined}
                 loop={items.length > 1}
+                loopAdditionalSlides={2}
+                loopAddBlankSlides={false}
                 speed={600}
                 grabCursor={true}
                 simulateTouch={true}
@@ -87,21 +103,21 @@ export const HomeHero = ({ items = [] }) => {
                 }
                 onSwiper={setSwiperInstance}
                 onSlideChange={(swiper) => {
-                    setCurrent(swiper.realIndex);
+                    setCurrent(swiper.realIndex % items.length);
                 }}
                 className="home-hero__swiper"
             >
-                {items.map((item, index) => (
-                    <SwiperSlide key={item.id ?? index}>
+                {slides.map(({ item, sourceIndex, copy }) => (
+                    <SwiperSlide key={`${item.id ?? sourceIndex}-${copy}`} data-source-index={sourceIndex}>
                         <Link
                             className="home-hero__slide"
                             to={item.link || '/'}
-                            aria-label={item.title || `추천 배너 ${index + 1}`}
+                            aria-label={item.title || `추천 배너 ${sourceIndex + 1}`}
                         >
                             <img
                                 className="home-hero__background"
                                 src={getImagePath(item.image)}
-                                alt={item.title || `추천 배너 ${index + 1}`}
+                                alt={item.title || `추천 배너 ${sourceIndex + 1}`}
                                 draggable={false}
                             />
                             {item.textImage && (

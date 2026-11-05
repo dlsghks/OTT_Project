@@ -25,6 +25,23 @@ export const CategoryMenu = ({ items = [] }) => {
 
   return (
     <nav className="home-categories" aria-label="콘텐츠 카테고리">
+      <div className="home-categories__app" tabIndex={0} aria-label="콘텐츠 카테고리 가로 목록">
+        <div className="home-categories__app-rows">
+          {[items.slice(0, Math.ceil(items.length / 2)), items.slice(Math.ceil(items.length / 2))].map((row, rowIndex) => (
+            <div className="home-categories__app-row" key={rowIndex}>
+              {row.map((item, index) => item.path ? (
+                <NavLink key={`${item.label}-${index}`} to={item.path} end={item.path === '/'} className="home-categories__card" aria-label={item.label} draggable={false}>
+                  <img src={item.image} alt={item.label} draggable={false} />
+                </NavLink>
+              ) : (
+                <div key={`${item.label}-${index}`} className="home-categories__card home-categories__card--static" title={item.label}>
+                  <img src={item.image} alt={item.label} draggable={false} />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="home-categories__slider">
         <Swiper
           className="home-categories__swiper"
