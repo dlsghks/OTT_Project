@@ -8,10 +8,6 @@ import { searchYoutube } from "../services/youtubeSearch";
 // 오늘 기준 n일 전 날짜 (YYYY-MM-DD), 음수면 n일 후
 const daysAgo = (days) => new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
 
-// 카테고리 히어로는 동일 제목의 작품만 선택한다(동명이작 오연결 방지).
-const normalizeTitle = (text) => String(text || '').normalize('NFKC')
-  .toLowerCase().replace(/[\p{P}\p{Z}\s]/gu, '');
-
 // 출연진 (전체 시즌 기준 aggregate_credits 우선)
 export const getTvCast = (tv) => tv.aggregate_credits?.cast?.length
   ? tv.aggregate_credits.cast
@@ -32,37 +28,21 @@ const loadingKeys = new Set();
 export const useTvStore = create((set, get) => ({
   // 카테고리 콘텐츠 id(ent-01) → TMDB id
   tvIds: {},
-  onFindTvId: async (item, { exactOnly = false } = {}) => {
+  onFindTvId: async (item) => {
     if (item.tmdbId) return item.tmdbId;
     const { tvIds } = get();
     if (tvIds[item.id]) return tvIds[item.id];
 
     const title = item.tmdbTitle || item.title;
-    // 시즌 표기가 제목에 포함되면 TV 시리즈 원제도 시도(예: 모범택시 3 → 모범택시).
-    const seasonBase = item.tmdbSeason
-      ? title.replace(/\s*(?:시즌\s*)?\d{1,2}\s*$/u, '').trim()
-      : title;
-    const queries = exactOnly ? [...new Set([title, seasonBase].filter(Boolean))] : [title];
+    const params = { query: title };
+    if (item.tmdbYear) params.first_air_date_year = item.tmdbYear;
 
-    for (const query of queries) {
-      const params = { query };
-      if (item.tmdbYear) params.first_air_date_year = item.tmdbYear;
-
-      const data = await fetchTmdb('/search/tv', params);
-      const results = data?.results ?? [];
-      const expected = normalizeTitle(query);
-      const exact = results.find((show) =>
-        normalizeTitle(show.name) === expected || normalizeTitle(show.original_name) === expected,
-      );
-      // 카테고리의 히어로는 TMDB 검색 첫 결과를 임의로 연결하지 않는다.
-      const id = (exact ?? (exactOnly ? null : results[0]))?.id ?? null;
-      if (id) {
-        set((state) => ({ tvIds: { ...state.tvIds, [item.id]: id } }));
-        return id;
-      }
-    }
-
-    return null;
+    const data = await fetchTmdb("/search/tv", params);
+    const results = data?.results ?? [];
+    const exact = results.find((show) => show.name === title || show.original_name === title);
+    const id = (exact ?? results[0])?.id ?? null;
+    if (id) set((state) => ({ tvIds: { ...state.tvIds, [item.id]: id } }));
+    return id;
   },
 
   // 시리즈 상세 (출연진, 제작진, 예고편 영상, 등급, 로고, 추천작 포함)
@@ -114,11 +94,9 @@ export const useTvStore = create((set, get) => ({
   onResolveEpisodeVideo: async ({ tmdbId, seasonNumber, episodeNumber, override, query }) => {
     if (override) return override;
 
-    if (tmdbId != null && seasonNumber != null) {
-      const videos = await get().onFetchEpisodeVideo(tmdbId, seasonNumber, episodeNumber);
-      const key = pickYoutubeVideo(videos)?.key;
-      if (key) return key;
-    }
+    const videos = await get().onFetchEpisodeVideo(tmdbId, seasonNumber, episodeNumber);
+    const key = pickYoutubeVideo(videos)?.key;
+    if (key) return key;
 
     return query ? searchYoutube(query) : null;
   },
