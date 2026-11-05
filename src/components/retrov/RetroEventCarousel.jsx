@@ -1,45 +1,93 @@
-import { useState } from "react";
-import { getImagePath } from "../../utils/imagePath";
-import "../../styles/components/RetroEventCarousel.scss";
+import { useRef } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { getImagePath } from '../../utils/imagePath';
 
-// 가운데 배너 + 양옆 배너가 살짝 보이는 캐러셀
-export default function RetroEventCarousel({ banners }) {
-  const [current, setCurrent] = useState(0);
-  const total = banners.length;
-  if (total === 0) return null;
+import 'swiper/css';
+import '../../styles/components/retrov/RetroEventCarousel.scss';
 
-  const move = (step) => setCurrent((prev) => (prev + step + total) % total);
-  const getBanner = (offset) => banners[(current + offset + total) % total];
+export default function RetroEventCarousel({ banners = [] }) {
+  const swiperRef = useRef(null);
+  const canSlide = banners.length > 1;
 
-  const slots = total > 1 ? [-1, 0, 1] : [0];
+  if (!banners.length) return null;
 
   return (
-    <section className="rv-event" aria-roledescription="carousel" aria-label="레트로브 이벤트">
-      <div className="rv-event__track">
-        {slots.map((offset) => {
-          const banner = getBanner(offset);
-          const isCenter = offset === 0;
+    <section className="rv-event" aria-label="추천 이벤트">
+      <Swiper
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
+        slidesPerView="auto"
+        slidesPerGroup={1}
+        centeredSlides
+        spaceBetween={24}
+        loop={canSlide}
+        speed={500}
+        grabCursor={canSlide}
+        simulateTouch
+        allowTouchMove={canSlide}
+        longSwipesRatio={0.1}
+        shortSwipes
+        watchOverflow
+        className="rv-event__swiper"
+      >
+        {banners.map((banner) => (
+          <SwiperSlide
+            key={banner.id}
+            className="rv-event__slide"
+          >
+            <img
+              src={getImagePath(banner.image)}
+              alt={[banner.title, banner.description].filter(Boolean).join(' ')}
+              draggable={false}
+              loading="lazy"
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-          return (
-            <article
-              key={`${banner.id}-${offset}`}
-              className={`rv-event__slide ${isCenter ? "is-active" : offset < 0 ? "is-prev" : "is-next"}`}
-              aria-hidden={!isCenter}
-              onClick={isCenter ? undefined : () => move(offset)}
-            >
-              <img src={getImagePath(banner.image)} alt={`${banner.title} ${banner.description}`} draggable="false" />
-            </article>
-          );
-        })}
-      </div>
-
-      {total > 1 && (
+      {canSlide && (
         <>
-          <button type="button" className="rv-event__nav rv-event__nav--prev" onClick={() => move(-1)} aria-label="이전 이벤트">
-            ‹
+          <button
+            type="button"
+            className="rv-event__nav rv-event__nav--prev"
+            aria-label="이전 이벤트"
+            onClick={() => swiperRef.current?.slidePrev()}
+          >
+            <svg
+              width="22"
+              height="36"
+              viewBox="0 0 22 36"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M20 2 2 18l18 16"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+            </svg>
           </button>
-          <button type="button" className="rv-event__nav rv-event__nav--next" onClick={() => move(1)} aria-label="다음 이벤트">
-            ›
+
+          <button
+            type="button"
+            className="rv-event__nav rv-event__nav--next"
+            aria-label="다음 이벤트"
+            onClick={() => swiperRef.current?.slideNext()}
+          >
+            <svg
+              width="22"
+              height="36"
+              viewBox="0 0 22 36"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 2 20 18 2 34"
+                stroke="currentColor"
+                strokeWidth="2"
+              />
+            </svg>
           </button>
         </>
       )}

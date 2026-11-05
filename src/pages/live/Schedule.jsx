@@ -3,8 +3,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { useNavigate } from 'react-router-dom';
-import { getScheduleForDate, localDateKey } from '../../data/scheduleData';
-import '../../styles/pages/Schedule.scss';
+import { getScheduleForDate, localDateKey } from '../../data/live/scheduleData';
+import '../../styles/pages/live/Schedule.scss';
 
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
 

@@ -1,0 +1,31 @@
+// 캐릭터 이미지 카드 (디자인 기준: 1920px 화면에서 1420 x 780px, 무도 퀴즈 패널과 같은 크기)
+@use "sass:math";
+@use "../../retrov/variables" as *;
+
+.character-image-panel {
+  max-width: $retrov-panel-width;
+  margin-inline: auto; // 위아래 간격은 RetrovDetail.scss 에서 지정
+  animation: character-image-panel-open 0.3s ease-out;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: #{math.div($retrov-panel-width, 1px)} / #{math.div($retrov-panel-height, 1px)};
+    background: rgba(255, 255, 255, 0.04);
+    object-fit: cover;
+  }
+}
+
+@keyframes character-image-panel-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character-image-panel {
+    animation: none;
+  }
+}
