@@ -76,7 +76,9 @@ const errorMessages = {
   153: "유튜브가 사이트 정보를 확인하지 못했습니다. localhost 개발 서버 주소에서 다시 확인해주세요.",
 };
 
-export const ShortsPlayer = ({ item }) => {
+export const ShortsPlayer = ({ item, autoPlay = true, onPlaybackChange, onNavigate }) => {
+  const swipeRef = useRef(null);
+  const swipedRef = useRef(false);
   const hostRef = useRef(null);
   const playerRef = useRef(null);
   const optionsRef = useRef(null);
@@ -89,6 +91,10 @@ export const ShortsPlayer = ({ item }) => {
   const [attempt, setAttempt] = useState(0);
   const videoId = getYouTubeVideoId(item.youtubeUrl);
   const originalUrl = videoId ? `https://www.youtube.com/shorts/${videoId}` : "";
+
+  useEffect(() => {
+    onPlaybackChange?.(media.playing, item.id);
+  }, [media.playing, item.id, onPlaybackChange]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -123,7 +129,7 @@ export const ShortsPlayer = ({ item }) => {
     host.appendChild(iframe);
 
     const startIfVisible = () => {
-      if (cancelled || !ready || !visible || document.hidden || autoStarted || errorSeen) return;
+      if (!autoPlay || cancelled || !ready || !visible || document.hidden || autoStarted || errorSeen) return;
       autoStarted = true;
       player.playVideo();
     };
@@ -214,7 +220,7 @@ export const ShortsPlayer = ({ item }) => {
       player?.destroy();
       host.replaceChildren();
     };
-  }, [videoId, item.id, attempt]);
+  }, [videoId, item.id, attempt, autoPlay]);
 
   useEffect(() => {
     if (!optionsOpen) return;
@@ -232,7 +238,12 @@ export const ShortsPlayer = ({ item }) => {
     const player = playerRef.current;
     if (!player || !media.ready || failed) return;
     setMessage("");
-    if (player.getPlayerState() === 1) player.pauseVideo(); else player.playVideo();
+    if (player.getPlayerState() === 1) player.pauseVideo();
+    else {
+      // A user tap starts app playback with sound; PC autoplay stays muted.
+      if (!autoPlay) { player.unMute(); mutedRef.current = false; setMuted(false); }
+      player.playVideo();
+    }
   };
   const setSound = () => {
     const player = playerRef.current;
@@ -262,6 +273,29 @@ export const ShortsPlayer = ({ item }) => {
           </div>
         </div>
         <div className="shorts-player__media shorts-player__youtube-host" ref={hostRef} />
+        <button className="shorts-player__tap" type="button"
+          aria-label={media.playing ? '영상 일시정지' : '영상 재생'}
+          disabled={!media.ready || failed}
+          onPointerDown={event => {
+            swipedRef.current = false;
+            if (event.pointerType !== 'mouse' || event.button !== 0) return;
+            swipeRef.current = { x: event.clientX, y: event.clientY };
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerUp={event => {
+            const start = swipeRef.current;
+            swipeRef.current = null;
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+            if (!start) return;
+            const dy = event.clientY - start.y;
+            if (Math.abs(dy) > 60 && Math.abs(dy) > Math.abs(event.clientX - start.x)) {
+              swipedRef.current = true;
+              onNavigate?.(dy < 0 ? 1 : -1);
+            }
+          }}
+          onPointerCancel={() => { swipeRef.current = null; }}
+          onClick={() => { if (!swipedRef.current) togglePlay(); swipedRef.current = false; }}
+        />
         <footer className="shorts-player__info">
           <h2 title={item.title}>{item.title}</h2>
           <button className="shorts-player__play" type="button" onClick={togglePlay} disabled={!media.ready || failed}

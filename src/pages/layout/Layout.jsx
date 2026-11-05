@@ -54,10 +54,10 @@ export const Layout = () => {
         <>
           <div className="mobile-chrome-desktop">
             <Footer />
+            <TopButton />
           </div>
 
           <MobileFooter />
-          <TopButton />
         </>
       )}
 

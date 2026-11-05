@@ -1,7 +1,10 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ShortsPlayer } from "../../components/shorts/ShortsPlayer";
 import { ShortsShareModal } from "../../components/shorts/ShortsShareModal";
+import { categoryPages } from "../../data/categoryData";
+import mobileHeartOutline from "../../assets/shorts/mobile/heart-outline.svg";
+import mobileShareIcon from "../../assets/shorts/mobile/share.svg";
 import { shortsData } from "../../data/shortsData";
 import { saveShortsHistory, toggleShortsLike, useProfileShorts } from "../../utils/profileShorts";
 import heartOutline from "../../assets/shorts/heart-outline.svg";
@@ -9,7 +12,22 @@ import heartFilled from "../../assets/shorts/heart-filled.svg";
 import shareIcon from "../../assets/shorts/share.svg";
 import "../../styles/pages/shorts/Shorts.scss";
 
-export const Shorts = ({ items = shortsData }) => {
+const SHORTS_GENRES = categoryPages.entertainment.filters.filter(
+  (genre) => !['all', 'original'].includes(genre.id)
+);
+
+export const Shorts = ({ items = shortsData, onGenreChange }) => {
+  const [isApp, setIsApp] = useState(() => window.matchMedia('(max-width: 1024px)').matches);
+  const [playback, setPlayback] = useState({ id: null, playing: false });
+  const [selectedGenre, setSelectedGenre] = useState(SHORTS_GENRES[0]?.id);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1024px)');
+    const update = () => setIsApp(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
   const [params, setParams] = useSearchParams();
   const initialIndex = useRef(
     Math.max(0, items.findIndex((item) => item?.id === params.get("short")))
@@ -26,6 +44,11 @@ export const Shorts = ({ items = shortsData }) => {
   const activeIndexRef = useRef(activeIndex);
   const activeItem = items[activeIndex];
   activeIndexRef.current = activeIndex;
+  const isPlaying = playback.id === activeItem?.id && playback.playing;
+  const handlePlaybackChange = useCallback((playing, id) => {
+    setPlayback(previous => previous.id === id && previous.playing === playing
+      ? previous : { id, playing });
+  }, []);
 
   // 현재 영상이 보이는 탭에서 2초간 활성화되면 기록합니다.
   // 실제 재생 시간을 확인하려면 ShortsPlayer의 재생 상태 연결이 필요합니다.
@@ -128,6 +151,16 @@ export const Shorts = ({ items = shortsData }) => {
 
   return (
     <>
+      <div className={`shorts-screen${isPlaying ? ' shorts-screen--playing' : ''}`}>
+        <nav className="shorts-screen__genres" aria-label="숏츠 장르" hidden={isPlaying}>
+          {SHORTS_GENRES.map(genre => (
+            <button key={genre.id} type="button" aria-pressed={selectedGenre === genre.id}
+              className={selectedGenre === genre.id ? 'is-active' : ''}
+              onClick={() => { setSelectedGenre(genre.id); onGenreChange?.(genre.id); }}>
+              {genre.label}
+            </button>
+          ))}
+        </nav>
       <section
         className={`shorts-page shorts-page--feed${shareItem ? " shorts-page--sharing" : ""}`}
         aria-label="웨이브 쇼츠"
@@ -157,7 +190,9 @@ export const Shorts = ({ items = shortsData }) => {
               aria-label={`${index + 1}번째 쇼츠`}
             >
               <div className="shorts-page__viewer">
-                {isActive ? <ShortsPlayer item={item} /> : (
+                {isActive ? <ShortsPlayer item={item} autoPlay={!isApp}
+                  onPlaybackChange={handlePlaybackChange}
+                  onNavigate={(direction) => goTo(index + direction)} /> : (
                   <div className="shorts-player shorts-player--youtube" aria-hidden="true" />
                 )}
                 {isActive && (
@@ -167,10 +202,19 @@ export const Shorts = ({ items = shortsData }) => {
                       <button type="button" aria-label="다음 쇼츠" disabled={index === items.length - 1} onClick={() => goTo(index + 1)}>↓</button>
                     </div>
                     <button className="shorts-page__action" type="button" aria-label="좋아요" aria-pressed={liked} disabled={likeBusy} onClick={() => toggleLike(item.id)}>
-                      <span className="shorts-page__action-icon"><img src={liked ? heartFilled : heartOutline} alt="" /></span>
+                      <span className="shorts-page__action-icon">
+                        <picture>
+                          {!liked && <source media="(max-width: 1024px)" srcSet={mobileHeartOutline} />}
+                          <img src={liked ? heartFilled : heartOutline} alt="" />
+                        </picture>
+                      </span>
+                      <span className="shorts-page__like-count">{new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 }).format((item.likeCount || 0) + (liked ? 1 : 0))}</span>
                     </button>
                     <button className="shorts-page__action" type="button" aria-label="영상 공유" aria-haspopup="dialog" onClick={() => setShareItem(item)}>
-                      <span className="shorts-page__action-icon"><img src={shareIcon} alt="" /></span>
+                      <span className="shorts-page__action-icon"><picture>
+                        <source media="(max-width: 1024px)" srcSet={mobileShareIcon} />
+                        <img src={shareIcon} alt="" />
+                      </picture></span>
                       <span>공유</span>
                     </button>
                     {item.programImage && (
@@ -184,6 +228,7 @@ export const Shorts = ({ items = shortsData }) => {
         })}
         {items.length === 0 && <p>등록된 쇼츠가 없습니다.</p>}
       </section>
+      </div>
       {recordMessage && <p role="status">{recordMessage}</p>}
       {shareItem && <ShortsShareModal key={shareItem.id} item={shareItem} onClose={() => setShareItem(null)} />}
     </>

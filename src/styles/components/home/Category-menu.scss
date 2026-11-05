@@ -1,3 +1,5 @@
+@use "../../common/slider-navigation" as nav;
+
 .home-categories {
   width: 100%;
   min-width: 0;
@@ -58,67 +60,12 @@
 
 
   &__arrow {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
-    width: 65px;
-    padding: 0;
-    border: none;
-    outline: none;
-    border-radius: 0;
-    box-shadow: none;
-    appearance: none;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #fff;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-
-    span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 42px;
-      height: 54px;
-
-      background: transparent !important;
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-
-      font-size: 32px;
-      line-height: 1;
-    }
-
-    &--prev {
-      left: 0;
-      background: linear-gradient(to right,
-          rgba(0, 0, 0, 0.8),
-          transparent);
-    }
-
-    &--next {
-      right: 0;
-      background: linear-gradient(to left,
-          rgba(0, 0, 0, 0.8),
-          transparent);
-    }
-
-    &:focus-visible span {
-      outline: 2px solid #fff !important;
-      outline-offset: 4px;
-    }
+    @include nav.section-arrow;
   }
 
 
   // 슬라이더 호버 시 좌우 화살표 표시
+  &__slider:focus-within &__arrow,
   &__slider:hover &__arrow {
     opacity: 1;
     pointer-events: auto;
