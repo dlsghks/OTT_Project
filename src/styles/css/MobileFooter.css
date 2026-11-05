@@ -82,12 +82,8 @@
 
     color: #a5a5a5;
   }
-<<<<<<< HEAD
-  .wavve-mobile-footer__notice img {
-=======
-
+  .wavve-mobile-footer__notice img,
   .wavve-mobile-footer__notice-link > img.wavve-mobile-footer__notice-icon {
->>>>>>> origin/develop
     position: static;
     inset: auto;
     display: block;

@@ -25,12 +25,12 @@ export default function RetroMainHero({ slides = [] }) {
         modules={[Autoplay]}
         slidesPerView="auto"
         centeredSlides
-<<<<<<< HEAD
-        spaceBetween={24}
-        breakpoints={{ 0: { spaceBetween: 12 }, 601: { spaceBetween: 16 }, 1025: { spaceBetween: 24 } }}
-=======
         spaceBetween={18}
->>>>>>> origin/develop
+        breakpoints={{
+          0: { spaceBetween: 12 },
+          601: { spaceBetween: 16 },
+          1025: { spaceBetween: 18 },
+        }}
         loop={total > 2}
         speed={700}
         grabCursor

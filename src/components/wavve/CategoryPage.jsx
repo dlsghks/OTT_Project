@@ -1,21 +1,11 @@
 import { useState } from 'react';
-<<<<<<< HEAD
 import { BrowsePageHeader } from '../common/BrowsePageHeader';
-=======
-
->>>>>>> origin/develop
 import { SubPageHeader } from './SubPageHeader';
 import { SectionRenderer } from './SectionRenderer';
 import { CollectionRow } from './CollectionRow';
 
 import { filterItems } from '../../data/categoryData';
 
-<<<<<<< HEAD
-import '../../styles/components/Home.scss';
-import '../../styles/pages/Category.scss';
-import '../../styles/components/HomeResponsive.scss';
-import '../../styles/responsive/CategoryResponsive.scss';
-=======
 import {
   fillSectionItems,
   MIN_SUB_SECTION_ITEMS,
@@ -23,7 +13,8 @@ import {
 
 import '../../styles/pages/home/Home.scss';
 import '../../styles/pages/category/Category.scss';
->>>>>>> origin/develop
+import '../../styles/components/HomeResponsive.scss';
+import '../../styles/responsive/CategoryResponsive.scss';
 
 export const CategoryPage = ({ page }) => {
   const [activeFilter, setActiveFilter] = useState('all');

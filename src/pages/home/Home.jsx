@@ -18,13 +18,8 @@ import {
   eventBanners,
 } from '../../data/home/homeData';
 
-<<<<<<< HEAD
-import '../../styles/components/Home.scss';
-import '../../styles/components/HomeResponsive.scss';
 import { HomeGenreNav } from '../../components/home/HomeGenreNav';
-=======
 import { categoryPages } from '../../data/categoryData';
->>>>>>> origin/develop
 
 import {
   fetchTmdb,
@@ -33,6 +28,7 @@ import {
 } from '../../services/tmdbDetail';
 
 import '../../styles/pages/home/Home.scss';
+import '../../styles/components/HomeResponsive.scss';
 
 // 앞서 추가한 TMDB 영화·드라마 섹션
 const MIN_SECTION_ITEMS = 15;
@@ -93,24 +89,6 @@ const discoverySections = [
   },
 ];
 
-<<<<<<< HEAD
-  if (id === 'coming-soon') {
-    return (
-      <ComingSoonSection
-        key={section.id}
-        {...section}
-        appResponsive
-      />
-    );
-  }
-
-  return (
-    <ContentSection
-      key={section.id}
-      {...section}
-        appResponsive
-    />
-=======
 // 이번에 추가하는 15개 섹션
 // 카테고리 데이터의 장르를 기준으로 목록을 구성한다.
 const additionalSections = [
@@ -278,7 +256,6 @@ const getCategoryItems = (category, genres) => {
   const extraItems = uniqueItems(items).slice(
     0,
     MIN_SECTION_ITEMS - primaryItems.length
->>>>>>> origin/develop
   );
 
   return [...primaryItems, ...extraItems];
@@ -463,14 +440,13 @@ export const Home = () => {
 
   const renderHomeSection = ({ type, id }) => {
     if (type === 'weekly') {
-      return <WeeklyContentSection key="weekly" />;
+      return <WeeklyContentSection key="weekly" appResponsive />;
     }
 
     if (type === 'hope') {
-      return <HopeSection key="hope" />;
+      return <HopeSection key="hope" appResponsive />;
     }
 
-    // 기존 홈 섹션
     // 기존 홈 섹션
     if (type === 'existing') {
       const section = homeSections.find(
@@ -483,6 +459,7 @@ export const Home = () => {
       if (id === 'coming-soon') {
         return (
           <ComingSoonSection
+            appResponsive
             key={`existing-${id}`}
             {...section}
           />
@@ -506,6 +483,7 @@ export const Home = () => {
 
       return (
         <ContentSection
+          appResponsive
           key={`existing-${id}`}
           {...section}
           title={title}
@@ -531,6 +509,7 @@ export const Home = () => {
 
       return (
         <ContentSection
+          appResponsive
           key={`discovery-${id}`}
           title={section.title}
           items={items}
@@ -556,6 +535,7 @@ export const Home = () => {
 
       return (
         <ContentSection
+          appResponsive
           key={`additional-${id}`}
           title={section.title}
           items={items}
@@ -569,15 +549,10 @@ export const Home = () => {
 
   return (
     <div className="wavve-home">
-<<<<<<< HEAD
 
       {/* 1. 메인 히어로 */}
       <HomeGenreNav />
       <HomeHero items={heroItems} appResponsive />
-=======
-      {/* 메인 히어로 */}
-      <HomeHero items={heroItems} />
->>>>>>> origin/develop
 
       <div className="wavve-home__inner">
         {/* 이벤트 */}
@@ -589,41 +564,8 @@ export const Home = () => {
         {/* TOP 랭킹 */}
         <RankingSection items={rankingItems} />
 
-<<<<<<< HEAD
-        {/* 5. 요일별 콘텐츠 */}
-        <WeeklyContentSection appResponsive />
-
-        {/* 6. 해외로 떠나는 여행 예능 */}
-        {renderSection('travel')}
-
-        {/* 7. 영화 HOPE 특집 */}
-        <HopeSection appResponsive />
-
-        {/* 8. 걱정은 잠시 잊게 만드는 음악 예능 */}
-        {renderSection('music-entertainment')}
-
-        {/* 9. 정형돈의 제목없음 TV */}
-        {renderSection('jung-hyung-don')}
-
-        {/* 10. #버라이어티 */}
-        {renderSection('variety')}
-
-        {/* 11. 두근두근 Coming Soon */}
-        {renderSection('coming-soon')}
-
-        {/* 12. #토크 */}
-        {renderSection('talk')}
-
-        {/* 13. #뮤직 */}
-        {renderSection('music')}
-
-        {/* 14. 예능 전체보기 */}
-        {renderSection('all-entertainment')}
-
-=======
         {/* 기존 섹션 + 영화·드라마 + 추가 15개 섹션 */}
         {homeSectionOrder.map(renderHomeSection)}
->>>>>>> origin/develop
       </div>
     </div>
   );

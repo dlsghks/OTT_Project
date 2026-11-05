@@ -1,7 +1,10 @@
 import { SectionTitle } from '../../components/common/SectionTitle';
-import { useEffect, useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { NotificationPopup } from "../../components/NotificationPopup";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Link, useLocation } from "react-router-dom";
+import { NotificationPanel } from "../../components/common/NotificationPanel";
+import { useAuthState } from "../../hooks/useAuthState";
+import { useNotificationStore } from "../../store/useNotificationStore";
 import { shortsData } from "../../data/shortsData";
 import { useProfileShorts } from "../../utils/profileShorts";
 import profileImage from "../../assets/mypage/profile.png";
@@ -135,6 +138,78 @@ export const MyPage = ({
   const [dialogTitle, setDialogTitle] = useState("");
   const dialogRef = useRef(null);
   const id = useId();
+  const { user, isLoggedIn } = useAuthState();
+  const location = useLocation();
+  const notificationButtonRef = useRef(null);
+  const notificationPanelRef = useRef(null);
+  const [notificationPosition, setNotificationPosition] = useState(null);
+  const notificationPanelId = `${id}-notifications`;
+
+  const notifications = useNotificationStore((state) =>
+    state.notificationsByUser[user?.uid] ?? EMPTY_ITEMS
+  );
+  const onReadNotification = useNotificationStore((state) => state.onReadNotification);
+  const onReadAllNotifications = useNotificationStore((state) => state.onReadAllNotifications);
+  const unreadCount = isLoggedIn
+    ? notifications.filter((item) => !item.readAt).length
+    : 0;
+
+  useEffect(() => {
+    setIsNotificationOpen(false);
+    setNotificationPosition(null);
+  }, [location.pathname, user?.uid]);
+
+  useLayoutEffect(() => {
+    if (!isNotificationOpen) return;
+
+    const updatePosition = () => {
+      const button = notificationButtonRef.current;
+      const panel = notificationPanelRef.current;
+      if (!button || !panel) return;
+
+      const rect = button.getBoundingClientRect();
+      if (!button.getClientRects().length) {
+        setIsNotificationOpen(false);
+        return;
+      }
+      const width = panel.getBoundingClientRect().width;
+      const next = {
+        top: rect.bottom + window.scrollY + 12,
+        left: window.scrollX + Math.max(
+          16,
+          Math.min(rect.right - width, window.innerWidth - width - 16)
+        ),
+      };
+      setNotificationPosition((previous) =>
+        previous?.top === next.top && previous?.left === next.left
+          ? previous
+          : next
+      );
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key !== "Escape") return;
+      setIsNotificationOpen(false);
+      setNotificationPosition(null);
+      notificationButtonRef.current?.focus();
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("keydown", handleKeyDown);
+
+    const observer = new ResizeObserver(updatePosition);
+    if (notificationButtonRef.current) observer.observe(notificationButtonRef.current);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("keydown", handleKeyDown);
+      observer.disconnect();
+    };
+  }, [isNotificationOpen]);
+
   // 저장된 ID 순서대로 표시해 가장 최근에 본 영상이 앞에 옵니다.
   const watchedShorts = watchedShortsIds
     .map((id) => shortsData.find((item) => item?.id === id))
@@ -232,7 +307,32 @@ export const MyPage = ({
             <p>{passName || "보유하신 이용권이 없습니다"}</p>
           </div>
           <div className="mypage__mobile-actions">
-            <button type="button" aria-label="알림" aria-haspopup="dialog" aria-expanded={isNotificationOpen} onClick={() => setIsNotificationOpen(true)}><img src={mobileBell} alt="" /></button>
+            <button
+              ref={notificationButtonRef}
+              type="button"
+              aria-label={unreadCount > 0 ? `알림, 읽지 않은 알림 ${unreadCount}개` : "알림"}
+              aria-expanded={isNotificationOpen}
+              aria-controls={notificationPanelId}
+              style={{ position: "relative", overflow: "visible" }}
+              onClick={() => {
+                setNotificationPosition(null);
+                setIsNotificationOpen((previous) => !previous);
+              }}
+            >
+              <img src={mobileBell} alt="" />
+              {isLoggedIn && unreadCount > 0 && (
+                <span aria-hidden="true" style={{
+                  position: "absolute", top: -4, right: -4,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  minWidth: 18, height: 18, padding: "0 4px",
+                  boxSizing: "border-box", borderRadius: 999,
+                  background: "#f33445", color: "#fff",
+                  font: "700 10px/1 Arial, sans-serif", pointerEvents: "none",
+                }}>
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </button>
             <Link to="/profileedit" aria-label="프로필 설정"><img src={mobileSettings} alt="" /></Link>
           </div>
           <button className="mypage__pass-button" type="button" onClick={() => requestAction("purchase-pass", "이용권 구매")}><span className="mypage__desktop-copy">이용권 구매</span><span className="mypage__mobile-copy">이용권 구매하기</span></button>
@@ -288,11 +388,10 @@ export const MyPage = ({
         </section>
 
         <section className="mypage__retro" aria-labelledby={`${id}-retro`}>
-<<<<<<< HEAD
-          <h2 id={`${id}-retro`}><span className="mypage__desktop-copy">레트로 Pick</span><span className="mypage__mobile-copy">레트로브 인기회차 픽!</span></h2>
-=======
-          <SectionTitle id={`${id}-retro`}>레트로 Pick</SectionTitle>
->>>>>>> origin/develop
+          <SectionTitle id={`${id}-retro`}>
+            <span className="mypage__desktop-copy">레트로 Pick</span>
+            <span className="mypage__mobile-copy">레트로브 인기회차 픽!</span>
+          </SectionTitle>
           <ul className="mypage__retro-list">{retroPicks.map((item) => renderCard(item, true))}</ul>
         </section>
       </div>
@@ -324,7 +423,29 @@ export const MyPage = ({
         </div>
       </section>
 
-      {isNotificationOpen && <NotificationPopup onClose={() => setIsNotificationOpen(false)} />}
+      {isNotificationOpen && createPortal(
+        <div
+          ref={notificationPanelRef}
+          className="header-notification-portal"
+          style={{
+            position: "absolute",
+            top: notificationPosition?.top ?? 0,
+            left: notificationPosition?.left ?? 0,
+            width: "min(480px, calc(100vw - 32px))",
+            visibility: notificationPosition ? "visible" : "hidden",
+            zIndex: 1000,
+          }}
+        >
+          <NotificationPanel
+            id={notificationPanelId}
+            isLoggedIn={isLoggedIn}
+            notifications={isLoggedIn ? notifications : EMPTY_ITEMS}
+            onRead={(notificationId) => onReadNotification(user?.uid, notificationId)}
+            onReadAll={() => onReadAllNotifications(user?.uid)}
+          />
+        </div>,
+        document.body
+      )}
 
       <dialog className="mypage__dialog" ref={dialogRef} aria-labelledby={`${id}-dialog-title`} onClose={() => setDialogTitle("")}
         onClick={(event) => { if (event.target === event.currentTarget) dialogRef.current.close(); }}>

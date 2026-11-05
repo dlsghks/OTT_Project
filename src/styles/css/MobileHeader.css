@@ -2,11 +2,7 @@
   display: none;
 }
 
-<<<<<<< HEAD
 @media (max-width: 1024px) {
-=======
-@media (max-width: 768px) {
->>>>>>> origin/develop
   .wavve-mobile-header {
     position: sticky;
     top: 0;
@@ -15,13 +11,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-<<<<<<< HEAD
     height: 50px;
     min-height: 50px;
-=======
-    height: 45px;
-    min-height: 45px;
->>>>>>> origin/develop
     margin: 0;
     padding: 0 16px 0 18px;
     box-sizing: border-box;
@@ -55,7 +46,6 @@
     margin: 0;
     padding: 0;
     border: 0;
-<<<<<<< HEAD
     min-width: 0;
     min-height: 0;
     right: auto;
@@ -86,24 +76,6 @@
     left: 52.05px;
     width: 15.0053px;
     height: 12.4477px;
-=======
-  }
-  .wavve-mobile-header__letter-w {
-    top: 0;
-    left: 0;
-  }
-  .wavve-mobile-header__letter-a {
-    top: 2.75px;
-    left: 20.03px;
-  }
-  .wavve-mobile-header__letter-v1 {
-    top: 3.2px;
-    left: 36.42px;
-  }
-  .wavve-mobile-header__letter-v2 {
-    top: 3.2px;
-    left: 52.05px;
->>>>>>> origin/develop
   }
   .wavve-mobile-header__letter-e {
     position: absolute;
@@ -112,23 +84,13 @@
     display: block;
     width: 13.8253px;
     height: 13.356px;
-<<<<<<< HEAD
     overflow: hidden;
-=======
-    mask-repeat: no-repeat;
-    mask-position: 0 0;
-    mask-size: 13.8252px 13.356px;
-    mask-mode: luminance;
->>>>>>> origin/develop
   }
   .wavve-mobile-header__letter-e > img {
     top: 0;
     left: 0;
-<<<<<<< HEAD
     width: 13.8253px;
     height: 13.356px;
-=======
->>>>>>> origin/develop
   }
   .wavve-mobile-header__cast {
     display: grid;
@@ -155,7 +117,6 @@
     top: 2.583px;
     left: 0.917px;
     display: block;
-<<<<<<< HEAD
     width: 18.1668px;
     height: 14.8417px;
     min-width: 0;
@@ -165,9 +126,6 @@
     bottom: auto;
     object-fit: contain;
     transform: none;
-=======
-    max-width: none;
->>>>>>> origin/develop
     margin: 0;
     border: 0;
   }

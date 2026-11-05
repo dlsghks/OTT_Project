@@ -26,12 +26,8 @@ import { useRetrovPlayer } from "../../hooks/useRetrovPlayer";
 import { useRetrovTmdbStore, tmdbImage } from "../../store/useRetrovTmdbStore";
 import { getImagePath } from "../../utils/imagePath";
 
-<<<<<<< HEAD
-import "../../styles/Retrov.scss";
-import "../../styles/responsive/RetrovResponsive.scss";
-=======
 import "../../styles/pages/retrov/Retrov.scss";
->>>>>>> origin/develop
+import "../../styles/responsive/RetrovResponsive.scss";
 
 function youtubeThumb(videoId) {
   return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
