@@ -138,28 +138,3 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.content-card__info .content-card__date {
-  margin-top: 5px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.4;
-  color: #a0a0a0;
-}
-
-.content-card__thumbnail {
-  overflow: hidden;
-}
-.content-card__thumbnail > img:not(.content-card__original) {
-  transition: transform 0.3s ease;
-  transform: scale(1);
-}
-.content-card:hover .content-card__thumbnail > img:not(.content-card__original) {
-  transform: scale(1.04);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .content-card__thumbnail > img:not(.content-card__original) {
-    transition: none;
-  }
-}
