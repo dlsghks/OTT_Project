@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
-import "../../styles/pages/InquiryWrite.scss";
+import "../../styles/pages/support/InquiryWrite.scss";
 import wavveLogo from "../../assets/wavve_logo_w.svg";
 
 const questionTypes = [

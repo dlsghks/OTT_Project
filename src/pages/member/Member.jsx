@@ -7,7 +7,7 @@ import kakaoIcon from "../../assets/member/kakao.svg";
 import appleIcon from "../../assets/member/apple.svg";
 import glowLeft from "../../assets/login/glow-left.png";
 import glowRight from "../../assets/login/glow-right.png";
-import "../../styles/components/Member.scss";
+import "../../styles/pages/member/Member.scss";
 
 const providers = [
   { key: "naver", name: "네이버", icon: naverIcon },

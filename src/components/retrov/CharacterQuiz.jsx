@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Pencil, X } from "lucide-react";
-import { isCorrectAnswer } from "../../data/characterQuizzes";
-import "../../styles/components/CharacterQuiz.scss";
+import { isCorrectAnswer } from "../../data/retrov/characterQuizzes";
+import "../../styles/components/retrov/CharacterQuiz.scss";
 import { getImagePath } from "../../utils/imagePath";
 
 // 캐릭터 아이콘 클릭 시 아래에 펼쳐지는 무도 퀴즈

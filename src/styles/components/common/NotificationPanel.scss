@@ -1,0 +1,212 @@
+.notification-panel {
+    display: flex;
+    flex-direction: column;
+
+    width: 480px;
+    max-width: calc(100vw - 32px);
+    max-height: min(555px, calc(100dvh - 130px));
+    box-sizing: border-box;
+
+    overflow: hidden;
+    border: 1px solid #424242;
+    border-radius: 12px;
+    background: #2b2b2b;
+    color: #fff;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+
+    white-space: normal;
+    line-height: 1.5;
+
+    // 상단
+    &__head {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+
+        min-height: 76px;
+        padding: 20px 24px;
+        background: #1351f9;
+
+        h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 400;
+        }
+    }
+
+    &__read-all {
+        padding: 6px 0;
+        border: 0;
+        background: transparent;
+        color: #fff;
+        font-family: inherit;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    // 빈 목록·비로그인 공통
+    &__empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+
+        min-height: 300px;
+        padding: 32px 20px;
+        overflow-y: auto;
+
+        color: #dedede;
+        text-align: center;
+
+        >svg {
+            flex-shrink: 0;
+        }
+
+        p {
+            margin: 0;
+            font-size: 15px;
+        }
+    }
+
+    // 비로그인 안내
+    &__guest {
+        gap: 16px;
+        padding: 36px 24px;
+
+        >svg {
+            margin-bottom: 8px;
+            color: #aebfff;
+        }
+
+        >p {
+            color: #bdbdbd;
+            line-height: 1.7;
+        }
+    }
+
+    &__guest-title {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    &__login {
+        min-width: 140px;
+        min-height: 44px;
+        margin-top: 8px;
+        padding: 10px 24px;
+
+        border: 0;
+        border-radius: 8px;
+        background: #1351f9;
+        color: #fff;
+
+        font-family: inherit;
+        font-size: 15px;
+        cursor: pointer;
+
+        &:hover {
+            background: #2d65ff;
+        }
+    }
+
+    // 알림 목록
+    &__list {
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+
+        width: 100%;
+        padding: 22px 24px;
+        border: 0;
+        border-bottom: 1px solid #414141;
+        background: transparent;
+        color: #fff;
+
+        font-family: inherit;
+        text-align: left;
+        white-space: normal;
+        cursor: pointer;
+
+        &.is-unread {
+            background: #303747;
+        }
+
+        &.is-read {
+            color: #b7b7b7;
+        }
+
+        &:hover {
+            background: #353535;
+        }
+    }
+
+    &__item-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        font-size: 16px;
+        font-weight: 500;
+        overflow-wrap: anywhere;
+    }
+
+    &__unread-dot {
+        flex: 0 0 7px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #ff404b;
+    }
+
+    &__message {
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    &__date {
+        color: #999;
+        font-size: 12px;
+    }
+
+    &__sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: -3px;
+    }
+
+    @media (max-width: 640px) {
+        width: min(360px, calc(100vw - 110px));
+
+        &__head,
+        &__item {
+            padding: 16px;
+        }
+
+        &__empty {
+            min-height: 220px;
+        }
+    }
+}

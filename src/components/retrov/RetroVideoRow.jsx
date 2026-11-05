@@ -1,9 +1,26 @@
-import { useRef } from "react";
+import { SectionTitle } from '../common/SectionTitle';
+import { useEffect, useRef, useState } from "react";
 import RetroVideoCard from "./RetroVideoCard";
 
 // 테마별 영상 가로 스크롤 목록 (휠·터치·마우스 드래그·화살표 버튼)
 export default function RetroVideoRow({ id, title, videos, frame, onPlay }) {
   const listRef = useRef(null);
+  const [navigation, setNavigation] = useState({ prev: false, next: false });
+
+  const updateNavigation = () => {
+    const list = listRef.current;
+    if (!list) return;
+    setNavigation({ prev: list.scrollLeft > 1, next: list.scrollLeft + list.clientWidth < list.scrollWidth - 1 });
+  };
+
+  useEffect(() => {
+    const list = listRef.current;
+    updateNavigation();
+    const observer = new ResizeObserver(updateNavigation);
+    observer.observe(list);
+    for (const item of list.children) observer.observe(item);
+    return () => observer.disconnect();
+  }, [videos]);
   const drag = useRef({ active: false, moved: false, startX: 0, scrollLeft: 0 });
 
   function scrollByPage(direction) {
@@ -43,16 +60,15 @@ export default function RetroVideoRow({ id, title, videos, frame, onPlay }) {
   return (
     <section className="retro-video-row" aria-labelledby={`retro-row-${id}`}>
       <div className="retro-video-row__head">
-        <h2 id={`retro-row-${id}`} className="retro-video-row__title">
+        <SectionTitle id={`retro-row-${id}`} className="retro-video-row__title">
           {title}
-        </h2>
-        <div className="retro-video-row__controls">
-          <button type="button" onClick={() => scrollByPage(-1)} aria-label={`${title} 이전 영상`}>‹</button>
-          <button type="button" onClick={() => scrollByPage(1)} aria-label={`${title} 다음 영상`}>›</button>
-        </div>
+        </SectionTitle>
+
       </div>
 
+      <div className="retro-video-row__slider">
       <ul
+        onScroll={updateNavigation}
         ref={listRef}
         className="retro-video-row__list"
         onPointerDown={handlePointerDown}
@@ -67,6 +83,9 @@ export default function RetroVideoRow({ id, title, videos, frame, onPlay }) {
           </li>
         ))}
       </ul>
+      {navigation.prev && <button type="button" className="retro-video-row__arrow retro-video-row__arrow--prev" onClick={() => scrollByPage(-1)} aria-label={`${title} 이전 영상`}>‹</button>}
+      {navigation.next && <button type="button" className="retro-video-row__arrow retro-video-row__arrow--next" onClick={() => scrollByPage(1)} aria-label={`${title} 다음 영상`}>›</button>}
+      </div>
     </section>
   );
 }

@@ -1,4 +1,3 @@
-
 .site-header {
   position: sticky;
   top: 0;
@@ -8,7 +7,7 @@
   background: #000;
   color: #8b8b8b;
 
-  > .inner {
+  >.inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -17,13 +16,14 @@
     width: 100%;
     max-width: none;
     min-height: 96px;
-
     margin: 0;
     padding: 0 110px;
     box-sizing: border-box;
   }
 
-  ul {
+  // 헤더의 최상위 메뉴 목록만 적용
+  .header-left>ul,
+  .header-right>ul {
     display: flex;
     align-items: center;
     margin: 0;
@@ -46,7 +46,7 @@
     }
   }
 
-  // 왼쪽: 로고 + 네비게이션
+  // 로고와 메인 메뉴
   .header-left {
     display: flex;
     align-items: center;
@@ -64,58 +64,136 @@
       line-height: 1;
     }
 
-    ul {
+    >ul {
       gap: 60px;
-    }
 
-    li {
-      flex-shrink: 0;
-    }
+      >li {
+        flex-shrink: 0;
 
-    li a {
-      display: block;
-      padding: 0;
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 96px;
-      white-space: nowrap;
+        >a {
+          display: block;
+          padding: 0;
+          font-size: 20px;
+          font-weight: 400;
+          line-height: 96px;
+          white-space: nowrap;
+        }
+      }
     }
   }
 
-  // 오른쪽: 아이콘 버튼
+  // 알림·검색·프로필
   .header-right {
     flex-shrink: 0;
+    overflow: visible;
 
-    ul {
-      gap: 36px;
+    >ul {
+      gap: 18px;
+
+      >li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 16px;
+        white-space: nowrap;
+
+        >button,
+        >a,
+        >a>button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          width: 32px;
+          height: 32px;
+          margin: 0;
+          padding: 0;
+          border: 0;
+
+          background: transparent;
+          line-height: 1;
+          cursor: pointer;
+        }
+
+        >button>img,
+        >a>img,
+        >a>button>img {
+          display: block;
+          width: 28px;
+          height: 28px;
+        }
+      }
+
+      // 알림 패널의 위치 기준
+      .site-header .header-right {
+        .header-notification-item {
+          flex: 0 0 32px;
+          width: 32px;
+          height: 32px;
+          overflow: visible;
+        }
+
+        // 벨 버튼 크기의 위치 기준
+        .header-notification {
+          position: relative;
+          width: 32px;
+          height: 32px;
+          overflow: visible;
+        }
+
+        .header-notification-button {
+          position: relative;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          width: 32px;
+          height: 32px;
+          margin: 0;
+          padding: 0;
+          border: 0;
+          background: transparent;
+          cursor: pointer;
+
+          >img {
+            display: block;
+            width: 28px;
+            height: 28px;
+          }
+
+          &:focus-visible {
+            outline: 2px solid #1351f9;
+            outline-offset: 4px;
+            border-radius: 4px;
+          }
+        }
+
+        // 헤더 높이에 영향을 주지 않고 아래로 띄우기
+        .header-notification-dropdown {
+          position: absolute;
+          top: calc(100% + 32px);
+          right: 0;
+          z-index: 200;
+
+          width: min(480px, calc(100vw - 32px));
+          margin: 0;
+          padding: 0;
+
+          // 위치는 바깥 dropdown이 담당
+          >.notification-panel {
+            position: static;
+            inset: auto;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            transform: none;
+          }
+        }
+      }
     }
 
-    li {
-      font-size: 16px;
-      white-space: nowrap;
-    }
-
-    button {
-      cursor: pointer;
-    }
-  }
-
-  // member-5: 헤더 오른쪽 아이콘 정렬
-  .header-right {
-    > ul {
-      display: flex;
-      align-items: center;
-    }
-
-    > ul > li {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    > ul > li > button,
-    > ul > li > a,
-    > ul > li > a > button,
     .my-hover,
     .my-hover__trigger {
       display: flex;
@@ -124,44 +202,66 @@
 
       width: 32px;
       height: 32px;
-      padding: 0;
       margin: 0;
+      padding: 0;
       border: 0;
 
       background: transparent;
       line-height: 1;
     }
 
-    > ul > li > button > img,
-    > ul > li > a > button > img {
-      display: block;
-      width: 28px;
-      height: 28px;
+    button {
+      cursor: pointer;
     }
   }
 
-  // 중간 화면: 간격과 글자 크기 축소
+  // 읽지 않은 알림 개수
+  .header-notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    box-sizing: border-box;
+
+    border: 2px solid #000;
+    border-radius: 999px;
+    background: #f33445;
+    color: #fff;
+
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+  }
+
   @media (max-width: 1600px) {
     .header-left {
       gap: 36px;
 
-      ul {
+      >ul {
         gap: 28px;
-      }
 
-      li a {
-        font-size: 18px;
+        >li>a {
+          font-size: 18px;
+        }
       }
     }
 
-    .header-right ul {
-      gap: 20px;
+    .header-right>ul {
+      gap: 10px;
     }
   }
 
-  // 태블릿: 로고/아이콘과 메뉴를 2줄로 배치
   @media (max-width: 1280px) {
-    > .inner {
+    >.inner {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 16px 24px;
@@ -177,17 +277,17 @@
         font-size: 40px;
       }
 
-      ul {
+      >ul {
         grid-column: 1 / -1;
         grid-row: 2;
         min-width: 0;
         gap: 28px;
         overflow-x: auto;
-      }
 
-      li a {
-        font-size: 16px;
-        line-height: 48px;
+        >li>a {
+          font-size: 16px;
+          line-height: 48px;
+        }
       }
     }
 
@@ -197,33 +297,66 @@
     }
   }
 
-  // 모바일
   @media (max-width: 480px) {
-    > .inner {
+    >.inner {
       padding: 16px;
     }
 
-    .header-left h1 {
-      font-size: 34px;
+    .header-left {
+      h1 {
+        font-size: 34px;
+      }
+
+      >ul {
+        gap: 24px;
+      }
     }
 
-    .header-left ul {
-      gap: 24px;
-    }
+    .header-right>ul {
+      gap: 8px;
 
-    .header-right ul {
-      gap: 16px;
-    }
-
-    .header-right li {
-      font-size: 14px;
+      >li {
+        font-size: 14px;
+      }
     }
   }
 }
 
-// develop: 고객센터 페이지 전용 헤더 배경색
+// 고객센터 페이지 헤더 배경
 body:has(.notice-page, .inquiry-write) {
   .site-header {
     background: #1b1b1b;
+  }
+}
+
+.site-header .header-right .header-notification-button {
+  position: relative;
+  overflow: visible;
+
+  &:focus-visible {
+    outline: 2px solid #1351f9;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+// body 아래에 생성되는 알림창
+.header-notification-portal {
+  width: min(480px, calc(100vw - 32px));
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #fff;
+  white-space: normal;
+
+  >.notification-panel {
+    position: static;
+    inset: auto;
+
+    width: 100%;
+    max-width: none;
+    margin: 0;
+
+    transform: none;
   }
 }

@@ -7,7 +7,7 @@ import kakaoIcon from "../../assets/login/kakao.png";
 import appleIcon from "../../assets/login/apple.png";
 import glowLeft from "../../assets/login/glow-left.png";
 import glowRight from "../../assets/login/glow-right.png";
-import "../../styles/components/Login.scss";
+import "../../styles/pages/member/Login.scss";
 
 const providers = [
   { key: "naver", label: "네이버로 시작하기", icon: naverIcon },

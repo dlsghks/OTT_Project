@@ -35,22 +35,25 @@ const byGenre = (items, genre) => items.filter((item) => item.genre === genre);
    예능
 ========================= */
 const entertainmentItems = [
-  // https://www.themoviedb.org/tv/33238?language=en-US — SBS, 2010
-  program('ent-01', '런닝맨', 'variety', ['sun'], '', false),
+  program('ent-01', '런닝맨', 'variety', ['sun']),
   program('ent-02', '나 혼자 산다', 'reality', ['fri']),
   program('ent-03', '놀면 뭐하니?', 'variety', ['sat']),
   program('ent-04', '전지적 참견 시점', 'reality', ['sat']),
   program('ent-05', '1박 2일 시즌4', 'travel', ['sun']),
   program('ent-06', '미운 우리 새끼', 'family', ['sun']),
   program('ent-07', '라디오스타', 'talk', ['wed']),
-  program('ent-08', '불후의 명곡', 'music', ['sat']),
+
+  program(
+    'ent-08',
+    '불후의 명곡 전설을 노래하다',
+    'music',
+    ['sat']
+  ),
+
   program('ent-09', '복면가왕', 'music', ['sun']),
   program('ent-10', '살림하는 남자들', 'life', ['wed']),
   program('ent-11', '나는 SOLO', 'reality', ['wed']),
-  // https://www.themoviedb.org/tv/155951 — 요즘 남자 라이프 - 신랑수업 (2022)
   program('ent-12', '신랑수업', 'reality', ['wed']),
-  // 허용된 포스터 대체: 강철부대 TV ID만 사용하고 표시 제목과 앱의 콘텐츠 ID는 유지한다.
-  // https://www.themoviedb.org/tv/121591 — 강철부대 (2021), W는 시즌 4
   program('ent-13', '강철부대W', 'survival', ['tue'], '새로운'),
   program('ent-14', '피의 게임 3', 'survival', [], '', true),
   program('ent-15', '좀비버스: 뉴 블러드', 'survival', [], '', true),
@@ -63,7 +66,6 @@ const entertainmentItems = [
   program('ent-22', '비긴어게인', 'music', ['thu']),
   program('ent-23', '유 퀴즈 온 더 블럭', 'talk', ['wed']),
   program('ent-24', '아는 형님', 'talk', ['sat']),
-  // 정확한 시즌/시리즈 ID를 확인하기 전에는 사용자 지정 정식 제목으로만 검색한다.
   program('ent-25', '동상이몽2', 'family', ['mon']),
   program('ent-26', '슈퍼맨이 돌아왔다', 'family', ['wed']),
   program('ent-27', '동물농장', 'pet', ['sun']),
@@ -72,8 +74,108 @@ const entertainmentItems = [
   program('ent-30', '최강야구', 'sports', ['mon']),
   program('ent-31', '나는 솔로 라이브', 'dating', ['thu']),
   program('ent-32', '연예대상', 'award'),
-].map((entry) => ({ ...withContent(entry, 'category'), link: `/entertainmentdetail/${entry.id}` }));
 
+  // 여행 추가
+  {
+    ...program('ent-33', '어서와~ 한국은 처음이지?', 'travel'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-34', '걸리버 여행기', 'travel'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-35', '니돈내산 독박투어', 'travel'),
+    kind: 'tv',
+
+  },
+  {
+    ...program('ent-36', '남겨서 뭐하게', 'travel'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-37', '강철지구', 'travel'),
+    kind: 'tv',
+
+  },
+  {
+    ...program('ent-38', '상남자의 여행법', 'travel'),
+    kind: 'tv',
+    tmdbId: 320408,
+  },
+  {
+    ...program('ent-39', '태어난 김에 음악일주', 'travel'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-40', '놀러코스터', 'travel'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-41', '위대한 가이드', 'travel'),
+    kind: 'tv',
+  },
+
+  // 음악 추가
+  {
+    ...program('ent-42', '천만기인쇼', 'music'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-43', '전설의 사내', 'music'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-44', '전국노래자랑', 'music'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-45', '놀라운 토요일', 'music'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-46', '쇼! 음악중심', 'music'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-47', '스튜디오 K', 'music'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-49', '놀라운 목요일', 'music'),
+    kind: 'tv',
+  },
+
+  // 토크 추가
+  {
+    ...program('ent-50', '심야괴담회', 'talk'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-51', '탐정들의 영업비밀', 'talk'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-52', '스모킹 건', 'talk'),
+    kind: 'tv',
+    tmdbId: 223443,
+  },
+  {
+    ...program('ent-53', '히든아이', 'talk'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-54', '주주총회', 'talk'),
+    kind: 'tv',
+  },
+  {
+    ...program('ent-55', '프리한19', 'talk'),
+    kind: 'tv',
+  },
+].map((entry) => ({
+  ...withContent(entry, 'category'),
+  link: `/entertainmentdetail/${entry.id}`,
+}));
 /* =========================
    드라마
 ========================= */
@@ -255,7 +357,7 @@ export const categoryPages = {
     sections: [
       { id: 'top', type: 'rank', title: '예능 TOP 20', items: entertainmentItems.slice(0, 20) },
       { id: 'weekday', type: 'weekday', title: '요일별 콘텐츠', items: entertainmentItems },
-      { id: 'travel', type: 'poster', title: '해외로 떠나는 여행 예능', items: byGenre(entertainmentItems, 'travel') },
+      { id: 'travel', type: 'poster', title: '떠나는 여행 예능', items: byGenre(entertainmentItems, 'travel') },
       { id: 'music', type: 'poster', title: '걱정은 잠시 잊게 만드는 음악 예능', items: byGenre(entertainmentItems, 'music') },
       { id: 'only', type: 'poster', title: '독점 예능', items: entertainmentItems.filter((item) => item.isOriginal || item.badge) },
       { id: 'tag-variety', type: 'poster', title: '# 버라이어티', items: byGenre(entertainmentItems, 'variety').concat(pick(entertainmentItems, ['ent-05', 'ent-17'])) },
@@ -306,9 +408,9 @@ export const categoryPages = {
   movie: {
     name: '영화',
     heroItems: [
-      { id: 'mov-hero-1', title: '범죄도시 4', subtitle: '지금 바로 구매하고 감상하세요', image: '/images/home/hero/movie_hero01.png',textImage:'/images/home/hero/sub-movie-hero-text01.png', link: '/moviedetail/mov-01' },
-      { id: 'mov-hero-2', title: '서울의 봄', subtitle: '1979년 12월 12일, 그날 밤', image: '/images/home/hero/movie_hero02.webp',textImage:'/images/home/hero/sub-movie-hero-text02.png', link: '/moviedetail/mov-02' },
-      { id: 'mov-hero-3', title: '파일럿', subtitle: '새로 들어온 코미디 영화', image: '/images/home/hero/movie_hero03.png',textImage:'/images/home/hero/sub-movie-hero-text03.png', link: '/moviedetail/mov-07' },
+      { id: 'mov-hero-1', title: '범죄도시 4', subtitle: '지금 바로 구매하고 감상하세요', image: '/images/home/hero/movie_hero01.png', textImage: '/images/home/hero/sub-movie-hero-text01.png', link: '/moviedetail/mov-01' },
+      { id: 'mov-hero-2', title: '서울의 봄', subtitle: '1979년 12월 12일, 그날 밤', image: '/images/home/hero/movie_hero02.webp', textImage: '/images/home/hero/sub-movie-hero-text02.png', link: '/moviedetail/mov-02' },
+      { id: 'mov-hero-3', title: '파일럿', subtitle: '새로 들어온 코미디 영화', image: '/images/home/hero/movie_hero03.png', textImage: '/images/home/hero/sub-movie-hero-text03.png', link: '/moviedetail/mov-07' },
     ],
     filters: [
       { id: 'all', label: '영화전체' },

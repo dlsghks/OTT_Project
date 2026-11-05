@@ -1,0 +1,9 @@
+.mobile-chrome-desktop {
+  display: contents;
+}
+
+@media (max-width: 768px) {
+  .mobile-chrome-desktop {
+    display: none;
+  }
+}

@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { useState } from 'react';
 
 import { TMDB_IMG, formatDate } from '../../services/tmdbDetail';
@@ -25,10 +26,10 @@ export const EpisodeRow = ({ title, seasonNumber, episodes, fallbackImage, onSel
   return (
     <section className="movie-videos episode-row">
       <div className="episode-row__header">
-        <h2 className="movie-videos__title">
+        <SectionTitle className="movie-videos__title">
           {title} 시즌{seasonNumber}
           <span className="episode-row__count">(총 {episodes.length}화)</span>
-        </h2>
+        </SectionTitle>
 
         <div className="episode-row__order" role="group" aria-label="회차 정렬">
           <button

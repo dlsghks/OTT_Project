@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { formatDate } from '../../services/tmdbDetail';
 import { VideoSlider } from './VideoSlider';
 
@@ -8,7 +9,7 @@ export const DetailVideos = ({ title, videos = [], onSelect }) => {
 
   return (
     <section className="movie-videos">
-      <h2 className="movie-videos__title">관련영상</h2>
+      <SectionTitle className="movie-videos__title">관련영상</SectionTitle>
 
       <VideoSlider
         label="관련영상"
