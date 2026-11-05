@@ -82,7 +82,7 @@
 
     color: #a5a5a5;
   }
-
+  .wavve-mobile-footer__notice img,
   .wavve-mobile-footer__notice-link > img.wavve-mobile-footer__notice-icon {
     position: static;
     inset: auto;
