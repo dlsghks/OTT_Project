@@ -23,16 +23,16 @@
   &__heading {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
+    gap: 22px;
+    margin-bottom: 28px;
 
     h1 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 24px;
     }
 
     a {
-      font-size: 0.75rem;
+      font-size: 14px;
       color: #bbb;
 
       &:hover {
@@ -51,8 +51,8 @@
 
   // 화면 전체 너비로 확장
   width: calc(100% + 220px);
-  margin-left: -6.875rem;
-  margin-bottom: 3.75rem;
+  margin-left: -110px;
+  margin-bottom: 56px;
 
   overflow: hidden;
 
@@ -132,7 +132,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
-    gap: 0.75rem;
+    gap: 8px;
 
     p {
       white-space: pre-line;
@@ -145,24 +145,19 @@
     top: 0;
     left: 0;
 
-    width: 4.6875rem;
-    height: 2rem;
-    text-align: center;
-    line-height: 1.5rem;
-
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
+    padding: 4px 7px;
+    border-radius: 3px;
 
     background: #fa3f48;
     color: #fff;
 
-    font-size: 1rem;
+    font-size: 11px;
     font-weight: 700;
   }
 
   // 시청률 순위
   &__rank {
-    font-size: 4rem;
+    font-size: 44px;
     font-weight: 800;
     font-style: italic;
     line-height: 1;
@@ -170,26 +165,26 @@
 
   h2 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 27px;
     font-weight: 700;
   }
 
   p {
     margin: 0;
-    font-size: 2rem;
+    font-size: 17px;
     font-weight: 600;
   }
 
   small {
-    color: #a5a5a5;
-    font-size: 1.5rem;
+    color: #c7d6eb;
+    font-size: 13px;
   }
 
   // 방송 진행률
   &__progress {
     width: 70%;
-    height: 0.25rem;
-    margin: 0.75rem 0 0.75rem;
+    height: 3px;
+    margin: 8px 0 12px;
 
     background: rgba(255, 255, 255, 0.3);
 
@@ -207,21 +202,19 @@
     align-items: center;
     justify-content: center;
 
-    padding: 0.75rem 1.5rem;
-    border-radius: 10px;
-    width: 12.25rem;
-    height: 3.125rem;
+    padding: 9px 16px;
+    border-radius: 5px;
 
-    background: #111;
+    background: rgba(255, 255, 255, 0.15);
     color: #fff;
 
-    font-size: 1.25rem;
+    font-size: 13px;
     text-decoration: none;
 
     transition: background 0.2s ease;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(255, 255, 255, 0.3);
     }
   }
 
@@ -236,7 +229,7 @@
     align-items: center;
     justify-content: center;
 
-    width: 4rem;
+    width: 64px;
     padding: 0;
     border: 0;
 
@@ -264,8 +257,8 @@
     }
 
     svg {
-      width: 1.5rem;
-      height: 2.25rem;
+      width: 22px;
+      height: 36px;
     }
   }
 
@@ -279,17 +272,17 @@
   // 현재 슬라이드 순위
   &__pagination {
     position: absolute;
-    right: 1.5rem;
-    bottom: 1.25rem;
+    right: 24px;
+    bottom: 20px;
     z-index: 10;
 
-    padding: 0.375rem 0.75rem;
-    border-radius: 10px;
+    padding: 6px 14px;
+    border-radius: 20px;
 
     background: rgba(0, 0, 0, 0.6);
     color: #fff;
 
-    font-size: 0.75rem;
+    font-size: 13px;
     pointer-events: none;
 
     span {
@@ -306,10 +299,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.125rem;
+  gap: 16px;
 
-  height: 11.25rem;
-  margin: 0 0 3.75rem;
+  height: 90px;
+  margin: 0 0 44px;
 
   background: linear-gradient(100deg,
       #080808,
@@ -320,11 +313,11 @@
   background-size: cover;
 
   strong {
-    font-size: 1.5rem;
+    font-size: 21px;
   }
 
   span {
-    font-size: 1.25rem;
+    font-size: 13px;
     color: #ddd;
   }
 }
@@ -335,17 +328,17 @@
 
 .live-section {
   margin-bottom: 0;
-  padding-bottom: 3.75rem;
+  padding-bottom: 48px;
 
   &__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
 
     h2 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: 20px;
     }
   }
 
@@ -360,7 +353,7 @@
 
   &__track {
     display: flex;
-    gap: 1.25rem;
+    gap: 12px;
 
     overflow-x: auto;
     scrollbar-width: none;
@@ -383,7 +376,7 @@
     border: 0;
 
     color: #fff;
-    font-size: 3rem;
+    font-size: 42px;
 
     opacity: 0;
     pointer-events: none;
@@ -418,14 +411,14 @@
 
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 5px;
 
   &__thumb {
     position: relative;
     aspect-ratio: 16 / 9;
 
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 6px;
     background: #303745;
 
     img {
@@ -445,23 +438,23 @@
     align-items: center;
     justify-content: center;
 
-    font-size: 1.25rem;
+    font-size: 19px;
     font-weight: 700;
     color: #c5cfdf;
   }
 
   &__badge {
     position: absolute;
-    left: 0.75rem;
-    top: 0.75rem;
+    left: 5px;
+    top: 5px;
 
-    padding: 0.25rem 0.375rem;
-    // border-radius: 3px;
+    padding: 2px 4px;
+    border-radius: 2px;
 
     background: #222c;
     color: #fff;
 
-    font-size: 0.75rem;
+    font-size: 10px;
   }
 
   &__progress {
@@ -477,12 +470,12 @@
     span {
       display: block;
       height: 100%;
-      background: #1351F9;
+      background: #2459ed;
     }
   }
 
   &__channel {
-    font-size: 1.125rem;
+    font-size: 13px;
     font-weight: 500;
 
     white-space: nowrap;
@@ -491,7 +484,7 @@
   }
 
   &__title {
-    font-size: 1.125rem;
+    font-size: 12px;
     color: #aaa;
 
     white-space: nowrap;
@@ -500,7 +493,7 @@
   }
 
   &:hover .live-card__thumb {
-    outline: 2px solid #1351F9;
+    outline: 2px solid #668cff;
   }
 }
 

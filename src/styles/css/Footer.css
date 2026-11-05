@@ -40,35 +40,12 @@
   color: #c8c8c8 !important;
   font-size: 22px;
 }
-.footer__notice-slider {
-  flex: 1;
-  min-width: 0;
-  height: 50px;
-  overflow: hidden;
-}
-.footer__notice-swiper {
-  width: 100%;
-  height: 50px;
-  overflow: hidden;
-}
-.footer__notice-swiper .swiper-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-.footer__notice-swiper .swiper-slide {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  height: 50px;
-  overflow: hidden;
-}
 .footer__notice-title {
-  display: block;
-  width: 100%;
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   color: #b4b4b4 !important;
-  font-size: 16px;
+  font-size: 20px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -77,8 +54,6 @@
 }
 .footer__notice-controls {
   display: flex;
-  flex-direction: row;
-  flex: 0 0 auto;
   align-self: stretch;
   margin-right: calc(var(--footer-side) + 12px);
   border-left: 1px solid #2b2b2b;
@@ -87,7 +62,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 70px;
   width: 70px;
   padding: 0;
   border: 0;
@@ -315,66 +289,4 @@
     width: 200px;
     font-size: 14px;
   }
-}
-
-.footer {
-  font-size: 14px;
-}
-.footer__notice-label {
-  font-size: 18px;
-}
-.footer__notice-title {
-  font-size: 16px;
-}
-.footer__nav a {
-  font-size: 14px;
-}
-.footer__info {
-  font-size: 12px;
-}
-.footer__copyright {
-  font-size: 12px;
-}
-.footer__business-toggle {
-  font-size: 14px;
-}
-.footer__business-menu a {
-  font-size: 14px;
-}
-@media (max-width: 768px) {
-  .footer__notice-inner {
-    gap: 16px;
-    height: 52px;
-    padding-left: var(--footer-side);
-  }
-  .footer__notice-label {
-    font-size: 15px;
-  }
-  .footer__notice-slider {
-    height: 40px;
-  }
-  .footer__notice-title {
-    font-size: 14px;
-  }
-  .footer__notice-controls {
-    flex-direction: row;
-    margin-right: 0;
-  }
-  .footer__notice-controls button {
-    flex: 0 0 44px;
-    width: 44px;
-  }
-  .footer__notice-controls button svg {
-    width: 12px;
-  }
-}
-
-body:has(.notice-page, .inquiry-write) .footer {
-  background: #1b1b1b;
-}
-body:has(.notice-page, .inquiry-write) .footer__notice {
-  background: #1b1b1b;
-}
-body:has(.notice-page, .inquiry-write) .footer__inner {
-  background: #1b1b1b;
 }

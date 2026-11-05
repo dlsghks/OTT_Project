@@ -10,7 +10,6 @@ import { Home } from "../pages/home/Home";
 
 // 카테고리 페이지
 import { Entertainment } from "../pages/category/Entertainment";
-import { EntertainmentAll } from "../pages/category/EntertainmentAll";
 import { Drama } from "../pages/category/Drama";
 import { Movie } from "../pages/category/Movie";
 import { Currentaffairs } from "../pages/category/Currentaffairs";
@@ -91,7 +90,6 @@ export const AppRouter = () => {
           path="/entertainment"
           element={<Entertainment />}
         />
-        <Route path="/entertainment/all" element={<EntertainmentAll />} />
         <Route path="/drama" element={<Drama />} />
         <Route path="/movie" element={<Movie />} />
         <Route
