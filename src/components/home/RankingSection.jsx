@@ -39,7 +39,7 @@ export const RankingSection = ({ items = [] }) => {
 
                     slidesPerView="auto"
                     slidesPerGroup={2}
-                    spaceBetween={18}
+                    spaceBetween={8}
                     speed={500}
 
                     grabCursor={true}
@@ -49,15 +49,9 @@ export const RankingSection = ({ items = [] }) => {
                     watchOverflow={true}
 
                     breakpoints={{
-                        640: {
-                            slidesPerGroup: 3,
-                        },
-                        1024: {
-                            slidesPerGroup: 4,
-                        },
-                        1440: {
-                            slidesPerGroup: 5,
-                        }
+                        601: { slidesPerGroup: 3, spaceBetween: 12 },
+                        1025: { slidesPerGroup: 4, spaceBetween: 18 },
+                        1440: { slidesPerGroup: 5, spaceBetween: 18 }
                     }}
 
                     className="ranking-section__swiper"

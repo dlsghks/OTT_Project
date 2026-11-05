@@ -32,7 +32,8 @@ export const ContentSection = ({
   more,
   cardType = 'default',
   showHeader = true,
-  renderCard
+  renderCard,
+  appResponsive = false
 }) => {
   const swiperRef = useRef(null);
 
@@ -96,7 +97,12 @@ export const ContentSection = ({
 
           watchOverflow={true}
 
-          breakpoints={{
+          breakpoints={appResponsive ? {
+            0: { slidesPerGroup: 1, spaceBetween: 8 },
+            601: { slidesPerGroup: 3, spaceBetween: 12 },
+            1025: { slidesPerGroup: 4, spaceBetween: 18 },
+            1440: { slidesPerGroup: config.group, spaceBetween: 18 },
+          } : {
             640: {
               slidesPerGroup: 3,
             },

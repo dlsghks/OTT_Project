@@ -18,6 +18,7 @@ import {
   eventBanners,
 } from '../../data/home/homeData';
 
+import { HomeGenreNav } from '../../components/home/HomeGenreNav';
 import { categoryPages } from '../../data/categoryData';
 
 import {
@@ -27,6 +28,7 @@ import {
 } from '../../services/tmdbDetail';
 
 import '../../styles/pages/home/Home.scss';
+import '../../styles/components/HomeResponsive.scss';
 
 // 앞서 추가한 TMDB 영화·드라마 섹션
 const MIN_SECTION_ITEMS = 15;
@@ -438,14 +440,13 @@ export const Home = () => {
 
   const renderHomeSection = ({ type, id }) => {
     if (type === 'weekly') {
-      return <WeeklyContentSection key="weekly" />;
+      return <WeeklyContentSection key="weekly" appResponsive />;
     }
 
     if (type === 'hope') {
-      return <HopeSection key="hope" />;
+      return <HopeSection key="hope" appResponsive />;
     }
 
-    // 기존 홈 섹션
     // 기존 홈 섹션
     if (type === 'existing') {
       const section = homeSections.find(
@@ -458,6 +459,7 @@ export const Home = () => {
       if (id === 'coming-soon') {
         return (
           <ComingSoonSection
+            appResponsive
             key={`existing-${id}`}
             {...section}
           />
@@ -481,6 +483,7 @@ export const Home = () => {
 
       return (
         <ContentSection
+          appResponsive
           key={`existing-${id}`}
           {...section}
           title={title}
@@ -506,6 +509,7 @@ export const Home = () => {
 
       return (
         <ContentSection
+          appResponsive
           key={`discovery-${id}`}
           title={section.title}
           items={items}
@@ -531,6 +535,7 @@ export const Home = () => {
 
       return (
         <ContentSection
+          appResponsive
           key={`additional-${id}`}
           title={section.title}
           items={items}
@@ -544,8 +549,10 @@ export const Home = () => {
 
   return (
     <div className="wavve-home">
-      {/* 메인 히어로 */}
-      <HomeHero items={heroItems} />
+
+      {/* 1. 메인 히어로 */}
+      <HomeGenreNav />
+      <HomeHero items={heroItems} appResponsive />
 
       <div className="wavve-home__inner">
         {/* 이벤트 */}
