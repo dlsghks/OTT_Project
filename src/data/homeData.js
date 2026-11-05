@@ -197,7 +197,7 @@ export const homeSections = [
     title: '예능 전체보기',
     cardType: 'default',
     items: homeContentBySection['all-entertainment'],
-    more: '/entertainment'
+    more: '/entertainment/all'
   }
 ];
 
