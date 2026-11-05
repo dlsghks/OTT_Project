@@ -1,9 +1,10 @@
+@use "../../common/figma-tokens" as figma;
 @use "../../common/slider-navigation" as nav;
 
 .content-section {
   width: 100%;
   min-width: 0;
-  margin-bottom: 80px;
+  margin-bottom: figma.$space-7xl;
 
   // 제목과 카드 간격
   &__header {
@@ -14,23 +15,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: figma.$space-xl;
 
     h2 {
       margin: 0;
-      color: #fff;
+      color: figma.$neutral-white;
       font-size: 28px;
       font-weight: 700;
       line-height: 1.4;
     }
 
     a {
-      color: #aaa;
+      color: figma.$neutral-3;
       font-size: 15px;
       text-decoration: none;
 
       &:hover {
-        color: #fff;
+        color: figma.$neutral-white;
       }
     }
   }

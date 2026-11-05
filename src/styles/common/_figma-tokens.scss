@@ -1,0 +1,102 @@
+// Figma 최종 디자인의 Variables 스크린샷에서 확인한 값 (2026-11-05).
+// 값은 px 단위이며, 브랜드/이벤트/레트로 고유 스타일은 무분별하게 덮어쓰지 않습니다.
+// 사용 예: @use '../../common/figma-tokens' as figma;
+
+// Colors / Primary
+$primary-main: #1351F9;  // 웨이브 메인
+$primary-click: #0F40C6; // 웨이브 클릭
+
+// Colors / Effect
+$effect-1: #1351F9;
+$effect-2: #00B0FF;
+$effect-3: #FF00B7;
+
+// Colors / Neutral
+$neutral-white: #FFFFFF;
+$neutral-1: #DDDDDD;
+$neutral-2: #BBBBBB;
+$neutral-3: #AAAAAA;
+$neutral-4: #888888;
+$neutral-5: #666666;
+$neutral-6: #555555;
+$neutral-7: #444444;
+$neutral-8: #222222;
+$neutral-black: #000000;
+
+// Colors / Event
+$event-1: #FF908A;
+$event-2: #F95659;
+$event-3: #FFC7E2;
+$event-4: #DA0F76;
+$event-5: #FFF1C0;
+$event-6: #7140CE;
+$warning: #F93950;
+
+// Radius (Figma: radius/0..3)
+$radius-0: 0px;
+$radius-1: 6px;
+$radius-2: 10px;
+$radius-3: 999px;
+
+// Spacing (Figma: spacing/0..max)
+$space-0: 0px;
+$space-2xs: 2px;
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 12px;
+$space-lg: 16px;
+$space-xl: 20px;
+$space-2xl: 24px;
+$space-3xl: 32px;
+$space-4xl: 40px;
+$space-5xl: 48px;
+$space-6xl: 64px;
+$space-7xl: 80px;
+$space-max: 110px;
+
+// Button / primitive, color, radius
+$button-pressed: #0032BA;
+$button-background: $primary-main;
+$button-label: $neutral-white;
+$button-icon: $neutral-white;
+$button-radius-retro: $radius-0;
+$button-radius-wavve: $radius-2;
+
+// Button / icon S, M, L (수평 padding 및 gap)
+$button-icon-s-padding-x: $space-4xl; // 40px
+$button-icon-s-gap: $space-sm;       // 8px
+$button-icon-m-padding-x: 60px;
+$button-icon-m-gap: $space-md;       // 12px
+$button-icon-l-padding-x: $space-7xl; // 80px
+$button-icon-l-gap: 15px;
+
+// Button / shared S, M, L (수직 padding)
+$button-shared-s-padding-y: $space-md; // 12px
+$button-shared-m-padding-y: $space-lg; // 16px
+$button-shared-l-padding-y: $space-xl; // 20px
+
+// Button / text S, M, L (고정 폭/높이: 콘텐츠 버튼에만 선택적으로 사용)
+$button-text-gap: $space-0;
+$button-text-s-padding-x: $space-3xl;
+$button-text-s-width: 288px;
+$button-text-s-height: 44px;
+$button-text-m-padding-x: $space-4xl;
+$button-text-m-width: 376px;
+$button-text-m-height: 52px;
+$button-text-l-padding-x: 52px;
+$button-text-l-width: 464px;
+$button-text-l-height: 62px;
+$button-padding-5-to-8-chars: $space-6xl;
+$button-padding-9-to-12-chars: 68px;
+
+// 공통 버튼 시각 상태만 적용하는 믹스인 (크기/레이아웃 변경 없음).
+@mixin wavve-primary-button {
+  border: 0;
+  border-radius: $button-radius-wavve;
+  background-color: $button-background;
+  color: $button-label;
+  cursor: pointer;
+  &:hover { background-color: $primary-click; }
+  &:active { background-color: $button-pressed; }
+  &:focus-visible { outline: 2px solid $primary-main; outline-offset: 2px; }
+}

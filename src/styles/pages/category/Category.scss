@@ -1,12 +1,14 @@
+@use "../../common/figma-tokens" as figma;
+
 /* =========================
    카테고리 페이지 (예능·드라마·영화·시사교양·애니·해외시리즈)
    카드 크기 · 배지 · 순위 숫자는 공통(common/_card.scss, ContentCard.scss)
 ========================= */
 
-$chip-blue: #1f4ef5;
-$chip-blue-hover: #3561ff;
-$chip-gray: #2e2e30;
-$chip-gray-hover: #3c3c40;
+$chip-blue: figma.$primary-main;
+$chip-blue-hover: figma.$primary-click;
+$chip-gray: figma.$neutral-8;
+$chip-gray-hover: figma.$neutral-7;
 $chip-border: rgba(255, 255, 255, 0.08);
 
 // 장르 필터 / 요일 버튼 공통
@@ -72,7 +74,7 @@ $chip-border: rgba(255, 255, 255, 0.08);
     }
 
     a {
-      color: #b9c3d4;
+      color: figma.$neutral-2;
       font-size: 13px;
       text-decoration: none;
     }

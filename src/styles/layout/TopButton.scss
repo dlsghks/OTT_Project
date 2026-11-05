@@ -1,3 +1,5 @@
+@use "../common/figma-tokens" as figma;
+
 // 상단 이동 버튼 (1920 이상 60*60, 작은 화면은 비율에 맞춰 축소 · 최소 44px)
 $base-screen: 1920;
 $size: 60;
@@ -27,10 +29,10 @@ $icon-w: 20;
 
   border: 0;
   border-radius: 50%;
-  background: #1f4ef5;
+  background: figma.$primary-main;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 
-  color: #fff;
+  color: figma.$neutral-white;
   cursor: pointer;
 
   opacity: 0;
@@ -45,7 +47,7 @@ $icon-w: 20;
   }
 
   &:hover {
-    background: #3561ff;
+    background: figma.$primary-click;
   }
 
   &:focus-visible {
