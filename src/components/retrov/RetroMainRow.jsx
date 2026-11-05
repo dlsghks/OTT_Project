@@ -28,6 +28,7 @@ export default function RetroMainRow({ id, title, icon, items, variant, renderIt
           slidesPerView="auto"
           slidesPerGroupAuto
           spaceBetween={20}
+          breakpoints={{ 0: { spaceBetween: 8 }, 601: { spaceBetween: 12 }, 1025: { spaceBetween: 20 } }}
           speed={500}
           grabCursor
           watchOverflow

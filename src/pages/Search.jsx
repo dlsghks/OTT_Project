@@ -1,16 +1,20 @@
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import searchIcon from '../assets/responsive/search.svg';
+import desktopSearchIcon from '../assets/responsive/search-desktop.svg';
+import closeIcon from '../assets/responsive/search-close.svg';
+import { categoryPages } from '../data/categoryData';
 
 import { ContentCard } from '../components/home/ContentCard';
 import { popularKeywords, searchContents } from '../data/searchData';
 
 import '../styles/pages/Search.scss';
+import '../styles/responsive/SearchResponsive.scss';
 
 const STORAGE_KEY = 'wavve-recent-searches';
 
 export const Search = () => {
-  const navigate = useNavigate();
+  const [popularExpanded, setPopularExpanded] = useState(false);
 
   // 검색창 입력값
   const [keyword, setKeyword] = useState('');
@@ -91,9 +95,9 @@ export const Search = () => {
 
       {/* 검색 영역 */}
       <section className="search-page__hero">
-        <p className="search-page__eyebrow">SEARCH</p>
+        
 
-        <h1>보고 싶은 콘텐츠를 찾아보세요</h1>
+        <h1>보고싶은 콘텐츠를 찾아보세요</h1>
 
         <form
           className="search-page__form"
@@ -102,15 +106,13 @@ export const Search = () => {
             handleSearch();
           }}
         >
-          <span className="search-page__search-icon">
-            ⌕
-          </span>
+          <span className="search-page__search-icon"><img className="search-page__desktop-icon" src={desktopSearchIcon} alt="" /><img src={searchIcon} alt="" /></span>
 
           <input
             type="search"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            placeholder="제목, 배우, 감독을 검색해보세요"
+            placeholder="제목, 장르, 배우로 찾아보세요."
             aria-label="콘텐츠 검색"
           />
 
@@ -160,7 +162,7 @@ export const Search = () => {
                     aria-label={`${word} 삭제`}
                     onClick={() => handleDelete(word)}
                   >
-                    ×
+                    <img src={closeIcon} alt="" />
                   </button>
                 </div>
               ))}
@@ -173,9 +175,10 @@ export const Search = () => {
         </div>
 
         {/* 실시간 인기 검색어 */}
-        <div className="popular-searches">
+        <div className={`popular-searches${popularExpanded ? " is-expanded" : ""}`}>
           <div className="search-page__section-head">
             <h2>실시간 인기 검색어</h2>
+            <button className="popular-searches__expand" type="button" aria-expanded={popularExpanded} onClick={() => setPopularExpanded(value => !value)}>{popularExpanded ? "접기" : "전체 보기"}</button>
             <span className="popular-searches__time">
               예시 순위
             </span>
@@ -209,8 +212,7 @@ export const Search = () => {
       {/* 추천 콘텐츠 영역 */}
       <section className="search-page__contents">
         <div className="search-page__contents-head">
-          <h2>지금 많이 찾는 콘텐츠</h2>
-          <span>웨이브 시청 데이터 기준 예시</span>
+          <h2>인기 시리즈</h2>
         </div>
 
         <div className="search-page__contents-grid">
@@ -220,6 +222,13 @@ export const Search = () => {
               item={item}
             />
           ))}
+        </div>
+      </section>
+
+      <section className="search-page__movies" aria-labelledby="search-movies-title">
+        <h2 id="search-movies-title">인기 영화</h2>
+        <div className="search-page__movie-list">
+          {categoryPages.movie.items.slice(0, 10).map(item => <ContentCard key={item.id} item={item} />)}
         </div>
       </section>
 
