@@ -1,0 +1,1683 @@
+.live-channel-page {
+  background: #09090b;
+  color: #fff;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+
+  button {
+    cursor: pointer;
+    color: inherit;
+    font: inherit
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 20px
+  }
+}
+
+.live-channel-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(300px, 3fr);
+  gap: 20px;
+  align-items: start
+}
+
+.live-channel-main,
+.live-sidebar {
+  min-width: 0
+}
+
+.live-player {
+  aspect-ratio: 16/9;
+  background: #050505 center/cover;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative
+}
+
+.live-player__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, .76);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  padding: 20px
+}
+
+.live-player__overlay h2 {
+  font-size: 22px
+}
+
+.live-player__overlay p {
+  margin: 0;
+  color: #bbb
+}
+
+.live-player__button {
+  border: 1px solid #fff;
+  border-radius: 28px;
+  padding: 12px 32px;
+  background: transparent;
+  color: #fff
+}
+
+.live-channel-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0 34px
+}
+
+.live-channel-info__text {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0
+}
+
+.live-channel-info__text>strong {
+  font-size: 27px;
+  white-space: nowrap
+}
+
+.live-channel-info__text>div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0
+}
+
+.live-channel-info__text b {
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}
+
+.live-channel-info__text span {
+  font-size: 13px;
+  color: #aaa
+}
+
+.live-channel-info__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0
+}
+
+.live-channel-info__actions button {
+  border: 0;
+  background: #242426;
+  border-radius: 30px;
+  padding: 10px 15px
+}
+
+.live-channel-info__actions button[aria-pressed=true] {
+  color: #ff4169
+}
+
+.live-schedule {
+  margin-bottom: 46px
+}
+
+.live-schedule__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px
+}
+
+.live-schedule__heading a {
+  font-size: 13px;
+  color: #bbb
+}
+
+.live-schedule__slider {
+  position: relative
+}
+
+.live-schedule__item {
+  box-sizing: border-box;
+  background: #222224;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  min-height: 86px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
+.live-schedule__item.is-current {
+  border-color: #ddd;
+  background: #151517
+}
+
+.live-schedule__item strong {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.live-schedule__item small {
+  font-size: 12px;
+  color: #aaa
+}
+
+.live-schedule__arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 42px;
+  background: linear-gradient(90deg, #08080bdd, transparent);
+  border: 0;
+  font-size: 34px;
+  opacity: 0;
+  transition: opacity .2s
+}
+
+.live-schedule__arrow--prev {
+  left: 0
+}
+
+.live-schedule__arrow--next {
+  right: 0;
+  background: linear-gradient(270deg, #08080bdd, transparent)
+}
+
+.live-schedule__slider:hover .live-schedule__arrow {
+  opacity: 1
+}
+
+.live-top20 h2 {
+  margin-bottom: 16px
+}
+
+.live-top20__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px 12px
+}
+
+.live-top20__card {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  min-width: 0
+}
+
+.live-top20__image {
+  aspect-ratio: 16/9;
+  background: #262632;
+  border-radius: 5px;
+  overflow: hidden
+}
+
+.live-top20__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
+.live-top20__meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 5px
+}
+
+.live-top20__meta em {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1
+}
+
+.live-top20__meta>div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px
+}
+
+.live-top20__meta strong,
+.live-top20__meta span {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}
+
+.live-top20__meta span {
+  color: #aaa
+}
+
+.live-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px
+}
+
+.live-chat,
+.live-channel-list {
+  background: #151720;
+  border-radius: 12px;
+  overflow: hidden
+}
+
+.live-sidebar__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px;
+  font-size: 18px
+}
+
+.live-sidebar__heading a {
+  font-size: 12px;
+  color: #bbb
+}
+
+.live-chat__toggle {
+  width: 100%;
+  background: none;
+  border: 0;
+  text-align: left
+}
+
+.live-chat__preview {
+  margin: 0 14px 14px;
+  padding: 13px;
+  background: #08090e;
+  border-radius: 8px;
+  color: #999;
+  font-size: 13px;
+  cursor: pointer
+}
+
+.live-chat.is-open {
+  height: auto;
+  aspect-ratio: unset;
+  display: flex;
+  flex-direction: column;
+  min-height: 0
+}
+
+.live-chat__messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px;
+  font-size: 13px;
+  color: #cbd1ed
+}
+
+.live-chat__messages p {
+  margin: 0 0 14px
+}
+
+.live-chat__form {
+  display: flex;
+  margin: 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden
+}
+
+.live-chat__form input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: white;
+  padding: 12px;
+  outline: 0
+}
+
+.live-chat__form button {
+  border: 0;
+  background: #323747;
+  padding: 0 14px
+}
+
+.live-chat__form button:disabled {
+  opacity: .45
+}
+
+.live-channel-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 670px
+}
+
+.live-channel-list__filters {
+  display: flex;
+  overflow-x: auto;
+  gap: 4px;
+  padding: 0 14px 12px;
+  scrollbar-width: none
+}
+
+.live-channel-list__filters button {
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px
+}
+
+.live-channel-list__filters button.active {
+  background: #343744
+}
+
+.live-channel-list__scroll {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 0 14px 12px
+}
+
+.live-channel-list__item {
+  width: 100%;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 8px 0
+}
+
+.live-channel-list__item.active .live-channel-list__thumb {
+  outline: 2px solid #fff
+}
+
+.live-channel-list__thumb {
+  position: relative;
+  flex: 0 0 40%;
+  aspect-ratio: 16/9;
+  background: #292c36;
+  border-radius: 7px;
+  overflow: hidden
+}
+
+.live-channel-list__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
+.live-channel-list__thumb>span {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: #000b;
+  font-size: 10px;
+  padding: 2px
+}
+
+.live-channel-list__progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: #2764fa
+}
+
+.live-channel-list__item>div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px
+}
+
+.live-channel-list__item strong {
+  font-size: 13px;
+  line-height: 1.4
+}
+
+.live-channel-list__item small {
+  color: #aaa;
+  font-size: 12px
+}
+
+.live-share-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.live-share-modal {
+  position: relative;
+  display: block;
+  flex: 0 1 475px;
+  width: 475px;
+  min-width: 0;
+  max-width: 100%;
+  height: 280px;
+  min-height: 0;
+  padding: 82px 24px 16px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  border: 0;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse at 50% 0,
+      rgba(30, 53, 145, 0.3),
+      transparent 55%),
+    #0c0d18;
+  color: #fff;
+
+  h2 {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+
+    display: flex;
+    align-items: center;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &__close {
+    position: absolute;
+    inset: 18px 18px auto auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    cursor: pointer;
+
+    svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__sns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    width: 100%;
+    height: 54px;
+    margin: 18px 0 0;
+    padding: 0;
+
+    button {
+      position: static;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 54px;
+
+      width: 54px;
+      height: 54px;
+      min-width: 54px;
+      max-width: 54px;
+      min-height: 54px;
+      max-height: 54px;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      aspect-ratio: 1;
+
+      border: 0;
+      border-radius: 25px;
+      background: #252632;
+      cursor: pointer;
+
+      img {
+        display: block;
+        flex: 0 0 auto;
+        width: 24px;
+        height: 24px;
+        max-width: none;
+        margin: 0;
+        object-fit: contain;
+      }
+    }
+  }
+
+  &__copy {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 422px;
+    max-width: 100%;
+    height: 52px;
+    margin: 25px auto 0;
+    padding: 8px 16px;
+    box-sizing: border-box;
+
+    border: 1px solid #505050;
+    border-radius: 10px;
+    background: #000;
+
+    input {
+      display: block;
+      flex: 1 1 0;
+      width: 0;
+      min-width: 0;
+      height: 34px;
+      margin: 0;
+      padding: 0;
+
+      border: 0;
+      border-radius: 0;
+      background: #000;
+      box-shadow: none;
+      color: #a0a0a0;
+
+      font-family: inherit;
+      font-size: 14px;
+      line-height: normal;
+      text-overflow: ellipsis;
+    }
+
+    button {
+      position: static;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 56px;
+
+      width: 56px;
+      min-width: 56px;
+      height: 34px;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+
+      border: 1px solid #505050;
+      border-radius: 8px;
+      background: #000;
+      box-shadow: none;
+      color: #fff;
+
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+
+      &:hover,
+      &:active {
+        background: #000;
+        border-color: #999;
+      }
+    }
+  }
+
+  &__feedback {
+    min-height: 18px;
+    margin: 12px 0 0;
+    padding: 0 4px;
+  }
+
+  &__message {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+
+    svg {
+      display: block;
+      flex: 0 0 12px;
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid #7da7ff;
+    outline-offset: 2px;
+  }
+}
+
+/* 기존 주소창 스타일보다 우선 적용 */
+.live-share-modal .live-share-modal__copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 422px;
+  max-width: 100%;
+  height: 52px;
+  margin: 22px auto 0;
+  padding: 8px 10px 8px 16px;
+  box-sizing: border-box;
+
+  background: #000;
+  border: 1px solid #505050;
+  border-radius: 12px;
+
+  input {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    background: #000;
+    background-image: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    color: #a0a0a0;
+    font-size: 14px;
+    text-overflow: ellipsis;
+  }
+
+  button {
+    flex: 0 0 56px;
+    width: 56px;
+    min-width: 56px;
+    height: 34px;
+    margin: 0;
+    padding: 0;
+
+    background: #000;
+    background-image: none;
+    border: 1px solid #626262;
+    border-radius: 8px;
+    box-shadow: none;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background: #000;
+      color: #fff;
+    }
+  }
+}
+
+.live-share-modal .live-share-modal__feedback {
+  min-height: 20px;
+  margin-top: 12px;
+}
+
+.live-share-modal .live-share-modal__message {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 20px;
+
+  svg {
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 640px) {
+  .live-share-modal {
+    padding: 70px 22px 22px;
+    border-radius: 22px;
+
+    h2 {
+      font-size: 26px;
+    }
+
+    &__close {
+      top: 18px;
+      right: 18px;
+      width: 40px;
+      height: 40px;
+    }
+
+    &__sns {
+      gap: 20px;
+
+      button {
+        flex-basis: 64px;
+        width: 64px;
+        height: 64px;
+      }
+
+      img {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    &__copy {
+      height: 66px;
+      margin-top: 26px;
+      padding: 10px 12px;
+      gap: 10px;
+
+      input {
+        font-size: 15px;
+      }
+
+      button {
+        height: 42px;
+        padding: 0 16px;
+        font-size: 16px;
+      }
+    }
+
+    &__message {
+      font-size: 14px;
+    }
+  }
+}
+
+.live-share-modal__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between
+}
+
+.live-share-modal__heading button {
+  background: none;
+  border: 0;
+  font-size: 30px
+}
+
+.live-share-modal__sns {
+  display: flex;
+  gap: 18px;
+  margin: 26px 0
+}
+
+.live-share-modal__sns button {
+  border: 0;
+  background: #343434;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center
+}
+
+.live-share-modal__sns small {
+  font-size: 10px
+}
+
+.live-share-modal__copy {
+  display: flex;
+  gap: 10px
+}
+
+.live-share-modal__copy input {
+  min-width: 0;
+  flex: 1;
+  background: #333;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px;
+  color: white
+}
+
+.live-share-modal__copy button {
+  background: white;
+  color: black;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 20px
+}
+
+.live-share-modal>p {
+  font-size: 11px;
+  color: #aaa;
+  margin: 16px 0 0
+}
+
+@media(min-width:901px) {
+  .live-channel-layout {
+    --player-width: calc((100vw - max(48px, 8vw) - 20px)*.7)
+  }
+
+  .live-chat.is-open {
+    height: calc(var(--player-width)*9/16)
+  }
+
+  .live-chat.is-open+.live-channel-list {
+    height: 380px
+  }
+}
+
+@media(max-width:900px) {
+  .live-channel-layout {
+    grid-template-columns: 1fr
+  }
+
+  .live-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start
+  }
+
+  .live-chat.is-open {
+    height: 440px
+  }
+
+  .live-channel-list {
+    height: 440px
+  }
+
+  .live-top20__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+  }
+}
+
+@media(max-width:600px) {
+  .live-channel-page {
+    padding: 20px 14px 60px
+  }
+
+  .live-sidebar {
+    display: flex
+  }
+
+  .live-channel-info {
+    align-items: flex-start;
+    flex-direction: column
+  }
+
+  .live-top20__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+  }
+
+  .live-player__overlay h2 {
+    font-size: 16px
+  }
+}
+
+/* 2차 수정: 로그인 제한, 편성표 버튼, TOP20 Swiper */
+.live-channel-login-notice {
+  margin: -18px 0 22px;
+  color: #ffb9c7;
+  font-size: 13px;
+
+  a {
+    margin-left: 8px;
+    color: white;
+    text-decoration: underline
+  }
+}
+
+.live-schedule__item-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0
+}
+
+.live-schedule__item-title strong {
+  min-width: 0;
+  display: block
+}
+
+.live-schedule__live {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 3px 5px;
+  background: #ef4055;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 10px;
+  vertical-align: middle;
+  white-space: nowrap
+}
+
+.live-schedule__action {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 6px;
+  background: #38383d;
+  padding: 7px 9px;
+  font-size: 11px
+}
+
+.live-schedule__bell {
+  font-size: 17px;
+  background: transparent;
+  padding: 3px 5px;
+  filter: grayscale(1)
+}
+
+.live-schedule__bell.is-active {
+  filter: none
+}
+
+.live-schedule__slider .swiper-slide {
+  height: auto
+}
+
+.live-schedule__slider .swiper-slide .live-schedule__item {
+  height: 100%
+}
+
+.live-top20__slider {
+  position: relative
+}
+
+.live-top20__slider .swiper-slide {
+  min-width: 0
+}
+
+.live-top20__card {
+  display: block;
+  width: 100%
+}
+
+.live-top20__arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 52px;
+  border: 0;
+  font-size: 36px;
+  background: linear-gradient(90deg, #09090be8, transparent);
+  opacity: 0;
+  transition: opacity .2s
+}
+
+.live-top20__arrow--prev {
+  left: 0
+}
+
+.live-top20__arrow--next {
+  right: 0;
+  background: linear-gradient(270deg, #09090be8, transparent)
+}
+
+.live-top20__slider:hover .live-top20__arrow {
+  opacity: 1
+}
+
+/* 3차 수정: 편성표 카드, 로그인 모달, 오른쪽 높이 동기화 */
+.live-schedule__item {
+  min-height: 84px;
+  background: #202022;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  padding: 18px 20px;
+  justify-content: center;
+  gap: 7px
+}
+
+.live-schedule__item.is-current {
+  background: #171719;
+  border-color: #f0f0f0
+}
+
+.live-schedule__item-title {
+  gap: 12px
+}
+
+.live-schedule__item-title strong {
+  font-size: 16px;
+  line-height: 1.4
+}
+
+.live-schedule__item small {
+  font-size: 14px;
+  color: #a4a4a8
+}
+
+.live-schedule__live {
+  background: #f44357;
+  font-size: 12px;
+  padding: 4px 7px;
+  margin-right: 7px
+}
+
+.live-schedule__action {
+  background: #39393c;
+  border-radius: 7px;
+  padding: 9px 12px;
+  white-space: nowrap
+}
+
+.live-schedule__bell {
+  background: transparent;
+  font-size: 20px
+}
+
+.live-sidebar {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column
+}
+
+.live-chat {
+  flex: 0 0 auto
+}
+
+.live-channel-list,
+.live-chat.is-open+.live-channel-list {
+  height: auto;
+  min-height: 0;
+  flex: 1 1 0;
+  overflow: hidden
+}
+
+.live-channel-list__scroll {
+  overscroll-behavior: contain
+}
+
+@media(min-width:901px) {
+  .live-chat.is-open {
+    height: auto
+  }
+
+  .live-chat.is-open+.live-channel-list {
+    height: auto
+  }
+}
+
+@media(max-width:900px) {
+  .live-sidebar {
+    height: auto !important;
+    min-height: 520px;
+    overflow: visible
+  }
+
+  .live-chat.is-open {
+    height: 440px !important
+  }
+
+  .live-channel-list {
+    min-height: 320px
+  }
+}
+
+@media(max-width:600px) {
+  .live-sidebar {
+    min-height: 700px
+  }
+
+  .live-schedule__item {
+    padding: 13px
+  }
+
+  .live-schedule__item-title strong {
+    font-size: 14px
+  }
+}
+
+/* 임시 편성 정보 구분 */
+.live-schedule__demo {
+  font-size: 11px;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+/* 공유 링크 복사 결과 안내 */
+.live-share-modal__copy-status {
+  margin: 8px 0 0;
+  color: #e9e9ed;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Login popup redesign: matches the provided reference without changing other UI */
+
+/* 변경 디자인: 영상 호버 컨트롤 (로그인 + 데모 광고 완료 상태에서만 렌더링) */
+.live-player__overlay:empty {
+  display: none
+}
+
+.live-player__demo-label {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  color: #fff9;
+  font-size: 12px;
+  pointer-events: none
+}
+
+.live-player__controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px 18px;
+  background: linear-gradient(transparent 58%, rgba(0, 0, 0, .8));
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity .22s ease, transform .22s ease, visibility .22s;
+  pointer-events: none
+}
+
+.live-player:hover .live-player__controls,
+.live-player:focus-within .live-player__controls {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto
+}
+
+.live-player__controls-top {
+  margin-bottom: 10px
+}
+
+.live-player__live-badge {
+  background: #f04454;
+  border-radius: 4px;
+  padding: 4px 7px;
+  font-size: 12px;
+  font-weight: 700
+}
+
+.live-player__controls-bottom,
+.live-player__controls-left,
+.live-player__controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.live-player__controls-bottom {
+  justify-content: space-between
+}
+
+.live-player__controls button {
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 23px;
+  min-width: 32px;
+  min-height: 34px
+}
+
+.live-player__controls button:hover {
+  color: #c7d4ff
+}
+
+.live-player__volume {
+  width: 76px;
+  accent-color: #fff;
+  cursor: pointer
+}
+
+.live-player__settings {
+  position: absolute;
+  right: 18px;
+  bottom: 66px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #14151b;
+  color: #ddd;
+  font-size: 12px
+}
+
+@media(hover:none) {
+  .live-player__controls {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto
+  }
+}
+
+@media(max-width:600px) {
+  .live-channel-page {
+    padding: 20px 0 60px
+  }
+
+  .live-player__volume {
+    width: 48px
+  }
+}
+
+/* 2026-11-04: 라이브 영상, 이미지 대체 표시, 채팅 UX, 푸터 여백 */
+.live-channel-page {
+  padding-bottom: 120px;
+}
+
+.live-player__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.live-player__overlay:has(> h2),
+.live-player__overlay:has(> p) {
+  z-index: 2;
+}
+
+.live-player__overlay:not(:has(> *)) {
+  display: none;
+}
+
+.live-image-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 12px;
+  box-sizing: border-box;
+  color: #bfc8dd;
+  font-weight: 700;
+  font-size: 14px;
+  background: linear-gradient(135deg, #172a49, #070b15);
+  overflow-wrap: anywhere;
+}
+
+.live-channel-list__thumb .live-image-fallback {
+  font-size: 12px;
+}
+
+.live-chat__preview {
+  display: block;
+  width: calc(100% - 28px);
+  text-align: left;
+  border: 0;
+}
+
+.live-chat__demo-note {
+  color: #9da9c5;
+  font-size: 12px;
+}
+
+.live-chat__error {
+  margin: 4px 14px;
+  color: #ffb9c7;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .live-channel-page {
+    padding-bottom: 80px;
+  }
+}
+
+/* 로그인 완료 상태: 영상 미연결 채널은 정상적인 미리보기 화면으로 표시 */
+.live-player__preview-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, .6);
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.live-player__overlay p {
+  max-width: 460px;
+  line-height: 1.65;
+}
+
+/* 유튜브 기본 컨트롤 사용 */
+iframe.live-player__video {
+  border: 0;
+  z-index: 1;
+}
+
+/* 유튜브 영상 + 자체 컨트롤 */
+.live-player.is-youtube {
+  --control-height: 88px;
+  background-color: #000;
+}
+
+.live-player__youtube {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: var(--control-height);
+  left: 0;
+  z-index: 1;
+  background: #000;
+
+  >div,
+  iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+/* 영상 위를 덮지 않고 아래 영역에 컨트롤 배치 */
+/* MP4 플레이어 컨트롤 */
+.live-player .live-player__controls {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  padding: 28px;
+  box-sizing: border-box;
+
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.65),
+      transparent 32%);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: none;
+  pointer-events: none;
+
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.live-player:hover .live-player__controls,
+.live-player:focus-within .live-player__controls {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none;
+}
+
+/* 왼쪽: 라이브 이미지 위 / 버튼 아래 */
+.live-player .live-player__controls-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.live-player__live-image {
+  display: block;
+  width: 61px;
+  height: auto;
+  object-fit: contain;
+}
+
+.live-player__button-row,
+.live-player .live-player__controls-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+}
+
+/* 영상 전체 클릭을 막지 않고 버튼 영역만 활성화 */
+.live-player__button-row,
+.live-player .live-player__controls-right {
+  pointer-events: auto;
+}
+
+.live-player .live-player__controls button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.live-player .live-player__controls button:hover {
+  background: transparent;
+  opacity: 0.8;
+}
+
+.live-player .live-player__controls button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.live-player__controls button img,
+.live-player__controls button svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* 음량 */
+.live-player__sound {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-player .live-player__volume {
+  width: 0;
+  min-width: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  accent-color: #fff;
+  cursor: pointer;
+
+  transition:
+    width 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.live-player__sound:hover .live-player__volume,
+.live-player__sound:focus-within .live-player__volume {
+  width: 90px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.live-player__mute-line {
+  position: absolute;
+  width: 31px;
+  height: 2px;
+  background: #fff;
+  transform: rotate(-45deg);
+  box-shadow: 0 0 2px #000;
+  pointer-events: none;
+}
+
+/* 화질 안내 */
+.live-player__settings-wrap {
+  position: relative;
+}
+
+.live-player__quality-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 16px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 220px;
+  padding: 18px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: rgba(20, 20, 20, 0.95);
+  color: #fff;
+}
+
+.live-player__quality-panel strong {
+  font-size: 16px;
+}
+
+.live-player__quality-panel span {
+  font-size: 14px;
+}
+
+.live-player__quality-panel p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #aaa;
+}
+
+/* 전체화면 */
+.live-player:fullscreen {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  background: #000;
+}
+
+@media (max-width: 640px) {
+  .live-player .live-player__controls {
+    padding: 16px;
+  }
+
+  .live-player .live-player__controls-left {
+    gap: 10px;
+  }
+
+  .live-player__button-row,
+  .live-player .live-player__controls-right {
+    gap: 10px;
+  }
+
+  .live-player__controls button img,
+  .live-player__controls button svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .live-player__sound:hover .live-player__volume,
+  .live-player__sound:focus-within .live-player__volume {
+    width: 60px;
+  }
+}
+
+@media (hover: none) {
+  .live-player .live-player__controls {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .live-player .live-player__volume {
+    width: 60px;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+.live-player.is-youtube .live-player__controls-top {
+  margin-bottom: 6px;
+}
+
+.live-player.is-youtube .live-player__settings {
+  z-index: 4;
+  bottom: var(--control-height);
+}
+
+/* 별도 LIVE 라벨 대신 컨트롤 안의 라이브 표시 사용 */
+.live-player.is-youtube .live-player__demo-label {
+  display: none;
+}
+
+/* 터치 기기에서는 항상 버튼 표시 */
+@media (hover: none) {
+  .live-player.is-youtube .live-player__controls {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+/* 유튜브 재생 중 기존 채널 썸네일 제거 */
+.live-player.is-youtube {
+  background-image: none !important;
+  background-color: #000;
+}
+
+.live-player:not(.is-youtube) {
+  background-color: #000;
+}
+
+.live-player:not(.is-youtube) .live-player__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.live-player:not(.is-youtube) .live-player__controls {
+  z-index: 3;
+}
+
+.live-player:not(.is-youtube) .live-player__demo-label,
+.live-player:not(.is-youtube) .live-player__settings {
+  z-index: 4;
+}

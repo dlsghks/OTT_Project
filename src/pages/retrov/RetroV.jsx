@@ -9,7 +9,7 @@ import RetroMainRow from "../../components/retrov/RetroMainRow";
 import RetroEventCarousel from "../../components/retrov/RetroEventCarousel";
 import YoutubePlayerModal from "../../components/common/YoutubePlayerModal";
 
-import { programs, eventBanners } from "../../data/retrov";
+import { programs, eventBanners } from "../../data/retrov/retrov";
 import {
   userName,
   heroSlides,
@@ -17,14 +17,14 @@ import {
   watching,
   recommendations,
   shorts,
-} from "../../data/retrovMain";
+} from "../../data/retrov/retrovMain";
 
-import { getEpisodeSource } from "../../data/retrovTmdb";
+import { getEpisodeSource } from "../../data/retrov/retrovTmdb";
 import { useRetrovPlayer } from "../../hooks/useRetrovPlayer";
 import { useRetrovTmdbStore, tmdbImage } from "../../store/useRetrovTmdbStore";
 import { getImagePath } from "../../utils/imagePath";
 
-import "../../styles/Retrov.scss";
+import "../../styles/pages/retrov/Retrov.scss";
 
 function youtubeThumb(videoId) {
   return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;

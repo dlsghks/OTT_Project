@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getImagePath } from '../../utils/imagePath';
 import RetroEventCarousel from '../../components/retrov/RetroEventCarousel';
-import { eventBanners } from '../../data/retrov';
-import '../../styles/Event.scss';
+import { eventBanners } from '../../data/retrov/retrov';
+import '../../styles/pages/event/Event.scss';
 
 const events = [
   {

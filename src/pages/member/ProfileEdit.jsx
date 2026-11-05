@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAccountStore, updateProfile, changeProfileLock } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
 import logo from "../../assets/wavve_logo_w.svg";
-import "../../styles/components/ProfileEdit.scss";
+import "../../styles/pages/member/ProfileEdit.scss";
 
 const profileImages = [1, 2, 3, 4].map(
   (number) =>

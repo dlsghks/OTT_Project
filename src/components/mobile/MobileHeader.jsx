@@ -6,7 +6,7 @@ import logoW from "../../assets/mobile/721ec.svg";
 import logoV2 from "../../assets/mobile/33785.svg";
 import logoV1 from "../../assets/mobile/2222e.svg";
 import castIcon from "../../assets/mobile/e8694.svg";
-import "../../styles/components/MobileHeader.scss";
+import "../../styles/components/mobile/MobileHeader.scss";
 
 // TV 연결은 프로젝트의 캐스트 기능을 onCastClick으로 전달합니다.
 export const MobileHeader = ({ onCastClick } = {}) => (
