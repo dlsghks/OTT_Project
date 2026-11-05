@@ -1,0 +1,405 @@
+@charset "UTF-8";
+/* =========================
+   상세 페이지 통합 스타일 (영화 · 예능 · 드라마 · 시사교양 · 애니 · 해외시리즈)
+   사용: pages/contents/MovieDetail.jsx, components/detail/TvDetail.jsx
+   히어로 아래로 관련영상 · 회차 · 테마 섹션 나열 (섹션 간격 80px)
+========================= */
+.movie-detail {
+  width: calc(100% + var(--page-side-padding) * 2);
+  margin: 0 calc(var(--page-side-padding) * -1);
+  padding-bottom: 7.5rem;
+  box-sizing: border-box;
+  background: #000000;
+  color: #fff;
+}
+.movie-detail--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 60vh;
+  color: #aaaaaa;
+}
+.movie-detail--empty a {
+  color: #fff;
+}
+.movie-detail__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  padding: 5rem var(--page-side-padding) 0;
+}
+.movie-detail__sections .category-row {
+  margin: 0;
+}
+
+/* 히어로 */
+.movie-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: clamp(32.5rem, 51vw, 61.25rem);
+  overflow: hidden;
+}
+.movie-hero__background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+.movie-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 45%, rgba(0, 0, 0, 0) 70%), linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0) 40%);
+  pointer-events: none;
+}
+.movie-hero__content {
+  position: relative;
+  z-index: 1;
+  width: min(62.5rem, 100%);
+  padding: 0 var(--page-side-padding) clamp(2.5rem, 4vw, 5rem);
+  box-sizing: border-box;
+}
+.movie-hero.is-expanded {
+  display: block;
+  height: auto;
+  min-height: var(--hero-height);
+  padding-top: var(--content-top);
+  box-sizing: border-box;
+}
+.movie-hero.is-expanded .movie-hero__background, .movie-hero.is-expanded::after {
+  inset: 0 0 auto;
+  height: var(--hero-height);
+}
+.movie-hero.is-expanded .movie-hero__content {
+  width: min(87.5rem, 100%);
+  padding-bottom: 0;
+}
+.movie-hero__logo {
+  margin: 0 0 26.25rem;
+}
+.movie-hero__logo img {
+  display: block;
+  max-width: min(26.25rem, 70%);
+  max-height: 11.25rem;
+  object-fit: contain;
+  object-position: left bottom;
+}
+.movie-hero__title {
+  margin: 0 0 1.25rem;
+  font-size: clamp(2.25rem, 3.4vw, 4rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+.movie-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.63rem;
+  margin: 0 0 1.75rem;
+  color: #aaaaaa;
+  font-size: clamp(0.88rem, 0.94vw, 1.13rem);
+}
+.movie-hero__age {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.38rem;
+  height: 1.38rem;
+  padding: 0 0.25rem;
+  border-radius: 4px;
+  background: #f5b800;
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+  box-sizing: border-box;
+}
+.movie-hero__age--15 {
+  background: #f07c00;
+  color: #fff;
+}
+.movie-hero__age--19 {
+  background: #d6001c;
+  color: #fff;
+}
+.movie-hero__age--all {
+  background: #1a9b48;
+  color: #fff;
+}
+.movie-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+.movie-hero__select {
+  height: 3.5rem;
+  min-width: 15rem;
+  padding: 0 2.75rem 0 1.13rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.6) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23fff' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  appearance: none;
+  cursor: pointer;
+}
+.movie-hero__select option {
+  background: #1c1c1e;
+}
+.movie-hero__buy {
+  width: clamp(15rem, 22vw, 26.25rem);
+  height: 3.5rem;
+  border: 0;
+  border-radius: 6px;
+  background: #1f4ef5;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.movie-hero__buy:hover {
+  background: #0F40C6;
+}
+.movie-hero__buy--login {
+  width: 18.06rem;
+  height: 4.06rem;
+  border-radius: 10px;
+  font-size: 1.25rem;
+}
+.movie-hero__icon {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 0.38rem;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.69rem;
+  cursor: pointer;
+}
+.movie-hero__icon.is-active {
+  color: #0F40C6;
+}
+.movie-hero__overview {
+  display: -webkit-box;
+  max-width: 51.25rem;
+  margin: 0 0 0.88rem;
+  overflow: hidden;
+  color: #fff;
+  font-size: clamp(0.88rem, 0.94vw, 1.06rem);
+  line-height: 1.6;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.movie-hero__overview.is-expanded {
+  display: block;
+  overflow: visible;
+}
+.movie-hero__toggle {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  z-index: 1;
+  transform: translateX(-50%);
+}
+.movie-hero__cast {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  font-size: clamp(0.88rem, 0.94vw, 1.06rem);
+}
+.movie-hero__cast > span:first-child {
+  margin-right: 0.5rem;
+}
+.movie-hero__cast u {
+  text-underline-offset: 3px;
+}
+
+/* 관련영상 */
+.movie-videos__title {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.13rem, 1.25vw, 1.5rem);
+}
+.movie-videos__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.movie-videos__card strong {
+  overflow: hidden;
+  margin-top: 0.63rem;
+  font-size: 1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.movie-videos__card:hover img {
+  transform: scale(1.05);
+}
+.movie-videos__thumb {
+  display: block;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #202532;
+}
+.movie-videos__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.movie-videos__desc {
+  color: #aaaaaa;
+  font-size: 0.88rem;
+}
+.movie-videos__date {
+  color: #7d8596;
+  font-size: 0.75rem;
+}
+.movie-videos__desc--clamp {
+  display: -webkit-box;
+  overflow: hidden;
+  line-height: 1.5;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 펼치기 상세 정보 (줄거리 · 개요 · 장르 · 감독 · 작가) – 히어로 출연 아래 */
+.detail-info {
+  margin: 0.88rem 0 0;
+}
+.detail-info__row {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+  font-size: clamp(0.88rem, 0.94vw, 1.06rem);
+  line-height: 1.6;
+}
+.detail-info__row dt {
+  flex: 0 0 4rem;
+  color: #fff;
+}
+.detail-info__row dd {
+  margin: 0;
+  color: #fff;
+}
+.detail-info__fold {
+  margin: 2.5rem auto 0;
+}
+
+/* 펼치기 · 접기 버튼 (타이포그래피: 버튼M(Default) – Noto Sans KR Regular 16 / Auto / 0%) */
+.detail-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+.detail-toggle:focus-visible {
+  outline: 0.13rem solid #fff;
+  outline-offset: 0.13rem;
+}
+
+/* 시즌별 회차 */
+.episode-row__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.episode-row__header .movie-videos__title {
+  margin: 0;
+}
+.episode-row__count {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.episode-row__order {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #7d8596;
+  font-size: 0.875rem;
+}
+.episode-row__order button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #aaaaaa;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+.episode-row__order button.is-active {
+  color: #fff;
+  font-weight: 600;
+}
+.episode-row__status {
+  margin: 0;
+  color: #aaaaaa;
+}
+
+/* 16:9 영상 카드 가로 슬라이드 (관련영상 · 시즌별 회차 공통, VideoSlider.jsx)
+   오른쪽 화면 끝까지는 .category-row__slider 공통 */
+.video-slider {
+  --video-w: clamp(15rem, 20.6vw, 24.75rem);
+}
+.video-slider__slide {
+  width: var(--video-w);
+  height: auto;
+  margin-right: var(--card-gap);
+  user-select: none;
+}
+.video-slider__slide img {
+  -webkit-user-drag: none;
+}
+.video-slider__fade {
+  width: calc(var(--video-w) * 0.5);
+}
+.video-slider__arrow {
+  top: calc(var(--video-w) * 9 / 32);
+}
+
+@media (max-width: 768px) {
+  .movie-hero {
+    height: auto;
+    min-height: 560px;
+  }
+  .movie-hero__select, .movie-hero__buy {
+    width: 100%;
+    min-width: 0;
+  }
+}

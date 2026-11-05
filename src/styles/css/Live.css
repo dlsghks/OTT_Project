@@ -2,7 +2,7 @@
   width: 100%;
   max-width: none;
   min-height: 100vh;
-  background: #1b1b1b;
+  background: transparent;
   color: #fff;
   margin: 0;
   padding: 0;
@@ -18,127 +18,234 @@
 .live-page__heading {
   display: flex;
   align-items: center;
-  gap: 22px;
-  margin-bottom: 28px;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 .live-page__heading h1 {
-  font-size: 24px;
   margin: 0;
+  font-size: 1.5rem;
 }
 .live-page__heading a {
-  font-size: 14px;
+  font-size: 0.75rem;
   color: #bbb;
+}
+.live-page__heading a:hover {
+  color: #fff;
 }
 
 .live-hero {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-bottom: 36px;
+  position: relative;
+  width: calc(100% + 220px);
+  margin-left: -6.875rem;
+  margin-bottom: 3.75rem;
+  overflow: hidden;
+}
+.live-hero__swiper {
+  width: 100%;
+  overflow: visible;
+}
+.live-hero .swiper-slide {
+  width: min(54.5vw, 1090px);
+  height: auto;
+  flex-shrink: 0;
 }
 .live-hero__slide {
   position: relative;
-  aspect-ratio: 2.1/1;
+  width: 100%;
+  aspect-ratio: 2.28/1;
   overflow: hidden;
-  border-radius: 7px;
+  border-radius: 10px;
   background: linear-gradient(120deg, #21558d, #081a35 80%);
   background-position: center;
   background-size: cover;
+  cursor: pointer;
+}
+.live-hero__video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.live-hero__video iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 .live-hero__slide::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(0, 35, 84, 0.97) 0%, rgba(0, 35, 84, 0.72) 35%, transparent 85%);
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(0, 25, 65, 0.96) 0%, rgba(0, 25, 65, 0.72) 30%, rgba(0, 25, 65, 0.18) 65%, transparent 100%);
+  pointer-events: none;
 }
 .live-hero__info {
   position: absolute;
-  left: 4%;
+  z-index: 2;
+  left: 3.5%;
   top: 5%;
-  bottom: 7%;
+  bottom: 8%;
   width: 60%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-  gap: 7px;
+  gap: 0.75rem;
+}
+.live-hero__info p {
+  white-space: pre-line;
 }
 .live-hero__badge {
   position: absolute;
   top: 0;
   left: 0;
+  width: 4.6875rem;
+  height: 2rem;
+  text-align: center;
+  line-height: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
   background: #fa3f48;
-  padding: 4px 7px;
-  font-size: 11px;
-  border-radius: 3px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
 }
 .live-hero__rank {
-  font-size: 38px;
+  font-size: 4rem;
+  font-weight: 800;
   font-style: italic;
   line-height: 1;
 }
 .live-hero h2 {
-  font-size: 25px;
   margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
 }
 .live-hero p {
-  font-size: 15px;
   margin: 0;
+  font-size: 2rem;
   font-weight: 600;
 }
 .live-hero small {
-  color: #c7d6eb;
+  color: #a5a5a5;
+  font-size: 1.5rem;
 }
 .live-hero__progress {
   width: 70%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.3137254902);
-  margin: 7px 0 10px;
+  height: 0.25rem;
+  margin: 0.75rem 0 0.75rem;
+  background: rgba(255, 255, 255, 0.3);
 }
 .live-hero__progress span {
   display: block;
   height: 100%;
   background: #fff;
+  transition: width 0.3s ease;
 }
 .live-hero a {
-  background: rgba(255, 255, 255, 0.1647058824);
-  padding: 8px 13px;
-  border-radius: 4px;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  width: 12.25rem;
+  height: 3.125rem;
+  background: #111;
+  color: #fff;
+  font-size: 1.25rem;
+  text-decoration: none;
+  transition: background 0.2s ease;
 }
 .live-hero a:hover {
-  background: rgba(255, 255, 255, 0.3333333333);
+  background: rgba(0, 0, 0, 0.5);
 }
-
-.live-banner {
-  height: 90px;
-  margin: 0 0 44px;
-  background: linear-gradient(100deg, #080808, #17366d, #090909);
+.live-hero__arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  width: 4rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+}
+.live-hero__arrow--prev {
+  left: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.6), transparent);
+}
+.live-hero__arrow--next {
+  right: 0;
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0.6), transparent);
+}
+.live-hero__arrow svg {
+  width: 1.5rem;
+  height: 2.25rem;
+}
+.live-hero:hover .live-hero__arrow, .live-hero:focus-within .live-hero__arrow {
+  opacity: 1;
+  pointer-events: auto;
+}
+.live-hero__pagination {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.25rem;
+  z-index: 10;
+  padding: 0.375rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+.live-hero__pagination span {
+  color: #aaa;
+}
+
+.live-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.125rem;
+  height: 11.25rem;
+  margin: 0 0 3.75rem;
+  background: linear-gradient(100deg, #080808, #17366d, #090909);
+  background-position: center;
+  background-size: cover;
 }
 .live-banner strong {
-  font-size: 21px;
+  font-size: 1.5rem;
 }
 .live-banner span {
-  font-size: 13px;
+  font-size: 1.25rem;
   color: #ddd;
 }
 
 .live-section {
-  margin-bottom: 48px;
+  margin-bottom: 0;
+  padding-bottom: 3.75rem;
 }
 .live-section__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 .live-section__head h2 {
-  font-size: 20px;
   margin: 0;
+  font-size: 1.5rem;
 }
 .live-section__slider {
   position: relative;
@@ -149,7 +256,7 @@
 }
 .live-section__track {
   display: flex;
-  gap: 12px;
+  gap: 1.25rem;
   overflow-x: auto;
   scrollbar-width: none;
   user-select: none;
@@ -162,11 +269,11 @@
   position: absolute;
   top: 0;
   bottom: 28px;
-  width: 50px;
   z-index: 2;
+  width: 50px;
   border: 0;
   color: #fff;
-  font-size: 42px;
+  font-size: 3rem;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
@@ -186,13 +293,13 @@
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0.375rem;
 }
 .live-card__thumb {
   position: relative;
   aspect-ratio: 16/9;
-  border-radius: 6px;
   overflow: hidden;
+  border-radius: 10px;
   background: #303745;
 }
 .live-card__thumb img {
@@ -208,19 +315,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 19px;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #c5cfdf;
 }
 .live-card__badge {
   position: absolute;
-  left: 5px;
-  top: 5px;
+  left: 0.75rem;
+  top: 0.75rem;
+  padding: 0.25rem 0.375rem;
   background: rgba(34, 34, 34, 0.8);
   color: #fff;
-  border-radius: 2px;
-  font-size: 10px;
-  padding: 2px 4px;
+  font-size: 0.75rem;
 }
 .live-card__progress {
   position: absolute;
@@ -233,35 +339,63 @@
 .live-card__progress span {
   display: block;
   height: 100%;
-  background: #2459ed;
+  background: #1351F9;
 }
 .live-card__channel {
-  font-size: 13px;
+  font-size: 1.125rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .live-card__title {
-  font-size: 12px;
+  font-size: 1.125rem;
   color: #aaa;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .live-card:hover .live-card__thumb {
-  outline: 2px solid #668cff;
+  outline: 2px solid #1351F9;
 }
 
+@media (max-width: 1200px) {
+  .live-hero .swiper-slide {
+    width: 65vw;
+  }
+}
 @media (max-width: 1100px) {
   .live-card {
     flex-basis: calc((100% - 36px) / 4);
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .live-hero {
-    grid-template-columns: 1fr;
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-bottom: 36px;
   }
+  .live-hero .swiper-slide {
+    width: 88vw;
+  }
+  .live-hero__rank {
+    font-size: 30px;
+  }
+  .live-hero h2 {
+    font-size: 21px;
+  }
+  .live-hero p {
+    font-size: 14px;
+  }
+  .live-hero__arrow {
+    width: 36px;
+  }
+  .live-hero__arrow svg {
+    width: 14px;
+    height: 24px;
+  }
+}
+@media (max-width: 700px) {
   .live-card {
     flex-basis: calc((100% - 12px) / 2);
   }
@@ -269,7 +403,7 @@
     flex-direction: column;
     gap: 5px;
   }
-  .live-hero__rank {
-    font-size: 26px;
-  }
+}
+.site-inner:has(> .live-page) {
+  background: linear-gradient(180deg, #071a2e 0%, #000000 80%);
 }
