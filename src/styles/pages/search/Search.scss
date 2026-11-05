@@ -1,0 +1,316 @@
+.search-page {
+    min-height: 100vh;
+    padding: 90px 32px 120px;
+    background: #090c12;
+    color: #fff;
+
+    // 검색 영역
+    &__hero {
+        max-width: 900px;
+        margin: 0 auto 70px;
+        text-align: center;
+
+        h1 {
+            margin: 12px 0 40px;
+            font-size: 36px;
+            font-weight: 700;
+        }
+    }
+
+    &__eyebrow {
+        color: #4c80ff;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 4px;
+    }
+
+    &__form {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        height: 72px;
+        padding: 8px 10px 8px 24px;
+
+        background: #1c212b;
+        border: 1px solid #333a48;
+        border-radius: 10px;
+
+        &:focus-within {
+            border-color: #3b70ff;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+
+            &::placeholder {
+                color: #777f90;
+            }
+
+            // 검색어 삭제 X 버튼
+            &::-webkit-search-cancel-button {
+                cursor: pointer;
+            }
+        }
+
+        button {
+            height: 100%;
+            padding: 0 28px;
+            border: none;
+            border-radius: 7px;
+            background: #2458e9;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
+
+    &__search-icon {
+        font-size: 28px;
+        color: #c4c9d3;
+    }
+
+    // 검색어 영역
+    &__keywords {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+
+        max-width: 1300px;
+        min-height: 320px;
+        margin: 0 auto 80px;
+    }
+
+    &__section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 26px;
+
+        h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+    }
+
+    // 하단 콘텐츠
+    &__contents {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding-top: 50px;
+        border-top: 1px solid #222833;
+    }
+
+    &__contents-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 24px;
+
+        h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        span {
+            color: #777f90;
+            font-size: 12px;
+        }
+    }
+
+    &__contents-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 16px;
+    }
+}
+
+// 최근 검색어
+.recent-searches {
+    &__clear {
+        border: 0;
+        background: transparent;
+        color: #7c8493;
+        cursor: pointer;
+        font-size: 12px;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: 10px;
+    }
+
+    &__chip {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 8px 12px;
+        border: 1px solid #2c313b;
+        border-radius: 30px;
+        background: #141820;
+    }
+
+    &__word,
+    &__delete {
+        border: none;
+        background: transparent;
+        color: #d3d6df;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    &__delete {
+        color: #737b89;
+        font-size: 17px;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+
+    &__empty {
+        color: #777f90;
+        font-size: 14px;
+    }
+}
+
+// 인기 검색어
+.popular-searches {
+    &__time {
+        color: #707887;
+        font-size: 12px;
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(5, auto);
+        grid-auto-flow: column;
+        column-gap: 32px;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        width: 100%;
+        min-width: 0;
+        min-height: 46px;
+        padding: 0 4px;
+
+        border: none;
+        border-bottom: 1px solid #1e242e;
+        background: transparent;
+        color: #fff;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover .popular-searches__keyword {
+            color: #6e98ff;
+        }
+    }
+
+    &__rank {
+        width: 20px;
+        flex-shrink: 0;
+        color: #6590ff;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    &__keyword {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+    }
+}
+
+// 순위 변동 아이콘
+.trend {
+    flex-shrink: 0;
+    font-size: 11px;
+
+    &--same {
+        color: #737b89;
+    }
+
+    &--up {
+        color: #ff6666;
+    }
+
+    &--down {
+        color: #668cff;
+    }
+
+    &--new {
+        color: #6590ff;
+        font-size: 10px;
+        font-weight: 700;
+    }
+}
+
+// 반응형
+@media (max-width: 1024px) {
+    .search-page {
+        &__keywords {
+            gap: 35px;
+        }
+
+        &__contents-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .search-page {
+        padding: 60px 20px 80px;
+
+        &__hero {
+            margin-bottom: 50px;
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+
+        &__form {
+            height: 58px;
+            padding-left: 14px;
+
+            button {
+                padding: 0 16px;
+            }
+        }
+
+        &__keywords {
+            grid-template-columns: 1fr;
+            gap: 50px;
+            min-height: auto;
+        }
+
+        &__contents-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+    }
+}

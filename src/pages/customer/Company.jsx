@@ -1,10 +1,11 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import '../../styles/pages/Company.scss';
+import '../../styles/pages/customer/Company.scss';
 
 const sections = [
   { id: 'company-about', name: '회사소개' },
@@ -47,7 +48,7 @@ export const Company = () => {
         <div className="company-page__bubble-cloud" aria-label="다양한 콘텐츠 파트너">
           {broadcasters.map((name, i) => <span key={`${name}-${i}`} className={`company-page__bubble company-page__bubble--${i % 5}`}>{name}</span>)}
         </div>
-        <h2>사업영역</h2>
+        <SectionTitle>사업영역</SectionTitle>
         <div className="company-page__business">
           <div><span aria-hidden="true">▣</span><p>브로드밴드<br />콘텐츠 서비스</p></div>
           <div><span aria-hidden="true">▱</span><p>프리미엄 독점<br />오리지널 콘텐츠</p></div>
@@ -55,7 +56,7 @@ export const Company = () => {
         </div>
       </section>
       <section className="company-page__history" id="company-history">
-        <h2>연혁</h2>
+        <SectionTitle>연혁</SectionTitle>
         <div className="company-page__history-wrap">
           <button ref={prevRef} type="button" className="company-page__arrow" aria-label="이전 연혁">‹</button>
           <Swiper modules={[Navigation]} spaceBetween={18} slidesPerView={1.3} breakpoints={{ 600: { slidesPerView: 3 }, 1000: { slidesPerView: 5 } }} onBeforeInit={(swiper) => { swiper.params.navigation.prevEl = prevRef.current; swiper.params.navigation.nextEl = nextRef.current; }} navigation={{ prevEl: prevRef.current, nextEl: nextRef.current }}>
@@ -65,11 +66,11 @@ export const Company = () => {
         </div>
       </section>
       <section className="company-page__section" id="company-bi">
-        <h2>BI</h2>
+        <SectionTitle>BI</SectionTitle>
         <div className="company-page__bi"><div className="company-page__brand">wavve</div><div><h3>JUST DIVE!</h3><p>웨이브의 브랜드 아이덴티티는 콘텐츠를 즐기는 새로운 경험과 즐거움을 표현합니다.</p><p>다양한 콘텐츠를 자유롭게 발견하고 몰입하는 순간을 지향합니다.</p></div></div>
       </section>
-      <section className="company-page__section" id="company-award"><h2>Award</h2><div className="company-page__awards"><div><strong>BRAND</strong><small>KOREA MARKETING AWARDS</small></div><div><strong>15th</strong><small>KOREA ASSEMBLY GRAND AWARD</small></div></div><p className="company-page__muted">수상 내역의 상세 문구와 원본 이미지가 확보되면 교체할 수 있도록 구성했습니다.</p></section>
-      <section className="company-page__section" id="company-location"><h2>오시는 길</h2><div className="company-page__map"><p>콘텐츠웨이브(주)</p><a href="https://map.naver.com/p/search/서울특별시%20영등포구%20여의나루로%2060" target="_blank" rel="noreferrer">지도에서 위치 확인 ↗</a></div><div className="company-page__address"><strong>주소</strong><p>서울특별시 영등포구 여의나루로 60 포스트타워 15층</p></div></section>
+      <section className="company-page__section" id="company-award"><SectionTitle>Award</SectionTitle><div className="company-page__awards"><div><strong>BRAND</strong><small>KOREA MARKETING AWARDS</small></div><div><strong>15th</strong><small>KOREA ASSEMBLY GRAND AWARD</small></div></div><p className="company-page__muted">수상 내역의 상세 문구와 원본 이미지가 확보되면 교체할 수 있도록 구성했습니다.</p></section>
+      <section className="company-page__section" id="company-location"><SectionTitle>오시는 길</SectionTitle><div className="company-page__map"><p>콘텐츠웨이브(주)</p><a href="https://map.naver.com/p/search/서울특별시%20영등포구%20여의나루로%2060" target="_blank" rel="noreferrer">지도에서 위치 확인 ↗</a></div><div className="company-page__address"><strong>주소</strong><p>서울특별시 영등포구 여의나루로 60 포스트타워 15층</p></div></section>
       <p className="company-page__disclaimer">본 페이지는 학습용 비공식 Wavve 리디자인입니다. 연혁 및 수상 상세 자료는 예시이며 공식 정보가 아닙니다.</p>
     </div>
   );

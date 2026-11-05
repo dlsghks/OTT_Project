@@ -8,9 +8,10 @@ import { ScrollToTop } from "../components/ScrollToTop";
 
 import {
   MobileHeader,
-  MobileFooter,
   MobileBottomNav,
 } from "../components/mobile";
+
+import { MobileFooter } from "../components/mobile/MobileFooter.jsx";
 
 import "../styles/layout/PageInner.scss";
 import "../styles/components/MobileChrome.scss";
@@ -52,12 +53,14 @@ export const Layout = () => {
       {/* 숏츠에서는 풋터 숨김 */}
       {!isShorts && (
         <>
+          {/* PC 풋터와 위로 이동 버튼 */}
           <div className="mobile-chrome-desktop">
             <Footer />
+            <TopButton />
           </div>
 
+          {/* 모바일 풋터 */}
           <MobileFooter />
-          <TopButton />
         </>
       )}
 

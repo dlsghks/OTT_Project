@@ -1,8 +1,8 @@
 import YoutubePlayerModal from '../common/YoutubePlayerModal';
 import { LoginModal } from '../common/LoginModal';
 
-import '../../styles/pages/Category.scss';
-import '../../styles/pages/TotalSubDetail.scss';
+import '../../styles/pages/category/Category.scss';
+import '../../styles/pages/contents/TotalSubDetail.scss';
 
 // 상세 페이지 공통 틀 (영화 · 시리즈)
 // - hero: DetailHero

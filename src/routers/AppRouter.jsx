@@ -3,19 +3,20 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 // 공통 레이아웃
-import { Layout } from "../pages/Layout";
+import { Layout } from "../pages/layout/Layout";
 
 // 메인 페이지
 import { Home } from "../pages/home/Home";
 
 // 카테고리 페이지
 import { Entertainment } from "../pages/category/Entertainment";
+import { EntertainmentAll } from "../pages/category/EntertainmentAll";
 import { Drama } from "../pages/category/Drama";
 import { Movie } from "../pages/category/Movie";
 import { Currentaffairs } from "../pages/category/Currentaffairs";
 import { Animation } from "../pages/category/Animation";
 import { Global } from "../pages/category/Global";
-import { Live } from "../pages/category/Live";
+import { Live } from "../pages/live/Live";
 import { Category } from "../pages/category/Category";
 
 // 콘텐츠 상세 페이지
@@ -40,14 +41,14 @@ import { Event } from "../pages/event/Event";
 import { EventDetail } from "../pages/event/EventDetail";
 
 // 검색 및 숏폼 페이지
-import { Search } from "../pages/Search";
-import { Shorts } from "../pages/Shorts";
+import { Search } from "../pages/search/Search";
+import { Shorts } from "../pages/shorts/Shorts";
 
 // 회사소개 및 고객센터
 import { Company } from "../pages/customer/Company";
 import { Service } from "../pages/customer/Service";
-import { Notice } from "../pages/notice/Notice";
-import { NoticeView } from "../pages/notice/NoticeView";
+import { Notice } from "../pages/support/Notice";
+import { NoticeView } from "../pages/support/NoticeView";
 import Support from "../pages/support/Support";
 import Inquiry from "../pages/support/Inquiry";
 import InquiryWrite from "../pages/support/InquiryWrite";
@@ -90,6 +91,7 @@ export const AppRouter = () => {
           path="/entertainment"
           element={<Entertainment />}
         />
+        <Route path="/entertainment/all" element={<EntertainmentAll />} />
         <Route path="/drama" element={<Drama />} />
         <Route path="/movie" element={<Movie />} />
         <Route

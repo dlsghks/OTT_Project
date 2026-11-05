@@ -1,0 +1,505 @@
+.profile-select {
+  --profile-size: 160px;
+  --lock-top: 50%;
+  --lock-left: 53%;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  min-height: 100svh;
+  margin: 0;
+  padding: 120px 24px 80px;
+
+  background: #1b1b1b;
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+
+  &,
+  * {
+    box-sizing: border-box;
+  }
+
+  // 헤더와 동일한 로고 크기 및 위치
+  &__logo {
+    position: absolute;
+    top: 0;
+    left: 110px;
+
+    display: flex;
+    align-items: center;
+
+    width: 112px;
+    height: 96px;
+
+    >img {
+      position: static;
+      display: block;
+      width: 112px;
+      max-width: none;
+      height: 24px;
+      margin: 0;
+      object-fit: contain;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    text-align: center;
+
+    >h1 {
+      margin: 0;
+      font-size: 30px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+  }
+
+  &__description {
+    margin: 14px 0 0;
+    color: #a5a5a5;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 52px;
+
+    margin: 48px 0 0;
+    padding: 0;
+    list-style: none;
+
+    >li {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #a5a5a5;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &:hover .profile-select__avatar {
+      outline-color: #1351f9;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #1351f9;
+      outline-offset: 10px;
+      border-radius: 8px;
+    }
+  }
+
+  // 프로필 사진: PC 160 × 160px
+  &__avatar {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+
+    width: var(--profile-size);
+    min-width: var(--profile-size);
+    max-width: var(--profile-size);
+    height: var(--profile-size);
+
+    overflow: hidden;
+    border-radius: 50%;
+    outline: 3px solid transparent;
+    outline-offset: -3px;
+
+    transition: outline-color 160ms ease;
+
+    >img {
+      position: static;
+      display: block;
+
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      height: 100%;
+      margin: 0;
+
+      border-radius: inherit;
+      object-fit: cover;
+    }
+  }
+
+  // 잠긴 프로필
+  &__lock-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    display: block;
+    border-radius: inherit;
+    background: #00000066;
+    pointer-events: none;
+
+    >img {
+      position: absolute;
+      top: var(--lock-top);
+      left: var(--lock-left);
+      right: auto;
+      bottom: auto;
+
+      display: block;
+      width: 28px;
+      min-width: 28px;
+      max-width: 28px;
+      height: 28px;
+      max-height: 28px;
+      margin: 0;
+      padding: 0;
+
+      object-fit: contain;
+      transform: translate(-50%, -50%);
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  &__name {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    transition: color 160ms ease;
+  }
+
+  &__notice {
+    margin: 48px 0 0;
+    color: #888;
+    font-size: 12px;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+
+  &__message {
+    margin: 20px 0 0;
+    color: #ff9999;
+    font-size: 14px;
+  }
+}
+
+// 기존 PIN 입력 영역
+.profile-edit .profile-pin,
+.profile-select .profile-pin {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: min(384px, 100%);
+  margin: 24px auto 0;
+  padding: 24px;
+  box-sizing: border-box;
+
+  border: 1px solid #383838;
+  border-radius: 12px;
+  background: #222;
+  color: #fff;
+  text-align: left;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  p {
+    margin: 0;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  >input {
+    width: 100%;
+    height: 46px;
+    margin: 0;
+    padding: 0 14px;
+    box-sizing: border-box;
+
+    border: 1px solid #505050;
+    border-radius: 6px;
+    background: #303030;
+    color: #fff;
+    font: inherit;
+
+    &:focus {
+      outline: 2px solid #1351f9;
+      outline-offset: 2px;
+    }
+  }
+
+  .profile-pin__error {
+    color: #ff8989;
+  }
+
+  .profile-pin__buttons {
+    display: flex;
+    gap: 10px;
+
+    >button {
+      flex: 1;
+      height: 44px;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      background: #414141;
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+
+      &:last-child {
+        background: #1351f9;
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+    }
+  }
+}
+
+// PIN 입력 모달
+.profile-pin-modal {
+  position: fixed;
+  inset: 0;
+
+  width: min(560px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100svh - 32px);
+  margin: auto;
+  padding: 56px 32px 32px;
+  box-sizing: border-box;
+
+  overflow: auto;
+  border: 0;
+  border-radius: 20px;
+
+  background:
+    radial-gradient(ellipse 70% 140px at 50% 0,
+      #1351f933,
+      transparent 100%),
+    #0c0d19;
+
+  box-shadow: 0 0 40px #ffffff18;
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  text-align: center;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  &::backdrop {
+    background: #000b;
+  }
+
+  &__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+
+    display: grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+
+    background: #090a13;
+    color: #e9ecf5;
+    cursor: pointer;
+
+    >span {
+      font-family: Arial, sans-serif;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    &:hover {
+      background: #252735;
+    }
+  }
+
+  >h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  >p {
+    margin: 16px 0 0;
+    color: #a5a5a5;
+    font-size: 15px;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+
+  &__inputs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 36px;
+
+    >input {
+      display: block;
+      flex: 0 1 58px;
+
+      width: 58px;
+      min-width: 0;
+      height: 64px;
+      margin: 0;
+      padding: 0;
+
+      border: 1px solid #494949;
+      border-radius: 8px;
+      background: #252735;
+      color: #fff;
+
+      font: inherit;
+      font-size: 28px;
+      text-align: center;
+      caret-color: #fff;
+
+      &:focus {
+        border-color: #7fa8ff;
+        outline: 2px solid #1351f9;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  &__error {
+    min-height: 22px;
+    margin: 14px 0 0;
+    color: #ff8989;
+    font-size: 13px;
+    line-height: 22px;
+  }
+
+  &__confirm {
+    width: 160px;
+    height: 44px;
+    margin-top: 12px;
+    padding: 0;
+
+    border: 0;
+    border-radius: 8px;
+    background: #1351f9;
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:disabled {
+      background: #252735;
+      color: #777;
+      cursor: default;
+    }
+  }
+
+  button:focus-visible {
+    outline: 2px solid #7fa8ff;
+    outline-offset: 3px;
+  }
+}
+
+// 태블릿: 헤더의 로고 여백과 맞춤
+@media (max-width: 1280px) {
+  .profile-select__logo {
+    top: 20px;
+    left: 24px;
+    height: 40px;
+  }
+}
+
+// 모바일
+@media (max-width: 768px) {
+  .profile-select {
+    --profile-size: 112px;
+
+    padding: 100px 24px 60px;
+
+    &__content>h1 {
+      font-size: 26px;
+    }
+
+    &__description {
+      font-size: 14px;
+    }
+
+    &__list {
+      display: grid;
+      grid-template-columns: repeat(2, var(--profile-size));
+      gap: 32px;
+      margin-top: 36px;
+    }
+
+    &__profile {
+      gap: 16px;
+    }
+
+    &__notice {
+      margin-top: 36px;
+    }
+  }
+}
+
+// 작은 모바일: 헤더의 로고 여백과 맞춤
+@media (max-width: 480px) {
+  .profile-select__logo {
+    top: 16px;
+    left: 16px;
+  }
+
+  .profile-pin-modal {
+    padding: 52px 20px 28px;
+
+    >h2 {
+      font-size: 21px;
+    }
+
+    >p {
+      font-size: 13px;
+    }
+
+    &__inputs {
+      gap: 8px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .profile-select__avatar,
+  .profile-select__name {
+    transition: none;
+  }
+}
