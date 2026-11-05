@@ -1,0 +1,31 @@
+.site-inner {
+  --page-side-padding: 110px;
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 var(--page-side-padding);
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #071a2e 0%, #000000 100%);
+}
+.site-inner .hero-full-width {
+  width: calc(100% + var(--page-side-padding) * 2);
+  max-width: none;
+  margin-left: calc(var(--page-side-padding) * -1);
+  margin-right: calc(var(--page-side-padding) * -1);
+  box-sizing: border-box;
+}
+.site-inner > .wavve-home,
+.site-inner > .live-page,
+.site-inner > .live-channel-page,
+.site-inner > .retrov-main,
+.site-inner > .shorts-page {
+  background: transparent;
+  background-image: none;
+}
+
+@media (max-width: 768px) {
+  .site-inner {
+    --page-side-padding: 20px;
+  }
+}

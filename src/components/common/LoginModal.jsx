@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import '../../styles/components/LoginModal.scss';
+import '../../styles/components/common/LoginModal.scss';
 
 export const LoginModal = ({ isOpen, onClose }) => {
   const location = useLocation();

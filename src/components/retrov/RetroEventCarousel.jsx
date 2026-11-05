@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { getImagePath } from '../../utils/imagePath';
 
 import 'swiper/css';
-import '../../styles/components/RetroEventCarousel.scss';
+import '../../styles/components/retrov/RetroEventCarousel.scss';
 
 export default function RetroEventCarousel({ banners = [] }) {
   const swiperRef = useRef(null);

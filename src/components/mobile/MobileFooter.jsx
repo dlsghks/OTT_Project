@@ -3,7 +3,7 @@ import youtubeIcon from "../../assets/mobile/d8a7e.png";
 import instagramIcon from "../../assets/mobile/454a8.png";
 import divider from "../../assets/mobile/f73c7.svg";
 import noticeIcon from "../../assets/mobile/86f00.svg";
-import "../../styles/components/MobileFooter.scss";
+import "../../styles/components/mobile/MobileFooter.scss";
 
 const Divider = () => (
   <span className="wavve-mobile-footer__divider" aria-hidden="true"><img src={divider} alt="" /></span>

@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { ContentCard } from '../home/ContentCard';
 
 // 전체 보기: 콘텐츠 그리드
@@ -6,7 +7,7 @@ export const CollectionRow = ({ title, items = [] }) => {
     <section className="category-row collection-row">
       <div className="category-row__header">
         <div className="category-row__title">
-          <h2>{title}</h2>
+          <SectionTitle>{title}</SectionTitle>
         </div>
       </div>
 
