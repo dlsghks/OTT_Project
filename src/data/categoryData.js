@@ -54,7 +54,7 @@ const entertainmentItems = [
   program('ent-13', '강철부대W', 'survival', ['tue'], '새로운'),
   program('ent-14', '피의 게임 3', 'survival', [], '', true),
   program('ent-15', '좀비버스: 뉴 블러드', 'survival', [], '', true),
-  program('ent-16', '여행을 대하는 자세', 'travel', [], '새로운', true),
+  program('ent-16', '여행 설계자들', 'travel', [], '새로운', true),
   program('ent-17', '태어난 김에 세계일주', 'travel', ['sun']),
   program('ent-18', '텐트 밖은 유럽', 'travel', ['thu']),
   program('ent-19', '현지에서 먹힐까?', 'travel', ['tue']),
@@ -230,9 +230,9 @@ export const categoryPages = {
   entertainment: {
     name: '예능',
     heroItems: [
-      { id: 'ent-hero-1', title: '런닝맨', subtitle: '일요일 저녁, 웃음 레이스는 계속된다', image: '/images/home/hero/ent_hero01.png',textImage: '/images/home/hero/sub-ent-hero-text01.png', link: '/programdetail/ent-01' },
-      { id: 'ent-hero-2', title: '피의 게임 3', subtitle: '웨이브 오리지널 서바이벌', image: '/images/home/hero/ent_hero02.png',textImage:'/images/home/hero/sub-ent-hero-text02.png' ,link: '/programdetail/ent-14' },
-      { id: 'ent-hero-3', title: '여행을 대하는 자세', subtitle: '지금 떠나고 싶은 여행 예능', image: '/images/home/hero/ent_hero03.webp',textImage:'/images/home/hero/sub-ent-hero-text03.png', link: '/programdetail/ent-16' },
+      { id: 'ent-hero-1', title: '런닝맨', subtitle: '일요일 저녁, 웃음 레이스는 계속된다', image: '/images/home/hero/ent_hero01.png',textImage: '/images/home/hero/sub-ent-hero-text01.png', link: '/entertainmentdetail/ent-01' },
+      { id: 'ent-hero-2', title: '피의 게임 3', subtitle: '웨이브 오리지널 서바이벌', image: '/images/home/hero/ent_hero02.png',textImage:'/images/home/hero/sub-ent-hero-text02.png' ,link: '/entertainmentdetail/ent-14' },
+      { id: 'ent-hero-3', title: '여행 설계자들', subtitle: '지금 떠나고 싶은 여행 예능', image: '/images/home/hero/ent_hero03.webp',textImage:'/images/home/hero/sub-ent-hero-text03.png', link: '/entertainmentdetail/ent-16' },
     ],
     filters: [
       { id: 'all', label: '예능전체' },
@@ -269,9 +269,9 @@ export const categoryPages = {
   drama: {
     name: '드라마',
     heroItems: [
-      { id: 'dra-hero-1', title: '모범택시 3', subtitle: '무지개 운수가 돌아왔다', image: '/images/home/hero/drama_hero01.png',textImage:'/images/home/hero/sub-drama-hero-text01.png', link: '/programdetail/dra-01' },
-      { id: 'dra-hero-2', title: '약한영웅 Class 1', subtitle: '웨이브 오리지널 드라마', image: '/images/home/hero/drama_hero02.webp',textImage:'/images/home/hero/sub-drama-hero-text02.png', link: '/programdetail/dra-14' },
-      { id: 'dra-hero-3', title: '메리 킬즈 피플', subtitle: '새로 공개된 금토 드라마', image: '/images/home/hero/drama_hero03.webp',textImage:'/images/home/hero/sub-drama-hero-text03.png', link: '/programdetail/dra-13' },
+      { id: 'dra-hero-1', title: '모범택시 3', subtitle: '무지개 운수가 돌아왔다', image: '/images/home/hero/drama_hero01.png',textImage:'/images/home/hero/sub-drama-hero-text01.png', link: '/dramadetail/dra-01' },
+      { id: 'dra-hero-2', title: '약한영웅 Class 1', subtitle: '웨이브 오리지널 드라마', image: '/images/home/hero/drama_hero02.webp',textImage:'/images/home/hero/sub-drama-hero-text02.png', link: '/dramadetail/dra-14' },
+      { id: 'dra-hero-3', title: '메리 킬즈 피플', subtitle: '새로 공개된 금토 드라마', image: '/images/home/hero/drama_hero03.webp',textImage:'/images/home/hero/sub-drama-hero-text03.png', link: '/dramadetail/dra-13' },
     ],
     filters: [
       { id: 'all', label: '드라마전체' },
@@ -340,9 +340,9 @@ export const categoryPages = {
   currentaffairs: {
     name: '시사교양',
     heroItems: [
-      { id: 'cur-hero-1', title: '그것이 알고 싶다', subtitle: '진실을 향한 끈질긴 추적', image: '/images/home/hero/doc_hero01.png',textImage:'/images/home/hero/sub-doc-hero-text01.png', link: '/programdetail/cur-01' },
-      { id: 'cur-hero-2', title: '다큐 인사이트', subtitle: '세상을 보는 새로운 시선', image: '/images/home/hero/doc_hero02.webp',textImage:'/images/home/hero/sub-doc-hero-text02.png', link: '/programdetail/cur-12' },
-      { id: 'cur-hero-3', title: '걸어서 세계속으로', subtitle: '화면으로 떠나는 세계 여행', image: '/images/home/hero/doc_hero03.png',textImage:'/images/home/hero/sub-doc-hero-text03.png', link: '/programdetail/cur-13' },
+      { id: 'cur-hero-1', title: '그것이 알고 싶다', subtitle: '진실을 향한 끈질긴 추적', image: '/images/home/hero/doc_hero01.png',textImage:'/images/home/hero/sub-doc-hero-text01.png', link: '/currentaffairsdetail/cur-01' },
+      { id: 'cur-hero-2', title: '다큐 인사이트', subtitle: '세상을 보는 새로운 시선', image: '/images/home/hero/doc_hero02.webp',textImage:'/images/home/hero/sub-doc-hero-text02.png', link: '/currentaffairsdetail/cur-12' },
+      { id: 'cur-hero-3', title: '걸어서 세계속으로', subtitle: '화면으로 떠나는 세계 여행', image: '/images/home/hero/doc_hero03.png',textImage:'/images/home/hero/sub-doc-hero-text03.png', link: '/currentaffairsdetail/cur-13' },
     ],
     filters: [
       { id: 'all', label: '시사교양전체' },
@@ -373,9 +373,9 @@ export const categoryPages = {
   animation: {
     name: '애니',
     heroItems: [
-      { id: 'ani-hero-1', title: '나 혼자만 레벨업', subtitle: '최약체 헌터의 성장 스토리', image: '/images/home/hero/ani_hero01.webp',textImage:'/images/home/hero/sub-ani-hero-text01.png', link: '/programdetail/ani-04' },
-      { id: 'ani-hero-2', title: '명탐정 코난', subtitle: '진실은 언제나 하나!', image: '/images/home/hero/ani_hero02.webp',textImage:'/images/home/hero/sub-ani-hero-text02.png', link: '/programdetail/ani-01' },
-      { id: 'ani-hero-3', title: '캐치! 티니핑', subtitle: '아이와 함께 보는 키즈 애니', image: '/images/home/hero/ani_hero03.webp',textImage:'/images/home/hero/sub-ani-hero-text03.png', link: '/programdetail/ani-11' },
+      { id: 'ani-hero-1', title: '나 혼자만 레벨업', subtitle: '최약체 헌터의 성장 스토리', image: '/images/home/hero/ani_hero01.webp',textImage:'/images/home/hero/sub-ani-hero-text01.png', link: '/animationdetail/ani-04' },
+      { id: 'ani-hero-2', title: '명탐정 코난', subtitle: '진실은 언제나 하나!', image: '/images/home/hero/ani_hero02.webp',textImage:'/images/home/hero/sub-ani-hero-text02.png', link: '/animationdetail/ani-01' },
+      { id: 'ani-hero-3', title: '캐치! 티니핑', subtitle: '아이와 함께 보는 키즈 애니', image: '/images/home/hero/ani_hero03.webp',textImage:'/images/home/hero/sub-ani-hero-text03.png', link: '/animationdetail/ani-11' },
     ],
     filters: [
       { id: 'all', label: '애니전체' },
@@ -405,9 +405,9 @@ export const categoryPages = {
   global: {
     name: '해외시리즈',
     heroItems: [
-      { id: 'glo-hero-1', title: '하우스 오브 드래곤', subtitle: 'HBO 오리지널 시리즈', image: '/images/home/hero/foreign_hero01.png',textImage:'/images/home/hero/sub-foreign-hero-text01.png', link: '/programdetail/glo-01' },
-      { id: 'glo-hero-2', title: '화이트 로투스', subtitle: '새 시즌 공개', image: '/images/home/hero/foreign_hero02.png',textImage:'/images/home/hero/sub-foreign-hero-text02.png', link: '/programdetail/glo-05' },
-      { id: 'glo-hero-3', title: '경여년', subtitle: '화제의 중국 드라마', image: '/images/home/hero/foreign_hero03.webp',textImage:'/images/home/hero/sub-foreign-hero-text03.png', link: '/programdetail/glo-10' },
+      { id: 'glo-hero-1', title: '하우스 오브 드래곤', subtitle: 'HBO 오리지널 시리즈', image: '/images/home/hero/foreign_hero01.png',textImage:'/images/home/hero/sub-foreign-hero-text01.png', link: '/globaldetail/glo-01' },
+      { id: 'glo-hero-2', title: '화이트 로투스', subtitle: '새 시즌 공개', image: '/images/home/hero/foreign_hero02.png',textImage:'/images/home/hero/sub-foreign-hero-text02.png', link: '/globaldetail/glo-05' },
+      { id: 'glo-hero-3', title: '경여년', subtitle: '화제의 중국 드라마', image: '/images/home/hero/foreign_hero03.webp',textImage:'/images/home/hero/sub-foreign-hero-text03.png', link: '/globaldetail/glo-10' },
     ],
     filters: [
       { id: 'all', label: '해외시리즈전체' },
