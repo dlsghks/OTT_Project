@@ -39,6 +39,12 @@ import { RetrovDetail } from "../pages/retrov/RetrovDetail";
 import { Event } from "../pages/event/Event";
 import { EventDetail } from "../pages/event/EventDetail";
 
+// 스페셜 페이지 (홈 카테고리 버튼)
+import { SpecialPage } from "../pages/special/SpecialPage";
+import { TmdbOpen } from "../pages/special/TmdbOpen";
+import { NewsClipList } from "../pages/special/NewsClipList";
+import { NewsClip } from "../pages/special/NewsClip";
+
 // 검색 및 숏폼 페이지
 import { Search } from "../pages/search/Search";
 import { Shorts } from "../pages/shorts/Shorts";
@@ -151,6 +157,23 @@ export const AppRouter = () => {
           path="/eventdetail"
           element={<EventDetail />}
         />
+        <Route
+          path="/event/:eventId"
+          element={<EventDetail />}
+        />
+
+        {/* 스페셜 (홈 카테고리 버튼) */}
+        <Route
+          path="/special/:slug"
+          element={<SpecialPage />}
+        />
+
+        {/* 스페셜 페이지 콘텐츠 → TMDB 상세 페이지 연결 */}
+        <Route path="/open" element={<TmdbOpen />} />
+
+        {/* 뉴스: 필터 탭 화면 · 클립 재생 */}
+        <Route path="/special/news/:tab" element={<NewsClipList />} />
+        <Route path="/news/clip/:clipId" element={<NewsClip />} />
 
         {/* 검색 및 숏폼 */}
         <Route path="/search" element={<Search />} />
