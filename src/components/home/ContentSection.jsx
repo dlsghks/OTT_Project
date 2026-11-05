@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 import { ContentCard } from './ContentCard';
-import '../../styles/components/ContentSection.scss';
+import '../../styles/components/home/ContentSection.scss';
 
 // 카드 종류별 설정
 const CARD_TYPES = {
@@ -60,7 +61,7 @@ export const ContentSection = ({
       {showHeader && (
         <div className="content-section__header">
           <div className="content-section__title">
-            <h2>{title}</h2>
+            <SectionTitle>{title}</SectionTitle>
 
             {(moreLink || more) && (
               <Link to={moreLink || more}>

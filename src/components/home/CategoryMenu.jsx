@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import '../../styles/components/Category-menu.scss';
+import '../../styles/components/home/Category-menu.scss';
 
 const getCategoryImage = (image = '') => {
   if (!image) return '';

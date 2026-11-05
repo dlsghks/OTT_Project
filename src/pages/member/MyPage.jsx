@@ -1,3 +1,4 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { NotificationPopup } from "../../components/NotificationPopup";
@@ -15,8 +16,8 @@ import favoriteGraphic from "../../assets/mypage/quiz-favorite.png";
 import linesGraphic from "../../assets/mypage/quiz-lines.png";
 import heartImage from "../../assets/mypage/heart.png";
 import heartGlowImage from "../../assets/mypage/heart-glow.png";
-import "../../styles/components/MyPage.scss";
-import "../../styles/components/MyPageShorts.scss";
+import "../../styles/pages/member/MyPage.scss";
+import "../../styles/pages/member/MyPageShorts.scss";
 
 import mobilePencil from "../../assets/mobile/pencil.svg";
 import mobileEmpty from "../../assets/mobile/empty.svg";
@@ -277,7 +278,7 @@ export const MyPage = ({
         </div>
 
         <section className="mypage__management" aria-labelledby={`${id}-management`}>
-          <h2 id={`${id}-management`}>계정 · 서비스 관리</h2>
+          <SectionTitle id={`${id}-management`}>계정 · 서비스 관리</SectionTitle>
           <div className="mypage__management-grid">
             <Link to="/profileedit">프로필 관리<span aria-hidden="true">›</span></Link>
             <button type="button" onClick={() => requestAction("billing", "이용권 · 결제 내역")}>이용권 · 결제 내역<span aria-hidden="true">›</span></button>
@@ -287,7 +288,11 @@ export const MyPage = ({
         </section>
 
         <section className="mypage__retro" aria-labelledby={`${id}-retro`}>
+<<<<<<< HEAD
           <h2 id={`${id}-retro`}><span className="mypage__desktop-copy">레트로 Pick</span><span className="mypage__mobile-copy">레트로브 인기회차 픽!</span></h2>
+=======
+          <SectionTitle id={`${id}-retro`}>레트로 Pick</SectionTitle>
+>>>>>>> origin/develop
           <ul className="mypage__retro-list">{retroPicks.map((item) => renderCard(item, true))}</ul>
         </section>
       </div>

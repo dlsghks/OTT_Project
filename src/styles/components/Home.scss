@@ -129,10 +129,17 @@
     cursor: pointer;
 
     &:hover,
-    &:focus-visible { opacity: 1; }
+    &:focus-visible {
+      opacity: 1;
+    }
 
-    &--prev { right: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 18px); }
-    &--next { left: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 18px); }
+    &--prev {
+      right: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 18px);
+    }
+
+    &--next {
+      left: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 18px);
+    }
   }
 
   &__counter {
@@ -495,21 +502,17 @@
     // 왼쪽 그라데이션
     &--prev {
       left: 0;
-      background: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.8),
-        rgba(0, 0, 0, 0)
-      );
+      background: linear-gradient(to right,
+          rgba(0, 0, 0, 0.8),
+          rgba(0, 0, 0, 0));
     }
 
     // 오른쪽 그라데이션
     &--next {
       right: 0;
-      background: linear-gradient(
-        to left,
-        rgba(0, 0, 0, 0.8),
-        rgba(0, 0, 0, 0)
-      );
+      background: linear-gradient(to left,
+          rgba(0, 0, 0, 0.8),
+          rgba(0, 0, 0, 0));
     }
   }
 
@@ -636,4 +639,63 @@
   }
 
 
+}
+
+.home-events {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+
+  .home-events__banner--image {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    border-radius: 0;
+    background: none;
+    overflow: hidden;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0;
+    }
+  }
+}
+
+.wavve-home .home-events {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: none;
+
+  >a.home-events__banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    overflow: hidden;
+
+    >img {
+      display: block;
+      width: 100%;
+      max-width: none;
+      height: auto;
+      margin: 0;
+      padding: 0;
+    }
+  }
 }

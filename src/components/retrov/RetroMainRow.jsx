@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -17,10 +18,10 @@ export default function RetroMainRow({ id, title, icon, items, variant, renderIt
 
   return (
     <section className={`rv-main-row rv-main-row--${variant}`} aria-labelledby={`rv-main-row-${id}`}>
-      <h2 id={`rv-main-row-${id}`} className="rv-main-row__title">
+      <SectionTitle id={`rv-main-row-${id}`} className="rv-main-row__title">
         {icon && <span aria-hidden="true">{icon}</span>}
         {title}
-      </h2>
+      </SectionTitle>
 
       <div className="rv-main-row__slider">
         <Swiper

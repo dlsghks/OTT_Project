@@ -1,10 +1,11 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ChevronDown, Heart, Share } from 'lucide-react';
 
-import { programs, programDetails, eventBanners } from '../../data/retrov';
-import { characterQuizzes } from '../../data/characterQuizzes';
-import { getTmdbTarget, getEpisodeNumber } from '../../data/retrovTmdb';
+import { programs, programDetails, eventBanners } from '../../data/retrov/retrov';
+import { characterQuizzes } from '../../data/retrov/characterQuizzes';
+import { getTmdbTarget, getEpisodeNumber } from '../../data/retrov/retrovTmdb';
 import { useRetrovTmdbStore, tmdbImage } from '../../store/useRetrovTmdbStore';
 import { useRetrovPlayer } from '../../hooks/useRetrovPlayer';
 import { getImagePath } from '../../utils/imagePath';
@@ -15,8 +16,8 @@ import CharacterQuiz from '../../components/retrov/CharacterQuiz';
 import CharacterImagePanel from '../../components/retrov/CharacterImagePanel';
 import RetroEventCarousel from '../../components/retrov/RetroEventCarousel';
 
-import '../../styles/RetrovDetail.scss';
-import '../../styles/Retrov.scss';
+import '../../styles/pages/retrov/RetrovDetail.scss';
+import '../../styles/pages/retrov/Retrov.scss';
 
 export const RetrovDetail = () => {
   const { programId } = useParams();
@@ -317,9 +318,9 @@ function ProgramFanPage({ programId, program }) {
 
         {/* 다른 프로그램 */}
         <section className="rv-section rv-others" aria-labelledby="rv-others-title">
-          <h2 id="rv-others-title" className="rv-section__title">
+          <SectionTitle id="rv-others-title" className="rv-section__title">
             {program.othersTitle ?? "또 다른 그때 그시절 프로그램보기"}
-          </h2>
+          </SectionTitle>
 
           <ul className="rv-others__list">
             {otherPrograms.slice(0, 5).map((item) => (

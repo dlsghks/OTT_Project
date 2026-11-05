@@ -1,7 +1,8 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { useState } from 'react';
 import { ContentSection } from './ContentSection';
-import { weekdays, weeklyContentByDay } from '../../data/weeklyContentData';
-import '../../styles/components/WeeklyContentSection.scss';
+import { weekdays, weeklyContentByDay } from '../../data/home/weeklyContentData';
+import '../../styles/components/home/WeeklyContentSection.scss';
 
 export const WeeklyContentSection = ({ itemsByDay = weeklyContentByDay, appResponsive = false }) => {
   const [selectedDay, setSelectedDay] = useState(
@@ -13,7 +14,7 @@ export const WeeklyContentSection = ({ itemsByDay = weeklyContentByDay, appRespo
     <section className="weekly-content" aria-labelledby="weekly-content-title">
       <div className="content-section__header">
         <div className="content-section__title">
-          <h2 id="weekly-content-title">요일별 콘텐츠</h2>
+          <SectionTitle id="weekly-content-title">요일별 콘텐츠</SectionTitle>
         </div>
       </div>
       <div className="weekly-content__days" role="group" aria-label="콘텐츠 업데이트 요일">

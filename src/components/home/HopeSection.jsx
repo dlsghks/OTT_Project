@@ -1,6 +1,7 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { ContentSection } from './ContentSection';
 import { Link } from 'react-router-dom';
-import { hopeItems } from '../../data/homeData';
+import { hopeItems } from '../../data/home/homeData';
 import { getImagePath } from '../../utils/imagePath';
 
 export const HopeSection = ({ appResponsive = false }) => (
@@ -10,9 +11,9 @@ export const HopeSection = ({ appResponsive = false }) => (
     style={{ '--hope-background': `url("${getImagePath('/images/home/section/Timothée.jpg')}")` }}
   >
     <div className="home-hope__intro">
-      <h2 id="home-hope-title" className="home-hope__title">
+      <SectionTitle id="home-hope-title" className="home-hope__title">
         <img src={getImagePath('/images/home/section/Timothée_name.png')} alt="티모시 샬라메" />
-      </h2>
+      </SectionTitle>
       <p className="home-hope__description">
         〈마티 슈프림〉의 주역<br />
         그의 필모그래피

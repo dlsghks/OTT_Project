@@ -4,7 +4,7 @@ import youtubeIcon from "../../assets/mobile/d8a7e.png";
 import instagramIcon from "../../assets/mobile/454a8.png";
 import divider from "../../assets/mobile/f73c7.svg";
 import noticeIcon from "../../assets/mobile/86f00.svg";
-import "../../styles/components/MobileFooter.scss";
+import "../../styles/components/mobile/MobileFooter.scss";
 
 const DEFAULT_NOTICES = [
   { id: 5, title: "[작업공지] 11/5 KT 휴대폰 본인확인 서비스 작업 안내" },

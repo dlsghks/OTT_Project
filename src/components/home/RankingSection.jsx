@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ContentCard } from './ContentCard';
@@ -22,7 +23,7 @@ export const RankingSection = ({ items = [] }) => {
         <section className="home-section ranking-section">
             {/* 섹션 제목 */}
             <div className="home-section__head">
-                <h2>오늘의 TOP 랭킹</h2>
+                <SectionTitle>오늘의 TOP 랭킹</SectionTitle>
             </div>
 
             {/* Swiper 슬라이드 영역 */}

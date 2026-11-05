@@ -1,3 +1,4 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -6,10 +7,10 @@ import { ChevronDown } from "lucide-react";
 import {
   faqCategories,
   faqItems,
-} from "../../data/faqData";
+} from "../../data/support/faqData";
 
-import "../../styles/pages/Notice.scss";
-import "../../styles/pages/Support.scss";
+import "../../styles/pages/support/Notice.scss";
+import "../../styles/pages/support/Support.scss";
 
 const supportTabs = [
   { label: "공지사항", path: "/notice" },
@@ -89,7 +90,7 @@ export const Support = () => {
 
         {/* FAQ 검색 */}
         <div className="support-page__search-box">
-          <h2>무엇을 도와드릴까요?</h2>
+          <SectionTitle>무엇을 도와드릴까요?</SectionTitle>
 
           <form
             className="support-page__search"

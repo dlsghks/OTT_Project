@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getImagePath } from "../../utils/imagePath";
 import { getTmdbPoster, logTmdbDiagnostic } from "../../services/tmdb";
-import "../../styles/components/ContentCard.scss";
+import "../../styles/components/home/ContentCard.scss";
 
 const ContentCardBody = ({ item, rank }) => {
   const [tmdbPoster, setTmdbPoster] = useState(null);

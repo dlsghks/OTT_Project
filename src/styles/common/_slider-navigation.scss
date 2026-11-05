@@ -1,0 +1,25 @@
+@mixin section-arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 65px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  font-family: Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1;
+  &--prev { left: 0; background: linear-gradient(to right, rgba(0, 0, 0, .8), transparent); }
+  &--next { right: 0; background: linear-gradient(to left, rgba(0, 0, 0, .8), transparent); }
+  @media (max-width: 767px) { width: 36px; font-size: 36px; }
+}

@@ -5,8 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
 import 'swiper/css'
 
-import logo from '../assets/wavve_logo_w.svg'
-import '../styles/components/Footer.scss'
+import logo from '../../assets/wavve_logo_w.svg'
+import '../../styles/layout/Footer.scss'
 
 // 상단 공지사항
 const notices = [
