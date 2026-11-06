@@ -31,7 +31,7 @@ const categoryImage = (name) =>
   `${import.meta.env.BASE_URL}images/category-buttons/${name}.png`;
 
 export const categories = [
-  { label: '출석체크', path: '/event/attendance', image: categoryImage('attendance-check') },
+  { label: '출석체크', path: '/eventdetail/attendance', image: categoryImage('attendance-check') },
   { label: 'MMA', path: '/special/mma', image: categoryImage('mma') },
   { label: '라이어', path: '/special/liar', image: categoryImage('liar') },
   { label: '골프', path: '/special/golf', image: categoryImage('golf') },
