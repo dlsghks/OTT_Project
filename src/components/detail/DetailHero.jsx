@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react';
 import { Heart, Share, ChevronDown, ChevronUp } from 'lucide-react';
+import { DetailInfo } from './DetailInfo';
+import { getInfoRows } from '../../services/tmdbDetail';
 
 // 상세 페이지 상단 히어로 (영화 · 시리즈 공통)
 // - select: 시청하기 왼쪽 선택 박스 (영화: 자막, 시리즈: 시즌)
@@ -26,7 +28,7 @@ export const DetailHero = ({
   const heroRef = useRef(null);
   const contentRef = useRef(null);
   const { user, isLiked, onLogin, onLike, onShare } = actions;
-  const infoRows = info.filter((row) => row.value);
+  const infoRows = getInfoRows(info);
 
   const expand = () => {
     setFrame({
@@ -113,16 +115,7 @@ export const DetailHero = ({
           )}
 
           {/* 펼치기: 출연 아래로 상세 정보(개요 · 장르 · 감독 · 작가) → 아래 테마는 그만큼 밀림 */}
-          {expanded && (
-            <dl className="detail-info">
-              {infoRows.map((row) => (
-                <div key={row.label} className="detail-info__row">
-                  <dt>{row.label}:</dt>
-                  <dd>{row.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          {expanded && <DetailInfo rows={infoRows} />}
         </div>
 
         {/* 펼치기: 히어로 아래 가운데 / 접기: 상세 정보 아래 가운데 */}

@@ -242,9 +242,10 @@
     z-index: 2;
     margin: 0;
     padding: 4px 12px;
-    border-radius: 999px;
+    border-radius: 0; // 각진 모서리
     background: rgba(0, 0, 0, 0.5);
-    font-size: 13px;
+    font-family: $retrov-pixel; // DungGeunMo
+    font-size: 16px;
     color: #ccc;
 
     strong {
@@ -377,6 +378,11 @@
       object-position: 62% center; // 배너 사진의 인물 쪽으로
       transition: transform 0.3s;
     }
+
+    // 디자인 포스터 (카드와 같은 318 x 464 비율이라 가운데 그대로)
+    img.rv-rank-card__image--poster {
+      object-position: center;
+    }
   }
 
   &__logo.rv-rank-card__logo {
@@ -443,6 +449,13 @@
       @include cover-img;
       transition: transform 0.3s;
     }
+
+    // 유튜브 썸네일(hqdefault 480x360) · 무한도전 이미지(640x480)는 4:3 안에 16:9 장면 + 위아래 검은 띠가 들어 있음
+    // → 4/3배 확대해 검은 띠를 잘라내고 TMDB 장면 사진(16:9 → 4:3 cover)과 같은 모습으로 (카드 크기는 그대로)
+    img[src*="i.ytimg.com"],
+    img[src*="/images/retrov/infinite-challenge/"] {
+      scale: 1.334;
+    }
   }
 
   &:hover &__image img {
@@ -489,6 +502,16 @@
   border: 1px solid #2c3343;
   border-radius: 6px;
   background: #000;
+
+  // 바로 재생되는 쇼츠 카드(button)도 링크 카드와 똑같이 보이도록 기본 버튼 스타일 제거
+  &--button {
+    width: 100%;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+  }
 
   &__caption {
     display: grid;

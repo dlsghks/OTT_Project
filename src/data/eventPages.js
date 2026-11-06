@@ -1,5 +1,7 @@
 import { AttendanceEvent } from '../components/event/AttendanceEvent';
 import { MmaEvent } from '../components/event/MmaEvent';
+import { RetroVoteEvent } from '../components/event/RetroVoteEvent';
+import { retrovEvents } from './retrov/retrovEvents';
 import { categoryPages } from './categoryData';
 
 // 이벤트 레지스트리 (/event/:eventId)
@@ -108,4 +110,9 @@ export const eventPages = {
       '개인 사정으로 공연에 참석하지 못한 경우, 티켓 재발급 및 별도 보상은 제공되지 않습니다.',
     ],
   },
+
+  // 레트로브 투표 이벤트 3종 (레트로브 이벤트 배너에서 연결: what-next · favorite-scene · next-line)
+  ...Object.fromEntries(
+    Object.entries(retrovEvents).map(([eventId, event]) => [eventId, { ...event, eventId, Component: RetroVoteEvent }])
+  ),
 };

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { categoryPages } from '../../data/categoryData';
 import { useTvStore, getTvCast } from '../../store/useTvStore';
 import {
-  TMDB_IMG, getLogo, getTvAge, getCrewNames, getDetailInfo, WRITER_JOBS, formatDate,
+  TMDB_IMG, getLogo, getTvAge, getTvInfo, formatDate,
 } from '../../services/tmdbDetail';
 import { buildEpisodeQuery, episodeVideoOverrides } from '../../data/episodeYoutube';
 import { useDetailActions } from '../../hooks/useDetailActions';
@@ -13,21 +13,6 @@ import { DetailHero } from './DetailHero';
 import { EpisodeRow } from './EpisodeRow';
 import { DetailSections } from './DetailSections';
 import { DetailMessage } from './DetailMessage';
-
-// 펼치기 정보 (개요 · 장르 · 감독 · 작가)
-const getInfo = (tv) => {
-  const crew = tv.aggregate_credits?.crew;
-  const start = tv.first_air_date?.slice(0, 4);
-  const end = tv.in_production ? '' : tv.last_air_date?.slice(0, 4) ?? '';
-
-  return getDetailInfo({
-    summary: [tv.networks?.[0]?.name, start ? `${start}~${end}` : ''],
-    genres: tv.genres,
-    directors: getCrewNames(crew, ['Director'])
-      || (tv.created_by ?? []).map((person) => person.name).join(', '),
-    writers: getCrewNames(crew, WRITER_JOBS),
-  });
-};
 
 // 시리즈 상세 공통 (예능 · 드라마 · 시사교양 · 애니 · 해외시리즈)
 // - programId: 카테고리 콘텐츠 id(ent-01) 또는 TMDB id(숫자)
@@ -162,7 +147,7 @@ export const TvDetail = ({ programId, config }) => {
           genres={tv.genres?.map((genre) => genre.name).join(' · ')}
           overview={tv.overview}
           cast={getTvCast(tv).slice(0, 5)}
-          info={getInfo(tv)}
+          info={getTvInfo(tv)}
           select={seasons.length > 0 && (
             <select
               className="movie-hero__select"
