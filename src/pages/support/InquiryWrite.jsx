@@ -5,6 +5,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import "../../styles/pages/support/InquiryWrite.scss";
 import wavveLogo from "../../assets/wavve_logo_w.svg";
+import {
+    addDoc,
+    collection,
+    getFirestore,
+    serverTimestamp,
+} from "firebase/firestore";
+
+const db = getFirestore(auth.app);
 
 const questionTypes = [
     "설치/작동오류",
@@ -49,6 +57,7 @@ const initialForm = {
 };
 
 export const InquiryWrite = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     const [form, setForm] = useState(initialForm);
@@ -96,9 +105,19 @@ export const InquiryWrite = () => {
     };
 
     // 등록 버튼
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (authLoading || isSubmitting) return;
+
         setMessage("");
+
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) {
+            setMessage("로그인 후 문의를 등록해 주세요.");
+            return;
+        }
 
         if (
             !form.name.trim() ||
@@ -119,10 +138,33 @@ export const InquiryWrite = () => {
             return;
         }
 
-        // 실제 저장 기능은 추후 Firebase 연동
-        setMessage(
-            "입력 내용이 확인되었습니다. 문의 등록 기능은 아직 준비 중입니다."
-        );
+        setIsSubmitting(true);
+
+        try {
+            await addDoc(collection(db, "inquiries"), {
+                uid: currentUser.uid,
+                name: form.name.trim(),
+                email: form.email.trim(),
+                phone: form.phone.trim(),
+                category: form.questionType,
+                services: form.services,
+                programInfo: form.programInfo.trim(),
+                devices: form.devices,
+                environment: form.environment.trim(),
+                title: form.title.trim(),
+                content: form.content.trim(),
+                agree: true,
+                status: "접수완료",
+                createdAt: serverTimestamp(),
+            });
+
+            navigate("/inquiry", { replace: true });
+        } catch (error) {
+            console.error("문의 등록 실패:", error);
+            setMessage("문의 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -426,9 +468,9 @@ export const InquiryWrite = () => {
                         <button
                             type="submit"
                             className="inquiry-write__submit"
-                            disabled={authLoading}
+                            disabled={authLoading || isSubmitting}
                         >
-                            등록
+                            {isSubmitting ? "등록 중..." : "등록"}
                         </button>
                     </div>
                 </form>
