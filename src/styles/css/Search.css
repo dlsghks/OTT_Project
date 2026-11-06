@@ -253,7 +253,10 @@
   color: #d4d4d4;
   text-align: left;
 }
-.popular-searches__item:first-child {
+.popular-searches__item {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.popular-searches__item.is-active {
   background: #1351f9;
   border-color: #1351f9;
 }

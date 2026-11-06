@@ -9,7 +9,7 @@
   overflow: hidden;
   background: #3734a0;
   color: #fff;
-  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   animation: mudo-quiz-open 0.25s ease-out;
 }
 .mudo-quiz p,

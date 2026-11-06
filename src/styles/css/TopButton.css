@@ -13,9 +13,9 @@
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: #1f4ef5;
+  background: #1351F9;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  color: #fff;
+  color: #FFFFFF;
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
@@ -28,7 +28,7 @@
   transform: translateY(0);
 }
 .top-button:hover {
-  background: #3561ff;
+  background: #0F40C6;
 }
 .top-button:focus-visible {
   outline: 2px solid #fff;
