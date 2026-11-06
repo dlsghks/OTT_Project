@@ -105,41 +105,7 @@ $chip-border: rgba(255, 255, 255, 0.08);
   }
 
   &__arrow {
-    position: absolute;
-    top: calc(var(--card-h) / 2);
-    z-index: 10;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 44px;
-    height: 80px;
-    padding: 0 0 4px;
-
-    border: 0;
-    border-radius: 6px;
-    background: rgba(28, 28, 30, 0.85);
-
-    color: #fff;
-    font-size: 36px;
-    line-height: 1;
-    cursor: pointer;
-
-    transform: translateY(-50%);
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background: rgba(60, 60, 64, 0.95);
-    }
-
-    &--prev {
-      left: 8px;
-    }
-
-    &--next {
-      right: max(8px, calc(6.25vw - 22px));
-    }
+    @include nav.section-arrow;
   }
 }
 
@@ -246,71 +212,7 @@ $chip-border: rgba(255, 255, 255, 0.08);
   }
 
   .category-row__arrow {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 65px;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-
-    color: #fff;
-    font-family: Arial, sans-serif;
-    font-size: 48px;
-    font-weight: 300;
-    line-height: 1;
-
-    transform: none;
-    cursor: pointer;
-
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-
-    span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font: inherit;
-    }
-
-    &--prev {
-      left: 0;
-      right: auto;
-
-      background: linear-gradient(to right,
-          rgba(0, 0, 0, 0.8),
-          transparent);
-
-      &:hover {
-        background: linear-gradient(to right,
-            rgba(0, 0, 0, 0.8),
-            transparent);
-      }
-    }
-
-    &--next {
-      right: 0;
-      left: auto;
-
-      background: linear-gradient(to left,
-          rgba(0, 0, 0, 0.8),
-          transparent);
-
-      &:hover {
-        background: linear-gradient(to left,
-            rgba(0, 0, 0, 0.8),
-            transparent);
-      }
-    }
+    @include nav.section-arrow;
   }
 
   .category-row__slider:hover .category-row__arrow,
@@ -332,4 +234,15 @@ $chip-border: rgba(255, 255, 255, 0.08);
   color: #9a9a9a;
   font-size: 13px;
   line-height: 1.5;
+}
+@media (min-width: 1025px) and (max-width: 1919px) {
+  .category-row__swiper {
+    container-type: inline-size;
+    .swiper-wrapper { height: auto; }
+    .swiper-slide.card-slide { width: min(318px, calc((100cqw - 4 * var(--card-gap)) / 4.5)); }
+  }
+}
+
+@media (min-width: 1025px) {
+  .category-row__swiper .swiper-wrapper { height: auto; }
 }

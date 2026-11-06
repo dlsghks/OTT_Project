@@ -321,8 +321,8 @@ export const MyHover = ({
             style={{
               position: "static",
               display: "block",
-              width: "32px",
-              height: "32px",
+              width: "28px",
+              height: "28px",
               maxWidth: "none",
               borderRadius: "50%",
               objectFit: "cover",

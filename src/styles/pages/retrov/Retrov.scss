@@ -916,49 +916,7 @@
   }
 
   .rv-main-row__arrow {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 65px;
-    height: auto;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-
-    color: #fff;
-    font-family: Arial, sans-serif;
-    font-size: 48px;
-    font-weight: 300;
-    line-height: 1;
-
-    transform: none;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-
-    &--prev {
-      left: 0;
-      right: auto;
-      background: linear-gradient(to right,
-          rgba(0, 0, 0, 0.8),
-          transparent);
-    }
-
-    &--next {
-      right: 0;
-      left: auto;
-      background: linear-gradient(to left,
-          rgba(0, 0, 0, 0.8),
-          transparent);
-    }
+    @include nav.section-arrow;
   }
 
   .rv-main-row__slider:hover .rv-main-row__arrow,
@@ -973,4 +931,15 @@
       font-size: 36px;
     }
   }
+}
+@media (min-width: 1025px) and (max-width: 1919px) {
+  .rv-main-row__swiper {
+    container-type: inline-size;
+    .swiper-wrapper { height: auto; }
+    .rv-main-row__item { width: min(318px, calc((100cqw - 80px) / 4.5)); height: auto; }
+  }
+}
+
+@media (min-width: 1025px) {
+  .rv-main-row__swiper .swiper-wrapper { height: auto; }
 }

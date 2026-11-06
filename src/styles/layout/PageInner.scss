@@ -1,5 +1,5 @@
 .site-inner {
-  --page-side-padding: 110px;
+  --page-side-padding: clamp(24px, 3.333333vw, 64px);
 
   width: 100%;
   max-width: none;
