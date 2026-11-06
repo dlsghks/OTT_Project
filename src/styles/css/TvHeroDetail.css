@@ -1,0 +1,32 @@
+.tv-hero-detail__notice {
+  margin: 0;
+  color: #AAAAAA;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.tv-hero-detail__episode-note {
+  margin: 0 0 1rem;
+  color: #AAAAAA;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.tv-hero-detail__more {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.65rem 1.4rem;
+  border: 1px solid #555555;
+  border-radius: 0.4rem;
+  background: #191919;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.tv-hero-detail__more:hover {
+  border-color: #1351F9;
+}
+
+.movie-hero__age--7 {
+  background: #188d47;
+  color: white;
+}
