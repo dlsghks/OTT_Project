@@ -43,6 +43,8 @@ import { SpecialPage } from "../pages/special/SpecialPage";
 import { TmdbOpen } from "../pages/special/TmdbOpen";
 import { NewsClipList } from "../pages/special/NewsClipList";
 import { NewsClip } from "../pages/special/NewsClip";
+import { GolfClip } from "../pages/special/GolfClip";
+import { GolfProgram } from "../pages/special/GolfProgram";
 
 // 검색 및 숏폼
 import { Search } from "../pages/search/Search";
@@ -137,6 +139,10 @@ export const AppRouter = () => {
         <Route path="/open" element={<TmdbOpen />} />
         <Route path="/special/news/:tab" element={<NewsClipList />} />
         <Route path="/news/clip/:clipId" element={<NewsClip />} />
+
+        {/* 골프: 클립 재생 · 프로그램 상세 */}
+        <Route path="/golf/clip/:clipId" element={<GolfClip />} />
+        <Route path="/golf/program/:programId" element={<GolfProgram />} />
 
         {/* 검색 및 숏폼 */}
         <Route path="/search" element={<Search />} />
