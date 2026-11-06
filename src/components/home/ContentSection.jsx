@@ -101,7 +101,7 @@ export const ContentSection = ({
             0: { slidesPerGroup: 1, spaceBetween: 8 },
             601: { slidesPerGroup: 3, spaceBetween: 12 },
             1025: { slidesPerGroup: 4, spaceBetween: 18 },
-            1440: { slidesPerGroup: config.group, spaceBetween: 18 },
+            1920: { slidesPerGroup: config.group, spaceBetween: 18 },
           } : {
             640: {
               slidesPerGroup: 3,

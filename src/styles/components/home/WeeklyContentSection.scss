@@ -1,3 +1,5 @@
+@use "../../common/figma-tokens" as figma;
+
 .weekly-content {
   width: 100%;
   min-width: 0;
@@ -22,14 +24,14 @@
     padding: 0;
     border: 0;
     outline: none;
-    border-radius: 10px;
-    background: #252525;
+    border-radius: figma.$radius-2;
+    background: figma.$neutral-8;
     color: #fff;
     font: inherit;
     cursor: pointer;
 
     &[aria-pressed='true'] {
-      background: #2057ec;
+      background: figma.$primary-main;
     }
 
     &:focus-visible {
@@ -49,6 +51,6 @@
   &__empty {
     margin: 0;
     padding: 32px 0;
-    color: #aaa;
+    color: figma.$neutral-3;
   }
 }

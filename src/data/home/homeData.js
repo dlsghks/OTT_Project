@@ -31,22 +31,22 @@ const categoryImage = (name) =>
   `${import.meta.env.BASE_URL}images/category-buttons/${name}.png`;
 
 export const categories = [
-  { label: '신인감독 김연경 2', image: categoryImage('rookie-coach-kim-yeon-koung-2') },
-  { label: '출석체크', image: categoryImage('attendance-check') },
-  { label: '티켓', image: categoryImage('ticket') },
-  { label: '골프', image: categoryImage('golf') },
-  { label: '영화+', path: '/movie', image: categoryImage('movie-plus') },
-  { label: '뉴스', image: categoryImage('news') },
-  { label: '그것이 알고 싶다', image: categoryImage('unsolved-mysteries') },
-  { label: '너 말고 다른 연애', image: categoryImage('different-love') },
-  { label: '포식자들', image: categoryImage('forensic-investigators') },
-  { label: 'Wavve only', image: categoryImage('wavve-only') },
-  { label: '서바이벌', image: categoryImage('survival') },
-  { label: '키즈', image: categoryImage('kids') },
-  { label: 'KBS', image: categoryImage('kbs') },
-  { label: 'MBC', image: categoryImage('mbc') },
-  { label: 'CJ ENM', image: categoryImage('cj-enm') },
-  { label: 'JTBC', image: categoryImage('jtbc') },
+  { label: '출석체크', path: '/event/attendance', image: categoryImage('attendance-check') },
+  { label: 'MMA', path: '/special/mma', image: categoryImage('mma') },
+  { label: '라이어', path: '/special/liar', image: categoryImage('liar') },
+  { label: '골프', path: '/special/golf', image: categoryImage('golf') },
+  { label: '영화+', path: '/special/movieplus', image: categoryImage('movie-plus') },
+  { label: '뉴스', path: '/special/news', image: categoryImage('news') },
+  { label: 'Wavve only', path: '/special/wavve-only', image: categoryImage('wavve-only') },
+  { label: '신인감독 김연경 2', path: '/special/rookie-coach', image: categoryImage('rookie-coach-kim-yeon-koung-2') },
+  { label: '옆자리, 프란체스카', path: '/special/francesca', image: categoryImage('francesca') },
+  { label: '여름방학', path: '/special/summer', image: categoryImage('summer') },
+  { label: '투니버스', path: '/special/tooniverse', image: categoryImage('tooniverse') },
+  { label: '키즈', path: '/special/kids', image: categoryImage('kids') },
+  { label: 'KBS', path: '/special/kbs', image: categoryImage('kbs') },
+  { label: 'MBC', path: '/special/mbc', image: categoryImage('mbc') },
+  { label: 'CJ ENM', path: '/special/cj-enm', image: categoryImage('cj-enm') },
+  { label: 'JTBC', path: '/special/jtbc', image: categoryImage('jtbc') },
 ];
 
 
