@@ -1,3 +1,4 @@
+@use "../../common/slider-navigation" as nav;
 // .site-inner의 여백/그라데이션은 유지하고 마이페이지에만 검정 배경을 적용합니다.
 .site-inner > .wavve-mypage {
   width: calc(100% + var(--page-side-padding, 110px) * 2);
@@ -57,9 +58,9 @@
 }
 .wavve-mypage .mypage__retro-summary dt { font-weight: 400; }
 .wavve-mypage .mypage__library { margin-top: 65px; }
-.wavve-mypage .mypage__tabs { display: flex; gap: 56px; min-height: 52px; border-bottom: 0; overflow-x: auto; scrollbar-width: none; }
-.wavve-mypage .mypage__tabs::-webkit-scrollbar { display: none; }
-.wavve-mypage .mypage__tabs > button {
+.wavve-mypage .mypage__library .mypage__tabs { display: flex; gap: 56px; min-height: 52px; border-bottom: 0; overflow-x: auto; scrollbar-width: none; }
+.wavve-mypage .mypage__library .mypage__tabs::-webkit-scrollbar { display: none; }
+.wavve-mypage .mypage__library .mypage__tabs > button {
   position: relative;
   flex: 0 0 auto;
   min-width: 140px;
@@ -73,16 +74,16 @@
   white-space: nowrap;
   transition: color 160ms ease;
 }
-.wavve-mypage .mypage__tabs > button:nth-child(2) { min-width: 160px; }
-.wavve-mypage .mypage__tabs > button:hover { color: #fff; }
-.wavve-mypage .mypage__tabs > button[aria-selected="true"] { color: #fff; font-weight: 700; }
-.wavve-mypage .mypage__tabs > button[aria-selected="true"]::after { content: ""; position: absolute; inset: auto 0 0; height: 3px; background: #1351f9; }
+.wavve-mypage .mypage__library .mypage__tabs > button:nth-child(2) { min-width: 160px; }
+.wavve-mypage .mypage__library .mypage__tabs > button:hover { color: #fff; }
+.wavve-mypage .mypage__library .mypage__tabs > button[aria-selected="true"] { color: #fff; font-weight: 700; }
+.wavve-mypage .mypage__library .mypage__tabs > button[aria-selected="true"]::after { content: ""; position: absolute; inset: auto 0 0; height: 3px; background: #1351f9; }
 .wavve-mypage .mypage__library-panel { min-height: 571px; padding-top: 40px; }
 .wavve-mypage .mypage__filter-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; }
-.wavve-mypage .mypage__filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-.wavve-mypage .mypage__filters > button { min-width: 86px; height: 48px; padding: 0 25px; border: 0; border-radius: 8px; background: transparent; color: #999; font-size: 16px; font-weight: 500; transition: background-color 160ms ease, color 160ms ease; }
-.wavve-mypage .mypage__filters > button:hover { background: #141414; color: #fff; }
-.wavve-mypage .mypage__filters > button[aria-pressed="true"] { background: #1351f9; font-weight: 700; color: #fff; }
+.wavve-mypage .mypage__library .mypage__filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.wavve-mypage .mypage__library .mypage__filters > button { min-width: 86px; height: 48px; padding: 0 25px; border: 0; border-radius: 8px; background: transparent; color: #999; font-size: 16px; font-weight: 500; transition: background-color 160ms ease, color 160ms ease; }
+.wavve-mypage .mypage__library .mypage__filters > button:hover { background: #141414; color: #fff; }
+.wavve-mypage .mypage__library .mypage__filters > button[aria-pressed="true"] { background: #1351f9; font-weight: 700; color: #fff; }
 .wavve-mypage .mypage__total { flex-shrink: 0; color: #c9c9c9; font-size: 16px; }
 .wavve-mypage .mypage__empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-height: 340px; margin-top: 46px; text-align: center; }
 .wavve-mypage .mypage__empty-icon { position: static; display: block; width: 64px; min-width: 64px; max-width: 64px; height: 64px; object-fit: contain; }
@@ -200,7 +201,7 @@
 
 @media (max-width: 1200px) {
   .wavve-mypage .mypage__summary > div { padding: 24px 20px; }
-  .wavve-mypage .mypage__tabs { gap: 24px; }
+  .wavve-mypage .mypage__library .mypage__tabs { gap: 24px; }
   .wavve-mypage .mypage__management-grid { gap: 20px; }
   .wavve-mypage .mypage__management-grid > a, .wavve-mypage .mypage__management-grid > button { padding-inline: 14px; font-size: 15px; }
 }
@@ -306,9 +307,9 @@
   }
 
   .wavve-mypage .mypage__library { width: calc(100% - 32px); margin: 31px 16px 0; }
-  .wavve-mypage .mypage__tabs { gap: clamp(8px, calc((100vw - 293px) / 3), 32px); min-height: 21.05px; height: 21.05px; }
-  .wavve-mypage .mypage__tabs > button,
-  .wavve-mypage .mypage__tabs > button:nth-child(2) {
+  .wavve-mypage .mypage__library .mypage__tabs { gap: clamp(8px, calc((100vw - 293px) / 3), 32px); min-height: 21.05px; height: 21.05px; }
+  .wavve-mypage .mypage__library .mypage__tabs > button,
+  .wavve-mypage .mypage__library .mypage__tabs > button:nth-child(2) {
     flex: 1 1 63px;
     min-width: 0;
     padding: 0 0 4.5px;
@@ -316,13 +317,13 @@
     font-size: 10.8px;
     line-height: 16.2px;
   }
-  .wavve-mypage .mypage__tabs > button:nth-child(2) { flex-basis: 72px; }
-  .wavve-mypage .mypage__tabs > button[aria-selected="true"] { border-bottom-color: #fff; }
-  .wavve-mypage .mypage__tabs > button[aria-selected="true"]::after { display: none; }
+  .wavve-mypage .mypage__library .mypage__tabs > button:nth-child(2) { flex-basis: 72px; }
+  .wavve-mypage .mypage__library .mypage__tabs > button[aria-selected="true"] { border-bottom-color: #1351f9; }
+  .wavve-mypage .mypage__library .mypage__tabs > button[aria-selected="true"]::after { display: none; }
   .wavve-mypage .mypage__library-panel { position: relative; min-height: 378px; padding-top: 7.85px; }
   .wavve-mypage .mypage__filter-row { min-height: 32px; gap: 0; }
-  .wavve-mypage .mypage__filters { gap: 7.2px; }
-  .wavve-mypage .mypage__filters > button {
+  .wavve-mypage .mypage__library .mypage__filters { gap: 7.2px; }
+  .wavve-mypage .mypage__library .mypage__filters > button {
     min-width: 51.6px;
     height: 28.8px;
     padding: 0 12px;
@@ -331,8 +332,8 @@
     font-size: 9.6px;
     font-weight: 500;
   }
-  .wavve-mypage .mypage__filters > button:nth-child(2) { min-width: 66px; }
-  .wavve-mypage .mypage__filters > button[aria-pressed="true"] { background: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .wavve-mypage .mypage__library .mypage__filters > button:nth-child(2) { min-width: 66px; }
+  .wavve-mypage .mypage__library .mypage__filters > button[aria-pressed="true"] { background: #1351f9; color: #fff; font-weight: 700; text-decoration: none; border-radius: 6px; }
   .wavve-mypage .mypage__total { display: none; }
   .wavve-mypage .mypage__empty {
     width: min(100%, 235px);
@@ -402,11 +403,11 @@
   .wavve-mypage .mypage__summary > div { padding: 16px; min-height: 92px; }
   .wavve-mypage .mypage__summary dt { font-size: 14px; }
   .wavve-mypage .mypage__library { width: calc(100% - 48px); margin-inline: 24px; }
-  .wavve-mypage .mypage__tabs { gap: 24px; height: 36px; }
-  .wavve-mypage .mypage__tabs > button { font-size: 14px; line-height: 24px; }
-  .wavve-mypage .mypage__tabs > button:nth-child(2) { font-size: 14px; line-height: 24px; }
+  .wavve-mypage .mypage__library .mypage__tabs { gap: 24px; height: 36px; }
+  .wavve-mypage .mypage__library .mypage__tabs > button { font-size: 14px; line-height: 24px; }
+  .wavve-mypage .mypage__library .mypage__tabs > button:nth-child(2) { font-size: 14px; line-height: 24px; }
   .wavve-mypage .mypage__filter-row { min-height: 40px; }
-  .wavve-mypage .mypage__filters > button { height: 36px; padding-inline: 18px; font-size: 12px; }
+  .wavve-mypage .mypage__library .mypage__filters > button { height: 36px; padding-inline: 18px; font-size: 12px; }
   .wavve-mypage .mypage__library-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 12px; }
   .wavve-mypage .mypage__management { width: calc(100% - 48px); margin-inline: 24px; }
   .wavve-mypage .mypage__management-grid > a,
@@ -429,4 +430,575 @@
 @media (prefers-reduced-motion: reduce) {
   .wavve-mypage .mypage__event-track,
   .wavve-mypage .mypage__poster-frame > .mypage__poster { transition: none; }
+}
+
+// A saved Editor Pick is a collection card linking to the complete recommendation page.
+.wavve-mypage .mypage__editor-heading {
+  margin: 28px 0 20px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.wavve-mypage .mypage__editor-group { container-type: inline-size; }
+.wavve-mypage .mypage__editor-list {
+  --editor-height: 375px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
+  gap: 32px 19px;
+  padding-bottom: 0;
+  list-style: none;
+  &::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  > li { scroll-snap-align: start; flex: 0 0 calc(var(--editor-height) * 610 / 345); min-width: 0; }
+}
+.wavve-mypage .mypage__editor-card {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  display: block;
+  width: 100%;
+  height: var(--editor-height);
+  aspect-ratio: 610 / 345;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #18152d;
+  color: #fff;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(100deg, #0c092d88, #231a4588 48%, #0c092dbb);
+  }
+  &:hover { outline: 2px solid #1351f9; outline-offset: -2px; }
+}
+.wavve-mypage img.mypage__editor-backdrop {
+  position: absolute;
+  inset: -12%;
+  z-index: -2;
+  width: 124%;
+  height: 124%;
+  max-width: none;
+  object-fit: cover;
+  filter: blur(28px);
+  opacity: .8;
+}
+.wavve-mypage img.mypage__editor-poster {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 32%;
+  height: 81%;
+  object-fit: cover;
+  box-shadow: 0 8px 24px #0006;
+}
+.wavve-mypage .mypage__editor-copy {
+  position: absolute;
+  top: 50%;
+  left: 49%;
+  right: 7%;
+  transform: translateY(-50%);
+  h4 { margin: 0; font-size: clamp(16px, 4cqw, 28px); font-weight: 500; line-height: 1.5; word-break: keep-all; }
+  p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-top: 12px; font-size: clamp(10px, 2.2cqw, 16px); line-height: 1.6; color: #ddd; word-break: keep-all; }
+}
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__editor-heading { margin: 16px 0 12px; font-size: 18px; }
+  .wavve-mypage .mypage__editor-list {
+    --editor-height: calc((100cqw - 16px) / 3 * 375 / 261);
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 0;
+    scroll-snap-type: x proximity;
+    > li { scroll-snap-align: start; }
+  }
+  .wavve-mypage .mypage__editor-card { border-radius: 12px; }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .wavve-mypage .mypage__editor-list { --editor-height: calc((100cqw - 36px) / 4 * 375 / 261); gap: 12px; }
+}
+@media (min-width: 901px) and (max-width: 1024px) {
+  .wavve-mypage .mypage__editor-list { --editor-height: calc((100cqw - 48px) / 5 * 375 / 261); gap: 12px; }
+}
+
+.wavve-mypage .mypage__editor-art-status {
+  position: absolute; top: 10%; left: 10%; width: 32%; height: 81%;
+  display: grid; place-items: center; padding: 12px; text-align: center;
+  background: #ffffff0a; color: #aaa; font-size: clamp(10px, 2cqw, 14px);
+}
+
+.wavve-mypage .mypage__editor-slider { position: relative; min-width: 0; margin-bottom: 40px; }
+.wavve-mypage .mypage__editor-arrow { @include nav.section-arrow; }
+@media (min-width: 1025px) {
+  .wavve-mypage .mypage__editor-slider:hover .mypage__editor-arrow,
+  .wavve-mypage .mypage__editor-slider:focus-within .mypage__editor-arrow { opacity: 1; pointer-events: auto; }
+}
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__editor-slider { margin-bottom: 24px; }
+  .wavve-mypage .mypage__editor-arrow { display: none; }
+}
+
+// Favorites share the Editor Pick row height and navigation; each keeps its own aspect ratio.
+.wavve-mypage .mypage__editor-list--posters,
+.wavve-mypage .mypage__editor-list--shorts {
+  padding-top: 24px;
+  > li { flex-basis: calc(var(--editor-height) * 261 / 375); }
+  .mypage__poster-frame { height: var(--editor-height); aspect-ratio: 261 / 375; flex-shrink: 0; }
+  .mypage__poster { width: 100%; height: 100%; }
+}
+.wavve-mypage .mypage__editor-list--shorts {
+  > li { flex-basis: calc(var(--editor-height) * 9 / 16); }
+  .mypage__poster-frame { aspect-ratio: 9 / 16; }
+}
+.wavve-mypage .mypage__editor-slider--posters .mypage__editor-arrow { top: 24px; bottom: 32px; }
+.wavve-mypage .mypage__editor-slider--shorts .mypage__editor-arrow { top: 24px; }
+.wavve-mypage .mypage__editor-list--posters .mypage__card-title {
+  display: none;
+}
+
+.wavve-mypage .mypage__editor-slider--posters .mypage__editor-arrow {
+  bottom: 0;
+}
+
+.wavve-mypage .mypage__editor-list--shorts .mypage__shorts-badge {
+  display: none;
+}
+
+.wavve-mypage .mypage__editor-list {
+  --favorite-poster-width: 250px;
+  --editor-height: calc(var(--favorite-poster-width) * 3 / 2);
+}
+
+/* 작은 PC: 4.5개 */
+@media (max-width: 1919px) {
+  .wavve-mypage .mypage__editor-list {
+    --favorite-poster-width: calc((100cqw - 72px) / 4.5);
+    --editor-height: calc(var(--favorite-poster-width) * 3 / 2);
+    gap: 18px;
+  }
+}
+
+/* 태블릿: 4.5개 */
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__editor-list {
+    --favorite-poster-width: calc((100cqw - 48px) / 4.5);
+    gap: 12px;
+  }
+}
+
+/* 모바일: 3.5개 */
+@media (max-width: 600px) {
+  .wavve-mypage .mypage__editor-list {
+    --favorite-poster-width: calc((100cqw - 24px) / 3.5);
+    gap: 8px;
+  }
+}
+
+.wavve-mypage .mypage__editor-list--posters > li,
+.wavve-mypage .mypage__editor-list--shorts > li {
+  flex: 0 0 var(--favorite-poster-width);
+}
+
+.wavve-mypage .mypage__editor-list--posters .mypage__poster-frame,
+.wavve-mypage .mypage__editor-list--shorts .mypage__poster-frame {
+  height: var(--editor-height);
+  aspect-ratio: 2 / 3;
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__retro .mypage__retro-list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    > li {
+      flex: 0 0 calc((100% - 24px) / 3.5);
+      min-width: 0;
+    }
+  }
+}
+.wavve-mypage .mypage__editor-list--retro > li {
+  flex: 0 0 261px;
+}
+/* 레트로브도 에디터 Pick과 같은 영역 너비로 계산 */
+.wavve-mypage .mypage__retro {
+  container-type: inline-size;
+}
+
+.wavve-mypage .mypage__editor-list {
+  --favorite-gap: 19px;
+}
+
+@media (max-width: 1919px) {
+  .wavve-mypage .mypage__editor-list {
+    --favorite-gap: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__editor-list {
+    --favorite-gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .wavve-mypage .mypage__editor-list {
+    --favorite-gap: 8px;
+  }
+}
+
+.wavve-mypage .mypage__retro .mypage__retro-list {
+  gap: var(--favorite-gap);
+}
+
+.wavve-mypage .mypage__retro .mypage__retro-list > li {
+  flex: 0 0 var(--favorite-poster-width);
+}
+
+.wavve-mypage .mypage__retro .mypage__poster-frame {
+  height: var(--editor-height);
+  aspect-ratio: 2 / 3;
+}
+
+/* 목록 아래에 잡혀 있던 불필요한 최소 높이 제거 */
+.wavve-mypage .mypage__library-panel:has(.mypage__editor-slider) {
+  min-height: 0;
+}
+
+/* 필터 → 카드 사이 */
+.wavve-mypage .mypage__library .mypage__editor-group {
+  padding-top: 24px;
+}
+
+/* 목록마다 따로 있던 위쪽 패딩 제거 */
+.wavve-mypage .mypage__library .mypage__editor-list {
+  padding-top: 0;
+}
+
+/* 목록 아래 여백 통일 */
+.wavve-mypage .mypage__library .mypage__editor-slider,
+.wavve-mypage .mypage__retro .mypage__editor-slider {
+  margin-bottom: 0;
+}
+
+.wavve-mypage .mypage__library-panel {
+  padding-top: 24px;
+  padding-bottom: 40px;
+}
+
+.wavve-mypage .mypage__retro {
+  padding-bottom: 40px;
+}
+
+/* 레트로브 제목 → 카드 사이 */
+.wavve-mypage .mypage__retro > h2 {
+  margin-bottom: 24px;
+}
+
+/* 카드 사이 간격도 동일하게 */
+.wavve-mypage .mypage__library .mypage__editor-list,
+.wavve-mypage .mypage__retro .mypage__retro-list {
+  gap: var(--favorite-gap, 12px);
+}
+
+/* 위쪽 패딩 제거에 맞춰 화살표 정렬 */
+.wavve-mypage .mypage__editor-slider--posters .mypage__editor-arrow,
+.wavve-mypage .mypage__editor-slider--shorts .mypage__editor-arrow {
+  top: 0;
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__library,
+  .wavve-mypage .mypage__retro {
+    width: calc(100% - 48px);
+    margin-inline: 24px;
+    padding-inline: 0;
+    box-sizing: border-box;
+  }
+
+  .wavve-mypage .mypage__library-panel {
+    padding-top: 16px;
+    padding-bottom: 32px;
+  }
+
+  .wavve-mypage .mypage__retro {
+    padding-bottom: 32px;
+  }
+
+  .wavve-mypage .mypage__retro > h2 {
+    margin-bottom: 24px;
+  }
+}
+/* 빈 목록의 고정 최소 높이 제거 */
+.wavve-mypage .mypage__library .mypage__library-panel {
+  min-height: 0;
+}
+
+/* 필터 아래 여백과 안내 요소 간격 정리 */
+.wavve-mypage .mypage__library .mypage__empty {
+  width: 100%;
+  min-height: 0;
+  margin: 24px 0 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+  gap: 12px;
+}
+
+.wavve-mypage .mypage__library .mypage__empty > h2,
+.wavve-mypage .mypage__library .mypage__empty > p {
+  margin: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.wavve-mypage .mypage__library .mypage__empty > p {
+  display: none;
+}
+
+.wavve-mypage .mypage__library .mypage__empty {
+  gap: 20px;
+  padding-block: 16px;
+}
+
+.wavve-mypage .mypage__library .mypage__empty {
+  gap: 10px;
+}
+
+.wavve-mypage .mypage__library .mypage__empty {
+  gap: 6px;
+}
+
+.wavve-mypage .mypage__library .mypage__empty > .mypage__browse {
+  margin-top: 20px;
+}
+
+/* 빈 상태와 카드 목록의 높이 기준 통일 */
+.wavve-mypage .mypage__library {
+  container-type: inline-size;
+
+  --library-poster-width: 250px;
+  --library-row-height: calc(var(--library-poster-width) * 3 / 2);
+  --library-stage-height: max(180px, var(--library-row-height));
+
+  .mypage__editor-list {
+    --editor-height: var(--library-row-height);
+    padding-top: 0;
+  }
+
+  .mypage__editor-group {
+    min-height: var(--library-stage-height);
+    padding-top: 24px;
+    box-sizing: content-box;
+  }
+
+  .mypage__empty {
+    width: 100%;
+    min-height: var(--library-stage-height);
+    margin: 24px 0 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+
+    .mypage__empty-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mypage__empty-icon {
+      display: block;
+      width: 40px;
+      min-width: 40px;
+      max-width: 40px;
+      height: 40px;
+    }
+
+    .mypage__empty-message {
+      margin: 0;
+      color: #a5a5a5;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      white-space: nowrap;
+    }
+
+    > .mypage__browse {
+      margin-top: 24px;
+    }
+  }
+}
+
+@media (max-width: 1919px) {
+  .wavve-mypage .mypage__library {
+    --library-poster-width: calc((100cqw - 72px) / 4.5);
+  }
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__library {
+    --library-poster-width: calc((100cqw - 48px) / 4.5);
+  }
+}
+
+@media (max-width: 600px) {
+  .wavve-mypage .mypage__library {
+    --library-poster-width: calc((100cqw - 24px) / 3.5);
+  }
+}
+
+/* 아이콘과 작은 안내 문구 */
+.wavve-mypage .mypage__library .mypage__empty-group {
+  gap: 16px;
+}
+
+.wavve-mypage .mypage__library .mypage__empty-group > picture {
+  display: block;
+  width: 104px;
+  height: 104px;
+  line-height: 0;
+}
+
+.wavve-mypage .mypage__library .mypage__empty .mypage__empty-icon {
+  width: 104px;
+  min-width: 104px;
+  max-width: 104px;
+  height: 104px;
+}
+
+/* 버튼은 아이콘보다 과하게 커지지 않게 */
+.wavve-mypage .mypage__library .mypage__empty > .mypage__browse {
+  width: auto;
+  min-width: 160px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 20px;
+  margin-top: 24px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.wavve-mypage .mypage__library .mypage__empty .mypage__empty-message {
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.wavve-mypage .mypage__library .mypage__empty > .mypage__browse {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__library .mypage__empty-group {
+    gap: 8px;
+  }
+
+  .wavve-mypage .mypage__library .mypage__empty-group > picture {
+    width: 38.4px;
+    height: 38.4px;
+  }
+
+  .wavve-mypage .mypage__library .mypage__empty .mypage__empty-icon {
+    width: 38.4px;
+    min-width: 38.4px;
+    max-width: 38.4px;
+    height: 38.4px;
+  }
+
+  .wavve-mypage .mypage__library .mypage__empty .mypage__empty-message {
+    font-size: 10.2px;
+    line-height: 15.3px;
+  }
+
+  .wavve-mypage .mypage__library .mypage__empty > .mypage__browse {
+    min-width: 111.6px;
+    height: 28.8px;
+    min-height: 28.8px;
+    padding: 0 12px;
+    margin-top: 20px;
+    font-size: 9.6px;
+    line-height: 14.4px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .wavve-mypage .mypage__library .mypage__empty > .mypage__browse {
+    width: 186px;
+    min-width: 186px;
+    height: 48px;
+    min-height: 48px;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+.wavve-mypage .mypage__summary > div {
+  background: #181b25;
+}
+
+.wavve-mypage .mypage__summary dt {
+  color: #adb1bf;
+}
+
+.wavve-mypage .mypage__summary > .mypage__retro-summary {
+  background:
+    linear-gradient(#181b25, #181b25) padding-box,
+    linear-gradient(110deg, #1351f9, #c700e8) border-box;
+}
+
+// 마이페이지 모든 탭에서 숏츠 배지 제거
+.wavve-mypage .mypage__poster-frame--shorts > .mypage__shorts-badge {
+  display: none !important;
+}
+
+// 숏츠는 포스터 크기에 맞추지 않고 9:16로 표시
+.wavve-mypage .mypage__library .mypage__poster-frame--shorts {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  background: transparent;
+
+  &::before,
+  &::after {
+    display: none;
+  }
+
+  > .mypage__poster {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .wavve-mypage .mypage__editor-copy {
+    h4 {
+      font-size: 14.4px;
+    }
+
+    p {
+      font-size: 10.2px;
+    }
+  }
 }

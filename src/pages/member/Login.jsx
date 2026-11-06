@@ -1,3 +1,4 @@
+import { FindIdModal } from "../../components/member/FindIdModal";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
@@ -7,7 +8,10 @@ import kakaoIcon from "../../assets/login/kakao.png";
 import appleIcon from "../../assets/login/apple.png";
 import glowLeft from "../../assets/login/glow-left.png";
 import glowRight from "../../assets/login/glow-right.png";
+import mobileGlowLeft from "../../assets/login/mobile/glow-left.svg";
+import mobileGlowRight from "../../assets/login/mobile/glow-right.svg";
 import "../../styles/pages/member/Login.scss";
+import { AccountHelpModal } from "../../components/member/AccountHelpModal";
 
 const providers = [
   { key: "naver", label: "네이버로 시작하기", icon: naverIcon },
@@ -26,6 +30,7 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [accountHelp, setAccountHelp] = useState(null);
 
   const handleEmailLogin = async (event) => {
     event.preventDefault();
@@ -66,15 +71,15 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
   };
 
   const handleAccountHelp = (type) => {
-    if (onAccountHelp) onAccountHelp(type);
-    else setMessage("계정 찾기 기능은 아직 연결되지 않았습니다.");
+    setMessage("");
+    setAccountHelp(type);
   };
 
   return (
-    <section className="login-page" aria-label="웨이브 로그인">
+    <section className={`login-page${emailFormOpen ? " login-page--email-open" : ""}`} aria-label="웨이브 로그인">
       <div className="login-page__glows" aria-hidden="true">
-        <img className="login-page__glow login-page__glow--left" src={glowLeft} alt="" />
-        <img className="login-page__glow login-page__glow--right" src={glowRight} alt="" />
+        <picture><source media="(max-width: 600px)" srcSet={mobileGlowLeft} /><img className="login-page__glow login-page__glow--left" src={glowLeft} alt="" /></picture>
+        <picture><source media="(max-width: 600px)" srcSet={mobileGlowRight} /><img className="login-page__glow login-page__glow--right" src={glowRight} alt="" /></picture>
       </div>
 
       <div className="login-page__content">
@@ -139,6 +144,24 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
         <button type="button" onClick={() => onServiceInfo ? onServiceInfo("privacy") : setMessage("개인정보 처리방침 페이지는 아직 연결되지 않았습니다.")}>개인정보 처리방침</button>
         <button type="button" onClick={() => onServiceInfo ? onServiceInfo("support") : setMessage("고객센터 페이지는 아직 연결되지 않았습니다.")}>고객센터</button>
       </nav>
+      {accountHelp === "id" && (
+        <FindIdModal
+          onClose={() => setAccountHelp(null)}
+          onSocialLogin={
+            onSocialLogin
+              ? (provider) => handleSocialLogin(provider)
+              : undefined
+          }
+        />
+      )}
+
+      {accountHelp === "password" && (
+        <AccountHelpModal
+          key="password"
+          type="password"
+          onClose={() => setAccountHelp(null)}
+        />
+      )}
     </section>
   );
 };

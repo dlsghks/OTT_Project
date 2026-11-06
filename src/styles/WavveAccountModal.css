@@ -1,0 +1,389 @@
+dialog.wavve-account-modal {
+  --wam-width: 560px;
+  --wam-header: 80px;
+  --wam-header-x: 32px;
+  --wam-title: 24px;
+  --wam-font: 16px;
+  --wam-small: 13px;
+  --wam-button-font: 17px;
+  --wam-control: 56px;
+  --wam-control-x: 18px;
+  --wam-radius: 12px;
+  --wam-control-radius: 6px;
+  --wam-x: 40px;
+  --wam-y: 32px;
+  --wam-gap: 24px;
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  width: min(var(--wam-width), 100vw - 32px);
+  max-width: none;
+  height: fit-content;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--wam-radius);
+  background: #252525;
+  color: #fff;
+  font: 400 var(--wam-font)/1.55 "Noto Sans KR", "Pretendard", sans-serif;
+  color-scheme: dark;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+dialog.wavve-account-modal::backdrop {
+  background: rgba(0, 0, 0, 0.75);
+}
+dialog.wavve-account-modal *, dialog.wavve-account-modal *::before, dialog.wavve-account-modal *::after {
+  box-sizing: border-box;
+}
+dialog.wavve-account-modal p, dialog.wavve-account-modal h2 {
+  margin: 0;
+  padding: 0;
+}
+dialog.wavve-account-modal button, dialog.wavve-account-modal input, dialog.wavve-account-modal select {
+  font-family: inherit;
+  letter-spacing: 0;
+}
+dialog.wavve-account-modal button {
+  cursor: pointer;
+}
+dialog.wavve-account-modal button:disabled {
+  cursor: default;
+}
+dialog.wavve-account-modal :focus-visible {
+  outline: 2px solid #8dacff;
+  outline-offset: 2px;
+}
+dialog.wavve-account-modal .wam-header {
+  position: sticky;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  height: var(--wam-header);
+  min-height: var(--wam-header);
+  margin: 0;
+  padding: 0 var(--wam-header-x);
+  border: 0;
+  background: #1351f9;
+}
+dialog.wavve-account-modal .wam-title {
+  min-width: 0;
+  color: #fff;
+  font-size: var(--wam-title);
+  font-weight: 700;
+  line-height: 1.55;
+}
+dialog.wavve-account-modal .wam-close {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 32px;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+dialog.wavve-account-modal .wam-close span {
+  line-height: 0;
+}
+dialog.wavve-account-modal .wam-close img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: none;
+}
+dialog.wavve-account-modal .wam-close-mobile {
+  display: none;
+}
+dialog.wavve-account-modal .wam-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wam-gap);
+  margin: 0;
+  padding: var(--wam-y) var(--wam-x);
+}
+dialog.wavve-account-modal .wam-input {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  height: var(--wam-control);
+  margin: 0;
+  padding: 0 var(--wam-control-x);
+  border: 1px solid #45454b;
+  border-radius: var(--wam-control-radius);
+  background-color: #333;
+  color: #fff;
+  font-size: var(--wam-font);
+  font-weight: 400;
+  line-height: 1.55;
+}
+dialog.wavve-account-modal .wam-input::placeholder {
+  color: #85858e;
+  opacity: 1;
+}
+dialog.wavve-account-modal .wam-input[readonly] {
+  color: #b5b5bd;
+}
+dialog.wavve-account-modal .wam-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: 100%;
+  height: var(--wam-control);
+  min-height: 0;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--wam-control-radius);
+  background: #414147;
+  color: #fff;
+  font-size: var(--wam-button-font);
+  font-weight: 700;
+  line-height: 1.55;
+}
+dialog.wavve-account-modal .wam-button--primary {
+  background: #1351f9;
+}
+dialog.wavve-account-modal .wam-button:disabled {
+  background: #414147;
+  color: #85858e;
+}
+dialog.wavve-account-modal .wam-complete {
+  display: flex;
+  flex-direction: column;
+  gap: 25.485px;
+  min-height: 353px;
+  padding: 68px 40px 98px;
+  text-align: center;
+}
+dialog.wavve-account-modal .wam-complete-message {
+  width: 100%;
+}
+dialog.wavve-account-modal .wam-complete-message p {
+  color: #fff;
+  font-size: 24.468px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+dialog.wavve-account-modal .wam-mark {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 65.244px;
+  padding-top: 16.31px;
+}
+dialog.wavve-account-modal .wam-mark span {
+  display: block;
+  width: 29.709px;
+  height: 29.709px;
+  transform: scale(1.6470588);
+  transform-origin: bottom center;
+}
+dialog.wavve-account-modal .wam-mark img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: none;
+}
+dialog.wavve-account-modal .wam-confirm {
+  font-size: 12.616px;
+  font-weight: 400;
+  height: 57.089px;
+}
+
+@media (max-width: 600px) {
+  dialog.wavve-account-modal {
+    --wam-width: 340px;
+    --wam-header: 48.572px;
+    --wam-header-x: 19.806px;
+    --wam-title: 14.855px;
+    --wam-font: 9.71px;
+    --wam-small: 7.89px;
+    --wam-button-font: 10.32px;
+    --wam-control: 34px;
+    --wam-control-x: 10.929px;
+    --wam-radius: 7.286px;
+    --wam-control-radius: 3.643px;
+    --wam-x: 24.286px;
+    --wam-y: 19.429px;
+    --wam-gap: 14.571px;
+    max-height: calc(100dvh - 32px);
+  }
+  dialog.wavve-account-modal .wam-close-pc {
+    display: none;
+  }
+  dialog.wavve-account-modal .wam-close-mobile {
+    display: block;
+  }
+  dialog.wavve-account-modal .wam-close {
+    flex-basis: 16px;
+    width: 16px;
+    height: 24px;
+  }
+  dialog.wavve-account-modal .wam-complete {
+    gap: 15.473px;
+    min-height: 214.324px;
+    padding: 41.286px 24.286px 59.5px;
+  }
+  dialog.wavve-account-modal .wam-complete-message p {
+    font-size: 14.855px;
+  }
+  dialog.wavve-account-modal .wam-mark {
+    height: 39.612px;
+    padding-top: 9.903px;
+  }
+  dialog.wavve-account-modal .wam-mark span {
+    transform: none;
+  }
+  dialog.wavve-account-modal .wam-confirm {
+    height: 34.661px;
+    font-size: 7.66px;
+    border-radius: 6.189px;
+  }
+}
+dialog.wavve-account-modal .wam-complete-message p {
+  font-size: 14.85px;
+}
+dialog.wavve-account-modal .wam-confirm {
+  font-size: 12.38px;
+}
+
+dialog.wavve-account-modal .wam-complete-message p {
+  font-size: clamp(14.85px, 9.22px + 1.4432vw, 24px);
+}
+dialog.wavve-account-modal .wam-confirm {
+  font-size: clamp(12.38px, 9.54px + 0.7287vw, 17px);
+}
+
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) {
+  --wam-width: 560px;
+  --wam-header: clamp(49px, 7.82vw, 80px);
+  --wam-header-x: clamp(20px, 3.13vw, 32px);
+  --wam-title: clamp(14.85px, calc(9.22px + 1.443vw), 24px);
+  --wam-font: clamp(12px, calc(9.54px + 0.631vw), 16px);
+  --wam-small: clamp(11px, calc(9.77px + 0.316vw), 13px);
+  --wam-button-font: clamp(
+    12.38px,
+    calc(9.54px + 0.729vw),
+    17px
+  );
+  --wam-control: clamp(42px, 5.47vw, 56px);
+  --wam-control-x: clamp(12px, 1.76vw, 18px);
+  --wam-control-radius: 6px;
+  --wam-x: clamp(20px, 3.91vw, 40px);
+  --wam-y: clamp(20px, 3.13vw, 32px);
+  --wam-gap: clamp(18px, 2.35vw, 24px);
+  width: min(var(--wam-width), 100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__tabs > button {
+  min-height: 48px;
+  padding: 12px 8px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__intro {
+  padding-block: 8px;
+  line-height: 1.8;
+  word-break: keep-all;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__methods {
+  gap: 12px 20px;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__methods > label {
+  gap: 7px;
+  white-space: nowrap;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__methods input {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__form {
+  gap: 12px;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__social-buttons {
+  gap: clamp(10px, 2vw, 18px);
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__sns {
+  width: clamp(36px, 5.3vw, 54px);
+  height: auto;
+  aspect-ratio: 1;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__verify {
+  width: min(240px, 80%);
+  min-height: clamp(150px, 20vw, 200px);
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .password-help__choices {
+  gap: 10px;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .password-help__choice {
+  min-height: clamp(150px, 21vw, 210px);
+  padding: 20px 6px;
+  gap: 8px;
+  word-break: keep-all;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .password-help__choice > svg {
+  width: clamp(40px, 5.86vw, 60px);
+  height: clamp(40px, 5.86vw, 60px);
+  margin-bottom: 8px;
+}
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__notice,
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .find-id__message,
+dialog.wavve-account-modal:has(.find-id,
+.password-help__complete) .password-help__notice {
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  dialog.wavve-account-modal:has(.find-id,
+  .password-help__complete) .wam-input {
+    font-size: 16px;
+  }
+  dialog.wavve-account-modal:has(.find-id,
+  .password-help__complete) .wam-input::placeholder {
+    font-size: 12px;
+  }
+  dialog.wavve-account-modal:has(.find-id,
+  .password-help__complete) .password-help__send-row > .wam-input {
+    padding-right: 48px;
+  }
+  dialog.wavve-account-modal:has(.find-id,
+  .password-help__complete) .password-help__send-row > button {
+    width: 44px;
+  }
+  dialog.wavve-account-modal:has(.find-id,
+  .password-help__complete) .find-id__social {
+    gap: 20px;
+  }
+}

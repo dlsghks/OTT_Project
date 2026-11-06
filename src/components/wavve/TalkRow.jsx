@@ -21,7 +21,7 @@ const resolveItem = async (item) => {
 
 // 시사토크 (뉴스 페이지 #시사토크)
 // - 삭제된 카드 수만큼 fallbackItems(메인 메뉴 시사교양 콘텐츠)로 채운다
-export const TalkRow = ({ title, items = [], fallbackItems = [] }) => {
+export const TalkRow = ({ title, items = [], fallbackItems = [], moreLink }) => {
   const [list, setList] = useState(null);
 
   useEffect(() => {
@@ -43,5 +43,5 @@ export const TalkRow = ({ title, items = [], fallbackItems = [] }) => {
     };
   }, [items, fallbackItems]);
 
-  return <PosterRow title={title} items={list ?? items} />;
+  return <PosterRow title={title} items={list ?? items} moreLink={moreLink} />;
 };

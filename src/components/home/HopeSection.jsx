@@ -18,7 +18,7 @@ export const HopeSection = ({ appResponsive = false }) => (
         〈마티 슈프림〉의 주역<br />
         그의 필모그래피
       </p>
-      <Link to="/movie" className="home-hope__more">자세히 보기</Link>
+      <Link to="/collection/home--hope" className="home-hope__more">더보기</Link>
     </div>
     <div className="home-hope__contents">
       <ContentSection appResponsive={appResponsive} items={hopeItems} cardType="default" showHeader={false} />
