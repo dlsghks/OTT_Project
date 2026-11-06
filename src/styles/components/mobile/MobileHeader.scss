@@ -122,3 +122,34 @@
     }
   }
 }
+
+// 로그인·회원가입에서만 공통 헤더를 뒤로가기 헤더로 전환합니다.
+@media (max-width: 1024px) {
+  .wavve-mobile-header--account {
+    .wavve-mobile-header__brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .wavve-mobile-header__back {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      margin: 0 0 0 -14px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      > img {
+        position: static;
+        display: block;
+        width: 15px;
+        height: 15px;
+        max-width: none;
+        margin: 0;
+        transform: none;
+      }
+    }
+  }
+}

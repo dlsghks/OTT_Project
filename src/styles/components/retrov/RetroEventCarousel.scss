@@ -21,6 +21,19 @@
       opacity: 1;
     }
 
+    // 배너 전체가 이벤트 페이지 링크
+    .rv-event__link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      -webkit-user-drag: none;
+
+      &:focus-visible {
+        outline: 2px solid #7da7ff;
+        outline-offset: -4px;
+      }
+    }
+
     img {
       display: block;
       width: 100%;

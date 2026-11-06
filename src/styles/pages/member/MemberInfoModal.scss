@@ -1,0 +1,32 @@
+// 크기/색상/헤더/입력/버튼/완료화면은 common/WavveAccountModal.scss에서만 관리합니다.
+dialog.wavve-account-modal {
+  .member-info-modal__intro {
+    display: flex; flex-direction: column; gap: 6px;
+    p:first-child { font-weight: 500; color: #fff; }
+    p:last-child { color: #b5b5bd; }
+  }
+  .member-info-modal__fields {
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px;
+    min-width: 0; margin: 0; padding: 0; border: 0;
+    > label { margin-top: 16px; color: #fff; font-size: var(--wam-font); font-weight: 500; line-height: 1.55; &:first-child { margin-top: 0; } }
+    > select { appearance: none; padding-right: 36px; background-image: linear-gradient(45deg, transparent 50%, #fff 50%), linear-gradient(135deg, #fff 50%, transparent 50%); background-position: right 20px center, right 15px center; background-size: 5px 5px; background-repeat: no-repeat; }
+  }
+  .member-info-modal__hint { color: #85858e; font-size: var(--wam-small); line-height: 1.55; overflow-wrap: anywhere; }
+  .member-info-modal__email { display: flex; align-items: center; gap: 8px; min-width: 0; .wam-input { flex: 1; } .wam-button { width: auto; flex-shrink: 0; font-size: var(--wam-small); font-weight: 500; } }
+  .member-info-modal__consents {
+    display: flex; flex-direction: column; gap: 16px; margin-top: 8px; padding: 20px 16px; border-radius: var(--wam-control-radius); background: #303030;
+    label { display: flex; align-items: flex-start; gap: 10px; color: #b5b5bd; font-size: var(--wam-small); line-height: 1.55; }
+    input { appearance: auto; flex: 0 0 18px; width: 18px; height: 18px; min-height: 0; margin: 2px 0 0; padding: 0; accent-color: #1351f9; }
+  }
+  .member-info-modal__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .member-info-modal__error { color: #ff9999; font-size: var(--wam-small); }
+  .member-info-modal__notice { color: #b5b5bd; a { color: #8dacff; text-decoration: underline; } }
+}
+@media (max-width: 600px) {
+  dialog.wavve-account-modal {
+    .member-info-modal__intro { gap: 3.643px; }
+    .member-info-modal__fields { gap: 4.857px; > label { margin-top: 9.714px; } }
+    .member-info-modal__consents { gap: 9.714px; padding: 12px 10px; label { gap: 6px; } input { flex-basis: 12px; width: 12px; height: 12px; margin-top: 0; } }
+    .member-info-modal__actions { gap: 7.286px; }
+  }
+}

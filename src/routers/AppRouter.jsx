@@ -43,6 +43,8 @@ import { SpecialPage } from "../pages/special/SpecialPage";
 import { TmdbOpen } from "../pages/special/TmdbOpen";
 import { NewsClipList } from "../pages/special/NewsClipList";
 import { NewsClip } from "../pages/special/NewsClip";
+import { GolfClip } from "../pages/special/GolfClip";
+import { GolfProgram } from "../pages/special/GolfProgram";
 
 // 검색 및 숏폼
 import { Search } from "../pages/search/Search";
@@ -64,6 +66,9 @@ import { Member } from "../pages/member/Member";
 import { ProfileSelect } from "../pages/member/ProfileSelect";
 import { ProfileEdit } from "../pages/member/ProfileEdit";
 import { MyPage } from "../pages/member/MyPage";
+import { Settings } from "../pages/member/Settings";
+import InquiryDetail from "../pages/support/InquiryDetail";
+import Voucher from "../pages/member/Voucher";
 
 export const AppRouter = () => {
   return (
@@ -71,6 +76,7 @@ export const AppRouter = () => {
       {/* 공통 레이아웃 미사용 */}
       <Route path="/profileselect" element={<ProfileSelect />} />
       <Route path="/profileedit" element={<ProfileEdit />} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="/inquiry/write" element={<InquiryWrite />} />
 
       {/* 공통 레이아웃 */}
@@ -128,14 +134,17 @@ export const AppRouter = () => {
 
         {/* 이벤트 */}
         <Route path="/event" element={<Event />} />
-        <Route path="/eventdetail" element={<EventDetail />} />
-        <Route path="/event/:eventId" element={<EventDetail />} />
+        <Route path="/eventdetail/:eventId" element={<EventDetail />} />
 
         {/* 스페셜 및 뉴스 */}
         <Route path="/special/:slug" element={<SpecialPage />} />
         <Route path="/open" element={<TmdbOpen />} />
         <Route path="/special/news/:tab" element={<NewsClipList />} />
         <Route path="/news/clip/:clipId" element={<NewsClip />} />
+
+        {/* 골프: 클립 재생 · 프로그램 상세 */}
+        <Route path="/golf/clip/:clipId" element={<GolfClip />} />
+        <Route path="/golf/program/:programId" element={<GolfProgram />} />
 
         {/* 검색 및 숏폼 */}
         <Route path="/search" element={<Search />} />
@@ -149,7 +158,11 @@ export const AppRouter = () => {
         <Route path="/notice/:id" element={<NoticeView />} />
         <Route path="/support" element={<Support />} />
         <Route path="/inquiry" element={<Inquiry />} />
+        <Route path="/inquiry/:id" element={<InquiryDetail />} />
         <Route path="/terms" element={<Terms />} />
+
+        {/* 이용원 구매 */}
+        <Route path="/voucher" element={<Voucher />} />
 
         {/* 회원 */}
         <Route path="/login" element={<Login />} />

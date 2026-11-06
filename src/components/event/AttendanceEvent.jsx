@@ -25,7 +25,7 @@ const writeChecked = (key, list) => {
   }
 };
 
-// 출석체크 이벤트 (/event/attendance)
+// 출석체크 이벤트 (/eventdetail/attendance)
 // 혜택 안내 → 달력(x2 날짜) → 출석 버튼 → 공유 → HOT 콘텐츠 → 유의사항
 export const AttendanceEvent = ({ title, image, benefits = [], doubleDays = [], hotItems = [], notices = [] }) => {
   const today = new Date();
