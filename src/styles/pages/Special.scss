@@ -214,9 +214,8 @@ $special-blue: #1f4ef5;
 }
 
 // 정사각 로고 이미지가 있는 채널 박스 (웨이브 채널 로고 720x720)
+// 로고 카드도 글자 카드(KBS NEWS · MBC NEWS)와 같은 크기 (.channel-card 의 너비 · 16:9 비율)
 .channel-card--logo {
-  width: clamp(110px, 8.4vw, 160px);
-  aspect-ratio: 1 / 1;
   overflow: hidden;
 
   img {

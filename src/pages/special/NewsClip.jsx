@@ -34,7 +34,10 @@ export const NewsClip = () => {
   return <NewsClipBody key={clip.id} clip={clip} youtubeId={youtubeId} />;
 };
 
-const NewsClipBody = ({ clip, youtubeId }) => {
+// 골프 클립 재생(GolfClip)에서도 같이 사용
+// - recommends: 오른쪽 추천 영상 (없으면 같은 뉴스 분류 클립)
+// - fallbackArticle: 유튜브 설명이 없을 때 보여줄 글 (없으면 뉴스 안내 문구)
+export const NewsClipBody = ({ clip, youtubeId, recommends: recommendItems, fallbackArticle }) => {
   // undefined: 찾는 중 · null: 못 찾음
   const [video, setVideo] = useState(undefined);
   const [shareMessage, setShareMessage] = useState('');
@@ -67,10 +70,10 @@ const NewsClipBody = ({ clip, youtubeId }) => {
     }
   };
 
-  const recommends = getTabClips(clip.tab).filter((item) => item.id !== clip.id);
+  const recommends = recommendItems ?? getTabClips(clip.tab).filter((item) => item.id !== clip.id);
   const meta = [clip.source, clip.category, clip.date].filter(Boolean).join(' · ');
   const article = video?.description?.trim()
-    || (video === undefined ? '' : `${clip.source}${clip.date ? ` ${clip.date}` : ''} ${clip.category} 뉴스 영상입니다.`);
+    || (video === undefined ? '' : fallbackArticle ?? `${clip.source}${clip.date ? ` ${clip.date}` : ''} ${clip.category} 뉴스 영상입니다.`);
 
   return (
     <div className="news-clip">
