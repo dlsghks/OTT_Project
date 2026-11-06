@@ -14,6 +14,7 @@ const getToday = () =>
 
 export const WeekdayRow = ({
   title,
+  moreLink,
   items = [],
   fallbackItems = items,
   minimum = MIN_SUB_SECTION_ITEMS,
@@ -74,6 +75,7 @@ export const WeekdayRow = ({
       <CategorySlider
         key={activeDay}
         title={title}
+        moreLink={moreLink ? `${moreLink}?day=${activeDay}` : undefined}
         items={displayItems}
         headerExtra={dayButtons}
       />

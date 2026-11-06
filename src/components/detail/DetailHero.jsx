@@ -83,6 +83,8 @@ export const DetailHero = ({
               type="button"
               className={`movie-hero__icon ${isLiked ? 'is-active' : ''}`}
               aria-pressed={isLiked}
+              aria-label={isLiked ? "관심 콘텐츠 해제" : "관심 콘텐츠 추가"}
+              disabled={actions.likeBusy}
               onClick={onLike}
             >
               <Heart size={24} fill={isLiked ? 'currentColor' : 'none'} />

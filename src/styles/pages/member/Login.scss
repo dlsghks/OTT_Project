@@ -13,7 +13,7 @@
   flex-direction: column;
   align-items: center;
   min-height: calc(100svh - var(--login-header-height));
-  padding: 129px 24px 60px;
+  padding: max(48px, calc((100svh - 1080px) / 2 + 109.286px)) 24px 60px;
   box-sizing: border-box;
   overflow: hidden;
   background: #090a14;
@@ -180,56 +180,74 @@
   }
 }
 
-@media (max-width: 768px) {
+// PC 디자인에서 태블릿까지 로그인 영역만 부드럽게 축소합니다.
+@media (min-width: 601px) and (max-width: 1440px) {
   .login-page {
-    padding: 80px 20px 32px;
-    &__content { gap: 28px; }
-    &__button { font-size: 16px; }
-    &__button--social > img { left: calc(50% - 120px); }
-    &__legal { gap: 12px; padding-top: 64px; font-size: 12px; }
+    padding-top: clamp(64px, 7.6vw, 109px);
+    &__content { width: clamp(400px, 33.333vw, 480px); gap: clamp(30px, 2.5vw, 36px); }
+    &__brand > img { width: clamp(150px, 12.5vw, 180px); }
+    &__button { min-height: clamp(52px, 4.167vw, 60px); font-size: clamp(16px, 1.25vw, 18px); }
+    &__accounts, &__social { gap: 16px; }
+  }
+}
+
+.login-page .login-page__button--social > img {
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 136px);
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  max-width: 22px;
+  object-fit: contain;
+}
+
+@media (max-width: 1024px) {
+  .login-page {
+    --login-header-height: 50px;
+    min-height: calc(100svh - 100px - env(safe-area-inset-bottom, 0px));
+  }
+  // 공통 모바일 풋터는 로그인 화면에서만 제외합니다.
+  .login-route + .mobile-chrome-desktop + .wavve-mobile-footer { display: none; }
+}
+
+// Figma ‘모바일 로그인’ 390 × 844 기준.
+@media (max-width: 600px) {
+  .login-page {
+    background: #000;
+    padding: max(40px, calc((100svh - 844px) / 2 + 159px)) 25px 40px;
+    overflow: hidden;
+    &__content { width: 100%; max-width: 400px; gap: 29.638px; }
+    &__brand > img { width: 133.373px; height: auto; }
+    &__accounts, &__social { gap: 14.819px; }
+    &__button {
+      min-height: 44.458px;
+      padding: 10px 40px;
+      border-radius: 0;
+      font-size: 13.34px;
+      line-height: 1.5;
+    }
+    &__divider { width: 100%; gap: 11.855px; font-size: 10.373px; line-height: 16px; }
+    &__help { display: none; gap: 12px; font-size: 12px; flex-wrap: wrap; }
+    &--email-open .login-page__help { display: flex; }
+    &__legal { display: none; }
+    &__email-form {
+      min-width: 0;
+      input { min-height: 48px; font-size: 16px; border-radius: 0; }
+    }
+    &__message { margin: 0; font-size: 13px; }
+    // 모바일 Figma glow 원본의 내보내기 크기와 위치입니다.
+    &__glow--left { width: 524px; height: 390px; left: calc(50% - 310px); top: -205px; }
+    &__glow--right { width: 438px; height: 358px; left: calc(50% - 128px); top: -192px; }
+  }
+  .login-page .login-page__button--social > img {
+    left: calc(50% - 100px);
+    width: 16.301px; height: 16.301px;
+    min-width: 16.301px; max-width: 16.301px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .login-page__button { transition: none; }
-}
-
-.login-page .login-page__button--social {
-    position: relative;
-
-    > img {
-        position: absolute;
-        top: 50%;
-        left: calc(50% - 136px);
-        transform: translateY(-50%);
-
-        width: 22px;
-        height: 22px;
-        min-width: 22px;
-        max-width: 22px;
-        max-height: 22px;
-        object-fit: contain;
-        margin: 0;
-    }
-}
-
-@media (max-width: 768px) {
-    .login-page .login-page__button--social > img {
-        left: calc(50% - 120px);
-    }
-}
-// 회원가입 페이지와 세로 배치 통일
-.login-page {
-  min-height: calc(100svh - 100px);
-
-  padding:
-    max(48px, calc((100svh - 1080px) / 2 + 109.286px))
-    24px
-    60px;
-}
-
-@media (max-width: 768px) {
-  .login-page {
-    padding: 48px 20px 32px;
-  }
 }

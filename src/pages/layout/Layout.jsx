@@ -18,6 +18,8 @@ import "../../styles/components/mobile/MobileChrome.scss";
 export const Layout = () => {
   const { pathname } = useLocation();
 
+  const isLogin = pathname.replace(/\/+$/, "") === "/login";
+
   const isShorts = pathname.replace(/\/+$/, "") === "/shorts";
 
   // 숏츠에서는 영상 피드 내부만 스크롤
@@ -45,7 +47,7 @@ export const Layout = () => {
       <MobileHeader />
 
       {/* 공통 본문 */}
-      <main className="site-inner">
+      <main className={`site-inner${isLogin ? " login-route" : ""}`}>
         <Outlet />
       </main>
 

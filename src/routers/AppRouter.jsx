@@ -64,6 +64,7 @@ import { Member } from "../pages/member/Member";
 import { ProfileSelect } from "../pages/member/ProfileSelect";
 import { ProfileEdit } from "../pages/member/ProfileEdit";
 import { MyPage } from "../pages/member/MyPage";
+import { Settings } from "../pages/member/Settings";
 
 export const AppRouter = () => {
   return (
@@ -71,6 +72,7 @@ export const AppRouter = () => {
       {/* 공통 레이아웃 미사용 */}
       <Route path="/profileselect" element={<ProfileSelect />} />
       <Route path="/profileedit" element={<ProfileEdit />} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="/inquiry/write" element={<InquiryWrite />} />
 
       {/* 공통 레이아웃 */}
