@@ -1,14 +1,15 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CircleAlert } from "lucide-react";
 
-import { inquiryData } from "../../data/inquiryData";
+import { inquiryData } from "../../data/support/inquiryData";
 
 import { LoginModal } from "../../components/common/LoginModal";
 
-import "../../styles/pages/Notice.scss";
-import "../../styles/pages/Inquiry.scss";
+import "../../styles/pages/support/Notice.scss";
+import "../../styles/pages/support/Inquiry.scss";
 
 // 테스트 상태
 // guest: 비로그인
@@ -91,7 +92,7 @@ export const Inquiry = () => {
                 {/* 로그인 상태에서만 문의 내역 출력 */}
                 {isLoggedIn && (
                     <section className="inquiry-page__history">
-                        <h2>나의 문의 내역</h2>
+                        <SectionTitle>나의 문의 내역</SectionTitle>
 
                         {currentInquiries.length === 0 ? (
                             /* 문의 내역 없음 */

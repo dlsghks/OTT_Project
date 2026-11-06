@@ -1,10 +1,1 @@
-// 기존 Layout에서 PC용 Header·Footer를 감싸는 래퍼에 사용합니다.
-.mobile-chrome-desktop {
-  display: contents;
-}
-
-@media (max-width: 768px) {
-  .mobile-chrome-desktop {
-    display: none;
-  }
-}
+@forward "./mobile/MobileChrome";

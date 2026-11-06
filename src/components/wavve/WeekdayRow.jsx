@@ -1,30 +1,72 @@
 import { useState } from 'react';
+
 import { CategorySlider } from './CategorySlider';
 import { weekdays } from '../../data/categoryData';
 
-// 오늘 요일 (월요일 시작)
-const getToday = () => weekdays[(new Date().getDay() + 6) % 7].id;
+import {
+  fillSectionItems,
+  MIN_SUB_SECTION_ITEMS,
+} from '../../utils/sectionItems';
 
-// 요일별 콘텐츠: 요일 버튼으로 방영 요일 필터
-export const WeekdayRow = ({ title, items = [] }) => {
+// 월요일부터 시작하는 요일 ID
+const getToday = () =>
+  weekdays[(new Date().getDay() + 6) % 7].id;
+
+export const WeekdayRow = ({
+  title,
+  items = [],
+  fallbackItems = items,
+  minimum = MIN_SUB_SECTION_ITEMS,
+}) => {
   const [activeDay, setActiveDay] = useState(getToday);
-  const dayItems = items.filter((item) => item.days?.includes(activeDay));
+
+  const dayItems = items.filter((item) =>
+    item.days?.includes(activeDay)
+  );
+
+  const uniqueDayItems = fillSectionItems(
+    dayItems,
+    [],
+    0
+  );
+
+  const displayItems = fillSectionItems(
+    uniqueDayItems,
+    fallbackItems,
+    minimum
+  );
+
+  const recommendationCount =
+    displayItems.length - uniqueDayItems.length;
+
+  const activeDayLabel = weekdays.find(
+    (day) => day.id === activeDay
+  )?.label;
 
   const dayButtons = (
-    <div className="weekday-filter" role="tablist" aria-label="요일 선택">
-      {weekdays.map((day) => (
-        <button
-          key={day.id}
-          type="button"
-          role="tab"
-          className={`weekday-filter__button ${activeDay === day.id ? 'is-active' : ''}`}
-          aria-selected={activeDay === day.id}
-          onClick={() => setActiveDay(day.id)}
-        >
-          {day.label}
-        </button>
-      ))}
-    </div>
+    <>
+      <div
+        className="weekday-filter"
+        role="group"
+        aria-label="방영 요일 선택"
+      >
+        {weekdays.map((day) => (
+          <button
+            key={day.id}
+            type="button"
+            className={`weekday-filter__button ${
+              activeDay === day.id ? 'is-active' : ''
+            }`}
+            aria-pressed={activeDay === day.id}
+            onClick={() => setActiveDay(day.id)}
+          >
+            {day.label}
+          </button>
+        ))}
+      </div>
+
+
+    </>
   );
 
   return (
@@ -32,10 +74,15 @@ export const WeekdayRow = ({ title, items = [] }) => {
       <CategorySlider
         key={activeDay}
         title={title}
-        items={dayItems}
+        items={displayItems}
         headerExtra={dayButtons}
       />
-      {!dayItems.length && <p className="weekday-row__empty">이 요일에 방영하는 콘텐츠가 없습니다.</p>}
+
+      {!displayItems.length && (
+        <p className="weekday-row__empty">
+          표시할 콘텐츠가 없습니다.
+        </p>
+      )}
     </div>
   );
 };

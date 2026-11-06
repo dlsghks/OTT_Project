@@ -2,10 +2,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay } from 'swiper/modules'
 import 'swiper/css'
 
-import logo from '../assets/wavve_logo_w.svg'
-import '../styles/components/Footer.scss'
+import logo from '../../assets/wavve_logo_w.svg'
+import '../../styles/layout/Footer.scss'
 
 // 상단 공지사항
 const notices = [
@@ -111,6 +112,12 @@ export const Footer = () => {
 
           <div className="footer__notice-slider">
             <Swiper
+              modules={[Autoplay]}
+              autoplay={{
+                delay: 3500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
               direction="vertical"
               slidesPerView={1}
               slidesPerGroup={1}

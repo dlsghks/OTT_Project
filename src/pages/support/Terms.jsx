@@ -1,3 +1,4 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -5,8 +6,8 @@ import {
     termsTabs,
     termsVersions,
     termsContents,
-} from "../../data/termData";
-import "../../styles/pages/Terms.scss";
+} from "../../data/support/termData";
+import "../../styles/pages/support/Terms.scss";
 
 const supportTabs = [
     { label: "공지사항", path: "/notice" },
@@ -160,7 +161,7 @@ export const Terms = () => {
 
                 <div className="terms-page__title-row">
                     <div className="terms-page__title">
-                        <h2>{currentTab?.label}</h2>
+                        <SectionTitle>{currentTab?.label}</SectionTitle>
                         <span>
                             시행일자 : {selectedVersion}
                         </span>

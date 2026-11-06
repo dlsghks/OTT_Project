@@ -1,31 +1,57 @@
+@use "../common/figma-tokens" as figma;
 
 .site-header {
+  // 1025~1920px 사이에서 헤더 전체 크기를 부드럽게 조정
+  --header-height: clamp(80px, calc(1.786vw + 61.7px), 96px);
+  --header-padding: clamp(24px, 3.333333vw, 64px);
+  --header-logo-width: clamp(90px, calc(2.455vw + 64.85px), 112px);
+  --header-menu-font: clamp(13px, calc(0.78125vw + 5px), 20px);
+  --header-menu-gap: clamp(12px, calc(5.357vw - 42.86px), 60px);
+  --header-left-gap: clamp(20px, calc(4.464vw - 25.71px), 60px);
+  --header-section-gap: clamp(20px, calc(2.232vw - 2.86px), 40px);
+  --header-icon-gap: clamp(18px, 1.5625vw, 30px);
+  --header-icon-size: 32px;
+
   position: sticky;
   top: 0;
   z-index: 100;
 
   width: 100%;
-  background: #000;
-  color: #8b8b8b;
+  margin: 0;
+  padding: 0;
 
-  > .inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
+  background: figma.$neutral-black;
+  color: figma.$neutral-4;
 
-    width: 100%;
-    max-width: none;
-    min-height: 96px;
-
-    margin: 0;
-    padding: 0 110px;
+  &,
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
   }
 
-  ul {
+  > .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--header-section-gap);
+
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: var(--header-height);
+
+    margin: 0;
+    padding: 0 var(--header-padding);
+  }
+
+  // 헤더의 최상위 메뉴 목록만 적용
+  .header-left>ul,
+  .header-right>ul {
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
+
     margin: 0;
     padding: 0;
     list-style: none;
@@ -36,81 +62,114 @@
     text-decoration: none;
 
     &:hover {
-      color: #fff;
-    }
-
-    &:focus-visible {
-      outline: 2px solid #1351f9;
-      outline-offset: 4px;
-      border-radius: 4px;
+      color: figma.$neutral-white;
     }
   }
 
-  // 왼쪽: 로고 + 네비게이션
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid figma.$primary-main;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  // 로고 + 메인 메뉴
   .header-left {
-    display: flex;
+    display: grid;
+    grid-template-columns:
+      var(--header-logo-width)
+      minmax(0, 1fr);
     align-items: center;
-    gap: 60px;
+    gap: var(--header-left-gap);
+
+    width: 100%;
     min-width: 0;
 
-    h1 {
-      flex-shrink: 0;
+    > h1 {
+      width: var(--header-logo-width);
+      min-width: 0;
+      height: auto;
+
       margin: 0;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      font-size: 48px;
-      font-weight: 900;
-      letter-spacing: -3px;
-      line-height: 1;
-    }
-
-    ul {
-      gap: 60px;
-    }
-
-    li {
-      flex-shrink: 0;
-    }
-
-    li a {
-      display: block;
       padding: 0;
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 96px;
-      white-space: nowrap;
+      line-height: 0;
+
+      > a {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      > a > img {
+        position: static;
+        display: block;
+
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        height: auto;
+        min-height: 0;
+        max-height: none;
+
+        margin: 0;
+        padding: 0;
+        border: 0;
+
+        object-fit: contain;
+        transform: none;
+      }
     }
-  }
 
-  // 오른쪽: 아이콘 버튼
-  .header-right {
-    flex-shrink: 0;
-
-    ul {
-      gap: 36px;
-    }
-
-    li {
-      font-size: 16px;
-      white-space: nowrap;
-    }
-
-    button {
-      cursor: pointer;
-    }
-  }
-
-  // member-5: 헤더 오른쪽 아이콘 정렬
-  .header-right {
     > ul {
+      justify-content: flex-start;
+      gap: var(--header-menu-gap);
+
+      width: 100%;
+      min-width: 0;
+    }
+
+    > ul > li {
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0;
+    }
+
+    > ul > li > a {
       display: flex;
       align-items: center;
+
+      min-height: var(--header-height);
+      margin: 0;
+      padding: 0;
+
+      font-size: var(--header-menu-font);
+      font-weight: 400;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+  }
+
+  // 알림 + 검색 + 프로필
+  .header-right {
+    width: max-content;
+    min-width: max-content;
+    margin: 0;
+    padding: 0;
+
+    > ul {
+      gap: var(--header-icon-gap);
     }
 
     > ul > li {
       display: flex;
       align-items: center;
       justify-content: center;
+      flex: 0 0 auto;
+
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     > ul > li > button,
@@ -122,108 +181,92 @@
       align-items: center;
       justify-content: center;
 
-      width: 32px;
-      height: 32px;
-      padding: 0;
+      width: var(--header-icon-size);
+      height: var(--header-icon-size);
+
       margin: 0;
+      padding: 0;
       border: 0;
 
       background: transparent;
       line-height: 1;
     }
 
+    button {
+      cursor: pointer;
+    }
+
+    > ul > li > a > img,
     > ul > li > button > img,
-    > ul > li > a > button > img {
+    > ul > li > a > button > img,
+    .my-hover__trigger > img {
+      position: static;
       display: block;
+
       width: 28px;
+      min-width: 0;
+      max-width: none;
       height: 28px;
-    }
-  }
 
-  // 중간 화면: 간격과 글자 크기 축소
-  @media (max-width: 1600px) {
-    .header-left {
-      gap: 36px;
-
-      ul {
-        gap: 28px;
-      }
-
-      li a {
-        font-size: 18px;
-      }
-    }
-
-    .header-right ul {
-      gap: 20px;
-    }
-  }
-
-  // 태블릿: 로고/아이콘과 메뉴를 2줄로 배치
-  @media (max-width: 1280px) {
-    > .inner {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 16px 24px;
-      padding: 20px 24px;
-    }
-
-    .header-left {
-      display: contents;
-
-      h1 {
-        grid-column: 1;
-        grid-row: 1;
-        font-size: 40px;
-      }
-
-      ul {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        min-width: 0;
-        gap: 28px;
-        overflow-x: auto;
-      }
-
-      li a {
-        font-size: 16px;
-        line-height: 48px;
-      }
-    }
-
-    .header-right {
-      grid-column: 2;
-      grid-row: 1;
-    }
-  }
-
-  // 모바일
-  @media (max-width: 480px) {
-    > .inner {
-      padding: 16px;
-    }
-
-    .header-left h1 {
-      font-size: 34px;
-    }
-
-    .header-left ul {
-      gap: 24px;
-    }
-
-    .header-right ul {
-      gap: 16px;
-    }
-
-    .header-right li {
-      font-size: 14px;
+      margin: 0;
+      padding: 0;
+      object-fit: contain;
+      transform: none;
     }
   }
 }
 
-// develop: 고객센터 페이지 전용 헤더 배경색
+// 태블릿·모바일에서는 Layout의 MobileHeader 사용
+@media (max-width: 1024px) {
+  .site-header {
+    display: none;
+  }
+}
+
+// 고객센터 페이지 헤더 배경
 body:has(.notice-page, .inquiry-write) {
   .site-header {
     background: #1b1b1b;
+  }
+}
+// Bell badge and body-mounted notification panel.
+.site-header .header-right .header-notification-button {
+  position: relative;
+  overflow: visible;
+}
+
+.site-header .header-notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 2px solid #000;
+  border-radius: figma.$radius-3;
+  background: figma.$warning;
+  color: figma.$neutral-white;
+  font: 700 10px/1 Arial, sans-serif;
+  pointer-events: none;
+}
+
+.header-notification-portal {
+  width: min(480px, calc(100vw - 32px));
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: figma.$neutral-white;
+  white-space: normal;
+
+  > .notification-panel {
+    position: static;
+    inset: auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    transform: none;
   }
 }

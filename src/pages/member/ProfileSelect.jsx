@@ -1,11 +1,11 @@
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ProfilePinModal } from "../../components/ProfilePinModal";
+import { ProfilePinModal } from "../../components/common/ProfilePinModal";
 import { useAccountStore, chooseProfile, verifyProfilePin } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
 import lockIcon from "../../assets/lock.png";
 import logo from "../../assets/wavve_logo_w.svg";
-import "../../styles/components/ProfileSelect.scss";
+import "../../styles/pages/member/ProfileSelect.scss";
 
 export const ProfileSelect = () => {
   const location = useLocation();

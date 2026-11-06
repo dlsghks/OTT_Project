@@ -7,7 +7,7 @@ import { EpisodeList } from '../../components/program/EpisodeList';
 import { CastList } from '../../components/program/CastList';
 import { RelatedPrograms } from '../../components/program/RelatedPrograms';
 
-import '../../styles/pages/ProgramDetail.scss';
+import '../../styles/pages/contents/ProgramDetail.scss';
 
 export const ProgramDetail = () => {
     const { programId } = useParams();

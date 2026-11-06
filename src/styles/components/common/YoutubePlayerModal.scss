@@ -1,0 +1,135 @@
+@use "../../retrov/variables" as *;
+
+// 유튜브 영상 전체화면 플레이어 (components/common/YoutubePlayerModal.jsx)
+.yt-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  color: #fff;
+  animation: yt-modal-fade 0.2s ease-out;
+
+  // 상단: 뒤로가기 + 제목 / 날짜 · 유튜브 링크
+  &__head {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 72px;
+    padding: 0 24px;
+
+    h2 {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      font-size: clamp(18px, 1.4vw, 28px);
+      font-weight: 500;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__close {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    &:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 2px;
+    }
+  }
+
+  // 영상: 상단 바를 뺀 나머지 화면 전체
+  &__player {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    margin: 0 4.4vw 40px;
+    background: #000;
+
+    iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  // 영상을 찾는 중 / 못 찾음 안내
+  &__status {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 24px;
+    font-size: 16px;
+    color: #cfcfcf;
+    text-align: center;
+  }
+
+  &__info {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: $retrov-text-muted;
+  }
+
+  &__external {
+    color: $retrov-text-muted;
+    text-decoration: underline;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+@keyframes yt-modal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .yt-modal {
+    &__head {
+      flex-wrap: wrap;
+      padding: 8px 12px;
+    }
+
+    &__info {
+      width: 100%;
+      padding-left: 56px;
+    }
+
+    &__player {
+      margin: 0 0 16px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yt-modal {
+    animation: none;
+  }
+}

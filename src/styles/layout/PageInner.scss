@@ -1,42 +1,15 @@
 .site-inner {
-  --page-side-padding: 110px;
+  --page-side-padding: clamp(24px, 3.333333vw, 64px);
 
   width: 100%;
   max-width: none;
-  min-height: 100vh;
-
   margin: 0;
   padding: 0 var(--page-side-padding);
   box-sizing: border-box;
-
-  // 모든 페이지 공통 배경
-  background: linear-gradient(
-    180deg,
-    #071a2e 0%,
-    #000000 100%
-  );
-
-  // 히어로만 화면 양쪽 끝까지 확장
-  .hero-full-width {
-    width: calc(100% + var(--page-side-padding) * 2);
-    max-width: none;
-    margin-left: calc(var(--page-side-padding) * -1);
-    margin-right: calc(var(--page-side-padding) * -1);
-    box-sizing: border-box;
-  }
-
-  // 공통 그라데이션 유지
-  > .wavve-home,
-  > .live-page,
-  > .live-channel-page,
-  > .retrov-main,
-  > .shorts-page {
-    background: transparent;
-    background-image: none;
-  }
+  min-width: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .site-inner {
     --page-side-padding: 20px;
   }

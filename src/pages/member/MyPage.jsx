@@ -1,5 +1,10 @@
-import { useEffect, useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { SectionTitle } from '../../components/common/SectionTitle';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Link, useLocation } from "react-router-dom";
+import { NotificationPanel } from "../../components/common/NotificationPanel";
+import { useAuthState } from "../../hooks/useAuthState";
+import { useNotificationStore } from "../../store/useNotificationStore";
 import { shortsData } from "../../data/shortsData";
 import { useProfileShorts } from "../../utils/profileShorts";
 import profileImage from "../../assets/mypage/profile.png";
@@ -14,9 +19,21 @@ import favoriteGraphic from "../../assets/mypage/quiz-favorite.png";
 import linesGraphic from "../../assets/mypage/quiz-lines.png";
 import heartImage from "../../assets/mypage/heart.png";
 import heartGlowImage from "../../assets/mypage/heart-glow.png";
-import "../../styles/components/MyPage.scss";
-import "../../styles/components/MyPageShorts.scss";
+import "../../styles/pages/member/MyPage.scss";
+import "../../styles/pages/member/MyPageShorts.scss";
 
+import mobilePencil from "../../assets/mobile/pencil.svg";
+import mobileEmpty from "../../assets/mobile/empty.svg";
+import mobileBell from "../../assets/mobile/bell.svg";
+import mobileSettings from "../../assets/mobile/settings.svg";
+import mobileNextGraphic from "../../assets/mobile/quiz-next.png";
+import mobileHeart0 from "../../assets/mobile/heart-0.svg";
+import mobileHeart1 from "../../assets/mobile/heart-1.svg";
+import mobileHeart2 from "../../assets/mobile/heart-2.svg";
+import mobileHeart3 from "../../assets/mobile/heart-3.svg";
+import mobileHeart4 from "../../assets/mobile/heart-4.svg";
+
+const MOBILE_HEARTS = [mobileHeart0, mobileHeart1, mobileHeart2, mobileHeart3, mobileHeart4];
 const EMPTY_ITEMS = [];
 const TABS = [
   { key: "history", label: "시청 내역", title: "아직 시청한 콘텐츠가 없어요" },
@@ -92,7 +109,7 @@ const MyPagePoster = ({ item, isShorts }) => {
       onLoad={(event) => {
         // 일부 영상은 없는 고해상도 이미지 대신 작은 기본 이미지를 반환합니다.
         if (isShorts && imageIndex === 0 && sources.length > 1 &&
-          event.currentTarget.naturalWidth <= 120) useFallback();
+            event.currentTarget.naturalWidth <= 120) useFallback();
       }}
     />
   );
@@ -116,10 +133,83 @@ export const MyPage = ({
 
   const [activeTab, setActiveTab] = useState("history");
   const [activeFilter, setActiveFilter] = useState("all");
-  const [activeEvent, setActiveEvent] = useState(1);
+  const [activeEvent, setActiveEvent] = useState(() => window.matchMedia("(max-width: 1024px)").matches ? 0 : 1);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const dialogRef = useRef(null);
   const id = useId();
+  const { user, isLoggedIn } = useAuthState();
+  const location = useLocation();
+  const notificationButtonRef = useRef(null);
+  const notificationPanelRef = useRef(null);
+  const [notificationPosition, setNotificationPosition] = useState(null);
+  const notificationPanelId = `${id}-notifications`;
+
+  const notifications = useNotificationStore((state) =>
+    state.notificationsByUser[user?.uid] ?? EMPTY_ITEMS
+  );
+  const onReadNotification = useNotificationStore((state) => state.onReadNotification);
+  const onReadAllNotifications = useNotificationStore((state) => state.onReadAllNotifications);
+  const unreadCount = isLoggedIn
+    ? notifications.filter((item) => !item.readAt).length
+    : 0;
+
+  useEffect(() => {
+    setIsNotificationOpen(false);
+    setNotificationPosition(null);
+  }, [location.pathname, user?.uid]);
+
+  useLayoutEffect(() => {
+    if (!isNotificationOpen) return;
+
+    const updatePosition = () => {
+      const button = notificationButtonRef.current;
+      const panel = notificationPanelRef.current;
+      if (!button || !panel) return;
+
+      const rect = button.getBoundingClientRect();
+      if (!button.getClientRects().length) {
+        setIsNotificationOpen(false);
+        return;
+      }
+      const width = panel.getBoundingClientRect().width;
+      const next = {
+        top: rect.bottom + window.scrollY + 12,
+        left: window.scrollX + Math.max(
+          16,
+          Math.min(rect.right - width, window.innerWidth - width - 16)
+        ),
+      };
+      setNotificationPosition((previous) =>
+        previous?.top === next.top && previous?.left === next.left
+          ? previous
+          : next
+      );
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key !== "Escape") return;
+      setIsNotificationOpen(false);
+      setNotificationPosition(null);
+      notificationButtonRef.current?.focus();
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("keydown", handleKeyDown);
+
+    const observer = new ResizeObserver(updatePosition);
+    if (notificationButtonRef.current) observer.observe(notificationButtonRef.current);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("keydown", handleKeyDown);
+      observer.disconnect();
+    };
+  }, [isNotificationOpen]);
+
   // 저장된 ID 순서대로 표시해 가장 최근에 본 영상이 앞에 옵니다.
   const watchedShorts = watchedShortsIds
     .map((id) => shortsData.find((item) => item?.id === id))
@@ -211,12 +301,41 @@ export const MyPage = ({
             <div className="mypage__profile-heading">
               <h1>{displayedName}<span>님</span></h1>
               <Link className="mypage__edit" to="/profileedit" aria-label="프로필 수정">
-                <img src={pencilImage} alt="" width="25" height="25" />
+                <picture><source media="(max-width: 1024px)" srcSet={mobilePencil} /><img src={pencilImage} alt="" width="25" height="25" /></picture>
               </Link>
             </div>
             <p>{passName || "보유하신 이용권이 없습니다"}</p>
           </div>
-          <button className="mypage__pass-button" type="button" onClick={() => requestAction("purchase-pass", "이용권 구매")}>이용권 구매</button>
+          <div className="mypage__mobile-actions">
+            <button
+              ref={notificationButtonRef}
+              type="button"
+              aria-label={unreadCount > 0 ? `알림, 읽지 않은 알림 ${unreadCount}개` : "알림"}
+              aria-expanded={isNotificationOpen}
+              aria-controls={notificationPanelId}
+              style={{ position: "relative", overflow: "visible" }}
+              onClick={() => {
+                setNotificationPosition(null);
+                setIsNotificationOpen((previous) => !previous);
+              }}
+            >
+              <img src={mobileBell} alt="" />
+              {isLoggedIn && unreadCount > 0 && (
+                <span aria-hidden="true" style={{
+                  position: "absolute", top: -4, right: -4,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  minWidth: 18, height: 18, padding: "0 4px",
+                  boxSizing: "border-box", borderRadius: 999,
+                  background: "#f33445", color: "#fff",
+                  font: "700 10px/1 Arial, sans-serif", pointerEvents: "none",
+                }}>
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
+            </button>
+            <Link to="/profileedit" aria-label="프로필 설정"><img src={mobileSettings} alt="" /></Link>
+          </div>
+          <button className="mypage__pass-button" type="button" onClick={() => requestAction("purchase-pass", "이용권 구매")}><span className="mypage__desktop-copy">이용권 구매</span><span className="mypage__mobile-copy">이용권 구매하기</span></button>
         </div>
 
         <dl className="mypage__summary">
@@ -240,12 +359,7 @@ export const MyPage = ({
           <div className="mypage__library-panel" role="tabpanel" id={`${id}-panel`} aria-labelledby={`${id}-tab-${activeTab}`}>
             <div className="mypage__filter-row">
               <div className="mypage__filters" role="group" aria-label="콘텐츠 종류">
-                {FILTERS.filter(
-                  (filter) =>
-                    filter.key !== "shorts" ||
-                    activeTab === "history" ||
-                    activeTab === "favorites"
-                ).map((filter) => <button key={filter.key} type="button" aria-pressed={activeFilter === filter.key}
+                {FILTERS.filter((filter) => filter.key !== "shorts" || activeTab === "history" || activeTab === "favorites").map((filter) => <button key={filter.key} type="button" aria-pressed={activeFilter === filter.key}
                   onClick={() => setActiveFilter(filter.key)}>{filter.label}</button>)}
               </div>
               <p className="mypage__total" aria-live="polite">전체 {visibleItems.length}개</p>
@@ -254,7 +368,7 @@ export const MyPage = ({
               <ul className="mypage__library-grid">{visibleItems.map((item) => renderCard(item))}</ul>
             ) : (
               <div className="mypage__empty">
-                <img className="mypage__empty-icon" src={emptyImage} alt="" width="64" height="64" />
+                <picture><source media="(max-width: 1024px)" srcSet={mobileEmpty} /><img className="mypage__empty-icon" src={emptyImage} alt="" width="64" height="64" /></picture>
                 <h2>{currentItems.length ? "선택한 종류의 콘텐츠가 없어요" : currentTab.title}</h2>
                 <p>지금 마음에 드는 작품을 찾아 첫 이야기를 시작해보세요.</p>
                 <Link className="mypage__browse" to="/">콘텐츠 둘러보기</Link>
@@ -264,7 +378,7 @@ export const MyPage = ({
         </div>
 
         <section className="mypage__management" aria-labelledby={`${id}-management`}>
-          <h2 id={`${id}-management`}>계정 · 서비스 관리</h2>
+          <SectionTitle id={`${id}-management`}>계정 · 서비스 관리</SectionTitle>
           <div className="mypage__management-grid">
             <Link to="/profileedit">프로필 관리<span aria-hidden="true">›</span></Link>
             <button type="button" onClick={() => requestAction("billing", "이용권 · 결제 내역")}>이용권 · 결제 내역<span aria-hidden="true">›</span></button>
@@ -274,7 +388,10 @@ export const MyPage = ({
         </section>
 
         <section className="mypage__retro" aria-labelledby={`${id}-retro`}>
-          <h2 id={`${id}-retro`}>레트로 Pick</h2>
+          <SectionTitle id={`${id}-retro`}>
+            <span className="mypage__desktop-copy">레트로 Pick</span>
+            <span className="mypage__mobile-copy">레트로브 인기회차 픽!</span>
+          </SectionTitle>
           <ul className="mypage__retro-list">{retroPicks.map((item) => renderCard(item, true))}</ul>
         </section>
       </div>
@@ -290,8 +407,11 @@ export const MyPage = ({
               aria-label={`${event.eyebrow}: ${event.title} ${event.accent}`}>
               <img className="mypage__banner-art mypage__banner-art--left" src={event.image} alt="" />
               <div className="mypage__banner-copy"><p>{event.eyebrow}</p><h2>{event.title} <em>{event.accent}</em></h2><p>{event.description}</p></div>
-              <img className="mypage__banner-art mypage__banner-art--right" src={event.image} alt="" />
-              {[0, 1, 2, 3, 4].map((heart) => <img key={heart} className={`mypage__heart mypage__heart--${heart}`} src={heart % 2 ? heartGlowImage : heartImage} alt="" />)}
+              <picture className="mypage__banner-art-picture">
+                {event.id === "next" && <source media="(max-width: 1024px)" srcSet={mobileNextGraphic} />}
+                <img className="mypage__banner-art mypage__banner-art--right" src={event.image} alt="" />
+              </picture>
+              {[0, 1, 2, 3, 4].map((heart) => <picture key={heart}><source media="(max-width: 1024px)" srcSet={MOBILE_HEARTS[heart]} /><img className={`mypage__heart mypage__heart--${heart}`} src={heart % 2 ? heartGlowImage : heartImage} alt="" /></picture>)}
             </Link>
           ))}
         </div>
@@ -302,6 +422,30 @@ export const MyPage = ({
           <button type="button" aria-label="다음 이벤트" onClick={() => setActiveEvent((activeEvent + 1) % EVENTS.length)}>›</button>
         </div>
       </section>
+
+      {isNotificationOpen && createPortal(
+        <div
+          ref={notificationPanelRef}
+          className="header-notification-portal"
+          style={{
+            position: "absolute",
+            top: notificationPosition?.top ?? 0,
+            left: notificationPosition?.left ?? 0,
+            width: "min(480px, calc(100vw - 32px))",
+            visibility: notificationPosition ? "visible" : "hidden",
+            zIndex: 1000,
+          }}
+        >
+          <NotificationPanel
+            id={notificationPanelId}
+            isLoggedIn={isLoggedIn}
+            notifications={isLoggedIn ? notifications : EMPTY_ITEMS}
+            onRead={(notificationId) => onReadNotification(user?.uid, notificationId)}
+            onReadAll={() => onReadAllNotifications(user?.uid)}
+          />
+        </div>,
+        document.body
+      )}
 
       <dialog className="mypage__dialog" ref={dialogRef} aria-labelledby={`${id}-dialog-title`} onClose={() => setDialogTitle("")}
         onClick={(event) => { if (event.target === event.currentTarget) dialogRef.current.close(); }}>

@@ -1,0 +1,181 @@
+.shorts-share {
+  position: fixed;
+  inset: 0;
+  width: min(475px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100svh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 18.269px;
+  background: #0c0d19;
+  box-shadow: 0 0 40.192px #ffffff26;
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  &, * { box-sizing: border-box; }
+  &::backdrop { background: #0009; }
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 2px solid #7fa8ff; outline-offset: 3px; }
+
+  &__surface {
+    position: relative;
+    min-height: 250px;
+    padding: 40px 24px 18px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  &__glow {
+    position: absolute;
+    z-index: -1;
+    top: -182.692px;
+    left: calc(50% - 228.365px);
+    display: block;
+    max-width: none;
+    pointer-events: none;
+  }
+
+  &__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 32.885px;
+    height: 32.885px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    > img { position: static; display: block; max-width: none; }
+    &:hover { background: #ffffff0d; }
+  }
+
+  h2 { margin: 0; font-size: 20px; font-weight: 700; line-height: 29px; }
+
+  &__services {
+    display: flex;
+    align-items: center;
+    gap: 18.269px;
+    width: calc(100% + 24px);
+    margin-top: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+
+    > button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 54.808px;
+      width: 54.808px;
+      height: 54.808px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #252735;
+      transition: background-color 150ms ease;
+      scroll-margin: 8px;
+      &:last-child { margin-right: 24px; }
+      &:hover { background: #393c50; }
+      &:focus-visible { outline-offset: -3px; }
+      > img { position: static; display: block; max-width: none; }
+    }
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: min(422px, 100%);
+    height: 52px;
+    margin-top: 20px;
+    padding: 8px 17px 8px 16px;
+    border: 1px solid #494949;
+    border-radius: 10px;
+    background: #000;
+
+    input {
+      flex: 1;
+      width: 0;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #a5a5a5;
+      font-size: 14px;
+      line-height: 20px;
+      text-overflow: ellipsis;
+    }
+
+    button {
+      flex: 0 0 56px;
+      height: 34px;
+      padding: 0;
+      border: 1px solid #4b4b4b;
+      border-radius: 8px;
+      background: transparent;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      &:hover { background: #ffffff14; }
+      &:disabled { cursor: wait; opacity: .6; }
+    }
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 16px;
+    margin: 14px 0 0 4px;
+    font-size: 13px;
+    line-height: 16px;
+    > img { position: static; display: block; width: 13px; height: 13px; }
+  }
+
+  &__notice { margin: 0; padding: 0 28px 18px; color: #b8ccff; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+}
+// 공유 서비스 아이콘 크기 고정
+.shorts-share .shorts-share__services > button > img {
+  position: static;
+  display: block;
+
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  max-width: 22px;
+  max-height: 22px;
+
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+  transform: none;
+}
+
+// 닫기 아이콘
+.shorts-share .shorts-share__close > img {
+  width: 33px;
+  height: 33px;
+  min-width: 33px;
+  max-width: 33px;
+  object-fit: contain;
+}
+
+// 복사 완료 체크 아이콘
+.shorts-share .shorts-share__status > img {
+  width: 13px;
+  height: 13px;
+  min-width: 13px;
+  max-width: 13px;
+  object-fit: contain;
+}
+
+
