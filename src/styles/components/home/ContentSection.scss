@@ -1,9 +1,10 @@
+@use "../../common/figma-tokens" as figma;
 @use "../../common/slider-navigation" as nav;
 
 .content-section {
   width: 100%;
   min-width: 0;
-  margin-bottom: 80px;
+  margin-bottom: figma.$space-7xl;
 
   // 제목과 카드 간격
   &__header {
@@ -14,23 +15,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: figma.$space-xl;
 
     h2 {
       margin: 0;
-      color: #fff;
+      color: figma.$neutral-white;
       font-size: 28px;
       font-weight: 700;
       line-height: 1.4;
     }
 
     a {
-      color: #aaa;
+      color: figma.$neutral-3;
       font-size: 15px;
       text-decoration: none;
 
       &:hover {
-        color: #fff;
+        color: figma.$neutral-white;
       }
     }
   }
@@ -117,3 +118,17 @@
 }
 
 .content-section__slider:focus-within .content-section__arrow { opacity: 1; pointer-events: auto; }
+
+@media (min-width: 1025px) and (max-width: 1919px) {
+  .content-section__swiper {
+    container-type: inline-size;
+    .swiper-wrapper { height: auto; }
+    .swiper-slide .content-card { height: auto; }
+    .swiper-slide { width: min(var(--content-card-width), calc((100cqw - 72px) / 4.5)); }
+  }
+}
+
+@media (min-width: 1025px) {
+  .content-section__swiper .swiper-wrapper { height: auto; }
+  .content-section__swiper .swiper-slide .content-card { height: auto; }
+}

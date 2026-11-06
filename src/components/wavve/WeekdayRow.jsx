@@ -65,16 +65,7 @@ export const WeekdayRow = ({
         ))}
       </div>
 
-      {recommendationCount > 0 && (
-        <p
-          className="weekday-row__recommend-note"
-          role="status"
-        >
-          {activeDayLabel}요일 방영 콘텐츠{' '}
-          {uniqueDayItems.length}개와 함께 볼 추천 콘텐츠{' '}
-          {recommendationCount}개
-        </p>
-      )}
+
     </>
   );
 

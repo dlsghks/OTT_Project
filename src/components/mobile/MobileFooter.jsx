@@ -45,7 +45,7 @@ export const MobileFooter = ({
   useEffect(() => {
     if (noticeItems.length < 2 || paused) return;
 
-    const mobile = window.matchMedia("(max-width: 768px)");
+    const mobile = window.matchMedia("(max-width: 1024px)");
     const delay = Number.isFinite(noticeInterval) ? Math.max(1000, noticeInterval) : 3500;
     let timer;
 

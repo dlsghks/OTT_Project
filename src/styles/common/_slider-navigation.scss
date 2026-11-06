@@ -3,23 +3,52 @@
   top: 0;
   bottom: 0;
   z-index: 10;
-  width: 65px;
+  width: clamp(36px, 2.5vw, 48px);
+  height: auto;
+  margin: 0;
   padding: 0;
   border: 0;
   border-radius: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: transparent;
   color: #fff;
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
-  font-family: Arial, sans-serif;
-  font-size: 48px;
-  font-weight: 300;
-  line-height: 1;
-  &--prev { left: 0; background: linear-gradient(to right, rgba(0, 0, 0, .8), transparent); }
-  &--next { right: 0; background: linear-gradient(to left, rgba(0, 0, 0, .8), transparent); }
-  @media (max-width: 767px) { width: 36px; font-size: 36px; }
+  transform: none;
+  transition: opacity .25s ease;
+
+  // The fade covers the row edge without intercepting card clicks.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(140px, 23.333333vw, 448px);
+    pointer-events: none;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    width: 100%;
+    aspect-ratio: 48 / 84;
+    background: url("data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20width%3D%2248%22%20height%3D%2284%22%20viewBox%3D%220%200%2048%2084%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%20id%3D%22Frame%20463%22%3E%0A%3Crect%20width%3D%2248%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22black%22%20fill-opacity%3D%220.8%22%2F%3E%0A%3Cpath%20id%3D%22Vector%2024%22%20d%3D%22M18%2028L33%2041.5L18%2055%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke%3D%22white%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A") center / contain no-repeat;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  span { display: none; }
+  &--prev {
+    left: 0;
+    right: auto;
+    &::before { left: 0; background: linear-gradient(90deg, #000, transparent 68.304%); }
+    &::after { transform: translateY(-50%) rotate(180deg); }
+  }
+  &--next {
+    right: 0;
+    left: auto;
+    &::before { right: 0; background: linear-gradient(90deg, transparent 31.696%, #000); }
+  }
+  &:hover { background: transparent; }
+  &:focus-visible { opacity: 1; pointer-events: auto; outline: 2px solid #fff; outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { transition: none; }
 }

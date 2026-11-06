@@ -51,7 +51,7 @@ export const RankingSection = ({ items = [] }) => {
                     breakpoints={{
                         601: { slidesPerGroup: 3, spaceBetween: 12 },
                         1025: { slidesPerGroup: 4, spaceBetween: 18 },
-                        1440: { slidesPerGroup: 5, spaceBetween: 18 }
+                        1920: { slidesPerGroup: 5, spaceBetween: 18 }
                     }}
 
                     className="ranking-section__swiper"
