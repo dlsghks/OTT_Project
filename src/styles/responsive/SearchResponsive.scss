@@ -39,7 +39,7 @@
     .popular-searches__list { display: flex; flex-direction: column; gap: 7px; }
     .popular-searches:not(.is-expanded) .popular-searches__item:nth-child(n + 4) { display: none; }
     .popular-searches__item { gap: 26px; min-height: 36px; padding: 8px 20px; border: 1px solid #232c45; border-radius: 5px; background: #1a1d24; }
-    .popular-searches__item:first-child { min-height: 34px; border-color: #1351f9; background: #1351f9; }
+    .popular-searches__item.is-active { border-color: #1351f9; background: #1351f9; }
     .popular-searches__rank { width: 7px; line-height: 18px; color: #d4d4d4; font-size: 12px; font-weight: 400; }
     .popular-searches__keyword { line-height: 18px; color: #d4d4d4; font-size: 12px; }
     .trend { display: none; }

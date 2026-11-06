@@ -1,20 +1,52 @@
 
 import { useEffect, useState } from 'react';
-import searchIcon from '../assets/responsive/search.svg';
-import desktopSearchIcon from '../assets/responsive/search-desktop.svg';
-import closeIcon from '../assets/responsive/search-close.svg';
-import { categoryPages } from '../data/categoryData';
+import searchIcon from '../../assets/responsive/search.svg';
+import desktopSearchIcon from '../../assets/responsive/search-desktop.svg';
+import closeIcon from '../../assets/responsive/search-close.svg';
+import { categoryPages } from '../../data/categoryData';
 
-import { ContentCard } from '../components/home/ContentCard';
-import { popularKeywords, searchContents } from '../data/searchData';
+import { ContentCard } from '../../components/home/ContentCard';
+import { popularKeywords, searchContents } from '../../data/searchData';
 
-import '../styles/pages/Search.scss';
-import '../styles/responsive/SearchResponsive.scss';
+import '../../styles/pages/search/Search.scss';
+import '../../styles/responsive/SearchResponsive.scss';
 
 const STORAGE_KEY = 'wavve-recent-searches';
+const POPULAR_ROTATION_MS = 2000;
 
 export const Search = () => {
   const [popularExpanded, setPopularExpanded] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isApp, setIsApp] = useState(
+    () => window.matchMedia('(max-width: 1024px)').matches
+  );
+
+  // 접힌 목록: 앱 3개, PC 5개. 펼치면 전체 검색어를 순환합니다.
+  const visibleCount = Math.min(
+    popularKeywords.length,
+    popularExpanded ? popularKeywords.length : isApp ? 3 : 5
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1024px)');
+    const handleChange = () => setIsApp(media.matches);
+
+    handleChange();
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    setActiveIndex(0);
+    if (visibleCount <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % visibleCount);
+    }, POPULAR_ROTATION_MS);
+
+    return () => window.clearInterval(timer);
+  }, [visibleCount]);
+
 
   // 검색창 입력값
   const [keyword, setKeyword] = useState('');
@@ -185,10 +217,10 @@ export const Search = () => {
           </div>
 
           <div className="popular-searches__list">
-            {popularKeywords.map((item) => (
+            {popularKeywords.map((item, index) => (
               <button
                 type="button"
-                className="popular-searches__item"
+                className={`popular-searches__item${activeIndex % Math.max(1, visibleCount) === index ? " is-active" : ""}`}
                 key={item.rank}
                 onClick={() =>
                   handlePopularClick(item.keyword)

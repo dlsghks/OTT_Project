@@ -27,6 +27,12 @@
 }
 @media (min-width: 601px) and (max-width: 1024px) {
   .category-page {
+    .category-row__slider {
+      width: calc(100% + var(--app-side));
+      margin-right: calc(var(--app-side) * -1);
+    }
+    .category-row__swiper { container-type: inline-size; }
+    .category-row__swiper .swiper-slide.card-slide { width: calc((100cqw - 48px) / 4.5); }
     .category-filter__button { min-height: 36px; padding-inline: 20px; font-size: 12px; }
     .category-row { margin-bottom: 32px; }
     .category-row__title h2 { font-size: 18px; line-height: 26px; }

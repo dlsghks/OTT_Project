@@ -1,25 +1,22 @@
-
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-// 공통 레이아웃
+// 공통 레이아웃 및 홈
 import { Layout } from "../pages/layout/Layout";
-
-// 메인 페이지
 import { Home } from "../pages/home/Home";
 
-// 카테고리 페이지
+// 카테고리
 import { Entertainment } from "../pages/category/Entertainment";
 import { EntertainmentAll } from "../pages/category/EntertainmentAll";
+import { CategoryAll } from "../pages/category/CategoryAll";
+import { CollectionAll } from "../pages/category/CollectionAll";
 import { Drama } from "../pages/category/Drama";
 import { Movie } from "../pages/category/Movie";
 import { Currentaffairs } from "../pages/category/Currentaffairs";
 import { Animation } from "../pages/category/Animation";
 import { Global } from "../pages/category/Global";
-import { Live } from "../pages/live/Live";
 import { Category } from "../pages/category/Category";
 
-// 콘텐츠 상세 페이지
+// 콘텐츠 상세
 import { ProgramDetail } from "../pages/contents/ProgramDetail";
 import { MovieDetail } from "../pages/contents/MovieDetail";
 import { EntertainmentDetail } from "../pages/contents/EntertainmentDetail";
@@ -28,19 +25,26 @@ import { CurrentaffairsDetail } from "../pages/contents/CurrentaffairsDetail";
 import { AnimationDetail } from "../pages/contents/AnimationDetail";
 import { GlobalDetail } from "../pages/contents/GlobalDetail";
 
-// 라이브 페이지
+// 라이브
+import { Live } from "../pages/live/Live";
 import { LiveChannel } from "../pages/live/LiveChannel";
 import { Schedule } from "../pages/live/Schedule";
 
-// 레트로브 페이지
+// 레트로브
 import { RetroV } from "../pages/retrov/RetroV";
 import { RetrovDetail } from "../pages/retrov/RetrovDetail";
 
-// 이벤트 페이지
+// 이벤트
 import { Event } from "../pages/event/Event";
 import { EventDetail } from "../pages/event/EventDetail";
 
-// 검색 및 숏폼 페이지
+// 스페셜 및 뉴스
+import { SpecialPage } from "../pages/special/SpecialPage";
+import { TmdbOpen } from "../pages/special/TmdbOpen";
+import { NewsClipList } from "../pages/special/NewsClipList";
+import { NewsClip } from "../pages/special/NewsClip";
+
+// 검색 및 숏폼
 import { Search } from "../pages/search/Search";
 import { Shorts } from "../pages/shorts/Shorts";
 
@@ -54,7 +58,7 @@ import Inquiry from "../pages/support/Inquiry";
 import InquiryWrite from "../pages/support/InquiryWrite";
 import { Terms } from "../pages/support/Terms";
 
-// 회원 페이지
+// 회원
 import Login from "../pages/member/Login";
 import { Member } from "../pages/member/Member";
 import { ProfileSelect } from "../pages/member/ProfileSelect";
@@ -64,40 +68,24 @@ import { MyPage } from "../pages/member/MyPage";
 export const AppRouter = () => {
   return (
     <Routes>
-      {/* 공통 Layout을 사용하지 않는 페이지 */}
-      <Route
-        path="/profileselect"
-        element={<ProfileSelect />}
-      />
+      {/* 공통 레이아웃 미사용 */}
+      <Route path="/profileselect" element={<ProfileSelect />} />
+      <Route path="/profileedit" element={<ProfileEdit />} />
+      <Route path="/inquiry/write" element={<InquiryWrite />} />
 
-      <Route
-        path="/profileedit"
-        element={<ProfileEdit />}
-      />
-
-      {/* 1:1 문의 작성 - 공통 Layout 미적용 */}
-      <Route
-        path="/inquiry/write"
-        element={<InquiryWrite />}
-      />
-
-      {/* 공통 Layout 사용 */}
+      {/* 공통 레이아웃 */}
       <Route path="/" element={<Layout />}>
-        {/* 메인 */}
         <Route index element={<Home />} />
 
-        {/* 웨이브 콘텐츠 */}
-        <Route
-          path="/entertainment"
-          element={<Entertainment />}
-        />
+        {/* 카테고리 및 전체보기 */}
+        <Route path="/entertainment" element={<Entertainment />} />
         <Route path="/entertainment/all" element={<EntertainmentAll />} />
+        <Route path="/:category/all" element={<CategoryAll />} />
+        <Route path="/collection/:sectionId" element={<CollectionAll />} />
+
         <Route path="/drama" element={<Drama />} />
         <Route path="/movie" element={<Movie />} />
-        <Route
-          path="/currentaffairs"
-          element={<Currentaffairs />}
-        />
+        <Route path="/currentaffairs" element={<Currentaffairs />} />
         <Route path="/animation" element={<Animation />} />
         <Route path="/global" element={<Global />} />
         <Route path="/category" element={<Category />} />
@@ -107,10 +95,7 @@ export const AppRouter = () => {
           path="/programdetail/:programId"
           element={<ProgramDetail />}
         />
-        <Route
-          path="/moviedetail/:movieId"
-          element={<MovieDetail />}
-        />
+        <Route path="/moviedetail/:movieId" element={<MovieDetail />} />
         <Route
           path="/entertainmentdetail/:programId"
           element={<EntertainmentDetail />}
@@ -132,27 +117,25 @@ export const AppRouter = () => {
           element={<GlobalDetail />}
         />
 
-        {/* LIVE */}
+        {/* 라이브 */}
         <Route path="/live" element={<Live />} />
-        <Route
-          path="/livechannel"
-          element={<LiveChannel />}
-        />
+        <Route path="/livechannel" element={<LiveChannel />} />
         <Route path="/schedule" element={<Schedule />} />
 
         {/* 레트로브 */}
         <Route path="/retrov" element={<RetroV />} />
-        <Route
-          path="/retrov/:programId"
-          element={<RetrovDetail />}
-        />
+        <Route path="/retrov/:programId" element={<RetrovDetail />} />
 
         {/* 이벤트 */}
         <Route path="/event" element={<Event />} />
-        <Route
-          path="/eventdetail"
-          element={<EventDetail />}
-        />
+        <Route path="/eventdetail" element={<EventDetail />} />
+        <Route path="/event/:eventId" element={<EventDetail />} />
+
+        {/* 스페셜 및 뉴스 */}
+        <Route path="/special/:slug" element={<SpecialPage />} />
+        <Route path="/open" element={<TmdbOpen />} />
+        <Route path="/special/news/:tab" element={<NewsClipList />} />
+        <Route path="/news/clip/:clipId" element={<NewsClip />} />
 
         {/* 검색 및 숏폼 */}
         <Route path="/search" element={<Search />} />
@@ -161,21 +144,9 @@ export const AppRouter = () => {
         {/* 회사소개 및 고객센터 */}
         <Route path="/company" element={<Company />} />
         <Route path="/service" element={<Service />} />
-
         <Route path="/notice" element={<Notice />} />
-
-        {/* 기존 noticeview 주소 호환 */}
-        <Route
-          path="/noticeview"
-          element={<NoticeView />}
-        />
-
-        {/* develop 브랜치의 공지 상세 주소 */}
-        <Route
-          path="/notice/:id"
-          element={<NoticeView />}
-        />
-
+        <Route path="/noticeview" element={<NoticeView />} />
+        <Route path="/notice/:id" element={<NoticeView />} />
         <Route path="/support" element={<Support />} />
         <Route path="/inquiry" element={<Inquiry />} />
         <Route path="/terms" element={<Terms />} />

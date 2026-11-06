@@ -8,33 +8,40 @@
   --header-section-gap: clamp(20px, calc(2.232vw - 2.86px), 40px);
   --header-icon-gap: clamp(6px, calc(1.3395vw - 7.715px), 18px);
   --header-icon-size: clamp(24px, 1.667vw, 32px);
+
   position: sticky;
   top: 0;
   z-index: 100;
+
   width: 100%;
   margin: 0;
   padding: 0;
   background: #000;
   color: #8b8b8b;
 }
+
 .site-header,
 .site-header *,
 .site-header *::before,
 .site-header *::after {
   box-sizing: border-box;
 }
+
 .site-header > .inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--header-section-gap);
+
   width: 100%;
   max-width: none;
   min-width: 0;
   min-height: var(--header-height);
+
   margin: 0;
   padding: 0 var(--header-padding);
 }
+
 .site-header .header-left > ul,
 .site-header .header-right > ul {
   display: flex;
@@ -44,19 +51,23 @@
   padding: 0;
   list-style: none;
 }
+
 .site-header a {
   color: inherit;
   text-decoration: none;
 }
+
 .site-header a:hover {
   color: #fff;
 }
+
 .site-header a:focus-visible,
 .site-header button:focus-visible {
   outline: 2px solid #1351f9;
   outline-offset: 4px;
   border-radius: 4px;
 }
+
 .site-header .header-left {
   display: grid;
   grid-template-columns: var(--header-logo-width) minmax(0, 1fr);
@@ -65,6 +76,7 @@
   width: 100%;
   min-width: 0;
 }
+
 .site-header .header-left > h1 {
   width: var(--header-logo-width);
   min-width: 0;
@@ -73,11 +85,13 @@
   padding: 0;
   line-height: 0;
 }
+
 .site-header .header-left > h1 > a {
   display: block;
   width: 100%;
   height: auto;
 }
+
 .site-header .header-left > h1 > a > img {
   position: static;
   display: block;
@@ -93,17 +107,20 @@
   object-fit: contain;
   transform: none;
 }
+
 .site-header .header-left > ul {
   justify-content: flex-start;
   gap: var(--header-menu-gap);
   width: 100%;
   min-width: 0;
 }
+
 .site-header .header-left > ul > li {
   flex: 0 0 auto;
   margin: 0;
   padding: 0;
 }
+
 .site-header .header-left > ul > li > a {
   display: flex;
   align-items: center;
@@ -115,15 +132,18 @@
   line-height: 1.5;
   white-space: nowrap;
 }
+
 .site-header .header-right {
   width: max-content;
   min-width: max-content;
   margin: 0;
   padding: 0;
 }
+
 .site-header .header-right > ul {
   gap: var(--header-icon-gap);
 }
+
 .site-header .header-right > ul > li {
   display: flex;
   align-items: center;
@@ -134,6 +154,7 @@
   line-height: 1;
   white-space: nowrap;
 }
+
 .site-header .header-right > ul > li > button,
 .site-header .header-right > ul > li > a,
 .site-header .header-right > ul > li > a > button,
@@ -150,9 +171,11 @@
   background: transparent;
   line-height: 1;
 }
+
 .site-header .header-right button {
   cursor: pointer;
 }
+
 .site-header .header-right > ul > li > a > img,
 .site-header .header-right > ul > li > button > img,
 .site-header .header-right > ul > li > a > button > img {
@@ -168,15 +191,6 @@
   transform: none;
 }
 
-@media (max-width: 1024px) {
-  .site-header {
-    display: none;
-  }
-}
-body:has(.notice-page, .inquiry-write) .site-header {
-  background: #1b1b1b;
-}
-
 .site-header .header-right .header-notification-button {
   position: relative;
   overflow: visible;
@@ -186,14 +200,17 @@ body:has(.notice-page, .inquiry-write) .site-header {
   position: absolute;
   top: -5px;
   right: -7px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
   border: 2px solid #000;
   border-radius: 999px;
+
   background: #f33445;
   color: #fff;
   font: 700 10px/1 Arial, sans-serif;
@@ -201,13 +218,14 @@ body:has(.notice-page, .inquiry-write) .site-header {
 }
 
 .header-notification-portal {
-  width: min(480px, 100vw - 32px);
+  width: min(480px, calc(100vw - 32px));
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   color: #fff;
   white-space: normal;
 }
+
 .header-notification-portal > .notification-panel {
   position: static;
   inset: auto;
@@ -215,4 +233,14 @@ body:has(.notice-page, .inquiry-write) .site-header {
   max-width: none;
   margin: 0;
   transform: none;
+}
+
+body:has(.notice-page, .inquiry-write) .site-header {
+  background: #1b1b1b;
+}
+
+@media (max-width: 1024px) {
+  .site-header {
+    display: none;
+  }
 }

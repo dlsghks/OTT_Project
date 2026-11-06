@@ -1,12 +1,14 @@
+@use "../../common/figma-tokens" as figma;
+
 /* =========================
    상세 페이지 통합 스타일 (영화 · 예능 · 드라마 · 시사교양 · 애니 · 해외시리즈)
    사용: pages/contents/MovieDetail.jsx, components/detail/TvDetail.jsx
    히어로 아래로 관련영상 · 회차 · 테마 섹션 나열 (섹션 간격 80px)
 ========================= */
 
-$buy-blue: #1f4ef5;
-$buy-blue-hover: #3561ff;
-$text-sub: #b9c3d4;
+$buy-blue: figma.$primary-main;
+$buy-blue-hover: figma.$primary-click;
+$text-sub: figma.$neutral-2;
 
 .movie-detail {
   // 페이지 좌우 여백을 넘어 화면 전체 배경
@@ -198,7 +200,7 @@ $text-sub: #b9c3d4;
     height: 56px;
 
     border: 0;
-    border-radius: 6px;
+    border-radius: figma.$button-radius-wavve;
     background: $buy-blue;
 
     color: #fff;
@@ -210,6 +212,10 @@ $text-sub: #b9c3d4;
 
     &:hover {
       background: $buy-blue-hover;
+    }
+
+    &:active {
+      background: figma.$button-pressed;
     }
 
     // 로그인 전: 로그인 버튼 (시안 289*65)
@@ -237,7 +243,7 @@ $text-sub: #b9c3d4;
     cursor: pointer;
 
     &.is-active {
-      color: $buy-blue-hover;
+      color: figma.$primary-main;
     }
   }
 
