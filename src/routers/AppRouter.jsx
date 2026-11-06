@@ -129,8 +129,7 @@ export const AppRouter = () => {
 
         {/* 이벤트 */}
         <Route path="/event" element={<Event />} />
-        <Route path="/eventdetail" element={<EventDetail />} />
-        <Route path="/event/:eventId" element={<EventDetail />} />
+        <Route path="/eventdetail/:eventId" element={<EventDetail />} />
 
         {/* 스페셜 및 뉴스 */}
         <Route path="/special/:slug" element={<SpecialPage />} />
