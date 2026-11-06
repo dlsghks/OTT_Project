@@ -65,6 +65,7 @@ import { ProfileSelect } from "../pages/member/ProfileSelect";
 import { ProfileEdit } from "../pages/member/ProfileEdit";
 import { MyPage } from "../pages/member/MyPage";
 import InquiryDetail from "../pages/support/InquiryDetail";
+import Voucher from "../pages/member/Voucher";
 
 export const AppRouter = () => {
   return (
@@ -151,6 +152,9 @@ export const AppRouter = () => {
         <Route path="/inquiry" element={<Inquiry />} />
         <Route path="/inquiry/:id" element={<InquiryDetail />} />
         <Route path="/terms" element={<Terms />} />
+
+        {/* 이용원 구매 */}
+        <Route path="/voucher" element={<Voucher />} />
 
         {/* 회원 */}
         <Route path="/login" element={<Login />} />

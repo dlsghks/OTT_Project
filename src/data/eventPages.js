@@ -100,7 +100,7 @@ export const eventPages = {
         top: 27.7,
         width: 83,
         height: 1.9,
-        message: "이용권 구매 페이지는 준비 중입니다.",
+        to: "/voucher",
       },
     ],
   },
