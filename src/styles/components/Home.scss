@@ -216,14 +216,14 @@
     }
 
     &.active {
-      box-shadow: inset 0 0 0 3px #2057ec;
+      box-shadow: inset 0 0 0 3px #1351F9;
     }
 
     &.active::after {
       content: '';
       position: absolute;
       inset: 0;
-      border: 3px solid #2057ec;
+      border: 3px solid #1351F9;
       border-radius: inherit;
       pointer-events: none;
     }
@@ -426,7 +426,7 @@
 
   // 제목과 카드 간격
   .home-section__head {
-    margin-bottom: 26px;
+    margin-bottom: 24px;
   }
 
   // 슬라이드 영역
@@ -453,7 +453,7 @@
 
     .content-card__thumbnail {
       aspect-ratio: 318 / 477;
-      border-radius: 15px;
+      border-radius: 10px;
     }
 
     img {
@@ -598,7 +598,7 @@
     }
 
     .content-section__swiper .swiper-slide {
-      width: 216px;
+      width: 220px;
       flex-shrink: 0;
       // 자동 너비 측정에 공통 카드 여백이 중복 포함되지 않도록 한다.
       // 실제 카드 간격은 Swiper의 인라인 spaceBetween(18px)을 사용한다.
@@ -611,7 +611,7 @@
     }
 
     .content-section .content-card__thumbnail {
-      height: 324px;
+      height: 330px;
       aspect-ratio: 2 / 3;
     }
   }

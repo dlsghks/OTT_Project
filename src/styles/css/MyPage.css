@@ -111,7 +111,11 @@
   height: 25px;
 }
 
-.wavve-mypage .mypage__edit > img {
+.wavve-mypage .mypage__edit > picture {
+  display: block;
+}
+
+.wavve-mypage .mypage__edit img {
   position: static;
   display: block;
   width: 25px;
@@ -163,7 +167,7 @@
 
 .wavve-mypage .mypage__summary > .mypage__retro-summary {
   background: linear-gradient(#000, #000) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
-  font-family: "DungGeunMo", "Pretendard", sans-serif;
+  font-family: "DungGeunMo", "Pretendard", "Noto Sans KR", sans-serif;
 }
 
 .wavve-mypage .mypage__retro-summary dt {
@@ -374,7 +378,7 @@
 
 .wavve-mypage .mypage__retro > h2 {
   margin-bottom: 20px;
-  font-family: "DungGeunMo", "Pretendard", sans-serif;
+  font-family: "DungGeunMo", "Pretendard", "Noto Sans KR", sans-serif;
   font-size: 30px;
   font-weight: 400;
   line-height: 41px;
@@ -420,7 +424,7 @@
 }
 
 .wavve-mypage .mypage__content-card--retro .mypage__card-title {
-  font-family: "DungGeunMo", "Pretendard", sans-serif;
+  font-family: "DungGeunMo", "Pretendard", "Noto Sans KR", sans-serif;
 }
 
 .wavve-mypage .mypage__library-grid {
@@ -709,166 +713,6 @@
   background: #1351f9;
 }
 
-@media (max-width: 1200px) {
-  .wavve-mypage .mypage__summary > div {
-    padding: 24px 20px;
-  }
-  .wavve-mypage .mypage__tabs {
-    gap: 24px;
-  }
-  .wavve-mypage .mypage__management-grid {
-    gap: 20px;
-  }
-  .wavve-mypage .mypage__management-grid > a, .wavve-mypage .mypage__management-grid > button {
-    padding-inline: 14px;
-    font-size: 15px;
-  }
-}
-@media (max-width: 900px) {
-  .wavve-mypage .mypage__summary {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .wavve-mypage .mypage__management-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .wavve-mypage .mypage__pass-button {
-    margin-left: auto;
-  }
-}
-@media (max-width: 768px) {
-  .wavve-mypage {
-    padding: 36px 0 48px;
-  }
-  .wavve-mypage .mypage__profile-row {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .wavve-mypage .mypage__profile-img {
-    width: 64px;
-    min-width: 64px;
-    max-width: 64px;
-    height: 64px;
-    flex-basis: 64px;
-  }
-  .wavve-mypage .mypage__profile-copy {
-    min-width: 0;
-    flex: 1;
-  }
-  .wavve-mypage .mypage__profile-heading h1 {
-    font-size: 20px;
-  }
-  .wavve-mypage .mypage__profile-copy > p {
-    font-size: 13px;
-  }
-  .wavve-mypage .mypage__pass-button {
-    width: 100%;
-    margin-left: 0;
-  }
-  .wavve-mypage .mypage__summary {
-    gap: 12px;
-    margin-top: 28px;
-  }
-  .wavve-mypage .mypage__summary > div {
-    min-height: 116px;
-    padding: 20px 16px;
-  }
-  .wavve-mypage .mypage__summary dt {
-    font-size: 14px;
-  }
-  .wavve-mypage .mypage__summary dd {
-    margin-top: 12px;
-    font-size: 18px;
-  }
-  .wavve-mypage .mypage__library {
-    margin-top: 36px;
-  }
-  .wavve-mypage .mypage__tabs {
-    gap: 12px;
-    min-height: 44px;
-  }
-  .wavve-mypage .mypage__tabs > button, .wavve-mypage .mypage__tabs > button:nth-child(2) {
-    min-width: max-content;
-    padding: 0 8px 12px;
-    font-size: 16px;
-    line-height: 28px;
-  }
-  .wavve-mypage .mypage__filter-row {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .wavve-mypage .mypage__filters {
-    gap: 4px;
-  }
-  .wavve-mypage .mypage__filters > button {
-    min-width: 0;
-    height: 40px;
-    padding: 0 12px;
-    font-size: 13px;
-  }
-  .wavve-mypage .mypage__total {
-    margin-left: auto;
-    font-size: 13px;
-  }
-  .wavve-mypage .mypage__library-panel {
-    min-height: 420px;
-    padding-top: 32px;
-  }
-  .wavve-mypage .mypage__empty {
-    gap: 14px;
-    min-height: 300px;
-    margin-top: 24px;
-  }
-  .wavve-mypage .mypage__empty > h2 {
-    font-size: 18px;
-    line-height: 28px;
-  }
-  .wavve-mypage .mypage__empty > p {
-    max-width: 290px;
-    font-size: 14px;
-    line-height: 23px;
-  }
-  .wavve-mypage .mypage__browse {
-    min-width: 160px;
-    min-height: 44px;
-    font-size: 14px;
-  }
-  .wavve-mypage .mypage__management > h2 {
-    font-size: 18px;
-  }
-  .wavve-mypage .mypage__management-grid {
-    gap: 12px;
-    margin-top: 16px;
-  }
-  .wavve-mypage .mypage__management-grid > a, .wavve-mypage .mypage__management-grid > button {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
-  .wavve-mypage .mypage__retro {
-    margin-top: 48px;
-  }
-  .wavve-mypage .mypage__retro > h2 {
-    font-size: 24px;
-    line-height: 32px;
-  }
-  .wavve-mypage .mypage__retro-list, .wavve-mypage .mypage__library-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 12px;
-  }
-  .wavve-mypage .mypage__card-title {
-    font-size: 16px;
-    line-height: 22px;
-  }
-  .wavve-mypage .mypage__events {
-    --banner-width: calc(100vw - 40px);
-    --banner-gap: 12px;
-    margin-top: 56px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wavve-mypage .mypage__event-track {
-    transition: none;
-  }
-}
 .wavve-mypage .mypage__poster-frame {
   width: 100%;
   aspect-ratio: 261/375;
@@ -890,7 +734,531 @@
   transform: scale(1.04);
 }
 
+.wavve-mypage .mypage__mobile-actions,
+.wavve-mypage .mypage__mobile-copy {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .wavve-mypage .mypage__summary > div {
+    padding: 24px 20px;
+  }
+  .wavve-mypage .mypage__tabs {
+    gap: 24px;
+  }
+  .wavve-mypage .mypage__management-grid {
+    gap: 20px;
+  }
+  .wavve-mypage .mypage__management-grid > a, .wavve-mypage .mypage__management-grid > button {
+    padding-inline: 14px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 1024px) {
+  .wavve-mypage {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0 48px;
+  }
+  .wavve-mypage .mypage__inner {
+    display: contents;
+  }
+  .wavve-mypage .mypage__mobile-copy {
+    display: inline;
+  }
+  .wavve-mypage .mypage__desktop-copy {
+    display: none;
+  }
+  .wavve-mypage .mypage__profile-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    align-items: center;
+    gap: 23px 12px;
+    width: calc(100% - 36px);
+    min-height: 0;
+    margin-inline: 18px;
+  }
+  .wavve-mypage .mypage__profile-img {
+    width: 54px;
+    min-width: 54px;
+    max-width: 54px;
+    height: 54px;
+  }
+  .wavve-mypage .mypage__profile-copy {
+    min-width: 0;
+    padding-right: 68px;
+    gap: 3px;
+  }
+  .wavve-mypage .mypage__profile-heading {
+    min-width: 0;
+    gap: 6px;
+  }
+  .wavve-mypage .mypage__profile-heading h1 {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14.4px;
+    line-height: 1.35;
+  }
+  .wavve-mypage .mypage__profile-heading h1 > span {
+    margin-left: 6px;
+  }
+  .wavve-mypage .mypage__profile-copy > p {
+    font-size: 10.8px;
+    line-height: 16px;
+    overflow-wrap: anywhere;
+  }
+  .wavve-mypage .mypage__edit {
+    flex-basis: 15px;
+    width: 15px;
+    height: 15px;
+  }
+  .wavve-mypage .mypage__edit > picture {
+    display: block;
+  }
+  .wavve-mypage .mypage__edit img {
+    display: block;
+    position: static;
+    width: 15px;
+    max-width: 15px;
+    height: 15px;
+  }
+  .wavve-mypage .mypage__mobile-actions {
+    position: absolute;
+    top: 10px;
+    right: 2px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .wavve-mypage .mypage__mobile-actions > button,
+  .wavve-mypage .mypage__mobile-actions > a {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .wavve-mypage .mypage__mobile-actions > button::before,
+  .wavve-mypage .mypage__mobile-actions > a::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 32px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+  .wavve-mypage .mypage__mobile-actions img {
+    position: static;
+    display: block;
+    max-width: none;
+  }
+  .wavve-mypage .mypage__mobile-actions > button img {
+    width: 15.5317px;
+    height: 17.2657px;
+  }
+  .wavve-mypage .mypage__mobile-actions > a img {
+    width: 19px;
+    height: 19px;
+  }
+  .wavve-mypage .mypage__pass-button {
+    grid-column: 1/-1;
+    width: calc(100% - 4px);
+    min-height: 44px;
+    height: 44px;
+    margin: 0 2px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+  .wavve-mypage .mypage__summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 8px;
+    width: calc(100% - 40px);
+    margin: 23px 20px 0;
+  }
+  .wavve-mypage .mypage__summary > div {
+    min-height: 79px;
+    padding: 12px 11px 8px;
+    border-radius: 6px;
+    background: #181b25;
+  }
+  .wavve-mypage .mypage__summary dt {
+    color: #adb1bf;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+  .wavve-mypage .mypage__summary dd {
+    margin-top: 0;
+    font-size: 23px;
+    line-height: 30px;
+  }
+  .wavve-mypage .mypage__summary > .mypage__retro-summary {
+    background: linear-gradient(#181b25, #181b25) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
+  }
+  .wavve-mypage .mypage__library {
+    width: calc(100% - 32px);
+    margin: 31px 16px 0;
+  }
+  .wavve-mypage .mypage__tabs {
+    gap: clamp(8px, (100vw - 293px) / 3, 32px);
+    min-height: 21.05px;
+    height: 21.05px;
+  }
+  .wavve-mypage .mypage__tabs > button,
+  .wavve-mypage .mypage__tabs > button:nth-child(2) {
+    flex: 1 1 63px;
+    min-width: 0;
+    padding: 0 0 4.5px;
+    border-bottom: 1.35px solid #141414;
+    font-size: 10.8px;
+    line-height: 16.2px;
+  }
+  .wavve-mypage .mypage__tabs > button:nth-child(2) {
+    flex-basis: 72px;
+  }
+  .wavve-mypage .mypage__tabs > button[aria-selected=true] {
+    border-bottom-color: #fff;
+  }
+  .wavve-mypage .mypage__tabs > button[aria-selected=true]::after {
+    display: none;
+  }
+  .wavve-mypage .mypage__library-panel {
+    position: relative;
+    min-height: 378px;
+    padding-top: 7.85px;
+  }
+  .wavve-mypage .mypage__filter-row {
+    min-height: 32px;
+    gap: 0;
+  }
+  .wavve-mypage .mypage__filters {
+    gap: 7.2px;
+  }
+  .wavve-mypage .mypage__filters > button {
+    min-width: 51.6px;
+    height: 28.8px;
+    padding: 0 12px;
+    border-radius: 3.6px;
+    color: #fff;
+    font-size: 9.6px;
+    font-weight: 500;
+  }
+  .wavve-mypage .mypage__filters > button:nth-child(2) {
+    min-width: 66px;
+  }
+  .wavve-mypage .mypage__filters > button[aria-pressed=true] {
+    background: #000;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .wavve-mypage .mypage__total {
+    display: none;
+  }
+  .wavve-mypage .mypage__empty {
+    width: min(100%, 235px);
+    min-height: 0;
+    margin: 82.05px auto 0;
+    gap: 10px;
+  }
+  .wavve-mypage .mypage__empty > picture {
+    display: block;
+    height: 38.4px;
+  }
+  .wavve-mypage .mypage__empty-icon {
+    width: 38.4px;
+    min-width: 38.4px;
+    max-width: 38.4px;
+    height: 38.4px;
+  }
+  .wavve-mypage .mypage__empty > h2 {
+    font-size: 14.4px;
+    line-height: 21.6px;
+  }
+  .wavve-mypage .mypage__empty > p {
+    font-size: 10.2px;
+    line-height: 15.3px;
+    white-space: nowrap;
+  }
+  .wavve-mypage .mypage__browse {
+    min-width: 111.6px;
+    min-height: 28.8px;
+    padding: 0 12px;
+    border-radius: 3.6px;
+    font-size: 9.6px;
+  }
+  .wavve-mypage .mypage__library-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 8px;
+    padding: 20px 0 32px;
+  }
+  .wavve-mypage .mypage__card-title {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .wavve-mypage .mypage__management {
+    width: calc(100% - 32px);
+    margin-inline: 16px;
+    padding: 0;
+    border: 0;
+  }
+  .wavve-mypage .mypage__management > h2 {
+    display: none;
+  }
+  .wavve-mypage .mypage__management-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px 12px;
+    margin: 0;
+  }
+  .wavve-mypage .mypage__management-grid > a,
+  .wavve-mypage .mypage__management-grid > button {
+    min-height: 33px;
+    height: 33px;
+    padding: 7px 10px;
+    border: 0.5px solid rgba(115, 115, 115, 0.2);
+    color: #737373;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 16px;
+  }
+  .wavve-mypage .mypage__management-grid span {
+    font-size: 10px;
+  }
+  .wavve-mypage .mypage__events {
+    --banner-width: 100%;
+    --banner-gap: 0px;
+    order: 1;
+    width: 100%;
+    margin-top: 44px;
+  }
+  .wavve-mypage .mypage__event-track {
+    width: 100%;
+    margin-left: 0;
+  }
+  .wavve-mypage .mypage__banner {
+    height: 140px;
+    aspect-ratio: auto;
+  }
+  .wavve-mypage .mypage__banner-copy {
+    top: 27px;
+    left: 23px;
+    white-space: normal;
+  }
+  .wavve-mypage .mypage__banner-copy > p:first-child {
+    display: none;
+  }
+  .wavve-mypage .mypage__banner-copy > h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .wavve-mypage .mypage__banner-copy em {
+    display: block;
+    color: #ff3b00;
+  }
+  .wavve-mypage .mypage__banner-copy > p:last-child {
+    width: 154px;
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .wavve-mypage .mypage__banner-art--left {
+    display: none;
+  }
+  .wavve-mypage .mypage__banner .mypage__banner-art--right {
+    top: 3px;
+    left: auto;
+    right: 5px;
+    width: 152px;
+    height: 152px;
+    transform: scaleX(-1);
+  }
+  .wavve-mypage .mypage__banner--lines .mypage__banner-copy {
+    left: 23px;
+  }
+  .wavve-mypage .mypage__heart {
+    width: auto;
+    height: auto;
+  }
+  .wavve-mypage .mypage__heart--0 {
+    left: calc(100% - 188.905px);
+    top: 58.124px;
+  }
+  .wavve-mypage .mypage__heart--1 {
+    left: calc(100% - 201px);
+    top: 35px;
+    width: auto;
+  }
+  .wavve-mypage .mypage__heart--2 {
+    left: calc(100% - 173.127px);
+    top: 10.894px;
+    width: auto;
+  }
+  .wavve-mypage .mypage__heart--3 {
+    left: calc(100% - 40.882px);
+    top: 121.154px;
+    width: auto;
+  }
+  .wavve-mypage .mypage__heart--4 {
+    left: calc(100% - 12px);
+    top: 101px;
+  }
+  .wavve-mypage .mypage__event-controls {
+    right: 8px;
+    bottom: 5px;
+    gap: 8px;
+  }
+  .wavve-mypage .mypage__retro {
+    order: 2;
+    width: calc(100% - 32px);
+    margin: 33px 16px 0;
+  }
+  .wavve-mypage .mypage__retro > h2 {
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 14px;
+  }
+  .wavve-mypage .mypage__retro-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .wavve-mypage .mypage__retro-list::-webkit-scrollbar {
+    display: none;
+  }
+  .wavve-mypage .mypage__retro-list > li {
+    flex: 0 0 100px;
+    min-width: 0;
+  }
+  .wavve-mypage .mypage__retro-list .mypage__poster-frame {
+    aspect-ratio: 2/3;
+    border-radius: 6px;
+  }
+  .wavve-mypage .mypage__retro-list .mypage__card-title {
+    font-size: 10px;
+    line-height: 15px;
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-mypage .mypage__profile-row {
+    width: calc(100% - 48px);
+    margin-inline: 24px;
+  }
+  .wavve-mypage .mypage__profile-copy {
+    gap: 5px;
+  }
+  .wavve-mypage .mypage__profile-heading h1 {
+    font-size: 18px;
+  }
+  .wavve-mypage .mypage__profile-copy > p {
+    font-size: 13px;
+  }
+  .wavve-mypage .mypage__summary {
+    width: calc(100% - 48px);
+    margin-inline: 24px;
+  }
+  .wavve-mypage .mypage__summary > div {
+    padding: 16px;
+    min-height: 92px;
+  }
+  .wavve-mypage .mypage__summary dt {
+    font-size: 14px;
+  }
+  .wavve-mypage .mypage__library {
+    width: calc(100% - 48px);
+    margin-inline: 24px;
+  }
+  .wavve-mypage .mypage__tabs {
+    gap: 24px;
+    height: 36px;
+  }
+  .wavve-mypage .mypage__tabs > button {
+    font-size: 14px;
+    line-height: 24px;
+  }
+  .wavve-mypage .mypage__tabs > button:nth-child(2) {
+    font-size: 14px;
+    line-height: 24px;
+  }
+  .wavve-mypage .mypage__filter-row {
+    min-height: 40px;
+  }
+  .wavve-mypage .mypage__filters > button {
+    height: 36px;
+    padding-inline: 18px;
+    font-size: 12px;
+  }
+  .wavve-mypage .mypage__library-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px 12px;
+  }
+  .wavve-mypage .mypage__management {
+    width: calc(100% - 48px);
+    margin-inline: 24px;
+  }
+  .wavve-mypage .mypage__management-grid > a,
+  .wavve-mypage .mypage__management-grid > button {
+    height: 44px;
+    font-size: 12px;
+  }
+  .wavve-mypage .mypage__events {
+    --banner-width: min(720px, 100%);
+    background: #000;
+  }
+  .wavve-mypage .mypage__event-track {
+    margin-left: calc((100% - var(--banner-width)) / 2);
+  }
+  .wavve-mypage .mypage__banner {
+    height: 160px;
+  }
+  .wavve-mypage .mypage__banner-copy {
+    top: 32px;
+    left: 32px;
+  }
+  .wavve-mypage .mypage__banner-copy > h2 {
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .wavve-mypage .mypage__banner-copy > p:last-child {
+    width: 260px;
+    font-size: 12px;
+  }
+  .wavve-mypage .mypage__retro {
+    width: calc(100% - 48px);
+    margin-inline: 24px;
+  }
+  .wavve-mypage .mypage__retro > h2 {
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 12px;
+  }
+  .wavve-mypage .mypage__retro-list {
+    gap: 12px;
+  }
+  .wavve-mypage .mypage__retro-list > li {
+    flex-basis: calc((100% - 36px) / 4);
+  }
+  .wavve-mypage .mypage__retro-list .mypage__card-title {
+    font-size: 13px;
+    line-height: 19px;
+  }
+}
+@media (min-width: 901px) and (max-width: 1024px) {
+  .wavve-mypage .mypage__library-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
 @media (prefers-reduced-motion: reduce) {
+  .wavve-mypage .mypage__event-track,
   .wavve-mypage .mypage__poster-frame > .mypage__poster {
     transition: none;
   }
