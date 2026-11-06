@@ -1,3 +1,9 @@
+import { MyPageEventCarousel } from "../../components/member/MyPageEventCarousel";
+import { MemberInfoModal } from "../../components/member/MemberInfoModal";
+import { getImagePath } from "../../utils/imagePath";
+import { useProfileFavorites } from "../../utils/profileFavorites";
+import { EditorCollectionSlider } from "../../components/member/EditorCollectionSlider";
+import { useEditorPicks } from "../../utils/profileEditorPicks";
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -42,7 +48,7 @@ const TABS = [
   { key: "downloads", label: "다운로드", title: "아직 다운로드한 콘텐츠가 없어요" },
 ];
 const FILTERS = [
-  { key: "all", label: "전체" },
+  { key: "editor", label: "에디터 Pick" },
   { key: "program", label: "프로그램" },
   { key: "movie", label: "영화" },
   { key: "shorts", label: "숏츠" },
@@ -94,13 +100,13 @@ const MyPagePoster = ({ item, isShorts }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const sources = isShorts
     ? [item.image, item.fallbackImage, emptyImage].filter(Boolean)
-    : [item.image, emptyImage].filter(Boolean);
+    : [item.image || item.poster, emptyImage].filter(Boolean);
   const useFallback = () => setImageIndex((index) => Math.min(index + 1, sources.length - 1));
 
   return (
     <img
       className="mypage__poster"
-      src={sources[imageIndex]}
+      src={getImagePath(sources[imageIndex])}
       alt={isShorts ? item.title || "저장한 숏츠 재생" : ""}
       loading="lazy"
       width="261"
@@ -109,7 +115,7 @@ const MyPagePoster = ({ item, isShorts }) => {
       onLoad={(event) => {
         // 일부 영상은 없는 고해상도 이미지 대신 작은 기본 이미지를 반환합니다.
         if (isShorts && imageIndex === 0 && sources.length > 1 &&
-            event.currentTarget.naturalWidth <= 120) useFallback();
+          event.currentTarget.naturalWidth <= 120) useFallback();
       }}
     />
   );
@@ -128,12 +134,14 @@ export const MyPage = ({
     likedIds: likedShortsIds,
     watchedIds: watchedShortsIds,
   } = useProfileShorts();
+  const { favorites: savedFavorites } = useProfileFavorites();
+  const { liked: likedEditorPicks } = useEditorPicks();
   const displayedName = selectedProfile.name || profileName;
   const displayedAvatar = selectedProfile.image || avatar;
+  const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
   const [activeTab, setActiveTab] = useState("history");
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [activeEvent, setActiveEvent] = useState(() => window.matchMedia("(max-width: 1024px)").matches ? 0 : 1);
+  const [activeFilter, setActiveFilter] = useState("program");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const dialogRef = useRef(null);
@@ -227,16 +235,22 @@ export const MyPage = ({
         !watchedShorts.some((short) => short.id === item.id)
       ),
     ],
-    // 전체에서는 모두 표시하고, 숏츠 필터에서는 좋아요한 숏츠만 표시합니다.
+    // 관심 숏츠는 현재 프로필의 좋아요 목록을 사용합니다.
     favorites: [
-      ...favoriteItems.filter((item) => item.type !== "shorts"),
+      ...savedFavorites,
+      ...favoriteItems.filter((item) => item.type !== "shorts" && !savedFavorites.some(saved => saved.id === item.id)),
       ...likedShorts,
     ],
     purchases: purchasedItems,
     downloads: downloadItems,
   };
   const currentItems = lists[activeTab];
-  const visibleItems = activeFilter === "all" ? currentItems : currentItems.filter((item) => item.type === activeFilter);
+  const visibleItems = currentItems.filter((item) => item.type === activeFilter);
+  const editorCollections = activeTab === 'favorites' ? likedEditorPicks : [];
+  const editorHeading = '관심 에디터 Pick';
+  const isEditorFilter = activeTab === 'favorites' && activeFilter === 'editor';
+  const displayCount = isEditorFilter ? editorCollections.length : visibleItems.length;
+  const filterLabel = FILTERS.find(filter => filter.key === activeFilter)?.label;
   const currentTab = TABS.find((tab) => tab.key === activeTab);
 
   useEffect(() => {
@@ -247,7 +261,7 @@ export const MyPage = ({
     if (onAction) onAction(action);
     else setDialogTitle(title);
   };
-  const changeTab = (key) => { setActiveTab(key); setActiveFilter("all"); };
+  const changeTab = (key) => { setActiveTab(key); setActiveFilter(key === "favorites" ? "editor" : "program"); };
   const handleTabKeyDown = (event, index) => {
     let nextIndex;
     if (event.key === "ArrowRight") nextIndex = (index + 1) % TABS.length;
@@ -262,32 +276,48 @@ export const MyPage = ({
 
   const renderCard = (item, retro = false) => {
     const isShorts = item.type === "shorts";
+    const className =
+      `mypage__content-card${retro ? " mypage__content-card--retro" : ""}`;
+
     const body = (
       <>
-        <div className={`mypage__poster-frame${isShorts ? " mypage__poster-frame--shorts" : ""}`}>
-          <MyPagePoster key={`${item.id}:${item.image}`} item={item} isShorts={isShorts} />
-          {isShorts && (
-            <span className="mypage__shorts-badge">
-              <svg width="10" height="12" viewBox="0 0 10 12" aria-hidden="true" focusable="false">
-                <path d="M1 1L9 6L1 11Z" fill="currentColor" />
-              </svg>
-              숏츠
-            </span>
-          )}
+        <div
+          className={`mypage__poster-frame${isShorts ? " mypage__poster-frame--shorts" : ""
+            }`}
+        >
+          <MyPagePoster
+            key={`${item.id}:${item.image}`}
+            item={item}
+            isShorts={isShorts}
+          />
         </div>
 
-        {!isShorts && (
-          <span className="mypage__card-title">
-            {item.title}
-          </span>
+        {!isShorts && !retro && (
+          <span className="mypage__card-title">{item.title}</span>
         )}
       </>
     );
-    const className = `mypage__content-card${retro ? " mypage__content-card--retro" : ""}`;
+
     return (
       <li key={item.id}>
-        {onOpenContent && item.type !== "shorts" ? <button className={className} type="button" onClick={() => onOpenContent(item)}>{body}</button>
-          : <Link className={className} to={item.to || (retro ? "/retrov" : "/category")}>{body}</Link>}
+        {onOpenContent && !isShorts ? (
+          <button
+            className={className}
+            type="button"
+            aria-label={item.title}
+            onClick={() => onOpenContent(item)}
+          >
+            {body}
+          </button>
+        ) : (
+          <Link
+            className={className}
+            aria-label={item.title}
+            to={item.to || (retro ? "/retrov" : "/category")}
+          >
+            {body}
+          </Link>
+        )}
       </li>
     );
   };
@@ -296,21 +326,47 @@ export const MyPage = ({
     <section className="wavve-mypage" aria-label="마이페이지">
       <div className="mypage__inner">
         <div className="mypage__profile-row">
-          <img className="mypage__profile-img" src={displayedAvatar} alt={`${displayedName} 프로필`} width="90" height="90" />
+          <img
+            className="mypage__profile-img"
+            src={displayedAvatar}
+            alt={`${displayedName} 프로필`}
+            width="90"
+            height="90"
+          />
+
           <div className="mypage__profile-copy">
             <div className="mypage__profile-heading">
-              <h1>{displayedName}<span>님</span></h1>
-              <Link className="mypage__edit" to="/profileedit" aria-label="프로필 수정">
-                <picture><source media="(max-width: 1024px)" srcSet={mobilePencil} /><img src={pencilImage} alt="" width="25" height="25" /></picture>
+              <h1>
+                {displayedName}<span>님</span>
+              </h1>
+
+              <Link
+                className="mypage__edit"
+                to="/profileedit"
+                aria-label="프로필 수정"
+              >
+                <picture>
+                  <source
+                    media="(max-width: 1024px)"
+                    srcSet={mobilePencil}
+                  />
+                  <img src={pencilImage} alt="" width="25" height="25" />
+                </picture>
               </Link>
             </div>
+
             <p>{passName || "보유하신 이용권이 없습니다"}</p>
           </div>
+
           <div className="mypage__mobile-actions">
             <button
               ref={notificationButtonRef}
               type="button"
-              aria-label={unreadCount > 0 ? `알림, 읽지 않은 알림 ${unreadCount}개` : "알림"}
+              aria-label={
+                unreadCount > 0
+                  ? `알림, 읽지 않은 알림 ${unreadCount}개`
+                  : "알림"
+              }
               aria-expanded={isNotificationOpen}
               aria-controls={notificationPanelId}
               style={{ position: "relative", overflow: "visible" }}
@@ -320,139 +376,370 @@ export const MyPage = ({
               }}
             >
               <img src={mobileBell} alt="" />
+
               {isLoggedIn && unreadCount > 0 && (
-                <span aria-hidden="true" style={{
-                  position: "absolute", top: -4, right: -4,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  minWidth: 18, height: 18, padding: "0 4px",
-                  boxSizing: "border-box", borderRadius: 999,
-                  background: "#f33445", color: "#fff",
-                  font: "700 10px/1 Arial, sans-serif", pointerEvents: "none",
-                }}>
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    top: -4,
+                    right: -4,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minWidth: 18,
+                    height: 18,
+                    padding: "0 4px",
+                    boxSizing: "border-box",
+                    borderRadius: 999,
+                    background: "#f33445",
+                    color: "#fff",
+                    font: "700 10px/1 Arial, sans-serif",
+                    pointerEvents: "none",
+                  }}
+                >
                   {unreadCount > 99 ? "99+" : unreadCount}
                 </span>
               )}
             </button>
-            <Link to="/profileedit" aria-label="프로필 설정"><img src={mobileSettings} alt="" /></Link>
+
+            <Link
+              to="/settings"
+              state={{ from: "/mypage" }}
+              aria-label="환경설정"
+            >
+              <img src={mobileSettings} alt="" />
+            </Link>
           </div>
-          <button className="mypage__pass-button" type="button" onClick={() => requestAction("purchase-pass", "이용권 구매")}><span className="mypage__desktop-copy">이용권 구매</span><span className="mypage__mobile-copy">이용권 구매하기</span></button>
+
+          <button
+            className="mypage__pass-button"
+            type="button"
+            onClick={() => requestAction("purchase-pass", "이용권 구매")}
+          >
+            <span className="mypage__desktop-copy">이용권 구매</span>
+            <span className="mypage__mobile-copy">이용권 구매하기</span>
+          </button>
         </div>
 
         <dl className="mypage__summary">
-          <div><dt>보유 코인</dt><dd>{coinCount.toLocaleString("ko-KR")}</dd></div>
-          <div><dt>보유 쿠폰</dt><dd>{couponCount.toLocaleString("ko-KR")}</dd></div>
-          <div><dt>구매 콘텐츠</dt><dd>{purchasedItems.length.toLocaleString("ko-KR")}</dd></div>
-          <div className="mypage__retro-summary"><dt>레트로 콘텐츠</dt><dd>{retroCount.toLocaleString("ko-KR")}</dd></div>
+          <div>
+            <dt>보유 코인</dt>
+            <dd>{coinCount.toLocaleString("ko-KR")}</dd>
+          </div>
+          <div>
+            <dt>보유 쿠폰</dt>
+            <dd>{couponCount.toLocaleString("ko-KR")}</dd>
+          </div>
+          <div>
+            <dt>구매 콘텐츠</dt>
+            <dd>{purchasedItems.length.toLocaleString("ko-KR")}</dd>
+          </div>
+          <div className="mypage__retro-summary">
+            <dt>레트로 콘텐츠</dt>
+            <dd>{retroCount.toLocaleString("ko-KR")}</dd>
+          </div>
         </dl>
 
         <div className="mypage__library">
-          <div className="mypage__tabs" role="tablist" aria-label="나의 콘텐츠">
+          <div
+            className="mypage__tabs"
+            role="tablist"
+            aria-label="나의 콘텐츠"
+          >
             {TABS.map((tab, index) => (
-              <button key={tab.key} type="button" role="tab" id={`${id}-tab-${tab.key}`}
-                aria-selected={activeTab === tab.key} aria-controls={`${id}-panel`}
+              <button
+                key={tab.key}
+                type="button"
+                role="tab"
+                id={`${id}-tab-${tab.key}`}
+                aria-selected={activeTab === tab.key}
+                aria-controls={`${id}-panel`}
                 tabIndex={activeTab === tab.key ? 0 : -1}
-                onClick={() => changeTab(tab.key)} onKeyDown={(event) => handleTabKeyDown(event, index)}>
+                onClick={() => changeTab(tab.key)}
+                onKeyDown={(event) => handleTabKeyDown(event, index)}
+              >
                 {tab.label}
               </button>
             ))}
           </div>
-          <div className="mypage__library-panel" role="tabpanel" id={`${id}-panel`} aria-labelledby={`${id}-tab-${activeTab}`}>
+
+          <div
+            className="mypage__library-panel"
+            role="tabpanel"
+            id={`${id}-panel`}
+            aria-labelledby={`${id}-tab-${activeTab}`}
+          >
             <div className="mypage__filter-row">
-              <div className="mypage__filters" role="group" aria-label="콘텐츠 종류">
-                {FILTERS.filter((filter) => filter.key !== "shorts" || activeTab === "history" || activeTab === "favorites").map((filter) => <button key={filter.key} type="button" aria-pressed={activeFilter === filter.key}
-                  onClick={() => setActiveFilter(filter.key)}>{filter.label}</button>)}
+              <div
+                className="mypage__filters"
+                role="group"
+                aria-label="콘텐츠 필터"
+              >
+                {FILTERS.filter(
+                  (filter) =>
+                    (filter.key !== "editor" || activeTab === "favorites") &&
+                    (filter.key !== "shorts" ||
+                      activeTab === "history" ||
+                      activeTab === "favorites")
+                ).map((filter) => (
+                  <button
+                    key={filter.key}
+                    type="button"
+                    aria-pressed={activeFilter === filter.key}
+                    onClick={() => setActiveFilter(filter.key)}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
               </div>
-              <p className="mypage__total" aria-live="polite">전체 {visibleItems.length}개</p>
+
+              <p className="mypage__total" aria-live="polite">
+                {filterLabel} {displayCount}개
+              </p>
             </div>
-            {visibleItems.length ? (
-              <ul className="mypage__library-grid">{visibleItems.map((item) => renderCard(item))}</ul>
+
+            {isEditorFilter && editorCollections.length ? (
+              <section
+                className="mypage__editor-group"
+                aria-label={editorHeading}
+              >
+                <EditorCollectionSlider collections={editorCollections} />
+              </section>
+            ) : activeTab === "favorites" && visibleItems.length ? (
+              <section
+                className="mypage__editor-group"
+                aria-label={`관심 ${filterLabel}`}
+              >
+                <EditorCollectionSlider
+                  key={`${selectedProfile.id}:${activeFilter}`}
+                  collections={visibleItems}
+                  renderItem={(item) => renderCard(item)}
+                  cardType={activeFilter === "shorts" ? "shorts" : "posters"}
+                  label={filterLabel}
+                />
+              </section>
+            ) : !isEditorFilter && visibleItems.length ? (
+              <ul className="mypage__library-grid">
+                {visibleItems.map((item) => renderCard(item))}
+              </ul>
             ) : (
               <div className="mypage__empty">
-                <picture><source media="(max-width: 1024px)" srcSet={mobileEmpty} /><img className="mypage__empty-icon" src={emptyImage} alt="" width="64" height="64" /></picture>
-                <h2>{currentItems.length ? "선택한 종류의 콘텐츠가 없어요" : currentTab.title}</h2>
-                <p>지금 마음에 드는 작품을 찾아 첫 이야기를 시작해보세요.</p>
-                <Link className="mypage__browse" to="/">콘텐츠 둘러보기</Link>
+                <div className="mypage__empty-group">
+                  <picture>
+                    <source
+                      media="(max-width: 1024px)"
+                      srcSet={mobileEmpty}
+                    />
+                    <img
+                      className="mypage__empty-icon"
+                      src={emptyImage}
+                      alt=""
+                      width="40"
+                      height="40"
+                    />
+                  </picture>
+
+                  <h2 className="mypage__empty-message">
+                    {isEditorFilter
+                      ? "관심 에디터 Pick이 없어요"
+                      : activeTab === "favorites"
+                        ? {
+                          program: "관심 프로그램이 없어요",
+                          movie: "관심 영화가 없어요",
+                          shorts: "관심 숏츠가 없어요",
+                        }[activeFilter]
+                        : currentItems.length
+                          ? "선택한 종류의 콘텐츠가 없어요"
+                          : currentTab.title}
+                  </h2>
+                </div>
+
+                <Link
+                  className="mypage__browse"
+                  to={
+                    {
+                      program: "/entertainment",
+                      movie: "/movie",
+                      shorts: "/shorts",
+                      editor: "/entertainment/all",
+                    }[activeFilter] || "/entertainment"
+                  }
+                >
+                  {isEditorFilter
+                    ? "에디터 Pick 둘러보기"
+                    : "콘텐츠 둘러보기"}
+                </Link>
               </div>
             )}
           </div>
         </div>
 
-        <section className="mypage__management" aria-labelledby={`${id}-management`}>
-          <SectionTitle id={`${id}-management`}>계정 · 서비스 관리</SectionTitle>
+        <section
+          className="mypage__management"
+          aria-labelledby={`${id}-management`}
+        >
+          <SectionTitle id={`${id}-management`}>
+            계정 · 서비스 관리
+          </SectionTitle>
+
           <div className="mypage__management-grid">
-            <Link to="/profileedit">프로필 관리<span aria-hidden="true">›</span></Link>
-            <button type="button" onClick={() => requestAction("billing", "이용권 · 결제 내역")}>이용권 · 결제 내역<span aria-hidden="true">›</span></button>
-            <button type="button" onClick={() => requestAction("coupon", "쿠폰 등록")}>쿠폰 등록<span aria-hidden="true">›</span></button>
-            <button type="button" onClick={() => requestAction("support", "고객센터")}>고객센터<span aria-hidden="true">›</span></button>
+            <button
+              type="button"
+              onClick={() => setIsMemberInfoOpen(true)}
+              aria-haspopup="dialog"
+            >
+              회원정보 수정<span aria-hidden="true">›</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => requestAction("billing", "이용권 · 결제 내역")}
+            >
+              이용권 · 결제 내역<span aria-hidden="true">›</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => requestAction("coupon", "쿠폰 등록")}
+            >
+              쿠폰 등록<span aria-hidden="true">›</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => requestAction("support", "고객센터")}
+            >
+              고객센터<span aria-hidden="true">›</span>
+            </button>
           </div>
+
+          {isMemberInfoOpen && (
+            <MemberInfoModal onClose={() => setIsMemberInfoOpen(false)} />
+          )}
         </section>
 
-        <section className="mypage__retro" aria-labelledby={`${id}-retro`}>
+        <section
+          className="mypage__retro"
+          aria-labelledby={`${id}-retro`}
+        >
           <SectionTitle id={`${id}-retro`}>
             <span className="mypage__desktop-copy">레트로 Pick</span>
-            <span className="mypage__mobile-copy">레트로브 인기회차 픽!</span>
+            <span className="mypage__mobile-copy">
+              레트로브 인기회차 픽!
+            </span>
           </SectionTitle>
-          <ul className="mypage__retro-list">{retroPicks.map((item) => renderCard(item, true))}</ul>
+
+          <EditorCollectionSlider
+            collections={retroPicks}
+            renderItem={(item) => renderCard(item, true)}
+            cardType="retro"
+            label="레트로 Pick"
+          />
         </section>
       </div>
 
-      <section className="mypage__events" aria-label="추천 이벤트" aria-roledescription="캐러셀"
-        onKeyDown={(event) => {
-          if (event.key === "ArrowLeft" && event.target === event.currentTarget) { event.preventDefault(); setActiveEvent((activeEvent + EVENTS.length - 1) % EVENTS.length); }
-          if (event.key === "ArrowRight" && event.target === event.currentTarget) { event.preventDefault(); setActiveEvent((activeEvent + 1) % EVENTS.length); }
-        }} tabIndex={0}>
-        <div className="mypage__event-track" style={{ "--event-index": activeEvent }}>
-          {EVENTS.map((event, index) => (
-            <Link key={event.id} to="/event" className={`mypage__banner mypage__banner--${event.id}`} tabIndex={index === activeEvent ? 0 : -1}
-              aria-label={`${event.eyebrow}: ${event.title} ${event.accent}`}>
-              <img className="mypage__banner-art mypage__banner-art--left" src={event.image} alt="" />
-              <div className="mypage__banner-copy"><p>{event.eyebrow}</p><h2>{event.title} <em>{event.accent}</em></h2><p>{event.description}</p></div>
-              <picture className="mypage__banner-art-picture">
-                {event.id === "next" && <source media="(max-width: 1024px)" srcSet={mobileNextGraphic} />}
-                <img className="mypage__banner-art mypage__banner-art--right" src={event.image} alt="" />
+      <MyPageEventCarousel
+        events={EVENTS}
+        renderBanner={(event) => (
+          <>
+            <img
+              className="mypage__banner-art mypage__banner-art--left"
+              src={event.image}
+              alt=""
+            />
+
+            <div className="mypage__banner-copy">
+              <p>{event.eyebrow}</p>
+              <h2>
+                {event.title} <em>{event.accent}</em>
+              </h2>
+              <p>{event.description}</p>
+            </div>
+
+            <picture className="mypage__banner-art-picture">
+              {event.id === "next" && (
+                <source
+                  media="(max-width: 1024px)"
+                  srcSet={mobileNextGraphic}
+                />
+              )}
+              <img
+                className="mypage__banner-art mypage__banner-art--right"
+                src={event.image}
+                alt=""
+              />
+            </picture>
+
+            {[0, 1, 2, 3, 4].map((heart) => (
+              <picture key={heart}>
+                <source
+                  media="(max-width: 1024px)"
+                  srcSet={MOBILE_HEARTS[heart]}
+                />
+                <img
+                  className={`mypage__heart mypage__heart--${heart}`}
+                  src={heart % 2 ? heartGlowImage : heartImage}
+                  alt=""
+                />
               </picture>
-              {[0, 1, 2, 3, 4].map((heart) => <picture key={heart}><source media="(max-width: 1024px)" srcSet={MOBILE_HEARTS[heart]} /><img className={`mypage__heart mypage__heart--${heart}`} src={heart % 2 ? heartGlowImage : heartImage} alt="" /></picture>)}
-            </Link>
-          ))}
-        </div>
-        <div className="mypage__event-controls">
-          <button type="button" aria-label="이전 이벤트" onClick={() => setActiveEvent((activeEvent + EVENTS.length - 1) % EVENTS.length)}>‹</button>
-          <div className="mypage__event-dots">{EVENTS.map((event, index) => <button key={event.id} type="button" aria-label={`${index + 1}번 이벤트 보기`}
-            aria-current={activeEvent === index ? "true" : undefined} onClick={() => setActiveEvent(index)} />)}</div>
-          <button type="button" aria-label="다음 이벤트" onClick={() => setActiveEvent((activeEvent + 1) % EVENTS.length)}>›</button>
-        </div>
-      </section>
+            ))}
+          </>
+        )}
+      />
 
-      {isNotificationOpen && createPortal(
-        <div
-          ref={notificationPanelRef}
-          className="header-notification-portal"
-          style={{
-            position: "absolute",
-            top: notificationPosition?.top ?? 0,
-            left: notificationPosition?.left ?? 0,
-            width: "min(480px, calc(100vw - 32px))",
-            visibility: notificationPosition ? "visible" : "hidden",
-            zIndex: 1000,
-          }}
-        >
-          <NotificationPanel
-            id={notificationPanelId}
-            isLoggedIn={isLoggedIn}
-            notifications={isLoggedIn ? notifications : EMPTY_ITEMS}
-            onRead={(notificationId) => onReadNotification(user?.uid, notificationId)}
-            onReadAll={() => onReadAllNotifications(user?.uid)}
-          />
-        </div>,
-        document.body
-      )}
+      {isNotificationOpen &&
+        createPortal(
+          <div
+            ref={notificationPanelRef}
+            className="header-notification-portal"
+            style={{
+              position: "absolute",
+              top: notificationPosition?.top ?? 0,
+              left: notificationPosition?.left ?? 0,
+              width: "min(480px, calc(100vw - 32px))",
+              visibility: notificationPosition ? "visible" : "hidden",
+              zIndex: 1000,
+            }}
+          >
+            <NotificationPanel
+              id={notificationPanelId}
+              isLoggedIn={isLoggedIn}
+              notifications={isLoggedIn ? notifications : EMPTY_ITEMS}
+              onRead={(notificationId) =>
+                onReadNotification(user?.uid, notificationId)
+              }
+              onReadAll={() => onReadAllNotifications(user?.uid)}
+            />
+          </div>,
+          document.body
+        )}
 
-      <dialog className="mypage__dialog" ref={dialogRef} aria-labelledby={`${id}-dialog-title`} onClose={() => setDialogTitle("")}
-        onClick={(event) => { if (event.target === event.currentTarget) dialogRef.current.close(); }}>
+      <dialog
+        className="mypage__dialog"
+        ref={dialogRef}
+        aria-labelledby={`${id}-dialog-title`}
+        onClose={() => setDialogTitle("")}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) {
+            dialogRef.current.close();
+          }
+        }}
+      >
         <h2 id={`${id}-dialog-title`}>{dialogTitle}</h2>
         <p>현재 준비 중인 서비스입니다.</p>
-        {dialogTitle === "고객센터" && <Link to="/notice" onClick={() => dialogRef.current.close()}>공지사항 보기</Link>}
-        <form method="dialog"><button type="submit" autoFocus>확인</button></form>
+
+        {dialogTitle === "고객센터" && (
+          <Link to="/notice" onClick={() => dialogRef.current.close()}>
+            공지사항 보기
+          </Link>
+        )}
+
+        <form method="dialog">
+          <button type="submit" autoFocus>
+            확인
+          </button>
+        </form>
       </dialog>
     </section>
   );

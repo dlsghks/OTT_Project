@@ -22,7 +22,6 @@ export const TvDetail = ({ programId, config }) => {
     tvIds, tvDetail, tvSeasons, tvSections,
     onFindTvId, onFetchTvDetail, onFetchTvSeason, onFetchTvSections, onResolveEpisodeVideo,
   } = useTvStore();
-  const actions = useDetailActions();
   const player = useVideoPlayer();
 
   const items = categoryPages[config.category].items;
@@ -33,6 +32,12 @@ export const TvDetail = ({ programId, config }) => {
   const [season, setSeason] = useState(null);
 
   const tv = tmdbId ? tvDetail[tmdbId] : null;
+  const actions = useDetailActions(tv ? {
+    id: `program:${tmdbId}`,
+    type: 'program',
+    title: localItem?.title ?? tv.name,
+    image: tv.poster_path ? `${TMDB_IMG}w500${tv.poster_path}` : localItem?.poster || localItem?.image || '',
+  } : null);
 
   // 시즌 선택 목록 (스페셜 시즌 0 제외) · 기본 시즌
   const seasons = tv

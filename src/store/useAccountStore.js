@@ -1,3 +1,5 @@
+import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
+import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
 import { create } from "zustand";
 import { doc, onSnapshot, runTransaction, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
@@ -14,6 +16,9 @@ export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   image: `${import.meta.env.BASE_URL}images/profiles/${id}.png`,
   likedIds: [],
   watchedIds: [],
+  likedContents: [],
+  likedEditorPicks: [],
+  viewedEditorPicks: [],
   pinSalt: "",
   pinHash: "",
   locked: false,
@@ -33,6 +38,9 @@ const normalize = (data = {}) => {
         : profile.image,
       likedIds: ids(saved?.likedIds),
       watchedIds: ids(saved?.watchedIds).slice(0, 100),
+      likedContents: normalizeContentFavorites(saved?.likedContents),
+      likedEditorPicks: normalizeEditorPicks(saved?.likedEditorPicks),
+      viewedEditorPicks: normalizeEditorPicks(saved?.viewedEditorPicks),
       pinSalt,
       pinHash,
       locked: Boolean(pinSalt && pinHash),
@@ -190,5 +198,46 @@ export const changeProfileLock = async (profileId, pin, mode, ownerId) => {
       throw new Error("잠금 상태가 변경됐어요. 다시 시도해주세요.");
     }
     transaction.set(ref, { profiles: { [profileId]: { pinSalt, pinHash } } }, { merge: true });
+  });
+};
+
+// Recommendation-page bookmarks use separate fields from individual Shorts likes.
+export const changeEditorPickRecord = async (profileId, entry, kind, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const [record] = normalizeEditorPicks([entry]);
+  if (!record || !['like', 'view'].includes(kind)) throw new Error('에디터 Pick 정보를 확인해주세요.');
+  const field = kind === 'like' ? 'likedEditorPicks' : 'viewedEditorPicks';
+  const ref = doc(db, 'users', uid);
+  await runTransaction(db, async transaction => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(profileId, uid);
+    const current = snapshot.data()?.profiles?.[profileId]?.[field];
+    const records = updateEditorPicks(current, record, kind);
+    const changes = { [field]: records };
+    if (kind === 'view') changes.likedEditorPicks = refreshEditorPick(
+      snapshot.data()?.profiles?.[profileId]?.likedEditorPicks, record
+    );
+    transaction.set(ref, { profiles: { [profileId]: changes } }, { merge: true });
+  });
+};
+
+// Programme/movie bookmarks are separate from Shorts and Editor Pick records.
+export const changeContentFavorite = async (profileId, item, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const validateProfile = () => {
+    requireAccount(profileId, uid);
+    if (useAccountStore.getState().selectedProfileId !== profileId) {
+      throw new Error('프로필이 변경됐어요. 다시 시도해주세요.');
+    }
+  };
+  validateProfile();
+  const [record] = normalizeContentFavorites([item]);
+  if (!record) throw new Error('작품 정보를 확인해주세요.');
+  await runTransaction(db, async transaction => {
+    const ref = doc(db, 'users', uid);
+    const snapshot = await transaction.get(ref);
+    validateProfile();
+    const likedContents = toggleContentFavorite(snapshot.data()?.profiles?.[profileId]?.likedContents, record);
+    transaction.set(ref, { profiles: { [profileId]: { likedContents } } }, { merge: true });
   });
 };

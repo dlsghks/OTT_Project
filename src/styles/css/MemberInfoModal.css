@@ -1,0 +1,274 @@
+.member-info-modal {
+  box-sizing: border-box;
+  width: min(560px, 100% - 32px);
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: #252525;
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color-scheme: dark;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.member-info-modal::backdrop {
+  background: rgba(0, 0, 0, 0.75);
+}
+.member-info-modal, .member-info-modal * {
+  box-sizing: border-box;
+}
+.member-info-modal p, .member-info-modal h2 {
+  margin: 0;
+}
+.member-info-modal button, .member-info-modal input, .member-info-modal select {
+  font: inherit;
+}
+.member-info-modal button {
+  cursor: pointer;
+}
+.member-info-modal button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+.member-info-modal :focus-visible {
+  outline: 2px solid #8dacff;
+  outline-offset: 3px;
+}
+.member-info-modal .member-info-modal__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 80px;
+  padding: 21px 32px;
+  background: #1351f9;
+}
+.member-info-modal .member-info-modal__header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.55;
+  color: #fff;
+}
+.member-info-modal .member-info-modal__close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.member-info-modal .member-info-modal__close img {
+  display: block;
+}
+.member-info-modal .member-info-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 40px;
+}
+.member-info-modal .member-info-modal__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.member-info-modal .member-info-modal__intro p:first-child {
+  color: #fff;
+  font-weight: 500;
+}
+.member-info-modal .member-info-modal__intro p:last-child {
+  color: #b5b5bd;
+}
+.member-info-modal .member-info-modal__fields {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px 12px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.member-info-modal .member-info-modal__fields > label {
+  color: #b5b5bd;
+  font-size: 14px;
+}
+.member-info-modal .member-info-modal__fields > input, .member-info-modal .member-info-modal__fields > select {
+  min-width: 0;
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #45454b;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+  font-size: 15px;
+}
+.member-info-modal .member-info-modal__fields > input::placeholder, .member-info-modal .member-info-modal__fields > select::placeholder {
+  color: #85858e;
+}
+.member-info-modal .member-info-modal__fields > input[readonly], .member-info-modal .member-info-modal__fields > select[readonly] {
+  color: #b5b5bd;
+}
+.member-info-modal .member-info-modal__hint {
+  grid-column: 2;
+  color: #85858e;
+  font-size: 12px;
+}
+.member-info-modal .member-info-modal__consents {
+  grid-column: 1/-1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 8px;
+  padding: 20px 16px;
+  border-radius: 6px;
+  background: #303030;
+}
+.member-info-modal .member-info-modal__consents label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #b5b5bd;
+  font-size: 13px;
+}
+.member-info-modal .member-info-modal__consents input {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #1351f9;
+}
+.member-info-modal .member-info-modal__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.member-info-modal .member-info-modal__actions button {
+  min-height: 56px;
+  padding: 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #414147;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+}
+.member-info-modal .member-info-modal__actions button[type=submit] {
+  background: #1351f9;
+}
+.member-info-modal .member-info-modal__actions button[type=submit]:disabled {
+  background: #414147;
+  color: #85858e;
+  opacity: 1;
+}
+.member-info-modal .member-info-modal__notice {
+  color: #b5b5bd;
+}
+.member-info-modal .member-info-modal__notice a {
+  color: #8dacff;
+  text-decoration: underline;
+}
+.member-info-modal .member-info-modal__error {
+  color: #ff9999;
+  font-size: 13px;
+}
+.member-info-modal .member-info-modal__success {
+  color: #b9d2ff;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .member-info-modal {
+    max-height: calc(100dvh - 32px);
+    font-size: 14px;
+  }
+  .member-info-modal .member-info-modal__header {
+    min-height: 64px;
+    padding: 16px 20px;
+  }
+  .member-info-modal .member-info-modal__header h2 {
+    font-size: 20px;
+  }
+  .member-info-modal .member-info-modal__body {
+    padding: 24px 20px;
+    gap: 20px;
+  }
+  .member-info-modal .member-info-modal__fields {
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 12px 8px;
+  }
+  .member-info-modal .member-info-modal__fields > label {
+    font-size: 12px;
+  }
+  .member-info-modal .member-info-modal__fields > input, .member-info-modal .member-info-modal__fields > select {
+    height: 44px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .member-info-modal .member-info-modal__hint {
+    grid-column: 1/-1;
+  }
+  .member-info-modal .member-info-modal__actions button {
+    min-height: 48px;
+    font-size: 15px;
+  }
+}
+.member-info-modal .member-info-modal__fields > select {
+  appearance: none;
+  padding-right: 40px;
+  background-image: linear-gradient(45deg, transparent 50%, #fff 50%), linear-gradient(135deg, #fff 50%, transparent 50%);
+  background-position: right 20px center, right 15px center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.member-info-modal .member-info-modal__email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.member-info-modal .member-info-modal__email input {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #45454b;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+}
+.member-info-modal .member-info-modal__email button {
+  flex-shrink: 0;
+  height: 48px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #1351f9;
+  color: #fff;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .member-info-modal .member-info-modal__email input {
+    height: 44px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .member-info-modal .member-info-modal__email button {
+    height: 44px;
+    padding: 0 10px;
+  }
+}

@@ -12,6 +12,7 @@ export const DetailLayout = ({ hero, children, player, actions }) => {
   return (
     <div className="movie-detail">
       {hero}
+      {actions.likeError && <p role="status" style={{ padding: "12px 24px", color: "#fff" }}>{actions.likeError}</p>}
 
       <div className="movie-detail__sections">{children}</div>
 

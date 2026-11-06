@@ -145,20 +145,34 @@
 
     &__pagination {
         display: flex;
+        align-items: center;
         justify-content: center;
-        margin-top: 100px;
+        gap: 8px;
+        margin-top: 30px;
 
         button {
             display: grid;
             place-items: center;
-            width: 42px;
-            height: 44px;
+            width: 32px;
+            height: 32px;
             padding: 0;
             border: 0;
-            border-radius: 11px;
-            background: #1351ff;
-            color: #fff;
-            font: inherit;
+            border-radius: 6px;
+            background: transparent;
+            color: #999;
+            font-size: 14px;
+            cursor: pointer;
+
+            &[aria-current="page"] {
+                background: #1351f9;
+                color: #fff;
+                font-weight: 700;
+            }
+
+            &:focus-visible {
+                outline: 2px solid #1351f9;
+                outline-offset: 3px;
+            }
         }
     }
 
