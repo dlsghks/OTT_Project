@@ -35,7 +35,7 @@ const categoryImage = (name) =>
 // - MMA 버튼은 MMA 스페셜 페이지(SN155)로 연결한다
 //   (MMA2026 티켓 응모 이벤트 화면은 /event/ticket 에 그대로 남아 있다)
 export const categories = [
-  { label: '출석체크', path: '/event/attendance', image: categoryImage('attendance-check') },
+  { label: '출석체크', path: '/eventdetail/attendance', image: categoryImage('attendance-check') },
   { label: 'MMA', path: '/special/mma', image: categoryImage('mma') },
   { label: '라이어', path: '/special/liar', image: categoryImage('liar') },
   { label: '골프', path: '/special/golf', image: categoryImage('golf') },

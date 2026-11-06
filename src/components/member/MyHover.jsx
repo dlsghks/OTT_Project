@@ -399,7 +399,10 @@ export const MyHover = ({
               <button
                 type="button"
                 disabled={!authReady}
-                onClick={() => handleAction("pass", "이용권")}
+                onClick={() => {
+                  close();
+                  navigate("/voucher");
+                }}
               >
                 이용권
               </button>
