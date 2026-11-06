@@ -1,3 +1,4 @@
+@use "../../common/figma-tokens" as figma;
 @use '../../common/card' as card;
 
 // 카드 크기 공통 변수
@@ -75,7 +76,7 @@
     padding: 16px;
     box-sizing: border-box;
 
-    color: #fff;
+    color: figma.$neutral-white;
     background: linear-gradient(135deg,
         #27334f,
         #131823);
@@ -114,12 +115,12 @@
 
     border-radius: max(3px, #{card.in-card(4)});
 
-    color: #fff;
+    color: figma.$neutral-white;
     font-size: max(10px, #{card.in-card(12)});
     font-weight: 700;
     line-height: 1.2;
 
-    background-color: #555;
+    background-color: figma.$neutral-6;
 
     // 새로운 배지
     &--new {
@@ -178,7 +179,7 @@
 
     h3 {
       margin: 0;
-      color: #fff;
+      color: figma.$neutral-white;
       font-size: 15px;
       font-weight: 500;
 
@@ -196,7 +197,7 @@
       font-size: 14px;
       font-weight: 400;
       line-height: 1.4;
-      color: #a0a0a0;
+      color: figma.$neutral-3;
     }
   }
 }

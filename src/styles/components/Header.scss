@@ -1,3 +1,5 @@
+@use "../common/figma-tokens" as figma;
+
 .site-header {
   // 1025~1920px 사이에서 헤더 전체 크기를 부드럽게 조정
   --header-height: clamp(80px, calc(1.786vw + 61.7px), 96px);
@@ -18,8 +20,8 @@
   margin: 0;
   padding: 0;
 
-  background: #000;
-  color: #8b8b8b;
+  background: figma.$neutral-black;
+  color: figma.$neutral-4;
 
   &,
   *,
@@ -60,13 +62,13 @@
     text-decoration: none;
 
     &:hover {
-      color: #fff;
+      color: figma.$neutral-white;
     }
   }
 
   a:focus-visible,
   button:focus-visible {
-    outline: 2px solid #1351f9;
+    outline: 2px solid figma.$primary-main;
     outline-offset: 4px;
     border-radius: 4px;
   }
@@ -244,9 +246,9 @@ body:has(.notice-page, .inquiry-write) {
   height: 18px;
   padding: 0 4px;
   border: 2px solid #000;
-  border-radius: 999px;
-  background: #f33445;
-  color: #fff;
+  border-radius: figma.$radius-3;
+  background: figma.$warning;
+  color: figma.$neutral-white;
   font: 700 10px/1 Arial, sans-serif;
   pointer-events: none;
 }
@@ -256,7 +258,7 @@ body:has(.notice-page, .inquiry-write) {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: #fff;
+  color: figma.$neutral-white;
   white-space: normal;
 
   > .notification-panel {
