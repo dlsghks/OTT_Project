@@ -3,13 +3,15 @@
 import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 
+import { BrowsePageHeader } from "../../components/common/BrowsePageHeader";
+import RetroMobileEvents from "../../components/retrov/RetroMobileEvents";
 import ProgramNavigation from "../../components/retrov/ProgramNavigation";
 import RetroMainHero from "../../components/retrov/RetroMainHero";
 import RetroMainRow from "../../components/retrov/RetroMainRow";
 import RetroEventCarousel from "../../components/retrov/RetroEventCarousel";
 import YoutubePlayerModal from "../../components/common/YoutubePlayerModal";
 
-import { programs, eventBanners } from "../../data/retrov";
+import { programs, eventBanners } from "../../data/retrov/retrov";
 import {
   userName,
   heroSlides,
@@ -17,14 +19,15 @@ import {
   watching,
   recommendations,
   shorts,
-} from "../../data/retrovMain";
+} from "../../data/retrov/retrovMain";
 
-import { getEpisodeSource } from "../../data/retrovTmdb";
+import { getEpisodeSource } from "../../data/retrov/retrovTmdb";
 import { useRetrovPlayer } from "../../hooks/useRetrovPlayer";
 import { useRetrovTmdbStore, tmdbImage } from "../../store/useRetrovTmdbStore";
 import { getImagePath } from "../../utils/imagePath";
 
-import "../../styles/Retrov.scss";
+import "../../styles/pages/retrov/Retrov.scss";
+import "../../styles/responsive/RetrovResponsive.scss";
 
 function youtubeThumb(videoId) {
   return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
@@ -87,6 +90,7 @@ export const RetroV = () => {
 
   return (
     <div className="retrov-main">
+      <BrowsePageHeader title="레트로브" retro />
 
       {/* 메인 배너 */}
       <div className="retrov-main__hero">
@@ -241,6 +245,7 @@ export const RetroV = () => {
       {/* 이벤트 배너 */}
       <div className="retrov-main__event">
         <RetroEventCarousel banners={eventBanners} />
+        <RetroMobileEvents banners={eventBanners} />
       </div>
 
       {/* 유튜브 재생 팝업 */}

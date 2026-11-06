@@ -1,0 +1,432 @@
+// .site-inner의 여백/그라데이션은 유지하고 마이페이지에만 검정 배경을 적용합니다.
+.site-inner > .wavve-mypage {
+  width: calc(100% + var(--page-side-padding, 110px) * 2);
+  margin-inline: calc(var(--page-side-padding, 110px) * -1);
+}
+
+.wavve-mypage {
+  padding: 95px 0 80px;
+  min-width: 0;
+  background: #000;
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  line-height: 1.5;
+}
+.wavve-mypage, .wavve-mypage * { box-sizing: border-box; }
+.wavve-mypage h1, .wavve-mypage h2, .wavve-mypage p,
+.wavve-mypage dl, .wavve-mypage dd, .wavve-mypage ul { margin: 0; }
+.wavve-mypage ul { padding: 0; list-style: none; }
+.wavve-mypage section { padding: 0; }
+.wavve-mypage button, .wavve-mypage a { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+.wavve-mypage button { cursor: pointer; }
+.wavve-mypage a { text-decoration: none; }
+.wavve-mypage button:focus-visible, .wavve-mypage a:focus-visible,
+.wavve-mypage [tabindex="0"]:focus-visible { outline: 2px solid #86aaff; outline-offset: 4px; }
+.wavve-mypage .mypage__inner {
+  width: min(1660px, calc(100% - var(--page-side-padding, 110px) * 2));
+  margin-inline: auto;
+}
+.wavve-mypage .mypage__profile-row { display: flex; align-items: center; gap: 20px; min-height: 90px; }
+.wavve-mypage .mypage__profile-img {
+  position: static;
+  display: block;
+  flex: 0 0 90px;
+  width: 90px;
+  min-width: 90px;
+  max-width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.wavve-mypage .mypage__profile-copy { display: flex; flex-direction: column; gap: 5px; min-width: 207px; }
+.wavve-mypage .mypage__profile-heading { display: flex; align-items: center; gap: 10px; }
+.wavve-mypage .mypage__profile-heading h1 { font-size: 24px; font-weight: 400; line-height: 1.35; }
+.wavve-mypage .mypage__profile-heading h1 > span { margin-left: 10px; }
+.wavve-mypage .mypage__profile-copy > p { color: #d4d4d4; font-size: 18px; font-weight: 600; line-height: 22px; }
+.wavve-mypage .mypage__edit { display: inline-flex; flex: 0 0 25px; width: 25px; height: 25px; }
+.wavve-mypage .mypage__edit img { position: static; display: block; width: 25px; max-width: 25px; height: 25px; object-fit: contain; }
+.wavve-mypage .mypage__pass-button { width: 180px; min-height: 48px; margin-left: 35px; border: 0; border-radius: 6px; background: #1351f9; font-size: 16px; font-weight: 500; }
+.wavve-mypage .mypage__pass-button:hover { background: #3268ff; }
+.wavve-mypage .mypage__summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 60px; }
+.wavve-mypage .mypage__summary > div { min-height: 163px; padding: 30px; border: 2px solid transparent; border-radius: 10px; }
+.wavve-mypage .mypage__summary dt { font-size: 18px; font-weight: 600; line-height: 22px; }
+.wavve-mypage .mypage__summary dd { margin-top: 20px; font-size: 20px; line-height: 22px; }
+.wavve-mypage .mypage__summary > .mypage__retro-summary {
+  background: linear-gradient(#000, #000) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
+  font-family: "DungGeunMo", "Pretendard", sans-serif;
+}
+.wavve-mypage .mypage__retro-summary dt { font-weight: 400; }
+.wavve-mypage .mypage__library { margin-top: 65px; }
+.wavve-mypage .mypage__tabs { display: flex; gap: 56px; min-height: 52px; border-bottom: 0; overflow-x: auto; scrollbar-width: none; }
+.wavve-mypage .mypage__tabs::-webkit-scrollbar { display: none; }
+.wavve-mypage .mypage__tabs > button {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 140px;
+  padding: 0 12px 15px;
+  border: 0;
+  background: transparent;
+  color: #a5a5a5;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 36px;
+  white-space: nowrap;
+  transition: color 160ms ease;
+}
+.wavve-mypage .mypage__tabs > button:nth-child(2) { min-width: 160px; }
+.wavve-mypage .mypage__tabs > button:hover { color: #fff; }
+.wavve-mypage .mypage__tabs > button[aria-selected="true"] { color: #fff; font-weight: 700; }
+.wavve-mypage .mypage__tabs > button[aria-selected="true"]::after { content: ""; position: absolute; inset: auto 0 0; height: 3px; background: #1351f9; }
+.wavve-mypage .mypage__library-panel { min-height: 571px; padding-top: 40px; }
+.wavve-mypage .mypage__filter-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; }
+.wavve-mypage .mypage__filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.wavve-mypage .mypage__filters > button { min-width: 86px; height: 48px; padding: 0 25px; border: 0; border-radius: 8px; background: transparent; color: #999; font-size: 16px; font-weight: 500; transition: background-color 160ms ease, color 160ms ease; }
+.wavve-mypage .mypage__filters > button:hover { background: #141414; color: #fff; }
+.wavve-mypage .mypage__filters > button[aria-pressed="true"] { background: #1351f9; font-weight: 700; color: #fff; }
+.wavve-mypage .mypage__total { flex-shrink: 0; color: #c9c9c9; font-size: 16px; }
+.wavve-mypage .mypage__empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-height: 340px; margin-top: 46px; text-align: center; }
+.wavve-mypage .mypage__empty-icon { position: static; display: block; width: 64px; min-width: 64px; max-width: 64px; height: 64px; object-fit: contain; }
+.wavve-mypage .mypage__empty > h2 { font-size: 24px; line-height: 36px; font-weight: 500; }
+.wavve-mypage .mypage__empty > p { color: #a5a5a5; font-size: 17px; line-height: 26px; word-break: keep-all; }
+.wavve-mypage .mypage__browse { display: inline-flex; align-items: center; justify-content: center; min-width: 186px; min-height: 48px; padding: 10px 20px; border-radius: 6px; background: #252525; font-size: 16px; font-weight: 500; }
+.wavve-mypage .mypage__browse:hover { background: #353535; }
+.wavve-mypage .mypage__management { width: min(1603px, 100%); border-top: 1px solid #919191; padding-top: 24px; }
+.wavve-mypage .mypage__management > h2 { font-size: 20px; font-weight: 700; line-height: 30px; }
+.wavve-mypage .mypage__management-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px; margin-top: 25px; }
+.wavve-mypage .mypage__management-grid > a, .wavve-mypage .mypage__management-grid > button {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 56px; padding: 10px 20px; border: 0; background: #1c1c1c;
+  color: #a5a5a5; font-size: 17px; font-weight: 500; text-align: left;
+}
+.wavve-mypage .mypage__management-grid > a:hover, .wavve-mypage .mypage__management-grid > button:hover { background: #292929; color: #fff; }
+.wavve-mypage .mypage__management-grid span { font-size: 24px; font-weight: 400; }
+.wavve-mypage .mypage__retro { margin-top: 100px; }
+.wavve-mypage .mypage__retro > h2 { margin-bottom: 20px; font-family: "DungGeunMo", "Pretendard", sans-serif; font-size: 30px; font-weight: 400; line-height: 41px; }
+.wavve-mypage .mypage__retro-list { display: grid; grid-template-columns: repeat(4, minmax(0, 261px)); gap: 19px; }
+.wavve-mypage .mypage__content-card { display: flex; flex-direction: column; width: 100%; min-width: 0; padding: 0; border: 0; background: transparent; text-align: left; }
+.wavve-mypage .mypage__poster {
+  position: static; display: block; width: 100%; min-width: 0; max-width: 100%;
+  height: auto; aspect-ratio: 261 / 375; object-fit: cover; border-radius: 5px;
+}
+.wavve-mypage .mypage__card-title { display: block; width: 100%; margin-top: 10px; font-size: 20px; line-height: 22px; letter-spacing: -0.2px; overflow-wrap: anywhere; }
+.wavve-mypage .mypage__content-card--retro .mypage__card-title { font-family: "DungGeunMo", "Pretendard", sans-serif; }
+.wavve-mypage .mypage__library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 261px)); gap: 32px 19px; padding: 40px 0 60px; }
+
+.wavve-mypage .mypage__events { --banner-width: min(1480px, calc(100vw - 80px)); --banner-gap: 24px; position: relative; margin-top: 120px; overflow: hidden; }
+.wavve-mypage .mypage__event-track {
+  display: flex; gap: var(--banner-gap); width: max-content;
+  margin-left: calc((100% - var(--banner-width)) / 2);
+  transform: translateX(calc(var(--event-index, 1) * (var(--banner-width) + var(--banner-gap)) * -1));
+  transition: transform 350ms ease;
+}
+.wavve-mypage .mypage__banner { position: relative; display: block; flex: 0 0 var(--banner-width); width: var(--banner-width); aspect-ratio: 1480 / 180; overflow: hidden; background: #ebebeb; color: #272727; container-type: inline-size; }
+.wavve-mypage .mypage__banner--favorite { background: linear-gradient(90deg, #fff0f4, #ffe4ed); color: #392434; }
+.wavve-mypage .mypage__banner--lines { background: linear-gradient(90deg, #21004a, #6f00a6 52.404%, #21004a); color: #fff; }
+.wavve-mypage .mypage__banner-copy { position: absolute; z-index: 1; top: 11.667%; left: 33.581%; white-space: nowrap; }
+.wavve-mypage .mypage__banner-copy > p:first-child { color: rgb(39 39 39 / 60%); font-size: 1.35135cqw; font-weight: 700; line-height: 1.4; }
+.wavve-mypage .mypage__banner-copy > h2 { margin-top: 0.54054cqw; font-size: 3.51351cqw; font-weight: 900; line-height: 1.23846; }
+.wavve-mypage .mypage__banner-copy em { color: #f30; font-style: normal; }
+.wavve-mypage .mypage__banner-copy > p:last-child { margin-top: 0.54054cqw; color: rgb(39 39 39 / 60%); font-size: 1.35135cqw; line-height: 1.4; }
+.wavve-mypage .mypage__banner--favorite .mypage__banner-copy > p:first-child { color: #d94d84; }
+.wavve-mypage .mypage__banner--favorite .mypage__banner-copy em { color: #c90076; }
+.wavve-mypage .mypage__banner--favorite .mypage__banner-copy > p:last-child { color: #786879; }
+.wavve-mypage .mypage__banner--lines .mypage__banner-copy { left: 35.878%; }
+.wavve-mypage .mypage__banner--lines .mypage__banner-copy > p:first-child { color: #d94d84; }
+.wavve-mypage .mypage__banner--lines .mypage__banner-copy > p:last-child { color: #fff; }
+.wavve-mypage .mypage__banner--lines .mypage__banner-copy em { color: #ffe1f8; }
+.wavve-mypage .mypage__banner-art { position: absolute; display: block; width: 20.2703%; max-width: none; height: auto; aspect-ratio: 1; object-fit: contain; pointer-events: none; }
+.wavve-mypage .mypage__banner-art--left { left: 12.1622%; top: -45.5556%; }
+.wavve-mypage .mypage__banner-art--right { left: 71.6216%; top: -10%; transform: scaleX(-1); }
+.wavve-mypage .mypage__banner--favorite .mypage__banner-art--left { left: 12.23%; top: -45.5556%; width: 17.3649%; transform: scaleX(-1) rotate(-9.72deg); }
+.wavve-mypage .mypage__banner--favorite .mypage__banner-art--right { left: 78.108%; top: -16.667%; width: 13.8601%; transform: rotate(12.67deg); }
+.wavve-mypage .mypage__banner--lines .mypage__banner-art { width: 12.4324%; top: -1.1111%; }
+.wavve-mypage .mypage__banner--lines .mypage__banner-art--left { left: 18.1757%; }
+.wavve-mypage .mypage__banner--lines .mypage__banner-art--right { left: 68.8514%; transform: none; }
+.wavve-mypage .mypage__heart { position: absolute; display: block; max-width: none; width: 2.2973%; height: auto; pointer-events: none; }
+.wavve-mypage .mypage__heart--0 { left: 2.7703%; top: 33.3333%; }
+.wavve-mypage .mypage__heart--1 { left: 8.0811%; top: -0.7778%; width: 3.4459%; }
+.wavve-mypage .mypage__heart--2 { left: 5.9459%; top: 62.2222%; width: 4.0541%; }
+.wavve-mypage .mypage__heart--3 { left: 95.5%; top: 19.5%; width: 3.7838%; }
+.wavve-mypage .mypage__heart--4 { left: 94.1216%; top: 63.8889%; }
+.wavve-mypage .mypage__event-controls { position: absolute; right: max(24px, calc((100% - var(--banner-width)) / 2 + 16px)); bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 14px; padding: 2px 8px; border-radius: 20px; background: rgb(0 0 0 / 65%); opacity: 0; pointer-events: none; }
+.wavve-mypage .mypage__events:hover .mypage__event-controls, .wavve-mypage .mypage__events:focus-within .mypage__event-controls { opacity: 1; pointer-events: auto; }
+.wavve-mypage .mypage__event-controls > button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; background: transparent; color: #a5a5a5; font-size: 24px; line-height: 1; }
+.wavve-mypage .mypage__event-dots { display: flex; align-items: center; gap: 8px; }
+.wavve-mypage .mypage__event-dots > button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #525252; }
+.wavve-mypage .mypage__event-dots > button[aria-current="true"] { background: #fff; }
+.wavve-mypage .mypage__dialog { width: min(400px, calc(100% - 40px)); max-width: 100%; margin: auto; padding: 32px 24px; border: 1px solid #444; border-radius: 12px; background: #1c1c1c; color: #fff; text-align: center; }
+.wavve-mypage .mypage__dialog::backdrop { background: rgb(0 0 0 / 70%); }
+.wavve-mypage .mypage__dialog h2 { font-size: 22px; }
+.wavve-mypage .mypage__dialog p { margin: 16px 0 24px; color: #a5a5a5; }
+.wavve-mypage .mypage__dialog > a { display: inline-block; margin-bottom: 20px; text-decoration: underline; }
+.wavve-mypage .mypage__dialog form > button { width: 100%; min-height: 44px; border: 0; border-radius: 6px; background: #1351f9; }
+
+
+
+
+@media (prefers-reduced-motion: reduce) {
+  .wavve-mypage .mypage__event-track { transition: none; }
+}
+.wavve-mypage .mypage__poster-frame {
+  width: 100%;
+  aspect-ratio: 261 / 375;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.wavve-mypage .mypage__poster-frame > .mypage__poster {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.wavve-mypage .mypage__content-card:hover
+  .mypage__poster-frame > .mypage__poster {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wavve-mypage .mypage__poster-frame > .mypage__poster {
+    transition: none;
+  }
+}
+.wavve-mypage .mypage__mobile-actions,
+.wavve-mypage .mypage__mobile-copy { display: none; }
+
+@media (max-width: 1200px) {
+  .wavve-mypage .mypage__summary > div { padding: 24px 20px; }
+  .wavve-mypage .mypage__tabs { gap: 24px; }
+  .wavve-mypage .mypage__management-grid { gap: 20px; }
+  .wavve-mypage .mypage__management-grid > a, .wavve-mypage .mypage__management-grid > button { padding-inline: 14px; font-size: 15px; }
+}
+// 모바일 마이페이지: 390px 피그마 기준, 좁은 화면에서는 가로 폭에 맞춰 배치합니다.
+@media (max-width: 1024px) {
+  .wavve-mypage {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0 48px;
+  }
+
+  .wavve-mypage .mypage__inner { display: contents; }
+  .wavve-mypage .mypage__mobile-copy { display: inline; }
+  .wavve-mypage .mypage__desktop-copy { display: none; }
+
+  .wavve-mypage .mypage__profile-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    align-items: center;
+    gap: 23px 12px;
+    width: calc(100% - 36px);
+    min-height: 0;
+    margin-inline: 18px;
+  }
+  .wavve-mypage .mypage__profile-img {
+    width: 54px;
+    min-width: 54px;
+    max-width: 54px;
+    height: 54px;
+  }
+  .wavve-mypage .mypage__profile-copy { min-width: 0; padding-right: 68px; gap: 3px; }
+  .wavve-mypage .mypage__profile-heading { min-width: 0; gap: 6px; }
+  .wavve-mypage .mypage__profile-heading h1 {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14.4px;
+    line-height: 1.35;
+  }
+  .wavve-mypage .mypage__profile-heading h1 > span { margin-left: 6px; }
+  .wavve-mypage .mypage__profile-copy > p { font-size: 10.8px; line-height: 16px; overflow-wrap: anywhere; }
+  .wavve-mypage .mypage__edit { flex-basis: 15px; width: 15px; height: 15px; }
+  .wavve-mypage .mypage__edit > picture { display: block; }
+  .wavve-mypage .mypage__edit img { display: block; position: static; width: 15px; max-width: 15px; height: 15px; }
+  .wavve-mypage .mypage__mobile-actions {
+    position: absolute;
+    top: 10px;
+    right: 2px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .wavve-mypage .mypage__mobile-actions > button,
+  .wavve-mypage .mypage__mobile-actions > a {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .wavve-mypage .mypage__mobile-actions > button::before,
+  .wavve-mypage .mypage__mobile-actions > a::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 32px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+  .wavve-mypage .mypage__mobile-actions img { position: static; display: block; max-width: none; }
+  .wavve-mypage .mypage__mobile-actions > button img { width: 15.5317px; height: 17.2657px; }
+  .wavve-mypage .mypage__mobile-actions > a img { width: 19px; height: 19px; }
+  .wavve-mypage .mypage__pass-button {
+    grid-column: 1 / -1;
+    width: calc(100% - 4px);
+    min-height: 44px;
+    height: 44px;
+    margin: 0 2px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+  .wavve-mypage .mypage__summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 8px;
+    width: calc(100% - 40px);
+    margin: 23px 20px 0;
+  }
+  .wavve-mypage .mypage__summary > div {
+    min-height: 79px;
+    padding: 12px 11px 8px;
+    border-radius: 6px;
+    background: #181b25;
+  }
+  .wavve-mypage .mypage__summary dt { color: #adb1bf; font-size: 12px; font-weight: 400; line-height: 22px; }
+  .wavve-mypage .mypage__summary dd { margin-top: 0; font-size: 23px; line-height: 30px; }
+  .wavve-mypage .mypage__summary > .mypage__retro-summary {
+    background: linear-gradient(#181b25, #181b25) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
+  }
+
+  .wavve-mypage .mypage__library { width: calc(100% - 32px); margin: 31px 16px 0; }
+  .wavve-mypage .mypage__tabs { gap: clamp(8px, calc((100vw - 293px) / 3), 32px); min-height: 21.05px; height: 21.05px; }
+  .wavve-mypage .mypage__tabs > button,
+  .wavve-mypage .mypage__tabs > button:nth-child(2) {
+    flex: 1 1 63px;
+    min-width: 0;
+    padding: 0 0 4.5px;
+    border-bottom: 1.35px solid #141414;
+    font-size: 10.8px;
+    line-height: 16.2px;
+  }
+  .wavve-mypage .mypage__tabs > button:nth-child(2) { flex-basis: 72px; }
+  .wavve-mypage .mypage__tabs > button[aria-selected="true"] { border-bottom-color: #fff; }
+  .wavve-mypage .mypage__tabs > button[aria-selected="true"]::after { display: none; }
+  .wavve-mypage .mypage__library-panel { position: relative; min-height: 378px; padding-top: 7.85px; }
+  .wavve-mypage .mypage__filter-row { min-height: 32px; gap: 0; }
+  .wavve-mypage .mypage__filters { gap: 7.2px; }
+  .wavve-mypage .mypage__filters > button {
+    min-width: 51.6px;
+    height: 28.8px;
+    padding: 0 12px;
+    border-radius: 3.6px;
+    color: #fff;
+    font-size: 9.6px;
+    font-weight: 500;
+  }
+  .wavve-mypage .mypage__filters > button:nth-child(2) { min-width: 66px; }
+  .wavve-mypage .mypage__filters > button[aria-pressed="true"] { background: #000; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .wavve-mypage .mypage__total { display: none; }
+  .wavve-mypage .mypage__empty {
+    width: min(100%, 235px);
+    min-height: 0;
+    margin: 82.05px auto 0;
+    gap: 10px;
+  }
+  .wavve-mypage .mypage__empty > picture { display: block; height: 38.4px; }
+  .wavve-mypage .mypage__empty-icon { width: 38.4px; min-width: 38.4px; max-width: 38.4px; height: 38.4px; }
+  .wavve-mypage .mypage__empty > h2 { font-size: 14.4px; line-height: 21.6px; }
+  .wavve-mypage .mypage__empty > p { font-size: 10.2px; line-height: 15.3px; white-space: nowrap; }
+  .wavve-mypage .mypage__browse { min-width: 111.6px; min-height: 28.8px; padding: 0 12px; border-radius: 3.6px; font-size: 9.6px; }
+  .wavve-mypage .mypage__library-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 8px; padding: 20px 0 32px; }
+  .wavve-mypage .mypage__card-title { margin-top: 6px; font-size: 12px; line-height: 18px; }
+
+  .wavve-mypage .mypage__management { width: calc(100% - 32px); margin-inline: 16px; padding: 0; border: 0; }
+  .wavve-mypage .mypage__management > h2 { display: none; }
+  .wavve-mypage .mypage__management-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px 12px; margin: 0; }
+  .wavve-mypage .mypage__management-grid > a,
+  .wavve-mypage .mypage__management-grid > button {
+    min-height: 33px;
+    height: 33px;
+    padding: 7px 10px;
+    border: 0.5px solid rgb(115 115 115 / 20%);
+    color: #737373;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 16px;
+  }
+  .wavve-mypage .mypage__management-grid span { font-size: 10px; }
+
+  .wavve-mypage .mypage__events { --banner-width: 100%; --banner-gap: 0px; order: 1; width: 100%; margin-top: 44px; }
+  .wavve-mypage .mypage__event-track { width: 100%; margin-left: 0; }
+  .wavve-mypage .mypage__banner { height: 140px; aspect-ratio: auto; }
+  .wavve-mypage .mypage__banner-copy { top: 27px; left: 23px; white-space: normal; }
+  .wavve-mypage .mypage__banner-copy > p:first-child { display: none; }
+  .wavve-mypage .mypage__banner-copy > h2 { margin: 0; font-size: 20px; line-height: 26px; }
+  .wavve-mypage .mypage__banner-copy em { display: block; color: #ff3b00; }
+  .wavve-mypage .mypage__banner-copy > p:last-child { width: 154px; margin-top: 6px; font-size: 11px; line-height: 16px; }
+  .wavve-mypage .mypage__banner-art--left { display: none; }
+  .wavve-mypage .mypage__banner .mypage__banner-art--right { top: 3px; left: auto; right: 5px; width: 152px; height: 152px; transform: scaleX(-1); }
+  .wavve-mypage .mypage__banner--lines .mypage__banner-copy { left: 23px; }
+  .wavve-mypage .mypage__heart { width: auto; height: auto; }
+  .wavve-mypage .mypage__heart--0 { left: calc(100% - 188.905px); top: 58.124px; }
+  .wavve-mypage .mypage__heart--1 { left: calc(100% - 201px); top: 35px; width: auto; }
+  .wavve-mypage .mypage__heart--2 { left: calc(100% - 173.127px); top: 10.894px; width: auto; }
+  .wavve-mypage .mypage__heart--3 { left: calc(100% - 40.882px); top: 121.154px; width: auto; }
+  .wavve-mypage .mypage__heart--4 { left: calc(100% - 12px); top: 101px; }
+  .wavve-mypage .mypage__event-controls { right: 8px; bottom: 5px; gap: 8px; }
+
+  .wavve-mypage .mypage__retro { order: 2; width: calc(100% - 32px); margin: 33px 16px 0; }
+  .wavve-mypage .mypage__retro > h2 { margin-bottom: 8px; font-size: 14px; line-height: 14px; }
+  .wavve-mypage .mypage__retro-list { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+  .wavve-mypage .mypage__retro-list::-webkit-scrollbar { display: none; }
+  .wavve-mypage .mypage__retro-list > li { flex: 0 0 100px; min-width: 0; }
+  .wavve-mypage .mypage__retro-list .mypage__poster-frame { aspect-ratio: 2 / 3; border-radius: 6px; }
+  .wavve-mypage .mypage__retro-list .mypage__card-title { font-size: 10px; line-height: 15px; }
+}
+
+// 태블릿: 앱 구조를 유지하면서 카드 수와 여백을 조정합니다.
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-mypage .mypage__profile-row { width: calc(100% - 48px); margin-inline: 24px; }
+  .wavve-mypage .mypage__profile-copy { gap: 5px; }
+  .wavve-mypage .mypage__profile-heading h1 { font-size: 18px; }
+  .wavve-mypage .mypage__profile-copy > p { font-size: 13px; }
+  .wavve-mypage .mypage__summary { width: calc(100% - 48px); margin-inline: 24px; }
+  .wavve-mypage .mypage__summary > div { padding: 16px; min-height: 92px; }
+  .wavve-mypage .mypage__summary dt { font-size: 14px; }
+  .wavve-mypage .mypage__library { width: calc(100% - 48px); margin-inline: 24px; }
+  .wavve-mypage .mypage__tabs { gap: 24px; height: 36px; }
+  .wavve-mypage .mypage__tabs > button { font-size: 14px; line-height: 24px; }
+  .wavve-mypage .mypage__tabs > button:nth-child(2) { font-size: 14px; line-height: 24px; }
+  .wavve-mypage .mypage__filter-row { min-height: 40px; }
+  .wavve-mypage .mypage__filters > button { height: 36px; padding-inline: 18px; font-size: 12px; }
+  .wavve-mypage .mypage__library-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 12px; }
+  .wavve-mypage .mypage__management { width: calc(100% - 48px); margin-inline: 24px; }
+  .wavve-mypage .mypage__management-grid > a,
+  .wavve-mypage .mypage__management-grid > button { height: 44px; font-size: 12px; }
+  .wavve-mypage .mypage__events { --banner-width: min(720px, 100%); background: #000; }
+  .wavve-mypage .mypage__event-track { margin-left: calc((100% - var(--banner-width)) / 2); }
+  .wavve-mypage .mypage__banner { height: 160px; }
+  .wavve-mypage .mypage__banner-copy { top: 32px; left: 32px; }
+  .wavve-mypage .mypage__banner-copy > h2 { font-size: 24px; line-height: 30px; }
+  .wavve-mypage .mypage__banner-copy > p:last-child { width: 260px; font-size: 12px; }
+  .wavve-mypage .mypage__retro { width: calc(100% - 48px); margin-inline: 24px; }
+  .wavve-mypage .mypage__retro > h2 { font-size: 18px; line-height: 24px; margin-bottom: 12px; }
+  .wavve-mypage .mypage__retro-list { gap: 12px; }
+  .wavve-mypage .mypage__retro-list > li { flex-basis: calc((100% - 36px) / 4); }
+  .wavve-mypage .mypage__retro-list .mypage__card-title { font-size: 13px; line-height: 19px; }
+}
+@media (min-width: 901px) and (max-width: 1024px) {
+  .wavve-mypage .mypage__library-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wavve-mypage .mypage__event-track,
+  .wavve-mypage .mypage__poster-frame > .mypage__poster { transition: none; }
+}

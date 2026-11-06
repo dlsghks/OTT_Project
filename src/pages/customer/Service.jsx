@@ -1,3 +1,4 @@
+import { SectionTitle } from '../../components/common/SectionTitle';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
@@ -5,7 +6,7 @@ import { getImagePath } from '../../utils/imagePath';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import '../../styles/pages/Service.scss';
+import '../../styles/pages/customer/Service.scss';
 
 const image = (name) => getImagePath(`/images/service/${name}`);
 
@@ -30,7 +31,7 @@ export const Service = () => (
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
             <div className="service-page__intro-slide">
-              <div className="service-page__intro-copy"><h2>{slide.heading}</h2><p>{slide.description}</p></div>
+              <div className="service-page__intro-copy"><SectionTitle>{slide.heading}</SectionTitle><p>{slide.description}</p></div>
               <img className="service-page__intro-image" src={image(slide.image)} alt={`Wavve 서비스 화면 ${index + 1}`} />
             </div>
           </SwiperSlide>
@@ -39,24 +40,24 @@ export const Service = () => (
     </section>
 
     <section className="service-page__feature">
-      <small>Wavve screen</small><h2>Fit your <em>screen</em></h2><p>당신의 스크린에 딱 맞추어 Wavve를 즐겨보세요.</p>
+      <small>Wavve screen</small><SectionTitle>Fit your <em>screen</em></SectionTitle><p>당신의 스크린에 딱 맞추어 Wavve를 즐겨보세요.</p>
       <img className="service-page__devices-image" src={image('screen-devices.png')} alt="PC, 태블릿, 모바일의 Wavve 화면" />
       <div className="service-page__two-col"><div><h3>더 넓게</h3><p>다양한 화면에서 즐기는 콘텐츠</p></div><div><h3>더 편리하게</h3><p>나에게 맞는 디바이스로 즐겨보세요.</p></div></div>
     </section>
 
     <section className="service-page__feature service-page__style">
-      <small>Wavve style</small><h2>Fit your <em>style</em></h2><p>당신의 스타일에 맞추어 Wavve를 즐겨보세요!</p>
+      <small>Wavve style</small><SectionTitle>Fit your <em>style</em></SectionTitle><p>당신의 스타일에 맞추어 Wavve를 즐겨보세요!</p>
       <img className="service-page__style-image" src={image('style-phones.png')} alt="콘텐츠, 이용권, 홈 화면의 Wavve 모바일 앱" />
       <div className="service-page__style-grid"><div><h3>영화도 Wavve!</h3><p>취향에 맞는 다양한 콘텐츠</p></div><div><h3>음악도 Wavve!</h3><p>다채로운 콘텐츠를 즐겨보세요</p></div><div><h3>PC와 함께, 더 생생하게</h3><p>큰 화면으로 즐기는 Wavve</p></div></div>
     </section>
 
     <section className="service-page__download">
-      <small>내 마음대로</small><h2>새로운 Wavve를 만나보세요</h2><p>더욱 다양한 콘텐츠와 함께, Wavve에서 재미의 파도를 타보세요.</p>
+      <small>내 마음대로</small><SectionTitle>새로운 Wavve를 만나보세요</SectionTitle><p>더욱 다양한 콘텐츠와 함께, Wavve에서 재미의 파도를 타보세요.</p>
       <div className="service-page__download-art"><img className="service-page__brand-text" src={image('brand-new-text.png')} alt="BRAND NEW" /><img className="service-page__download-phone" src={image('download-phone.png')} alt="Wavve 앱" /></div>
       <div className="service-page__store-links"><a href="https://apps.apple.com/kr/app/wavve-%EC%9B%A8%EC%9D%B4%EB%B8%8C/id987782077" target="_blank" rel="noreferrer"><img src={image('app-store.png')} alt="App Store에서 다운로드" /></a><a href="https://play.google.com/store/apps/details?id=kr.co.captv.pooqV2&hl=ko" target="_blank" rel="noreferrer"><img src={image('google-play.png')} alt="Google Play에서 다운로드" /></a></div>
     </section>
 
-    <section className="service-page__ticket"><small>이용권</small><h2>어떤 이용권으로든<br />Wavve 영화까지 자유롭게!</h2><p>원하는 콘텐츠를 내게 맞는 이용권으로 즐겨보세요.</p><Link to="/pay" className="service-page__button">Wavve 이용권 보러가기</Link></section>
+    <section className="service-page__ticket"><small>이용권</small><SectionTitle>어떤 이용권으로든<br />Wavve 영화까지 자유롭게!</SectionTitle><p>원하는 콘텐츠를 내게 맞는 이용권으로 즐겨보세요.</p><Link to="/pay" className="service-page__button">Wavve 이용권 보러가기</Link></section>
 
     <section className="service-page__social"><div><small>Wavve의 새로운 소식을 가장 먼저 만나보세요</small><h3>SNS에서 “Wavve”를 팔로우하세요!</h3></div><div><a href="https://www.instagram.com/wavve.official/" target="_blank" rel="noreferrer" aria-label="Instagram"><img src={image('instagram.png')} alt="" /></a><a href="https://www.youtube.com/@wavve" target="_blank" rel="noreferrer" aria-label="YouTube"><img src={image('youtube.png')} alt="" /></a><a href="https://www.tiktok.com/@wavve.official" target="_blank" rel="noreferrer" aria-label="TikTok"><img src={image('tiktok.png')} alt="" /></a></div></section>
     <p className="service-page__disclaimer">본 페이지는 학습용 비공식 Wavve 리디자인입니다.</p>

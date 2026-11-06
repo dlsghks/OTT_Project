@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 
 import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -21,7 +22,7 @@ export const LiveSection = ({ title, items = [], getProgress }) => {
   return (
     <section className="live-section">
       <div className="live-section__header">
-        <h2>{title}</h2>
+        <SectionTitle>{title}</SectionTitle>
       </div>
 
       <div className="live-section__slider">

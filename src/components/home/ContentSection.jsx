@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 import { ContentCard } from './ContentCard';
-import '../../styles/components/ContentSection.scss';
+import '../../styles/components/home/ContentSection.scss';
 
 // 카드 종류별 설정
 const CARD_TYPES = {
@@ -31,7 +32,8 @@ export const ContentSection = ({
   more,
   cardType = 'default',
   showHeader = true,
-  renderCard
+  renderCard,
+  appResponsive = false
 }) => {
   const swiperRef = useRef(null);
 
@@ -59,7 +61,7 @@ export const ContentSection = ({
       {showHeader && (
         <div className="content-section__header">
           <div className="content-section__title">
-            <h2>{title}</h2>
+            <SectionTitle>{title}</SectionTitle>
 
             {(moreLink || more) && (
               <Link to={moreLink || more}>
@@ -95,7 +97,12 @@ export const ContentSection = ({
 
           watchOverflow={true}
 
-          breakpoints={{
+          breakpoints={appResponsive ? {
+            0: { slidesPerGroup: 1, spaceBetween: 8 },
+            601: { slidesPerGroup: 3, spaceBetween: 12 },
+            1025: { slidesPerGroup: 4, spaceBetween: 18 },
+            1920: { slidesPerGroup: config.group, spaceBetween: 18 },
+          } : {
             640: {
               slidesPerGroup: 3,
             },

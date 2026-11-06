@@ -1,6 +1,7 @@
+@use "./figma-tokens" as figma;
 // =========================
 // 콘텐츠 카드 공통 값 (홈 · 예능 · 드라마 · 영화 · 시사교양 · 애니 · 해외시리즈)
-// 사용: @use '../common/card' as card;
+// 사용: @use './card' as card;
 // =========================
 
 @use 'sass:math';
@@ -22,7 +23,7 @@ $rank-left: 14;
 $rank-max: 20;
 
 // 카드 배지 · 웨이브 오리지널 아이콘 (318 카드 기준 값)
-$badge-blue: #1765f5;
+$badge-blue: figma.$primary-main;
 $purchase-purple: #6b46c1;
 
 // 1920 기준 px → 카드 너비 비례 값

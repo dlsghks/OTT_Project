@@ -1,3 +1,4 @@
+import { SectionTitle } from '../common/SectionTitle';
 import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ContentCard } from './ContentCard';
@@ -22,7 +23,7 @@ export const RankingSection = ({ items = [] }) => {
         <section className="home-section ranking-section">
             {/* 섹션 제목 */}
             <div className="home-section__head">
-                <h2>오늘의 TOP 랭킹</h2>
+                <SectionTitle>오늘의 TOP 랭킹</SectionTitle>
             </div>
 
             {/* Swiper 슬라이드 영역 */}
@@ -38,7 +39,7 @@ export const RankingSection = ({ items = [] }) => {
 
                     slidesPerView="auto"
                     slidesPerGroup={2}
-                    spaceBetween={18}
+                    spaceBetween={8}
                     speed={500}
 
                     grabCursor={true}
@@ -48,15 +49,9 @@ export const RankingSection = ({ items = [] }) => {
                     watchOverflow={true}
 
                     breakpoints={{
-                        640: {
-                            slidesPerGroup: 3,
-                        },
-                        1024: {
-                            slidesPerGroup: 4,
-                        },
-                        1440: {
-                            slidesPerGroup: 5,
-                        }
+                        601: { slidesPerGroup: 3, spaceBetween: 12 },
+                        1025: { slidesPerGroup: 4, spaceBetween: 18 },
+                        1920: { slidesPerGroup: 5, spaceBetween: 18 }
                     }}
 
                     className="ranking-section__swiper"

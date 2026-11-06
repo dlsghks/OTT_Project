@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import wavveLogo from "../../assets/login/wavve-logo.png";
 import naverIcon from "../../assets/login/naver.png";
@@ -7,7 +7,7 @@ import kakaoIcon from "../../assets/login/kakao.png";
 import appleIcon from "../../assets/login/apple.png";
 import glowLeft from "../../assets/login/glow-left.png";
 import glowRight from "../../assets/login/glow-right.png";
-import "../../styles/components/Login.scss";
+import "../../styles/pages/member/Login.scss";
 
 const providers = [
   { key: "naver", label: "네이버로 시작하기", icon: naverIcon },

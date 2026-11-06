@@ -5,7 +5,7 @@ import liveClip from "../../assets/mobile/5ba48.svg";
 import liveIcon from "../../assets/mobile/c81c7.svg";
 import shortsIcon from "../../assets/mobile/8fc13.svg";
 import searchIcon from "../../assets/mobile/44c9a.svg";
-import "../../styles/components/MobileBottomNav.scss";
+import "../../styles/components/mobile/MobileBottomNav.scss";
 
 const menus = [
   { key: "home", label: "홈", to: "/", icon: homeIcon, clip: homeClip },

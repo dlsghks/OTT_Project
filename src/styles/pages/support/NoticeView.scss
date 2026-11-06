@@ -1,0 +1,303 @@
+
+.notice-view {
+  // 공지사항 상세 영역
+  &__detail {
+    width: 100%;
+    margin-top: 34px;
+  }
+
+  // 테이블 헤더
+  &__table-head,
+  &__info {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr) 140px;
+    align-items: center;
+  }
+
+  &__table-head {
+    height: 48px;
+    border-bottom: 1px solid #393939;
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  // 공지사항 정보
+  &__info {
+    min-height: 54px;
+    padding: 0 8px;
+    border-bottom: 1px solid #393939;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  &__type {
+    padding-left: 22px;
+    white-space: nowrap;
+  }
+
+  &__title {
+    min-width: 0;
+    margin: 0;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  &__date {
+    color: #aaa;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  // 공지사항 본문
+  &__content {
+    min-height: 300px;
+    padding: 32px 40px 65px;
+    box-sizing: border-box;
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+  &__text {
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+
+    p {
+      margin: 0 0 18px;
+    }
+
+    ul,
+    ol {
+      padding-left: 22px;
+      margin: 20px 0;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+    }
+  }
+
+  &__no-content {
+    color: #777;
+  }
+
+  // 이전글 / 다음글
+  &__navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px;
+    padding: 0 20px 40px;
+    border-bottom: 1px solid #393939;
+  }
+
+  &__nav-item {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    strong {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    a {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      max-width: 100%;
+      color: #aaa;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #fff;
+      }
+
+      span {
+        max-width: 100%;
+        font-size: 18px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+      }
+
+      small {
+        font-size: 13px;
+        color: #999;
+      }
+    }
+
+    p {
+      margin: 0;
+      color: #777;
+      font-size: 14px;
+    }
+  }
+
+  // 목록 버튼
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 22px;
+  }
+
+  &__list-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #aaa;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #fff;
+
+      .notice-view__list-icon {
+        border-color: #fff;
+      }
+    }
+  }
+
+  &__list-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 2px solid #666;
+    border-radius: 50%;
+    transition: border-color 0.2s;
+  }
+
+  // 공지사항이 없는 경우
+  &__empty {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    color: #aaa;
+
+    a {
+      padding: 12px 20px;
+      border-radius: 5px;
+      background: #1554f6;
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+
+  // 태블릿
+  @media (max-width: 1024px) {
+    &__content {
+      padding: 30px 20px 60px;
+    }
+
+    &__navigation {
+      gap: 25px;
+      padding: 0 10px 35px;
+    }
+
+    &__nav-item a span {
+      font-size: 16px;
+    }
+  }
+
+  // 모바일
+  @media (max-width: 768px) {
+    &__detail {
+      margin-top: 20px;
+    }
+
+    &__table-head,
+    &__info {
+      grid-template-columns: 85px minmax(0, 1fr) 85px;
+    }
+
+    &__table-head {
+      height: 40px;
+      font-size: 11px;
+    }
+
+    &__info {
+      min-height: 55px;
+      padding: 8px 4px;
+      font-size: 10px;
+    }
+
+    &__type {
+      padding-left: 4px;
+    }
+
+    &__title {
+      font-size: 11px;
+    }
+
+    &__date {
+      font-size: 10px;
+    }
+
+    &__content {
+      min-height: 250px;
+      padding: 25px 10px 45px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    &__navigation {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+      padding: 0 5px 30px;
+    }
+
+    &__nav-item {
+      gap: 8px;
+
+      strong {
+        font-size: 12px;
+      }
+
+      a {
+        gap: 5px;
+
+        span {
+          font-size: 12px;
+        }
+
+        small {
+          font-size: 10px;
+        }
+      }
+
+      p {
+        font-size: 11px;
+      }
+    }
+
+    &__list-button {
+      font-size: 12px;
+    }
+
+    &__list-icon {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}

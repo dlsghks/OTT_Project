@@ -1,0 +1,273 @@
+
+import { useEffect, useState } from 'react';
+import searchIcon from '../../assets/responsive/search.svg';
+import desktopSearchIcon from '../../assets/responsive/search-desktop.svg';
+import closeIcon from '../../assets/responsive/search-close.svg';
+import { categoryPages } from '../../data/categoryData';
+
+import { ContentCard } from '../../components/home/ContentCard';
+import { popularKeywords, searchContents } from '../../data/searchData';
+
+import '../../styles/pages/search/Search.scss';
+import '../../styles/responsive/SearchResponsive.scss';
+
+const STORAGE_KEY = 'wavve-recent-searches';
+const POPULAR_ROTATION_MS = 2000;
+
+export const Search = () => {
+  const [popularExpanded, setPopularExpanded] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isApp, setIsApp] = useState(
+    () => window.matchMedia('(max-width: 1024px)').matches
+  );
+
+  // 접힌 목록: 앱 3개, PC 5개. 펼치면 전체 검색어를 순환합니다.
+  const visibleCount = Math.min(
+    popularKeywords.length,
+    popularExpanded ? popularKeywords.length : isApp ? 3 : 5
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1024px)');
+    const handleChange = () => setIsApp(media.matches);
+
+    handleChange();
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    setActiveIndex(0);
+    if (visibleCount <= 1) return;
+
+    const timer = window.setInterval(() => {
+      setActiveIndex(prev => (prev + 1) % visibleCount);
+    }, POPULAR_ROTATION_MS);
+
+    return () => window.clearInterval(timer);
+  }, [visibleCount]);
+
+
+  // 검색창 입력값
+  const [keyword, setKeyword] = useState('');
+
+  // 최근 검색어
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // 최근 검색어 변경 시 로컬 스토리지에 저장
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(recentSearches)
+    );
+  }, [recentSearches]);
+
+  // 검색 실행
+  const handleSearch = (searchWord = keyword) => {
+    const value = searchWord.trim();
+
+    if (!value) return;
+
+    // 중복 제거 후 최신 검색어를 맨 앞에 추가
+    setRecentSearches(prev => [
+      value,
+      ...prev.filter(word => word !== value)
+    ].slice(0, 10));
+
+    setKeyword("");
+
+    // 추후 실제 검색 결과 페이지와 연결 가능
+    // navigate(`/search/result?keyword=${encodeURIComponent(value)}`);
+  };
+
+  // 개별 검색어 삭제
+  const handleDelete = (word) => {
+    setRecentSearches(prev =>
+      prev.filter(item => item !== word)
+    );
+  };
+
+  // 전체 검색어 삭제
+  const handleDeleteAll = () => {
+    setRecentSearches([]);
+  };
+
+  // 인기 검색어 클릭
+  const handlePopularClick = (word) => {
+    handleSearch(word);
+  };
+
+  // 순위 변동 표시
+  const renderChange = (change) => {
+    switch (change) {
+      case 'up':
+        return <span className="trend trend--up">▲</span>;
+
+      case 'down':
+        return <span className="trend trend--down">▼</span>;
+
+      case 'new':
+        return <span className="trend trend--new">NEW</span>;
+
+      default:
+        return <span className="trend trend--same">−</span>;
+    }
+  };
+
+  return (
+    <div className="search-page">
+
+      {/* 검색 영역 */}
+      <section className="search-page__hero">
+        
+
+        <h1>보고싶은 콘텐츠를 찾아보세요</h1>
+
+        <form
+          className="search-page__form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+        >
+          <span className="search-page__search-icon"><img className="search-page__desktop-icon" src={desktopSearchIcon} alt="" /><img src={searchIcon} alt="" /></span>
+
+          <input
+            type="search"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="제목, 장르, 배우로 찾아보세요."
+            aria-label="콘텐츠 검색"
+          />
+
+          <button type="submit">
+            검색
+          </button>
+        </form>
+      </section>
+
+      {/* 검색어 정보 영역 */}
+      <section className="search-page__keywords">
+
+        {/* 최근 검색어 */}
+        <div className="recent-searches">
+          <div className="search-page__section-head">
+            <h2>최근 검색어</h2>
+
+            {recentSearches.length > 0 && (
+              <button
+                type="button"
+                className="recent-searches__clear"
+                onClick={handleDeleteAll}
+              >
+                전체 삭제
+              </button>
+            )}
+          </div>
+
+          {recentSearches.length > 0 ? (
+            <div className="recent-searches__list">
+              {recentSearches.map((word) => (
+                <div
+                  className="recent-searches__chip"
+                  key={word}
+                >
+                  <button
+                    type="button"
+                    className="recent-searches__word"
+                    onClick={() => handleSearch(word)}
+                  >
+                    {word}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="recent-searches__delete"
+                    aria-label={`${word} 삭제`}
+                    onClick={() => handleDelete(word)}
+                  >
+                    <img src={closeIcon} alt="" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="recent-searches__empty">
+              최근 검색 내역이 없습니다.
+            </p>
+          )}
+        </div>
+
+        {/* 실시간 인기 검색어 */}
+        <div className={`popular-searches${popularExpanded ? " is-expanded" : ""}`}>
+          <div className="search-page__section-head">
+            <h2>실시간 인기 검색어</h2>
+            <button className="popular-searches__expand" type="button" aria-expanded={popularExpanded} onClick={() => setPopularExpanded(value => !value)}>{popularExpanded ? "접기" : "전체 보기"}</button>
+            <span className="popular-searches__time">
+              예시 순위
+            </span>
+          </div>
+
+          <div className="popular-searches__list">
+            {popularKeywords.map((item, index) => (
+              <button
+                type="button"
+                className={`popular-searches__item${activeIndex % Math.max(1, visibleCount) === index ? " is-active" : ""}`}
+                style={activeIndex % Math.max(1, visibleCount) === index ? {
+                  backgroundColor: '#1351f9',
+                  borderColor: '#1351f9',
+                } : undefined}
+                key={item.rank}
+                onClick={() =>
+                  handlePopularClick(item.keyword)
+                }
+              >
+                <span className="popular-searches__rank">
+                  {item.rank}
+                </span>
+
+                <span className="popular-searches__keyword">
+                  {item.keyword}
+                </span>
+
+                {renderChange(item.change)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 추천 콘텐츠 영역 */}
+      <section className="search-page__contents">
+        <div className="search-page__contents-head">
+          <h2>인기 시리즈</h2>
+        </div>
+
+        <div className="search-page__contents-grid">
+          {searchContents.map((item) => (
+            <ContentCard
+              key={item.id}
+              item={item}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="search-page__movies" aria-labelledby="search-movies-title">
+        <h2 id="search-movies-title">인기 영화</h2>
+        <div className="search-page__movie-list">
+          {categoryPages.movie.items.slice(0, 10).map(item => <ContentCard key={item.id} item={item} />)}
+        </div>
+      </section>
+
+    </div>
+  );
+};

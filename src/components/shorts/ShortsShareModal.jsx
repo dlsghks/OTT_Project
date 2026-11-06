@@ -10,7 +10,7 @@ import xIcon from "../../assets/shorts/share-modal/x.svg";
 import gmailIcon from "../../assets/shorts/share-modal/gmail.svg";
 import mailIcon from "../../assets/shorts/share-modal/mail.svg";
 import messageIcon from "../../assets/shorts/share-modal/message.svg";
-import "../../styles/components/ShortsShareModal.scss";
+import "../../styles/components/shorts/ShortsShareModal.scss";
 
 // 쓰기에 성공한 경우에만 완료 상태를 표시합니다.
 async function copyText(value, input) {

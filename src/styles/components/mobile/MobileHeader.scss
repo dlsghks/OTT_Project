@@ -1,0 +1,124 @@
+.wavve-mobile-header {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .wavve-mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 50px;
+    min-height: 50px;
+    margin: 0;
+    padding: 0 16px 0 18px;
+    box-sizing: border-box;
+    background: #000;
+    color: #fff;
+
+    &,
+    * {
+      box-sizing: border-box;
+    }
+
+    &__brand {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      height: 50px;
+      margin: 0;
+      padding: 0;
+      text-decoration: none;
+    }
+
+    &__logo {
+      position: relative;
+      display: block;
+      width: 80.0053px;
+      height: 16.821px;
+      transform: translateY(0.5px);
+
+      img {
+        position: absolute;
+        display: block;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        min-width: 0;
+        min-height: 0;
+        right: auto;
+        bottom: auto;
+        object-fit: contain;
+        transform: none;
+      }
+    }
+
+    &__logo > img.wavve-mobile-header__letter-w { top: 0; left: 0; width: 20.7545px; height: 16.821px; }
+    &__logo > img.wavve-mobile-header__letter-a { top: 2.75px; left: 20.03px; width: 15.0727px; height: 13.356px; }
+    &__logo > img.wavve-mobile-header__letter-v1 { top: 3.2px; left: 36.42px; width: 15.0053px; height: 12.4477px; }
+    &__logo > img.wavve-mobile-header__letter-v2 { top: 3.2px; left: 52.05px; width: 15.0053px; height: 12.4477px; }
+
+    &__letter-e {
+      position: absolute;
+      top: 2.74px;
+      left: 66.18px;
+      display: block;
+      width: 13.8253px;
+      height: 13.356px;
+      overflow: hidden;
+
+      > img { top: 0; left: 0; width: 13.8253px; height: 13.356px; }
+
+    }
+
+    &__cast {
+      display: grid;
+      place-items: center;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 50px;
+      margin: 0 -12px 0 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+
+      > span {
+        position: relative;
+        display: block;
+        width: 20px;
+        height: 20px;
+        transform: translateY(0.5px);
+
+        > img {
+          position: absolute;
+          top: 2.583px;
+          left: 0.917px;
+          display: block;
+          width: 18.1668px;
+          height: 14.8417px;
+          min-width: 0;
+          min-height: 0;
+          max-width: none;
+          right: auto;
+          bottom: auto;
+          object-fit: contain;
+          transform: none;
+          margin: 0;
+          border: 0;
+        }
+      }
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid #1351f9;
+      outline-offset: -2px;
+    }
+  }
+}
