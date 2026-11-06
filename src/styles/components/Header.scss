@@ -1,14 +1,14 @@
 .site-header {
   // 1025~1920px 사이에서 헤더 전체 크기를 부드럽게 조정
   --header-height: clamp(80px, calc(1.786vw + 61.7px), 96px);
-  --header-padding: clamp(24px, calc(9.598vw - 74.29px), 110px);
+  --header-padding: clamp(24px, 3.333333vw, 64px);
   --header-logo-width: clamp(90px, calc(2.455vw + 64.85px), 112px);
   --header-menu-font: clamp(13px, calc(0.78125vw + 5px), 20px);
   --header-menu-gap: clamp(12px, calc(5.357vw - 42.86px), 60px);
   --header-left-gap: clamp(20px, calc(4.464vw - 25.71px), 60px);
   --header-section-gap: clamp(20px, calc(2.232vw - 2.86px), 40px);
-  --header-icon-gap: clamp(6px, calc(1.3395vw - 7.715px), 18px);
-  --header-icon-size: clamp(24px, 1.667vw, 32px);
+  --header-icon-gap: clamp(18px, 1.5625vw, 30px);
+  --header-icon-size: 32px;
 
   position: sticky;
   top: 0;
@@ -196,14 +196,15 @@
 
     > ul > li > a > img,
     > ul > li > button > img,
-    > ul > li > a > button > img {
+    > ul > li > a > button > img,
+    .my-hover__trigger > img {
       position: static;
       display: block;
 
-      width: calc(var(--header-icon-size) * 0.875);
+      width: 28px;
       min-width: 0;
       max-width: none;
-      height: calc(var(--header-icon-size) * 0.875);
+      height: 28px;
 
       margin: 0;
       padding: 0;
