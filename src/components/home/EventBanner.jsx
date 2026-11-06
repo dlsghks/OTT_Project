@@ -7,10 +7,10 @@ export const EventBanner = ({ items = [] }) => (
         aria-label="이벤트"
         style={{
             display: 'block',
-            width: 'calc(100% + var(--page-side-padding) * 2)',
+            width: 'calc(100% + var(--app-side, var(--page-side-padding)) * 2)',
             maxWidth: 'none',
-            marginLeft: 'calc(var(--page-side-padding) * -1)',
-            marginRight: 'calc(var(--page-side-padding) * -1)',
+            marginLeft: 'calc(var(--app-side, var(--page-side-padding)) * -1)',
+            marginRight: 'calc(var(--app-side, var(--page-side-padding)) * -1)',
             padding: 0,
             boxSizing: 'border-box',
             background: 'none',

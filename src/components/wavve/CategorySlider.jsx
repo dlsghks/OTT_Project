@@ -73,7 +73,7 @@ export const CategorySlider = ({
             0: { slidesPerGroup: 1, spaceBetween: 8 },
             601: { slidesPerGroup: 3, spaceBetween: 12 },
             1025: { slidesPerGroup: 4, spaceBetween: 0 },
-            1440: { slidesPerGroup: 5, spaceBetween: 0 },
+            1920: { slidesPerGroup: 5, spaceBetween: 0 },
           }}
           className="category-row__swiper"
         >
