@@ -1,5 +1,7 @@
 import { AttendanceEvent } from '../components/event/AttendanceEvent';
 import { MmaEvent } from '../components/event/MmaEvent';
+import { RetroVoteEvent } from '../components/event/RetroVoteEvent';
+import { retrovEvents } from './retrov/retrovEvents';
 import { categoryPages } from './categoryData';
 import { EventWinner } from "../components/event/EventWinner";
 import { eventWinnerData } from "./eventWinnerData";
@@ -124,6 +126,18 @@ export const eventPages = {
     ],
   },
 
+  // 레트로브 투표 이벤트 3종
+  ...Object.fromEntries(
+    Object.entries(retrovEvents).map(([eventId, event]) => [
+      eventId,
+      {
+        ...event,
+        eventId,
+        Component: RetroVoteEvent,
+      },
+    ])
+  ),
+
   evil: {
     title: "<레지던트 이블: 0번째 밤> 론칭 프로모션",
     period: "2026-11-03 ~ 2026-11-16",
@@ -133,6 +147,6 @@ export const eventPages = {
     hotspots: [],
   },
 
-  // 반드시 마지막에 배치
+  // 당첨자 발표는 마지막에 배치
   ...winnerPages,
 };

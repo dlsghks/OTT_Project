@@ -31,7 +31,6 @@ export const MovieDetail = () => {
 
 const MovieDetailBody = ({ movieId }) => {
   const { movieIds, movieDetail, movieSections, onFindMovieId, onFetchMovieDetail } = useMovieStore();
-  const actions = useDetailActions();
   const player = useVideoPlayer();
 
   // 카테고리 영화(mov-01)는 제목으로 TMDB id를 찾고, 숫자는 TMDB id 그대로 사용
@@ -54,6 +53,12 @@ const MovieDetailBody = ({ movieId }) => {
   }, [localMovie, tmdbId, onFindMovieId, onFetchMovieDetail]);
 
   const movie = tmdbId ? movieDetail[tmdbId] : null;
+  const actions = useDetailActions(movie ? {
+    id: `movie:${tmdbId}`,
+    type: 'movie',
+    title: localMovie?.title ?? movie.title,
+    image: movie.poster_path ? `${TMDB_IMG}w500${movie.poster_path}` : localMovie?.poster || localMovie?.image || '',
+  } : null);
   const sections = tmdbId ? movieSections[tmdbId] ?? [] : [];
   const notFound = searchFailed || (!localMovie && !tmdbId) || movie === false;
 

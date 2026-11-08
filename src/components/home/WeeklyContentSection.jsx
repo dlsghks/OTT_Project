@@ -1,4 +1,5 @@
 import { SectionTitle } from '../common/SectionTitle';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ContentSection } from './ContentSection';
 import { weekdays, weeklyContentByDay } from '../../data/home/weeklyContentData';
@@ -15,6 +16,7 @@ export const WeeklyContentSection = ({ itemsByDay = weeklyContentByDay, appRespo
       <div className="content-section__header">
         <div className="content-section__title">
           <SectionTitle id="weekly-content-title">요일별 콘텐츠</SectionTitle>
+          <Link to={`/collection/home--weekly?day=${selectedDay}`}>더보기</Link>
         </div>
       </div>
       <div className="weekly-content__days" role="group" aria-label="콘텐츠 업데이트 요일">
