@@ -71,3 +71,75 @@
   .search-page__section-head h2 { font-size: 20px; }
   .search-page__contents-grid .content-card { flex-basis: 210px; width: 210px; }
 }
+
+// 검색 실행 후 기존 콘텐츠 카드를 그리드 형태로 표시
+.search-page__results {
+  max-width: 106.25rem;
+  margin: 0 auto;
+}
+.search-page__results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.search-page__results-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+.search-page__results-header h2 span {
+  color: #a0a0a0;
+  font-size: 1rem;
+}
+.search-page__results-header button {
+  border: 0;
+  background: transparent;
+  color: #bbb;
+  cursor: pointer;
+}
+.search-page__results-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2rem 1.125rem;
+}
+.search-page__results-grid .content-card { min-width: 0; width: 100%; }
+.search-page__results-empty { color: #bbb; padding: 2rem 0; }
+@media (max-width: 1280px) {
+  .search-page__results-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .search-page__results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .search-page__results-header { margin-bottom: 1.25rem; }
+  .search-page__results-header h2 { font-size: 0.95rem; }
+  .search-page__results-header h2 span { font-size: 0.75rem; }
+  .search-page__results-header button { font-size: 0.75rem; }
+  .search-page__results-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 0.625rem; }
+}
+
+// 키워드 검색 결과: 공개 예정 / 카테고리 / 프로그램 구분
+.search-page__result-group { margin: 0 0 3.75rem; }
+.search-page__result-group > h3 { margin: 0 0 1.375rem; color: #fff; font-size: 1.5rem; font-weight: 500; }
+.search-page__result-group > h3 span { color: #1351f9; }
+.search-page__category-results { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.125rem; }
+.search-page__category-result {
+  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.625rem;
+  min-height: 6rem; padding: 1rem; border-radius: 0.75rem; background: #242424; color: #fff;
+  text-decoration: none;
+  &:hover { background: #303a50; }
+  span { color: #aaa; font-size: 0.875rem; }
+  strong { font-size: 1rem; font-weight: 600; }
+}
+.search-page__upcoming-card .content-card__thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+.search-page__results-notice { color: #999; margin: 1rem 0; font-size: 0.875rem; }
+@media (max-width: 900px) {
+  .search-page__category-results { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .search-page__result-group { margin-bottom: 2rem; }
+  .search-page__result-group > h3 { font-size: 1.1rem; }
+  .search-page__category-results { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem; }
+}

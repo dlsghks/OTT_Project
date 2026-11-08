@@ -4,10 +4,10 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { newsTabs, getNewsTab, getTabClips } from '../../data/newsClips';
 import { NewsClipCard } from '../../components/news/NewsClipCard';
 
-import '../../styles/components/Home.scss';
-import '../../styles/pages/Category.scss';
-import '../../styles/pages/TotalSubDetail.scss';
-import '../../styles/pages/Special.scss';
+import '../../styles/components/special/HomeShared.scss';
+import '../../styles/pages/shared/Category.scss';
+import '../../styles/pages/shared/TotalSubDetail.scss';
+import '../../styles/pages/special/Special.scss';
 
 // 뉴스 > 필터 탭 화면 (/special/news/:tab) — 웨이브 /special/sub?uiCode=SN101 구성
 // 상단: "뉴스" + 필터 버튼(CategoryPage 필터 스타일) / 본문: 탭별 클립 그리드

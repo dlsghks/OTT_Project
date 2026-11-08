@@ -1,9 +1,9 @@
 import { Link, useParams } from "react-router-dom";
 import { eventPages } from "../../data/eventPages";
 
-import "../../styles/components/Home.scss";
-import "../../styles/pages/Category.scss";
-import "../../styles/pages/Event.scss";
+import "../../styles/components/special/HomeShared.scss";
+import "../../styles/pages/shared/Category.scss";
+import "../../styles/pages/event/EventDetail.scss";
 
 // /eventdetail/:eventId → 이벤트별 컴포넌트 선택
 export const EventDetail = () => {

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { VideoSlider } from '../detail/VideoSlider';
 import { getImagePath } from '../../utils/imagePath';
 
-import '../../styles/pages/TotalSubDetail.scss';
+import '../../styles/pages/shared/TotalSubDetail.scss';
 
 // 16:9 영상 카드 행 (상세 페이지 관련영상 · 회차와 같은 VideoSlider + movie-videos__card)
 // - ranked: 썸네일 좌측 하단 순위 숫자 (TOP 20 · 인기 라이브)
