@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { notices } from "../../data/support/noties";
-import "../../styles/pages/Notice.scss";
+import "../../styles/pages/support/Notice.scss";
 
 const supportTabs = [
   { label: "공지사항", path: "/notice" },

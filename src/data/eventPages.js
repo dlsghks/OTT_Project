@@ -55,7 +55,7 @@ export const eventPages = {
         top: 24.1,
         width: 66,
         height: 1.45,
-        message: "이용권 구매 페이지는 준비 중입니다.",
+        to: "/voucher",
       },
       {
         id: "watch",

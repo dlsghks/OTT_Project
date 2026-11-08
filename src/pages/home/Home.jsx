@@ -28,7 +28,7 @@ import {
 } from '../../data/home/homeSeeAll';
 
 import '../../styles/pages/home/Home.scss';
-import '../../styles/components/HomeResponsive.scss';
+import '../../styles/components/home/HomeResponsive.scss';
 
 // 화면에 보여줄 순서
 // 기존 섹션 사이에 새 카테고리를 섞어서 배치한다.

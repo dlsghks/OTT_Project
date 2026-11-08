@@ -1,9 +1,11 @@
 
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import searchIcon from '../../assets/responsive/search.svg';
 import desktopSearchIcon from '../../assets/responsive/search-desktop.svg';
 import closeIcon from '../../assets/responsive/search-close.svg';
 import { categoryPages } from '../../data/categoryData';
+import { getLocalSearchMatches, getTmdbSearchMatches, normalizeSearchKeyword } from '../../services/searchCatalog';
 
 import { ContentCard } from '../../components/home/ContentCard';
 import { popularKeywords, searchContents } from '../../data/searchData';
@@ -48,8 +50,38 @@ export const Search = () => {
   }, [visibleCount]);
 
 
-  // 검색창 입력값
+  // 검색창 입력값과 실제 제출된 검색어는 별도로 관리
   const [keyword, setKeyword] = useState('');
+  const [searchedKeyword, setSearchedKeyword] = useState('');
+
+  const localMatches = getLocalSearchMatches(searchedKeyword);
+  const [remoteSearch, setRemoteSearch] = useState({ keyword: '', items: [], loading: false, failed: false });
+
+  useEffect(() => {
+    const value = searchedKeyword.trim();
+    if (!value) return;
+
+    let cancelled = false;
+    setRemoteSearch({ keyword: value, items: [], loading: true, failed: false });
+    getTmdbSearchMatches(value).then(({ items, failed }) => {
+      if (!cancelled) setRemoteSearch({ keyword: value, items, loading: false, failed });
+    }).catch(() => {
+      if (!cancelled) setRemoteSearch({ keyword: value, items: [], loading: false, failed: true });
+    });
+    return () => { cancelled = true; };
+  }, [searchedKeyword]);
+
+  // 로컬 목록 우선 표시. TMDB에서 같은 작품이 조회되면 제목과 미디어 유형으로 중복 제거.
+  const localTitles = new Set(localMatches.programs.map(item =>
+    `${normalizeSearchKeyword(item.title)}:${item.kind === 'movie' ? 'movie' : 'tv'}`
+  ));
+  const remoteReady = remoteSearch.keyword === searchedKeyword;
+  const remoteItems = remoteReady ? remoteSearch.items.filter(item =>
+    !localTitles.has(`${normalizeSearchKeyword(item.title)}:${item.kind}`)
+  ) : [];
+  const results = [...localMatches.programs, ...remoteItems];
+  const totalResults = results.length + localMatches.categories.length + localMatches.upcoming.length;
+  const loading = Boolean(searchedKeyword) && (!remoteReady || remoteSearch.loading);
 
   // 최근 검색어
   const [recentSearches, setRecentSearches] = useState(() => {
@@ -82,10 +114,8 @@ export const Search = () => {
       ...prev.filter(word => word !== value)
     ].slice(0, 10));
 
-    setKeyword("");
-
-    // 추후 실제 검색 결과 페이지와 연결 가능
-    // navigate(`/search/result?keyword=${encodeURIComponent(value)}`);
+    setKeyword(value);
+    setSearchedKeyword(value);
   };
 
   // 개별 검색어 삭제
@@ -154,6 +184,76 @@ export const Search = () => {
         </form>
       </section>
 
+      {searchedKeyword && (
+        <section className="search-page__results" aria-live="polite">
+          <div className="search-page__results-header">
+            <h2>‘{searchedKeyword}’ 검색 결과 <span>{totalResults}개{loading ? ' · 검색 중' : ''}</span></h2>
+            <button type="button" onClick={() => {
+              setSearchedKeyword('');
+              setKeyword('');
+            }}>검색 초기화</button>
+          </div>
+
+          {localMatches.upcoming.length > 0 && (
+            <div className="search-page__result-group">
+              <h3>공개 예정 <span>{localMatches.upcoming.length}</span></h3>
+              <div className="search-page__results-grid">
+                {localMatches.upcoming.map(item => (
+                  <div className="content-card search-page__upcoming-card" key={item.id}>
+                    <div className="content-card__thumbnail">
+                      <img src={item.image} alt={item.title} loading="lazy" />
+                    </div>
+                    <div className="content-card__info">
+                      <h3>{item.title}</h3>
+                      {item.description && <p className="content-card__date">{item.description}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {localMatches.categories.length > 0 && (
+            <div className="search-page__result-group">
+              <h3>카테고리 <span>{localMatches.categories.length}</span></h3>
+              <div className="search-page__category-results">
+                {localMatches.categories.map(item => (
+                  <Link className="search-page__category-result" key={item.path} to={item.path}>
+                    <span>{item.name}</span>
+                    <strong>{item.label}</strong>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {results.length > 0 && (
+            <div className="search-page__result-group">
+              <h3>프로그램 <span>{results.length}{loading ? '+' : ''}</span></h3>
+              <div className="search-page__results-grid">
+                {results.map(item => (
+                  <ContentCard key={`${item.link}-${item.id}`} item={item} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {totalResults === 0 && !loading && (
+            <p className="search-page__results-empty">
+              검색 결과가 없습니다. 다른 검색어를 입력해 주세요.
+            </p>
+          )}
+          {loading && <p className="search-page__results-notice">TMDB에서 추가 콘텐츠를 검색하고 있습니다.</p>}
+          {remoteReady && remoteSearch.failed && (
+            <p className="search-page__results-notice">TMDB 검색을 불러오지 못해 등록된 콘텐츠만 표시합니다. API 키와 네트워크를 확인해 주세요.</p>
+          )}
+          {!loading && remoteReady && !remoteSearch.failed && remoteItems.length > 0 && (
+            <p className="search-page__results-notice">TMDB에서 찾은 작품도 포함되어 있으며, 실제 Wavve 제공 여부와는 다를 수 있습니다.</p>
+          )}
+        </section>
+      )}
+
+      {!searchedKeyword && <>
       {/* 검색어 정보 영역 */}
       <section className="search-page__keywords">
 
@@ -267,6 +367,7 @@ export const Search = () => {
           {categoryPages.movie.items.slice(0, 10).map(item => <ContentCard key={item.id} item={item} />)}
         </div>
       </section>
+      </>}
 
     </div>
   );

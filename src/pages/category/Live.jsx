@@ -12,7 +12,7 @@ import {
   liveBanner,
 } from '../../data/live/liveData';
 
-import '../../styles/pages/Live.scss';
+import '../../styles/pages/category/Live.scss';
 
 export const Live = () => {
   const [now, setNow] = useState(() => Date.now());
