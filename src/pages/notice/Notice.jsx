@@ -1,7 +1,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { notices } from "../../data/noties";
+import { notices } from "../../data/support/noties";
 import "../../styles/pages/Notice.scss";
 
 const supportTabs = [

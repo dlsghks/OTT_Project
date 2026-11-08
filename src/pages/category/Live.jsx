@@ -10,7 +10,7 @@ import {
   liveTop10,
   liveCategories,
   liveBanner,
-} from '../../data/liveData';
+} from '../../data/live/liveData';
 
 import '../../styles/pages/Live.scss';
 

@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { List } from "lucide-react";
-import { notices } from "../../data/noties";
+import { notices } from "../../data/support/noties";
 import "../../styles/pages/Notice.scss";
 import "../../styles/pages/NoticeView.scss";
 
