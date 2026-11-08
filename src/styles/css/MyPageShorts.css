@@ -36,7 +36,7 @@
   height: 12px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .wavve-mypage .mypage__poster-frame--shorts > .mypage__shorts-badge {
     top: 7px;
     right: 7px;

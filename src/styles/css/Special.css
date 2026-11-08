@@ -185,6 +185,8 @@
 }
 
 .channel-card--logo {
+  width: clamp(110px, 8.4vw, 160px);
+  aspect-ratio: 1/1;
   overflow: hidden;
 }
 .channel-card--logo img {

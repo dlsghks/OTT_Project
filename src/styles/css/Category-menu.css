@@ -45,7 +45,7 @@
   transition: border-color 0.2s ease;
 }
 .home-categories__card:hover::after {
-  border-color: #2057ec;
+  border-color: #1351F9;
 }
 .home-categories__arrow {
   position: absolute;
