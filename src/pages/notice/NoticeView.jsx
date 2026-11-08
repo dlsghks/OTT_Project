@@ -2,9 +2,9 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { List } from "lucide-react";
-import { notices } from "../../data/noties";
-import "../../styles/pages/Notice.scss";
-import "../../styles/pages/NoticeView.scss";
+import { notices } from "../../data/support/noties";
+import "../../styles/pages/support/Notice.scss";
+import "../../styles/pages/support/NoticeView.scss";
 
 const supportTabs = [
   { label: "공지사항", path: "/notice" },

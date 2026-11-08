@@ -213,7 +213,18 @@
     font-size: 15px;
 
     &[aria-pressed="true"] {
-      color: #ff4d7a;
+      color: #1351f9; // 관심 활성: 파란 하트 아이콘과 같은 색
+    }
+
+    // 시안 아이콘 (관심 37x33 · 공유 34x28) — 글자 줄이 맞도록 아이콘 칸 높이 33px 통일
+    grid-template-rows: 33px auto;
+
+    .rv-hero__icon {
+      display: block;
+      align-self: center;
+      width: auto; // 공통 img 너비 100% 규칙 대신 시안 크기 그대로
+      height: auto;
+      max-width: none;
     }
   }
 
@@ -226,6 +237,78 @@
     margin-top: 12px;
     font-size: clamp(15px, 1.04vw, 20px);
     line-height: 1.55;
+  }
+
+  // 펼치기 · 접기 버튼 (예능~해외시리즈 상세와 같은 위치, 글씨체는 레트로브 DungGeunMo)
+  &__toggle {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border: 0;
+    background: none;
+    font-size: 16px;
+    line-height: normal;
+    transform: translateX(-50%);
+
+    // 접기: 상세 정보 아래 가운데
+    &--fold {
+      position: relative;
+      bottom: auto;
+      left: auto;
+      margin: 40px auto 0;
+      transform: none;
+    }
+  }
+
+  // 펼친 상태: 로고 · 버튼 자리는 그대로, 출연 아래로 상세 정보가 늘어남 (배경 · 그라데이션은 펼치기 전 높이에 고정)
+  &.is-expanded {
+    display: block;
+    height: auto;
+    min-height: var(--hero-height);
+    padding-top: var(--content-top);
+
+    &::before,
+    &::after {
+      inset: 0 0 auto;
+      height: var(--hero-height);
+    }
+
+    &::before {
+      z-index: 1;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      background: var(--hero-bg) center top / cover no-repeat;
+    }
+  }
+}
+
+// 펼치기 상세 정보 (개요 · 장르 · 감독 · 작가)
+.rv-hero-info {
+  margin: 14px 0 0;
+
+  &__row {
+    display: flex;
+    gap: 12px;
+    padding: 4px 0;
+    font-size: clamp(15px, 1.04vw, 20px);
+    line-height: 1.6;
+
+    dt {
+      flex: 0 0 64px;
+    }
+
+    dd {
+      margin: 0;
+    }
   }
 }
 
@@ -429,6 +512,19 @@
     &__cast {
       font-size: 14px;
     }
+
+    // 펼치기 버튼이 출연 문구와 겹치지 않도록
+    &__content {
+      padding-bottom: 48px;
+    }
+
+    &__toggle {
+      font-size: 14px;
+    }
+  }
+
+  .rv-hero-info__row {
+    font-size: 14px;
   }
 }
 
@@ -464,5 +560,341 @@
   .rv-detail .rv-container {
     padding-left: 20px;
     padding-right: 20px;
+  }
+}
+/* ---------------- 모바일 · 태블릿 (1024px 이하, 디자인 시안 390px 기준) ---------------- */
+// PC 레이아웃은 그대로 두고 이 블록에서만 덮어씀
+.rv-hero__close,
+.rv-hero__more,
+.rv-hero__play-label--mobile {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  // 앱 화면: 상단 웨이브 헤더 대신 히어로 오른쪽 위 닫기 버튼
+  body:has(.rv-detail) .wavve-mobile-header {
+    display: none;
+  }
+
+  .rv-detail {
+    width: calc(100% + var(--page-side-padding, 20px) * 2);
+    margin-inline: calc(var(--page-side-padding, 20px) * -1);
+    background: #000;
+  }
+
+  .rv-detail .rv-container {
+    padding: 0 16px 40px;
+  }
+
+  // 히어로: 위쪽 이미지(화면 너비 x 60%) 위에 로고 · 관심 · 공유, 아래에 시즌 · 재생 · 설명 · 출연
+  .rv-hero {
+    --m-hero-h: 60vw;
+
+    display: block;
+    height: auto;
+    min-height: 0;
+    margin: 0 0 24px;
+    padding: 0;
+    background-color: #000;
+    background-position: center top;
+    background-size: auto var(--m-hero-h);
+
+    &::before {
+      inset: 0 0 auto;
+      height: var(--m-hero-h);
+      background: linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.45) 22%, rgba(0, 0, 0, 0) 55%);
+    }
+
+    // 펼친 상태도 PC처럼 위치를 고정하지 않고 아래로만 늘어남
+    &.is-expanded {
+      min-height: 0;
+      padding-top: 0;
+
+      &::before {
+        height: var(--m-hero-h);
+      }
+
+      &::after {
+        height: var(--m-hero-h);
+        background: var(--hero-bg) center top / auto var(--m-hero-h) no-repeat;
+      }
+    }
+
+    &__close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+
+      img {
+        display: block;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      grid-template-rows: var(--m-hero-h);
+      column-gap: 12px;
+      padding: 0 16px;
+    }
+
+    &__logo {
+      grid-area: 1 / 1 / 2 / 3;
+      align-self: end;
+      width: clamp(96px, 28vw, 200px);
+      margin: 0 0 14px;
+    }
+
+    // 시안: 등급 · 장르 줄 없음
+    &__meta {
+      display: none;
+    }
+
+    // 버튼 묶음을 풀어서 관심 · 공유는 이미지 위, 시즌 · 재생은 이미지 아래 줄
+    &__actions {
+      display: contents;
+    }
+
+    &__icon-btn {
+      grid-row: 1;
+      align-self: end;
+      grid-template-rows: 24px auto;
+      gap: 4px;
+      width: auto;
+      min-width: 32px;
+      margin-bottom: 14px;
+      font-size: 12px;
+
+      .rv-hero__icon {
+        width: auto;
+        height: auto;
+        max-height: 22px;
+      }
+    }
+
+    &__season {
+      grid-row: 2;
+      grid-column: 1;
+      width: clamp(120px, 34vw, 240px);
+      margin: 0;
+
+      select {
+        height: 44px;
+        padding: 0 36px 0 14px;
+        border-radius: 2px;
+        font-size: 14px;
+      }
+
+      svg {
+        right: 10px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    &__play {
+      grid-row: 2;
+      grid-column: 2 / -1;
+      width: 100%;
+      height: 44px;
+      margin: 0;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
+    // 재생 버튼 글자: 모바일은 "시청하기"
+    .rv-hero__play-label {
+      display: none;
+    }
+
+    .rv-hero__play-label--mobile {
+      display: inline;
+    }
+
+    // 시즌이 없는 프로그램은 재생 버튼이 한 줄 전체
+    &__actions:not(:has(.rv-hero__season)) .rv-hero__play {
+      grid-column: 1 / -1;
+    }
+
+    // 설명: 3줄까지 + 오른쪽 끝 더보기
+    &__desc {
+      position: relative;
+      grid-column: 1 / -1;
+      display: -webkit-box;
+      margin-top: 16px;
+      overflow: hidden;
+      font-size: 13px;
+      line-height: 1.6;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+
+      p {
+        display: inline;
+        margin: 0;
+      }
+
+      p + p::before {
+        content: " ";
+      }
+    }
+
+    &.is-expanded &__desc {
+      display: block;
+      -webkit-line-clamp: unset;
+      line-clamp: none;
+    }
+
+    &__more {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      display: block;
+      padding: 0 0 0 28px;
+      border: 0;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0), #000 24px);
+      font-size: 13px;
+      line-height: 1.6;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    &__cast {
+      grid-column: 1 / -1;
+      margin-top: 10px;
+      overflow: hidden;
+      font-size: 13px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .rv-hero-info {
+      grid-column: 1 / -1;
+      margin-top: 10px;
+    }
+
+    // 펼치기 대신 설명 옆 더보기 / 접기는 상세 정보 아래 가운데
+    &__toggle:not(.rv-hero__toggle--fold) {
+      display: none;
+    }
+
+    &__toggle--fold {
+      margin: 16px auto 0;
+      font-size: 13px;
+    }
+  }
+
+  .rv-hero-info__row {
+    gap: 8px;
+    padding: 2px 0;
+    font-size: 13px;
+
+    dt {
+      flex-basis: 48px;
+    }
+  }
+
+  // 캐릭터: 가로 스크롤
+  .rv-cast {
+    justify-content: flex-start;
+    gap: 14px;
+    margin: 0 -16px 24px;
+    padding: 24px 16px 0;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .rv-detail .rv-cast__item {
+    width: clamp(76px, 22vw, 120px);
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  // 캐릭터 이미지 카드 · 퀴즈: 화면 끝까지
+  .rv-detail .character-image-panel,
+  .rv-detail .mudo-quiz {
+    width: auto;
+    max-width: none;
+    margin: 0 -16px 32px;
+  }
+
+  // 테마별 영상: 카드 2.3개가 보이는 가로 스크롤
+  .rv-detail .retro-video-row + .retro-video-row,
+  .rv-detail .rv-container > .retro-video-row:first-child {
+    margin-top: 32px;
+  }
+
+  .rv-detail .retro-video-row__head {
+    margin-bottom: 12px;
+  }
+
+  .rv-detail .retro-video-row__title,
+  .rv-detail .rv-section__title {
+    font-size: 16px;
+  }
+
+  .rv-detail .retro-video-row__list {
+    gap: 12px;
+    margin-right: -16px;
+    padding: 0 16px 8px 0;
+  }
+
+  .rv-detail .retro-video-row__item {
+    width: 41vw;
+  }
+
+  .rv-detail .retro-video-row__arrow {
+    display: none;
+  }
+
+  .rv-detail .retro-video-card__title {
+    margin: 8px 0 6px;
+    font-size: 14px;
+  }
+
+  .rv-detail .retro-video-card__desc {
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+
+  .rv-detail .retro-video-card__date {
+    font-size: 10px;
+  }
+
+  // 다른 프로그램: 가로 스크롤
+  .rv-detail .rv-others {
+    margin-top: 40px;
+  }
+
+  .rv-detail .rv-section__title {
+    margin-bottom: 12px;
+  }
+
+  .rv-detail .rv-others__list {
+    display: flex;
+    gap: 12px;
+    margin: 0 -16px 0 0;
+    padding: 0 16px 0 0;
+    overflow-x: auto;
+    list-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    li {
+      flex: 0 0 41vw;
+    }
   }
 }

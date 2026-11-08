@@ -5,7 +5,7 @@ import { getImagePath } from "../../utils/imagePath";
 import { getTmdbPoster, logTmdbDiagnostic } from "../../services/tmdb";
 import "../../styles/components/home/ContentCard.scss";
 
-const ContentCardBody = ({ item, rank }) => {
+const ContentCardBody = ({ item, rank, onPosterLoad }) => {
   const [tmdbPoster, setTmdbPoster] = useState(null);
   const [imageError, setImageError] = useState(false);
   const [localFailed, setLocalFailed] = useState(false);
@@ -55,6 +55,7 @@ const ContentCardBody = ({ item, rank }) => {
             src={poster}
             alt={item.title}
             loading="lazy"
+            onLoad={(event) => onPosterLoad?.(event.currentTarget.getAttribute('src'))}
             onError={() => {
               if (localPoster && !localFailed) {
                 logTmdbDiagnostic("local_image_error");
@@ -146,7 +147,7 @@ const ContentCardBody = ({ item, rank }) => {
   );
 };
 
-export const ContentCard = ({ item, rank }) => {
+export const ContentCard = ({ item, rank, onPosterLoad }) => {
   const imageKey = JSON.stringify([
     item.id,
     item.title,
@@ -167,6 +168,7 @@ export const ContentCard = ({ item, rank }) => {
       key={imageKey}
       item={item}
       rank={rank}
+      onPosterLoad={onPosterLoad}
     />
   );
 };

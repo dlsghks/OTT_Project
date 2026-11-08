@@ -17,36 +17,42 @@ export const programs = [
     title: "무한도전",
     image: `${IMG}/infinite-challenge-logo.png`,
     thumbnail: `${IMG}/infinite-challenge-thumb.jpg`,
+    another: `${IMG}/another/infinite-challenge-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
   },
   {
     id: "high-kick",
     title: "거침없이 하이킥",
     image: `${IMG}/high-kick-logo.png`,
     thumbnail: `${IMG}/high-kick-thumb.jpg`,
+    another: `${IMG}/another/high-kick-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
   },
   {
     id: "dad-where-are-we-going",
     title: "아빠! 어디가?", 
     image: `${IMG}/dad-where-logo.png`,
     thumbnail: `${IMG}/dad-where-thumb.jpg`,
+    another: `${IMG}/another/dad-where-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
   },
   {
     id: "we-got-married",
     title: "우리 결혼했어요",
     image: `${IMG}/we-got-married-logo.png`,
     thumbnail: `${IMG}/we-got-married-thumb.jpg`,
+    another: `${IMG}/another/we-got-married-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
   },
   {
     id: "boys-over-flowers",
     title: "꽃보다 남자",
     image: `${IMG}/boys-over-flowers-logo.png`,
     thumbnail: `${IMG}/boys-over-flowers-thumb.jpg`,
+    another: `${IMG}/another/boys-over-flowers-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
   },
   {
     id: "full-house",
     title: "풀하우스",
     image: `${IMG}/full-house-logo.png`,
     thumbnail: `${IMG}/full-house-thumb.jpg`,
+    another: `${IMG}/another/full-house-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
   },
 ];
 
@@ -55,18 +61,21 @@ export const programs = [
 export const eventBanners = [
   {
     id: "favorite-scene",
+    link: "/event/favorite-scene", // 우리 결혼했어요 최애 장면 투표 (src/data/retrov/retrovEvents.js)
     image: `${IMG}/event/favorite-scene.png`,
     title: "나의 최애 장면은?!",
     description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",
   },
   {
     id: "next-line",
+    link: "/event/next-line", // 거침없이 하이킥 명대사 퀴즈
     image: `${IMG}/event/next-line.png`,
     title: "다음에 올 명대사는?",
     description: "그때 그 대사, 아직 기억하나요?",
   },
   {
     id: "what-next",
+    link: "/event/what-next", // 풀하우스 다음 장면 투표
     image: `${IMG}/event/what-next.png`,
     title: "잠깐! 이다음에 무슨 일이?",
     description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",
@@ -90,6 +99,8 @@ export const programDetails = {
       "서울 시내 한복판에서 펼쳐지는 리얼 코믹 서스펜스!",
     ],
     cast: ["유재석", "박명수", "정준하", "정형돈", "노홍철", "하하"],
+    // 펼치기 상세 정보 (TMDB 연결이 없는 프로그램만 · getDetailInfo 형식)
+    info: { summary: ["MBC", "2005~2018"], genres: [{ name: "예능" }, { name: "리얼 버라이어티" }], directors: "김태호" },
 
     // 퀴즈 데이터: src/data/characterQuizzes.js (키 = id)
     characters: [
