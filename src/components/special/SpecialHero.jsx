@@ -1,4 +1,4 @@
-import '../../styles/components/SpecialHero.scss';
+import '../../styles/components/special/SpecialHero.scss';
 
 // 스페셜 페이지 상단 hero (웨이브 special 페이지 w-special-title 구조)
 // - 기본형: 1920×1080 배경 + 가운데 로고 · 설명 (높이 540px 기준)

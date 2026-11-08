@@ -4,7 +4,7 @@ import { useEditorPicks, saveEditorPick } from '../../utils/profileEditorPicks';
 import { getImagePath } from '../../utils/imagePath';
 import { Heart } from 'lucide-react';
 import { ContentCard } from '../home/ContentCard';
-import '../../styles/pages/SeeAllPage.scss';
+import '../../styles/pages/category/SeeAllPage.scss';
 
 const plainText = (node) => Children.toArray(node).map(child => {
   if (typeof child === 'string' || typeof child === 'number') return String(child);

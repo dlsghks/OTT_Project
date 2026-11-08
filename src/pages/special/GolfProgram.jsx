@@ -10,7 +10,7 @@ import { DetailMessage } from '../../components/detail/DetailMessage';
 import { DetailSections } from '../../components/detail/DetailSections';
 import { VideoRow } from '../../components/wavve/VideoRow';
 
-import '../../styles/pages/Special.scss';
+import '../../styles/pages/special/Special.scss';
 
 // 골프 프로그램 상세 (/golf/program/:programId) — 영화 · 시리즈 상세 페이지와 같은 틀 (DetailLayout · DetailHero)
 // - programId: 웨이브 프로그램 id (예: S31_20261029_SOIL)
