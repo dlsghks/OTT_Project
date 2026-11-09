@@ -44,7 +44,7 @@ export default function RetroMobileEvents({ banners }) {
     const lines = copy?.description ?? [banner.description];
 
     return (
-      <Link to={banner.link ?? "/event"} key={banner.id} className={`rv-mobile-events__banner rv-mobile-events__banner--${banner.id}`} aria-label={banner.title}>
+      <Link to={banner.link ?? "/eventdetail"} key={banner.id} className={`rv-mobile-events__banner rv-mobile-events__banner--${banner.id}`} aria-label={banner.title}>
         {HEARTS.map((src, index) => <img key={src} className={`rv-mobile-events__heart rv-mobile-events__heart--${index}`} src={src} alt="" />)}
         <img className="rv-mobile-events__art" src={ART[banner.id]} alt="" />
         {(EXTRAS[banner.id] ?? []).map(({ src, className }) => (

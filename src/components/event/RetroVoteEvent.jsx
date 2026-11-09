@@ -124,7 +124,7 @@ function useSceneMedia(programId, scenes) {
   });
 }
 
-// 레트로브 투표 이벤트 (/event/what-next · /event/favorite-scene · /event/next-line)
+// 레트로브 투표 이벤트 (/eventdetail/what-next · /eventdetail/favorite-scene · /eventdetail/next-line)
 // 상단 바 → 히어로 → 참여 방법 → 투표(장면 + 보기) → 투표 결과 → 프로그램 카드 → 유의사항
 // 데이터: src/data/retrov/retrovEvents.js
 export const RetroVoteEvent = ({ eventId, theme, programId, programTitle, title, period, hero, steps, vote, result, promo, notices = [] }) => {
