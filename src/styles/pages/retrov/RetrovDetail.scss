@@ -4,9 +4,8 @@
 
 .rv-detail {
   // 공통 Layout의 좌우 110px 패딩 바깥으로 확장
-  width: calc(100% + 220px);
-  margin-left: -110px;
-  margin-right: -110px;
+  width: calc(100% + var(--page-side-padding) * 2);
+  margin-inline: calc(var(--page-side-padding) * -1);
 
   min-height: 100vh;
   overflow-x: hidden;
@@ -538,9 +537,8 @@
 
 // 레트로브 상세페이지 전체 너비 확장
 .rv-detail {
-  width: calc(100% + 220px);
-  margin-left: -110px;
-  margin-right: -110px;
+  width: calc(100% + var(--page-side-padding) * 2);
+  margin-inline: calc(var(--page-side-padding) * -1);
   box-sizing: border-box;
 }
 
@@ -562,6 +560,7 @@
     padding-right: 20px;
   }
 }
+
 /* ---------------- 모바일 · 태블릿 (1024px 이하, 디자인 시안 390px 기준) ---------------- */
 // PC 레이아웃은 그대로 두고 이 블록에서만 덮어씀
 .rv-hero__close,
@@ -571,6 +570,7 @@
 }
 
 @media (max-width: 1024px) {
+
   // 앱 화면: 상단 웨이브 헤더 대신 히어로 오른쪽 위 닫기 버튼
   body:has(.rv-detail) .wavve-mobile-header {
     display: none;
@@ -741,7 +741,7 @@
         margin: 0;
       }
 
-      p + p::before {
+      p+p::before {
         content: " ";
       }
     }
@@ -852,8 +852,8 @@
   }
 
   // 테마별 영상: 카드 2.3개가 보이는 가로 스크롤
-  .rv-detail .retro-video-row + .retro-video-row,
-  .rv-detail .rv-container > .retro-video-row:first-child {
+  .rv-detail .retro-video-row+.retro-video-row,
+  .rv-detail .rv-container>.retro-video-row:first-child {
     margin-top: 32px;
   }
 

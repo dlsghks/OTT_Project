@@ -1,3 +1,4 @@
+import { normalizeWatchHistory, updateWatchHistory } from "../utils/watchHistoryRecords";
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
 import { createAttendanceCoin, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
@@ -23,6 +24,7 @@ export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   image: `${import.meta.env.BASE_URL}images/profiles/${id}.png`,
   likedIds: [],
   watchedIds: [],
+  watchHistory: [],
   likedContents: [],
   likedEditorPicks: [],
   viewedEditorPicks: [],
@@ -49,6 +51,7 @@ const normalize = (data = {}) => {
         : profile.image,
       likedIds: ids(saved?.likedIds),
       watchedIds: ids(saved?.watchedIds).slice(0, 100),
+      watchHistory: normalizeWatchHistory(saved?.watchHistory),
       likedContents: normalizeContentFavorites(saved?.likedContents),
       likedEditorPicks: normalizeEditorPicks(saved?.likedEditorPicks),
       viewedEditorPicks: normalizeEditorPicks(saved?.viewedEditorPicks),
@@ -256,6 +259,7 @@ export const changeContentFavorite = async (profileId, item, ownerId) => {
   });
 };
 
+
 // 출석체크: 프로필별 출석 날짜와 코인 적립을 한 번에 저장합니다. 같은 날짜는 한 번만 기록됩니다.
 export const saveAttendanceDay = async (profileId, day, ownerId) => {
   const uid = requireAccount(profileId, ownerId);
@@ -315,5 +319,23 @@ export const redeemCoupon = async (profileId, couponId, ownerId) => {
     requireSelectedProfile(profileId, uid);
     const records = normalizeCouponRecords(snapshot.data()?.profiles?.[profileId]?.couponRecords);
     transaction.set(ref, { profiles: { [profileId]: { couponRecords: markCouponUsed(records, couponId) } } }, { merge: true });
+  });
+};
+// 실제 재생을 시작한 작품만 현재 계정·프로필에 저장합니다.
+export const saveWatchHistoryRecord = async (profileId, item, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const validate = () => {
+    requireAccount(profileId, uid);
+    if (useAccountStore.getState().selectedProfileId !== profileId) {
+      throw new Error("프로필이 변경됐어요. 다시 재생해주세요.");
+    }
+  };
+  validate();
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    validate();
+    const watchHistory = updateWatchHistory(snapshot.data()?.profiles?.[profileId]?.watchHistory, item);
+    transaction.set(ref, { profiles: { [profileId]: { watchHistory } } }, { merge: true });
   });
 };

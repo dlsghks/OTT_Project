@@ -22,22 +22,32 @@ import {
 
 import { getEpisodeSource } from "../../data/retrov/retrovTmdb";
 import { useRetrovPlayer } from "../../hooks/useRetrovPlayer";
-import { useRetrovTmdbStore, tmdbImage } from "../../store/useRetrovTmdbStore";
+import {
+  useRetrovTmdbStore,
+  tmdbImage,
+} from "../../store/useRetrovTmdbStore";
 import { getImagePath } from "../../utils/imagePath";
 
 import "../../styles/pages/retrov/Retrov.scss";
 import "../../styles/responsive/RetrovResponsive.scss";
 
 function youtubeThumb(videoId) {
-  return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
+  return videoId
+    ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+    : null;
 }
 
-// 추천 · 시청 중 콘텐츠 썸네일: 직접 넣은 이미지 → TMDB 회차 장면 사진 → 유튜브 썸네일 → 프로그램 배너 사진
+// 추천·시청 중 콘텐츠 썸네일
 function useRecommendationImages(items) {
   const { episodes, onFetchEpisodes } = useRetrovTmdbStore();
 
   useEffect(() => {
-    const targets = new Set(items.filter((item) => !item.image && item.tmdb).map((item) => `${item.tmdb.id}_${item.tmdb.season}`));
+    const targets = new Set(
+      items
+        .filter((item) => !item.image && item.tmdb)
+        .map((item) => `${item.tmdb.id}_${item.tmdb.season}`)
+    );
+
     targets.forEach((key) => {
       const [id, season] = key.split("_");
       onFetchEpisodes(Number(id), Number(season));
@@ -48,18 +58,37 @@ function useRecommendationImages(items) {
     () =>
       items.map((item) => {
         if (item.image) return item;
+
         const still = item.tmdb
-          ? episodes[`${item.tmdb.id}_${item.tmdb.season}`]?.find((ep) => ep.episode_number === item.tmdb.episode)?.still_path
+          ? episodes[
+            `${item.tmdb.id}_${item.tmdb.season}`
+          ]?.find(
+            (ep) => ep.episode_number === item.tmdb.episode
+          )?.still_path
           : null;
-        return { ...item, image: tmdbImage(still, "w500") ?? youtubeThumb(item.videoId) ?? item.fallbackImage };
+
+        return {
+          ...item,
+          image:
+            tmdbImage(still, "w500") ??
+            youtubeThumb(item.videoId) ??
+            item.fallbackImage,
+        };
       }),
     [items, episodes]
   );
 }
 
-// 카드: 유튜브 id 나 TMDB 회차(item.source / item.play)가 있으면 누르면 바로 재생, 아니면 상세페이지로 이동
+// 시청 중·추천 카드: 재생 가능한 영상이 있으면 팝업 재생
 function PlayableCard({ item, onPlay, className, children }) {
-  const source = item.source ?? (item.play && getEpisodeSource(item.programId, item.play.seasonId, item.play.episode));
+  const source =
+    item.source ??
+    (item.play &&
+      getEpisodeSource(
+        item.programId,
+        item.play.seasonId,
+        item.play.episode
+      ));
 
   if (item.videoId || source) {
     return (
@@ -67,7 +96,13 @@ function PlayableCard({ item, onPlay, className, children }) {
         type="button"
         className={`${className} ${className}--button`}
         onClick={() =>
-          onPlay({ id: item.id, title: item.title, description: item.description, videoId: item.videoId, source })
+          onPlay({
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            videoId: item.videoId,
+            source,
+          })
         }
         aria-label={`${item.title} 재생`}
       >
@@ -77,14 +112,17 @@ function PlayableCard({ item, onPlay, className, children }) {
   }
 
   return (
-    <Link to={`/retrov/${item.programId}`} className={className}>
+    <Link
+      to={`/retrov/${item.programId}`}
+      className={className}
+    >
       {children}
     </Link>
   );
 }
 
 export const RetroV = () => {
-  const { playingVideo, play, close } = useRetrovPlayer(); // 영상 재생 (유튜브 팝업)
+  const { playingVideo, play, close } = useRetrovPlayer();
   const recommendCards = useRecommendationImages(recommendations);
   const watchingCards = useRecommendationImages(watching);
 
@@ -97,7 +135,7 @@ export const RetroV = () => {
         <RetroMainHero slides={heroSlides} />
       </div>
 
-      {/* 프로그램 선택 (동그란 필터) */}
+      {/* 프로그램 선택 */}
       <ProgramNavigation programs={programs} />
 
       {/* TOP 랭킹 */}
@@ -114,13 +152,17 @@ export const RetroV = () => {
           >
             <span className="rv-rank-card__poster">
               <img
-                className={item.poster ? "rv-rank-card__image--poster" : undefined}
+                className={
+                  item.poster
+                    ? "rv-rank-card__image--poster"
+                    : undefined
+                }
                 src={getImagePath(item.poster ?? item.thumbnail)}
                 alt=""
                 loading="lazy"
                 draggable="false"
               />
-              {/* 디자인 포스터에는 로고가 들어 있어서 사진일 때만 로고를 얹음 */}
+
               {!item.poster && (
                 <img
                   className="rv-rank-card__logo"
@@ -149,7 +191,11 @@ export const RetroV = () => {
         title={`${userName}님이 시청 중인 콘텐츠`}
         items={watchingCards}
         renderItem={(item) => (
-          <PlayableCard item={item} onPlay={play} className="rv-thumb-card">
+          <PlayableCard
+            item={item}
+            onPlay={play}
+            className="rv-thumb-card"
+          >
             <span className="rv-thumb-card__image">
               <img
                 src={getImagePath(item.image)}
@@ -180,7 +226,11 @@ export const RetroV = () => {
         title="레트로브 추천 콘텐츠"
         items={recommendCards}
         renderItem={(item) => (
-          <PlayableCard item={item} onPlay={play} className="rv-thumb-card">
+          <PlayableCard
+            item={item}
+            onPlay={play}
+            className="rv-thumb-card"
+          >
             <span className="rv-thumb-card__image">
               <img
                 src={getImagePath(item.image)}
@@ -203,7 +253,8 @@ export const RetroV = () => {
         )}
       />
 
-      {/* 쇼츠 */}
+      {/* 쇼츠: 클릭한 영상의 숏츠 페이지로 이동 */}
+      {/* 레트로브 전용 숏츠 */}
       <RetroMainRow
         id="shorts"
         variant="shorts"
@@ -211,12 +262,15 @@ export const RetroV = () => {
         items={shorts}
         renderItem={(item) => {
           const program = programs.find(
-            (p) => p.id === item.programId
+            (program) => program.id === item.programId
           );
 
           return (
-            // 누르면 유튜브 쇼츠 바로 재생 (시청 중 · 추천 카드와 같은 재생 팝업)
-            <PlayableCard item={item} onPlay={play} className="rv-short-card">
+            <Link
+              to={`/retrov/shorts?short=${encodeURIComponent(item.id)}`}
+              className="rv-short-card"
+              aria-label={`${item.title} 숏츠 보기`}
+            >
               <strong className="rv-short-card__caption">
                 <span>{item.caption[0]}</span>
                 <em>{item.caption[1]}</em>
@@ -239,7 +293,7 @@ export const RetroV = () => {
               <span className="rv-short-card__footer">
                 {program?.title} | 오직 <b>wavve</b>에서
               </span>
-            </PlayableCard>
+            </Link>
           );
         }}
       />
@@ -249,8 +303,13 @@ export const RetroV = () => {
         <RetroEventCarousel banners={eventBanners} />
       </div>
 
-      {/* 유튜브 재생 팝업 */}
-      {playingVideo && <YoutubePlayerModal video={playingVideo} onClose={close} />}
+      {/* 시청 중·추천 콘텐츠 재생 팝업 */}
+      {playingVideo && (
+        <YoutubePlayerModal
+          video={playingVideo}
+          onClose={close}
+        />
+      )}
     </div>
   );
 };

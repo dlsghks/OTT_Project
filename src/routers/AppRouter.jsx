@@ -24,6 +24,7 @@ import { DramaDetail } from "../pages/contents/DramaDetail";
 import { CurrentaffairsDetail } from "../pages/contents/CurrentaffairsDetail";
 import { AnimationDetail } from "../pages/contents/AnimationDetail";
 import { GlobalDetail } from "../pages/contents/GlobalDetail";
+import { HomeContentDetail } from '../pages/homeContent/HomeContentDetail';
 
 // 라이브
 import { Live } from "../pages/live/Live";
@@ -33,6 +34,7 @@ import { Schedule } from "../pages/live/Schedule";
 // 레트로브
 import { RetroV } from "../pages/retrov/RetroV";
 import { RetrovDetail } from "../pages/retrov/RetrovDetail";
+import { RetrovShorts } from "../pages/retrov/RetrovShorts";
 
 // 이벤트
 import { Event } from "../pages/event/Event";
@@ -124,6 +126,10 @@ export const AppRouter = () => {
           path="/globaldetail/:programId"
           element={<GlobalDetail />}
         />
+        <Route
+          path="/home-content/:sectionId/:contentId"
+          element={<HomeContentDetail />}
+        />
 
         {/* 라이브 */}
         <Route path="/live" element={<Live />} />
@@ -133,6 +139,17 @@ export const AppRouter = () => {
         {/* 레트로브 */}
         <Route path="/retrov" element={<RetroV />} />
         <Route path="/retrov/:programId" element={<RetrovDetail />} />
+        <Route path="/retrov" element={<RetroV />} />
+
+        <Route
+          path="/retrov/shorts"
+          element={<RetrovShorts />}
+        />
+
+        <Route
+          path="/retrov/:programId"
+          element={<RetrovDetail />}
+        />
 
         {/* 이벤트 */}
         <Route path="/event" element={<Event />} />
