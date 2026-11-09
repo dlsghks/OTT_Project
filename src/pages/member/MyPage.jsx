@@ -1,4 +1,7 @@
 import { MyPageEventCarousel } from "../../components/member/MyPageEventCarousel";
+import RetroMobileEventSwiper from "../../components/retrov/RetroMobileEventSwiper";
+import { eventBanners } from "../../data/retrov/retrov";
+import { useMobileLayout } from "../../hooks/useMobileLayout";
 import { MemberInfoModal } from "../../components/member/MemberInfoModal";
 import { getImagePath } from "../../utils/imagePath";
 import { useProfileFavorites } from "../../utils/profileFavorites";
@@ -262,6 +265,7 @@ export const MyPage = ({
   }, [dialogTitle]);
 
   const navigate = useNavigate();
+  const isMobile = useMobileLayout();
   const requestAction = (action, title) => {
     if (action === "coupon") navigate("/coupon");
     else if (onAction) onAction(action);
@@ -645,7 +649,7 @@ export const MyPage = ({
         </section>
       </div>
 
-      <MyPageEventCarousel
+      {isMobile ? <RetroMobileEventSwiper banners={eventBanners} className="mypage__events" /> : <MyPageEventCarousel
         events={EVENTS}
         renderBanner={(event) => (
           <>
@@ -692,7 +696,7 @@ export const MyPage = ({
             ))}
           </>
         )}
-      />
+      />}
 
       {isNotificationOpen &&
         createPortal(

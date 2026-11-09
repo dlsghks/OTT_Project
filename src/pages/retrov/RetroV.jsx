@@ -4,7 +4,6 @@ import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { BrowsePageHeader } from "../../components/common/BrowsePageHeader";
-import RetroMobileEvents from "../../components/retrov/RetroMobileEvents";
 import ProgramNavigation from "../../components/retrov/ProgramNavigation";
 import RetroMainHero from "../../components/retrov/RetroMainHero";
 import RetroMainRow from "../../components/retrov/RetroMainRow";
@@ -248,7 +247,6 @@ export const RetroV = () => {
       {/* 이벤트 배너 */}
       <div className="retrov-main__event">
         <RetroEventCarousel banners={eventBanners} />
-        <RetroMobileEvents banners={eventBanners} />
       </div>
 
       {/* 유튜브 재생 팝업 */}

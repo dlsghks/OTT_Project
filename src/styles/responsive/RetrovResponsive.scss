@@ -45,7 +45,7 @@
     .rv-main-row__arrow { display: none; }
     .rv-rank-card { container-type: inline-size; }
     .rv-rank-card__poster { aspect-ratio: 2 / 3; }
-    .rv-rank-card__number { left: 5px; height: 52cqw; }
+    .rv-rank-card__number { --rank-number-y: 0; bottom: 0cqw; left: 5px; height: 52cqw; } // 숫자 아래가 카드 밖으로 잘리지 않도록
     .rv-thumb-card { gap: 4px; }
     .rv-thumb-card__image { aspect-ratio: 4 / 3; }
     .rv-thumb-card__title { margin-top: 0; font-size: 11px; line-height: 15px; }
@@ -56,7 +56,6 @@
     .rv-short-card__footer { padding: 4px 2px; font-size: 6px; line-height: 9px; }
     .rv-short-card__badge.rv-short-card__badge { top: 4px; left: 4px; width: 12px; }
     .retrov-main__event { width: calc(100% + var(--retro-side) * 2); margin: 30px calc(var(--retro-side) * -1) 0; }
-    .retrov-main__event > .rv-event { display: none; }
     .rv-mobile-events { display: flex; flex-direction: column; gap: 16px; }
     .rv-mobile-events__banner { position: relative; display: flex; align-items: center; width: 100%; height: 140px; padding: 0 24px; overflow: hidden; background: linear-gradient(90deg, #e9e9e9 0%, #f4f4f4 100%); color: #272727; }
     .rv-mobile-events__copy { position: relative; z-index: 2; white-space: nowrap; }
@@ -101,5 +100,14 @@
     .rv-mobile-events__art { right: 32px; }
     .rv-short-card__caption { font-size: 10px; line-height: 14px; }
     .rv-short-card__footer { font-size: 9px; line-height: 13px; }
+  }
+}
+@media (max-width: 600px) {
+  .retrov-main {
+    // 프로그램 필터: 화면에 아이콘 5.5개 (왼쪽 여백 · 아이콘 사이 10px x 5 를 뺀 너비를 5.5등분)
+    --retro-circle: calc((100vw - var(--retro-side) - 50px) / 5.5);
+    .circle-navigation { gap: 10px; }
+    .circle-navigation__item { grid-template-columns: minmax(0, 1fr); width: var(--retro-circle); font-size: clamp(9px, 2.564vw, 12px); }
+    .circle-navigation__item img { width: var(--retro-circle); height: var(--retro-circle); }
   }
 }
