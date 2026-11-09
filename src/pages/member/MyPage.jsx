@@ -1,18 +1,26 @@
+import { WatchHistoryCard } from "../../components/member/WatchHistoryCard";
 import { MyPageEventCarousel } from "../../components/member/MyPageEventCarousel";
+import RetroMobileEventSwiper from "../../components/retrov/RetroMobileEventSwiper";
+import { eventBanners } from "../../data/retrov/retrov";
+import { useMobileLayout } from "../../hooks/useMobileLayout";
 import { MemberInfoModal } from "../../components/member/MemberInfoModal";
 import { getImagePath } from "../../utils/imagePath";
+import { useProfileWatchHistory } from "../../utils/profileWatchHistory";
 import { useProfileFavorites } from "../../utils/profileFavorites";
+import { EditorCollectionCard } from "../../components/member/EditorCollectionCard";
+import "../../styles/pages/member/MyPageUnifiedRow.scss";
 import { EditorCollectionSlider } from "../../components/member/EditorCollectionSlider";
 import { useEditorPicks } from "../../utils/profileEditorPicks";
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NotificationPanel } from "../../components/common/NotificationPanel";
 import { useAuthState } from "../../hooks/useAuthState";
 import { useNotificationStore } from "../../store/useNotificationStore";
-import { shortsData } from "../../data/shortsData";
 import { useProfileShorts } from "../../utils/profileShorts";
+import { getCoinTotal } from "../../utils/coinRecords";
+import { getOwnedCoupons } from "../../utils/couponRecords";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
 import emptyImage from "../../assets/mypage/empty-play.png";
@@ -26,7 +34,7 @@ import linesGraphic from "../../assets/mypage/quiz-lines.png";
 import heartImage from "../../assets/mypage/heart.png";
 import heartGlowImage from "../../assets/mypage/heart-glow.png";
 import "../../styles/pages/member/MyPage.scss";
-import "../../styles/pages/member/MyPageShorts.scss";
+import "../../styles/pages/member/MyPageWatchHistory.scss";
 
 import mobilePencil from "../../assets/mobile/pencil.svg";
 import mobileEmpty from "../../assets/mobile/empty.svg";
@@ -48,10 +56,10 @@ const TABS = [
   { key: "downloads", label: "다운로드", title: "아직 다운로드한 콘텐츠가 없어요" },
 ];
 const FILTERS = [
+  { key: "all", label: "전체" },
   { key: "editor", label: "에디터 Pick" },
   { key: "program", label: "프로그램" },
   { key: "movie", label: "영화" },
-  { key: "shorts", label: "숏츠" },
 ];
 const RETRO_PICKS = [
   {
@@ -85,17 +93,6 @@ const EVENTS = [
   { id: "lines", eyebrow: "풀하우스 명대사 퀴즈", title: "다음에 올", accent: "명대사는?", description: "그때 그 대사, 아직 기억하나요?", image: linesGraphic },
 ];
 
-// 숏츠 찜·시청 기록은 선택한 계정·프로필의 목록을 사용합니다.
-// 영상별 실제 썸네일을 사용합니다. 고해상도 이미지가 없으면 기본 해상도로 대체합니다.
-const toShortsCard = (item) => ({
-  id: `shorts-${item.id}`,
-  title: item.title,
-  image: item.thumbnailUrl || `https://i.ytimg.com/vi/${encodeURIComponent(item.id)}/maxresdefault.jpg`,
-  fallbackImage: `https://i.ytimg.com/vi/${encodeURIComponent(item.id)}/hqdefault.jpg`,
-  type: "shorts",
-  to: `/shorts?short=${encodeURIComponent(item.id)}`,
-});
-
 const MyPagePoster = ({ item, isShorts }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const sources = isShorts
@@ -123,25 +120,26 @@ const MyPagePoster = ({ item, isShorts }) => {
 
 // 목록 item 형식: { id, title, image, type: "program" | "movie" | "shorts", to? }
 export const MyPage = ({
-  profileName = "프로필1", avatar = profileImage, passName = "", coinCount = 0,
-  couponCount = 0, retroCount = 0, historyItems = EMPTY_ITEMS,
+  profileName = "프로필1", avatar = profileImage, passName = "",
+  retroCount = 0, historyItems = EMPTY_ITEMS,
   favoriteItems = EMPTY_ITEMS, purchasedItems = EMPTY_ITEMS,
   downloadItems = EMPTY_ITEMS, retroPicks = RETRO_PICKS,
   onAction, onOpenContent,
 } = {}) => {
   const {
     profile: selectedProfile,
-    likedIds: likedShortsIds,
-    watchedIds: watchedShortsIds,
   } = useProfileShorts();
   const { favorites: savedFavorites } = useProfileFavorites();
+  const { history: savedWatchHistory } = useProfileWatchHistory();
   const { liked: likedEditorPicks } = useEditorPicks();
   const displayedName = selectedProfile.name || profileName;
   const displayedAvatar = selectedProfile.image || avatar;
+  const coinCount = getCoinTotal(selectedProfile.coinRecords); // 선택한 프로필의 총코인
+  const couponCount = getOwnedCoupons(selectedProfile.couponRecords).length; // 선택한 프로필의 보유 쿠폰 수
   const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
   const [activeTab, setActiveTab] = useState("history");
-  const [activeFilter, setActiveFilter] = useState("program");
+  const [activeFilter, setActiveFilter] = useState("all");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const dialogRef = useRef(null);
@@ -218,38 +216,33 @@ export const MyPage = ({
     };
   }, [isNotificationOpen]);
 
-  // 저장된 ID 순서대로 표시해 가장 최근에 본 영상이 앞에 옵니다.
-  const watchedShorts = watchedShortsIds
-    .map((id) => shortsData.find((item) => item?.id === id))
-    .filter(Boolean)
-    .map(toShortsCard);
-
-  const likedShorts = shortsData
-    .filter((item) => item && likedShortsIds.includes(item.id))
-    .map(toShortsCard);
-
+  // 숏츠 좋아요는 이 목록에 포함하지 않습니다.
+  const withoutShorts = (items) => items.filter((item) => item.type !== "shorts");
+  const savedPrograms = withoutShorts(savedFavorites);
   const lists = {
-    history: [
-      ...watchedShorts,
-      ...historyItems.filter((item) =>
-        !watchedShorts.some((short) => short.id === item.id)
+    history: [...savedWatchHistory, ...withoutShorts(historyItems).filter((item) =>
+      !savedWatchHistory.some((saved) => saved.id === item.id)
+    )],
+    favorites: [
+      ...savedPrograms,
+      ...withoutShorts(favoriteItems).filter((item) =>
+        !savedPrograms.some((saved) => saved.id === item.id)
       ),
     ],
-    // 관심 숏츠는 현재 프로필의 좋아요 목록을 사용합니다.
-    favorites: [
-      ...savedFavorites,
-      ...favoriteItems.filter((item) => item.type !== "shorts" && !savedFavorites.some(saved => saved.id === item.id)),
-      ...likedShorts,
-    ],
-    purchases: purchasedItems,
-    downloads: downloadItems,
+    purchases: withoutShorts(purchasedItems),
+    downloads: withoutShorts(downloadItems),
   };
-  const currentItems = lists[activeTab];
-  const visibleItems = currentItems.filter((item) => item.type === activeFilter);
-  const editorCollections = activeTab === 'favorites' ? likedEditorPicks : [];
-  const editorHeading = '관심 에디터 Pick';
-  const isEditorFilter = activeTab === 'favorites' && activeFilter === 'editor';
-  const displayCount = isEditorFilter ? editorCollections.length : visibleItems.length;
+  // 종류별 구분 없이 최근 담은 순서로 표시합니다.
+  const currentItems = (activeTab === "favorites"
+    ? [...lists.favorites, ...likedEditorPicks.map((item) => ({ ...item, type: "editor" }))]
+    : lists[activeTab]
+  ).sort((a, b) => activeTab === "history"
+    ? (Number(b.watchedAt) || 0) - (Number(a.watchedAt) || 0)
+    : (Number(b.savedAt) || 0) - (Number(a.savedAt) || 0));
+  const visibleItems = activeFilter === "all" ? currentItems
+    : currentItems.filter((item) => item.type === activeFilter);
+  const isEditorFilter = activeTab === "favorites" && activeFilter === "editor";
+  const displayCount = visibleItems.length;
   const filterLabel = FILTERS.find(filter => filter.key === activeFilter)?.label;
   const currentTab = TABS.find((tab) => tab.key === activeTab);
 
@@ -257,11 +250,14 @@ export const MyPage = ({
     if (dialogTitle && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
   }, [dialogTitle]);
 
+  const navigate = useNavigate();
+  const isMobile = useMobileLayout();
   const requestAction = (action, title) => {
-    if (onAction) onAction(action);
+    if (action === "coupon") navigate("/coupon");
+    else if (onAction) onAction(action);
     else setDialogTitle(title);
   };
-  const changeTab = (key) => { setActiveTab(key); setActiveFilter(key === "favorites" ? "editor" : "program"); };
+  const changeTab = (key) => { setActiveTab(key); setActiveFilter("all"); };
   const handleTabKeyDown = (event, index) => {
     let nextIndex;
     if (event.key === "ArrowRight") nextIndex = (index + 1) % TABS.length;
@@ -424,11 +420,11 @@ export const MyPage = ({
 
         <dl className="mypage__summary">
           <div>
-            <dt>보유 코인</dt>
+            <dt><Link className="mypage__summary-link" to="/coin">보유 코인</Link></dt>
             <dd>{coinCount.toLocaleString("ko-KR")}</dd>
           </div>
           <div>
-            <dt>보유 쿠폰</dt>
+            <dt><Link className="mypage__summary-link" to="/coupon">보유 쿠폰</Link></dt>
             <dd>{couponCount.toLocaleString("ko-KR")}</dd>
           </div>
           <div>
@@ -465,7 +461,7 @@ export const MyPage = ({
           </div>
 
           <div
-            className="mypage__library-panel"
+            className={`mypage__library-panel${activeTab === "history" ? " mypage__library-panel--history" : ""}`}
             role="tabpanel"
             id={`${id}-panel`}
             aria-labelledby={`${id}-tab-${activeTab}`}
@@ -477,11 +473,7 @@ export const MyPage = ({
                 aria-label="콘텐츠 필터"
               >
                 {FILTERS.filter(
-                  (filter) =>
-                    (filter.key !== "editor" || activeTab === "favorites") &&
-                    (filter.key !== "shorts" ||
-                      activeTab === "history" ||
-                      activeTab === "favorites")
+                  (filter) => filter.key !== "editor" || activeTab === "favorites"
                 ).map((filter) => (
                   <button
                     key={filter.key}
@@ -499,30 +491,24 @@ export const MyPage = ({
               </p>
             </div>
 
-            {isEditorFilter && editorCollections.length ? (
-              <section
-                className="mypage__editor-group"
-                aria-label={editorHeading}
-              >
-                <EditorCollectionSlider collections={editorCollections} />
-              </section>
-            ) : activeTab === "favorites" && visibleItems.length ? (
-              <section
-                className="mypage__editor-group"
-                aria-label={`관심 ${filterLabel}`}
-              >
+            {visibleItems.length ? (
+              <section className="mypage__editor-group" aria-label={`${filterLabel} 콘텐츠`}>
                 <EditorCollectionSlider
-                  key={`${selectedProfile.id}:${activeFilter}`}
+                  key={`${selectedProfile.id}:${activeTab}:${activeFilter}`}
                   collections={visibleItems}
-                  renderItem={(item) => renderCard(item)}
-                  cardType={activeFilter === "shorts" ? "shorts" : "posters"}
+                  renderItem={(item) => activeTab === "history" ? (
+                    <li key={`history:${item.id}`}>
+                      <WatchHistoryCard key={`${item.id}:${item.thumbnailUrl || item.videoId || item.image}`} item={item} onOpenContent={onOpenContent} />
+                    </li>
+                  ) : item.type === "editor" ? (
+                    <li key={`editor:${item.id}`} className="mypage__library-editor-item">
+                      <EditorCollectionCard collection={item} />
+                    </li>
+                  ) : renderCard(item)}
+                  cardType={activeTab === "history" ? "history" : "posters"}
                   label={filterLabel}
                 />
               </section>
-            ) : !isEditorFilter && visibleItems.length ? (
-              <ul className="mypage__library-grid">
-                {visibleItems.map((item) => renderCard(item))}
-              </ul>
             ) : (
               <div className="mypage__empty">
                 <div className="mypage__empty-group">
@@ -547,7 +533,7 @@ export const MyPage = ({
                         ? {
                           program: "관심 프로그램이 없어요",
                           movie: "관심 영화가 없어요",
-                          shorts: "관심 숏츠가 없어요",
+                          all: "아직 관심 콘텐츠가 없어요",
                         }[activeFilter]
                         : currentItems.length
                           ? "선택한 종류의 콘텐츠가 없어요"
@@ -561,7 +547,6 @@ export const MyPage = ({
                     {
                       program: "/entertainment",
                       movie: "/movie",
-                      shorts: "/shorts",
                       editor: "/entertainment/all",
                     }[activeFilter] || "/entertainment"
                   }
@@ -639,7 +624,7 @@ export const MyPage = ({
         </section>
       </div>
 
-      <MyPageEventCarousel
+      {isMobile ? <RetroMobileEventSwiper banners={eventBanners} className="mypage__events" /> : <MyPageEventCarousel
         events={EVENTS}
         renderBanner={(event) => (
           <>
@@ -686,7 +671,7 @@ export const MyPage = ({
             ))}
           </>
         )}
-      />
+      />}
 
       {isNotificationOpen &&
         createPortal(

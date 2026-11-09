@@ -29,7 +29,10 @@ export const GolfProgram = () => {
 
 const GolfProgramBody = ({ program }) => {
   const navigate = useNavigate();
-  const actions = useDetailActions();
+  const actions = useDetailActions({
+    id: `golf:${program.id}`, type: "program", title: program.title,
+    image: program.poster || program.image || "",
+  });
   const player = useVideoPlayer();
 
   useEffect(() => {

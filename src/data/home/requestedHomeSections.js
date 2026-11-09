@@ -443,10 +443,10 @@ const jungVideoData = [
     updatedAt: '2026-10-16',
   },
 
-
-
-
 ];
+
+const jungEpisodeNumbers = [14, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const jungDurations = ['49분', '18분', '17분', '15분', '44분', '45분', '39분', '38분', '53분', '1시간 1분'];
 
 const jungHyungDonItems = jungVideoData.map((video, index) => {
   const number = index + 1;
@@ -456,8 +456,11 @@ const jungHyungDonItems = jungVideoData.map((video, index) => {
 
   return {
     id: `jung-hyung-don-${number}`,
+    link: `/home-content/jung-hyung-don/jung-hyung-don-${number}`,
     title: video.title,
     updatedAt: video.updatedAt,
+    episodeNumber: jungEpisodeNumbers[index],
+    duration: jungDurations[index],
     kind: 'series',
     image: `/images/home/section/jung/${filename}`,
     badge: '',
@@ -538,7 +541,18 @@ export const homeContentBySection = {
   'jung-hyung-don': jungHyungDonItems,
 
   // 기존 버라이어티 연결 복구
-  variety: selectItems(varietyTitles),
+  variety: selectItems(varietyTitles).map((entry) => {
+    if (entry.id === 'home-new-series-08') {
+      return { ...entry, link: '/collection/home--jung-hyung-don' };
+    }
+
+    if (entry.tmdbId) {
+      return { ...entry, link: `/entertainmentdetail/${entry.tmdbId}` };
+    }
+
+    const params = new URLSearchParams({ title: entry.title, kind: 'multi' });
+    return { ...entry, link: `/open?${params.toString()}` };
+  }),
 
   // 추가한 프로그램도 예능 전체보기에 포함
   'all-entertainment': categoryPages.entertainment.items,

@@ -42,8 +42,8 @@ export const getLocalSearchMatches = (query) => {
     (page.items ?? []).forEach((item) => {
       const matchingGenre = filters.find(filter => filter.id === item.genre);
       const terms = [item.title, item.tmdbTitle, item.genre, matchingGenre?.label,
-        item.description, item.badge, ...(Array.isArray(item.tags) ? item.tags : []),
-        ...labels];
+      item.description, item.badge, ...(Array.isArray(item.tags) ? item.tags : []),
+      ...labels];
       if (!terms.some(term => includesKeyword(term, keyword))) return;
       const link = item.link || `${DETAIL_ROUTES[key]}/${item.id}`;
       const unique = `${key}:${item.id}`;
@@ -52,6 +52,20 @@ export const getLocalSearchMatches = (query) => {
       programs.push({ ...item, kind: key === 'movie' ? 'movie' : 'tv', link });
     });
   });
+
+  const jungSection = homeSections.find(section => section.id === 'jung-hyung-don');
+  const latestJungEpisode = jungSection?.items.find(item => item.id === 'jung-hyung-don-1');
+  const jungTitle = '정형돈의 제목없음 TV';
+
+  if (latestJungEpisode?.link && includesKeyword(jungTitle, keyword)) {
+    programs.push({
+      id: 'jung-hyung-don-program',
+      title: jungTitle,
+      kind: 'tv',
+      image: '/images/home/section/jung/JungThumbnail.jpg',
+      link: latestJungEpisode.link,
+    });
+  }
 
   const upcoming = (homeSections.find(section => section.id === 'coming-soon')?.items ?? [])
     .filter(item => [item.title, item.description].some(term => includesKeyword(term, keyword)))

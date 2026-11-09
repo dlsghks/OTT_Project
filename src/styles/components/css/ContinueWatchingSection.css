@@ -1,0 +1,139 @@
+@charset "UTF-8";
+/* Figma: 카드 폭 407px, 썸네일 16:9, 간격 18px.
+   슬라이더/제목/반응형 카드 폭은 기존 메인 ContentSection 설정을 사용합니다. */
+.wavve-home .home-continue-watching {
+  min-width: 0;
+}
+.wavve-home .home-continue-watching .mypage__history-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.wavve-home .home-continue-watching .mypage__history-card:focus-visible {
+  outline: 2px solid #1351f9;
+  outline-offset: 3px;
+}
+.wavve-home .home-continue-watching .mypage__history-thumbnail {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #181818;
+}
+.wavve-home .home-continue-watching .mypage__history-thumbnail > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.wavve-home .home-continue-watching .mypage__history-duration {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.7333333333);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.wavve-home .home-continue-watching .mypage__history-progress {
+  position: absolute;
+  inset: auto 0 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2509803922);
+}
+.wavve-home .home-continue-watching .mypage__history-progress > span {
+  display: block;
+  height: 100%;
+  background: #1351f9;
+}
+.wavve-home .home-continue-watching .mypage__history-title, .wavve-home .home-continue-watching .mypage__history-program {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.wavve-home .home-continue-watching .mypage__history-title {
+  margin-top: 10px;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 500;
+}
+.wavve-home .home-continue-watching .mypage__history-program {
+  margin-top: 3px;
+  color: #a5a5a5;
+  font-size: 16px;
+  line-height: 23px;
+}
+
+@media (max-width: 1024px) {
+  .wavve-home .home-continue-watching .mypage__history-thumbnail {
+    border-radius: 6px;
+  }
+  .wavve-home .home-continue-watching .mypage__history-title {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .wavve-home .home-continue-watching .mypage__history-program {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .wavve-home .home-continue-watching .mypage__history-duration {
+    right: 6px;
+    bottom: 8px;
+    font-size: 11px;
+  }
+}
+/* 카테고리 버튼 아래부터 섹션 제목까지 33px: 기존 여백과 중복되지 않게 합니다. */
+.wavve-home .home-categories:has(+ .home-continue-watching) {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.wavve-home .home-continue-watching {
+  padding-top: 60px;
+}
+.wavve-home .home-continue-watching .content-section__title h2 {
+  font-size: 24px;
+}
+.wavve-home .home-continue-watching .mypage__history-thumbnail > img {
+  transition: transform 0.35s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .wavve-home .home-continue-watching .mypage__history-card:hover .mypage__history-thumbnail > img {
+    transform: scale(1.06);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wavve-home .home-continue-watching .mypage__history-thumbnail > img {
+    transition: none;
+  }
+}
+
+/* PC에서는 기존 4.5개 맞춤 축소 규칙보다 우선하여 피그마 카드 폭을 유지합니다. */
+@media (min-width: 1025px) {
+  .wavve-home .home-continue-watching .mypage__history-card {
+    min-height: 299px;
+  }
+  .wavve-home .home-continue-watching .content-section__swiper .swiper-slide {
+    width: 407px;
+  }
+}
+.wavve-home .home-continue-watching .content-section {
+  margin-bottom: 60px;
+}

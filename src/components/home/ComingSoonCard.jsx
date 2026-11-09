@@ -9,12 +9,11 @@ export const ComingSoonCard = ({
   isFavorite,
   onFavoriteClick,
 }) => {
+  const detailPath = `/home-content/coming-soon/${item.id}`;
   return (
     <div className="coming-soon-card">
-      <Link
-        to={`/programdetail/${item.id}`}
-        className="coming-soon-card__link"
-      >
+      {/* 썸네일을 감싸는 링크 */}
+      <Link to={detailPath} className="coming-soon-card__link">
         <div className="coming-soon-card__thumbnail">
           <img
             src={getImagePath(item.image)}
@@ -37,7 +36,8 @@ export const ComingSoonCard = ({
 
       <div className="coming-soon-card__info">
         <div className="coming-soon-card__text">
-          <Link to={`/programdetail/${item.id}`}>
+          {/* // 제목을 감싸는 링크 */}
+          <Link to={detailPath}>
             <h3>{item.title}</h3>
           </Link>
 
@@ -46,9 +46,8 @@ export const ComingSoonCard = ({
 
         <button
           type="button"
-          className={`coming-soon-card__heart ${
-            isFavorite ? "is-active" : ""
-          }`}
+          className={`coming-soon-card__heart ${isFavorite ? "is-active" : ""
+            }`}
           onClick={() => onFavoriteClick(item)}
           aria-label={
             isFavorite
