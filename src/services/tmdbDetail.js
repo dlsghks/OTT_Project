@@ -89,6 +89,25 @@ export const getDetailInfo = ({ summary = [], genres = [], directors, writers })
   { label: "작가", value: writers },
 ];
 
+// 펼치기 정보 중 값이 있는 행만
+export const getInfoRows = (rows = []) => rows.filter((row) => row.value);
+
+// 시리즈 펼치기 정보 (개요 · 장르 · 감독 · 작가) — 예능~해외시리즈 상세 · 레트로브 상세 공통
+export const getTvInfo = (tv) => {
+  if (!tv) return [];
+  const crew = tv.aggregate_credits?.crew;
+  const start = tv.first_air_date?.slice(0, 4);
+  const end = tv.in_production ? "" : tv.last_air_date?.slice(0, 4) ?? "";
+
+  return getDetailInfo({
+    summary: [tv.networks?.[0]?.name, start ? `${start}~${end}` : ""],
+    genres: tv.genres,
+    directors: getCrewNames(crew, ["Director"])
+      || (tv.created_by ?? []).map((person) => person.name).join(", "),
+    writers: getCrewNames(crew, WRITER_JOBS),
+  });
+};
+
 // TMDB 영상 목록에서 유튜브 영상 고르기 (예고편 > 티저 > 아무 유튜브 영상)
 export const pickYoutubeVideo = (videos = []) => {
   const youtube = videos.filter((video) => video.site === "YouTube");

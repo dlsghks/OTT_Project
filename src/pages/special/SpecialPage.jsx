@@ -5,9 +5,9 @@ import { SpecialHero } from '../../components/special/SpecialHero';
 import { SectionRenderer } from '../../components/wavve/SectionRenderer';
 import { CollectionRow } from '../../components/wavve/CollectionRow';
 
-import '../../styles/components/Home.scss';
-import '../../styles/pages/Category.scss';
-import '../../styles/pages/Special.scss';
+import '../../styles/components/special/HomeShared.scss';
+import '../../styles/pages/shared/Category.scss';
+import '../../styles/pages/special/Special.scss';
 
 // 스페셜 페이지 본문
 // - filters 가 있으면 CategoryPage 와 같은 필터 버튼(.category-filter) 표시

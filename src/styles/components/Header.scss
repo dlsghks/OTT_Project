@@ -270,3 +270,10 @@ body:has(.notice-page, .inquiry-write) {
     transform: none;
   }
 }
+
+.site-header .header-left > ul > li > a {
+  &:hover,
+  &.is-active {
+    color: #fff;
+  }
+}

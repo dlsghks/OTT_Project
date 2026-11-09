@@ -1,7 +1,6 @@
 // 레트로브 메인 페이지 데이터 (디자인 기준: 1920px)
 // 이미지: public/images/retrov/main/ (로고 -logo-w.png = 흰색 로고, -thumb.jpg = 1920x1080 배너 사진)
 import { programs, programDetails } from "./retrov";
-import { infiniteChallengeSections } from "./infiniteChallengeVideos";
 import { getTmdbTarget, getEpisodeNumber } from "./retrovTmdb";
 
 const IMG = "/images/retrov/main";
@@ -40,7 +39,7 @@ export const heroSlides = heroCopy.map(([id, description]) => ({
   description,
 }));
 
-// 레트로브 TOP 랭킹 (포스터 = 배너 사진 + 흰색 로고, rankImage = 순위 숫자 이미지)
+// 레트로브 TOP 랭킹 (poster = 디자인 포스터 318x464, 없으면 배너 사진 + 흰색 로고 / rankImage = 순위 숫자 이미지)
 export const rankings = [
   "infinite-challenge",
   "high-kick",
@@ -50,25 +49,9 @@ export const rankings = [
   "dad-where-are-we-going",
 ].map((id, index) => ({
   ...getProgram(id),
+  poster: `${IMG}/poster/${id}.png`,
   rankImage: `${IMG}/rank/number-${index + 1}.svg`,
 }));
-
-// 무한도전 테마별 영상에서 n번째 영상 꺼내기
-const icVideo = (sectionId, index) => {
-  const section = infiniteChallengeSections.find((item) => item.id === sectionId);
-  return section?.videos[index];
-};
-
-// {userName}님이 시청 중인 콘텐츠 (progress: 시청 진행률 %)
-// play: { seasonId, episode } — 무한도전 외 프로그램은 누르면 TMDB 고유 id 로 해당 회차 영상 재생 (없으면 상세페이지로 이동)
-export const watching = [
-  { id: "watching-1", programId: "infinite-challenge", title: icVideo("office", 1)?.title, image: icVideo("office", 1)?.image, progress: 54 },
-  { id: "watching-2", programId: "boys-over-flowers", title: "꽃보다 남자 3화", image: `${IMG}/boys-over-flowers-thumb.jpg`, progress: 20, play: { episode: 3 } },
-  { id: "watching-3", programId: "infinite-challenge", title: icVideo("chase", 0)?.title, image: icVideo("chase", 0)?.image, progress: 82 },
-  { id: "watching-4", programId: "high-kick", title: "거침없이 하이킥 12화", image: `${IMG}/high-kick-thumb.jpg`, progress: 35, play: { seasonId: "season-1", episode: 12 } },
-  { id: "watching-5", programId: "full-house", title: "풀하우스 5화", image: `${IMG}/full-house-thumb.jpg`, progress: 10, play: { seasonId: "season-1", episode: 5 } },
-  { id: "watching-6", programId: "infinite-challenge", title: icVideo("game", 0)?.title, image: icVideo("game", 0)?.image, progress: 100 },
-];
 
 // 레트로브 추천 콘텐츠 — 상세페이지 테마별 영상에서 프로그램마다 골라 20개
 // count: 프로그램별 개수 (테마마다 1개씩 돌아가며 뽑음)
@@ -130,12 +113,52 @@ export const recommendations = pickVideos(
   recommendGroups.reduce((sum, videos) => sum + videos.length, 0)
 );
 
-// 레트로브 쇼츠 모아보기 (caption: [윗줄, 파란 강조줄])
+// {userName}님이 시청 중인 콘텐츠 — 상세페이지 테마별 영상에서 프로그램마다 2개씩 12개 (추천 콘텐츠와 겹치지 않게)
+// 추천 콘텐츠와 같은 카드 데이터라 누르면 바로 해당 영상 재생 / progress: 시청 진행률 %
+const WATCHING_COUNT = 2;
+const WATCHING_PROGRESS = [54, 20, 82, 35, 10, 100, 66, 45, 28, 90, 15, 72];
+const recommendIds = new Set(recommendations.map((item) => item.id));
+
+const watchingGroups = Object.keys(RECOMMEND_COUNT).map((programId) =>
+  pickVideos(programDetails[programId]?.sections ?? [], 30)
+    .map((video) => toRecommendation(programId, video))
+    .filter((item, index, list) => list.findIndex((other) => other.title === item.title) === index)
+    .filter((item) => !recommendIds.has(item.id))
+    .slice(0, WATCHING_COUNT)
+);
+
+export const watching = pickVideos(
+  watchingGroups.map((videos) => ({ videos })),
+  watchingGroups.reduce((sum, videos) => sum + videos.length, 0)
+).map((item, index) => ({
+  ...item,
+  id: item.id.replace("recommend-", "watching-"),
+  progress: WATCHING_PROGRESS[index % WATCHING_PROGRESS.length],
+}));
+
+// 레트로브 쇼츠 모아보기 — wavve 웨이브 유튜브 채널 쇼츠 (프로그램별 2개)
+// videoId: 유튜브 쇼츠 ID (누르면 바로 재생) / caption: [윗줄, 파란 강조줄] / title: 유튜브 원래 제목
+// 썸네일은 유튜브 쇼츠 세로 이미지 (i.ytimg.com/oar2.jpg, API 사용량 없음)
+const short = (videoId, programId, caption, title) => ({
+  id: `short-${videoId}`,
+  videoId,
+  programId,
+  caption,
+  title,
+  image: `https://i.ytimg.com/vi/${videoId}/oar2.jpg`, // 쇼츠 세로 썸네일
+});
+
 export const shorts = [
-  { id: "short-1", programId: "infinite-challenge", caption: ["한순간의 표정이 만든 패착", "단번에 읽어낸 유재석"], image: icVideo("chase", 1)?.image },
-  { id: "short-2", programId: "infinite-challenge", caption: ["회의 시간에 터진 웃음", "무한상사 레전드 장면"], image: icVideo("office", 2)?.image },
-  { id: "short-3", programId: "infinite-challenge", caption: ["눈치 게임의 최후", "끝까지 버틴 단 한 명"], image: icVideo("game", 1)?.image },
-  { id: "short-4", programId: "infinite-challenge", caption: ["도전은 계속된다", "무모해서 더 빛난 미션"], image: icVideo("mission", 1)?.image },
-  { id: "short-5", programId: "infinite-challenge", caption: ["무대 위의 반전", "가요제 최고의 순간"], image: icVideo("music-festival", 0)?.image },
-  { id: "short-6", programId: "infinite-challenge", caption: ["말로 하는 스포츠", "티키타카 명장면 1분 요약"], image: icVideo("tikitaka", 1)?.image },
+  short("fp-1_FB7MAo", "infinite-challenge", ["무한도전 레전드 감성", "파도처럼 부서진 내 맘"], "[무한도전] 파도처럼 부서진 내 맘"),
+  short("EGtuOyzKqcQ", "high-kick", ["거침없이 하이킥", "불꽃 카리스마 민호"], "♨불꽃카리스마 민호♨ | 거침없이 하이킥"),
+  short("GxFT_ihiZuI", "boys-over-flowers", ["착한 척은 어려워", "차카니 백 개 먹고 온 구준표"], "차카니 백 개 먹고 온 구준표"),
+  short("sbUtM-VmtEg", "we-got-married", ["풋풋함에 설렘 한 스푼", "용서커플"], "풋풋+설렘=용서커플♥️"),
+  short("Sbe6nnDzlLs", "dad-where-are-we-going", ["세 살이 어려운", "셋째 다윤이"], "세 살이 어려운 셋째 다윤이 | 아빠 어디가"),
+  short("aqxNPGFXc3Q", "full-house", ["송혜교를 위한 노래", "비의 곰 세 마리"], "레전드인 송혜교를 이을 큐티한 비의 곰 세 마리🐻"),
+  short("9xcqEQplgEg", "infinite-challenge", ["포즈만 봐도 자동 반응", "레전드는 영원하다"], "레전드는 영원하다🎬📺 무한도전 포즈 보자마자 자동 반응하는 멤버들"),
+  short("lUlaYeEULTE", "high-kick", ["러블리함 만땅!", "하이킥 서민정 코어"], "러블리함 만땅! 하이킥 서민정 코어♥️"),
+  short("HERZKt_dRnY", "boys-over-flowers", ["재벌 2세의 진심", "계란말이에 진심인 구준표"], "계란말이에 진심인 구준표"),
+  short("bS1dbHVvQgc", "we-got-married", ["우리 사랑하게 됐어요", "아담부부"], "아담부부 우리 사랑하게 됐어요🤵👰"),
+  short("Q9TEV6JF3S0", "dad-where-are-we-going", ["귀여움 과다", "윤후 사랑의 총알"], "귀여움 과다 윤후 사랑의 총알💘"),
+  short("HWtypOqx0rM", "full-house", ["4K로 다시 보는", "송혜교 리즈 시절"], "4K로 보는 송혜교 리즈 시절 대공개! 💕"),
 ];

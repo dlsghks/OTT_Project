@@ -10,9 +10,9 @@ import {
   liveTop10,
   liveCategories,
   liveBanner,
-} from '../../data/liveData';
+} from '../../data/live/liveData';
 
-import '../../styles/pages/Live.scss';
+import '../../styles/pages/category/Live.scss';
 
 export const Live = () => {
   const [now, setNow] = useState(() => Date.now());

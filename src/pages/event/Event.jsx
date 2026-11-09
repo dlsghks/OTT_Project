@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getImagePath } from '../../utils/imagePath';
 import RetroEventCarousel from '../../components/retrov/RetroEventCarousel';
 import { eventBanners } from '../../data/retrov/retrov';
@@ -7,7 +7,7 @@ import '../../styles/pages/event/Event.scss';
 
 const events = [
   {
-    id: 'check',
+    id: 'attendance',
     title: '11월 출석체크',
     image: 'event-check.jpg',
     period: '2026. 11. 01 ~ 2026. 11. 30',
@@ -19,13 +19,6 @@ const events = [
     image: 'event-payback.jpg',
     period: '2026. 10. 30 ~ 2027. 01. 31',
     reward: '없음',
-  },
-  {
-    id: 'mma2026',
-    title: 'MMA2026',
-    image: 'event-mma.jpg',
-    period: '2026. 10. 26 ~ 2026. 11. 04',
-    reward: 'MMA2026 초대권',
   },
   {
     id: 'evil',
@@ -57,7 +50,7 @@ const events = [
   },
 ];
 
-const endedEvents = [
+const previousEndedEvents = [
   {
     id: 'ended-01',
     title: '<인턴> 론칭 프로모션',
@@ -113,24 +106,71 @@ const endedEvents = [
   image: `/images/events/end/ended-event${String(index + 1).padStart(2, '0')}.jpg`,
 }));
 
+const endedEvents = [
+  {
+    id: 'mma2026',
+    title: 'MMA2026 티켓 응모 이벤트 당첨자 발표',
+    image: '/images/events/end/ended-event00.jpg',
+    announcedAt: '2026. 11. 05',
+  },
+  ...previousEndedEvents,
+];
+
+const PAGE_SIZE = 10;
+
 export const Event = () => {
-  const [activeTab, setActiveTab] = useState('ongoing');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const activeTab =
+    searchParams.get("tab") === "winners" ? "winners" : "ongoing";
+  const [winnersPage, setWinnersPage] = useState(1);
+
   const isOngoing = activeTab === 'ongoing';
-  const visibleEvents = isOngoing ? events : endedEvents;
+
+  const totalPages = isOngoing
+    ? 1
+    : Math.ceil(endedEvents.length / PAGE_SIZE);
+
+  const visibleEvents = isOngoing
+    ? events
+    : endedEvents.slice(
+      (winnersPage - 1) * PAGE_SIZE,
+      winnersPage * PAGE_SIZE
+    );
+
+  const handleTabChange = (tab) => {
+    setSearchParams(
+      (previous) => {
+        const next = new URLSearchParams(previous);
+
+        if (tab === "winners") {
+          next.set("tab", "winners");
+        } else {
+          next.delete("tab");
+        }
+
+        return next;
+      },
+      { replace: true }
+    );
+
+    setWinnersPage(1);
+  };
 
   return (
     <div className="event-page">
-      <section className="event-page__hero" aria-label="MMA2026 이벤트">
-        <Link to="/eventdetail/mma2026">
-          <img
-            src={getImagePath('/images/events/event-banner-MMA.jpg')}
-            alt="웨이브에서 MMA2026 이벤트 참여하고 직관 티켓 받아보자"
-          />
-        </Link>
-      </section>
-
+      <div className="event-page__hero">
+        <img
+          src={getImagePath('/images/events/event-banner-MMA.jpg')}
+          alt="MMA2026 이벤트"
+        />
+      </div>
       <div className="event-page__content">
-        <div className="event-page__tabs" role="tablist" aria-label="이벤트 구분">
+        <div
+          className="event-page__tabs"
+          role="tablist"
+          aria-label="이벤트 구분"
+        >
           <button
             id="event-tab-ongoing"
             type="button"
@@ -138,7 +178,7 @@ export const Event = () => {
             aria-selected={isOngoing}
             aria-controls="event-panel"
             className={isOngoing ? 'is-active' : ''}
-            onClick={() => setActiveTab('ongoing')}
+            onClick={() => handleTabChange('ongoing')}
           >
             진행중 이벤트
           </button>
@@ -150,7 +190,7 @@ export const Event = () => {
             aria-selected={!isOngoing}
             aria-controls="event-panel"
             className={!isOngoing ? 'is-active' : ''}
-            onClick={() => setActiveTab('winners')}
+            onClick={() => handleTabChange('winners')}
           >
             당첨자 발표
           </button>
@@ -189,6 +229,7 @@ export const Event = () => {
                             <dt>기간</dt>
                             <dd>{event.period}</dd>
                           </div>
+
                           <div>
                             <dt>경품</dt>
                             <dd>{event.reward}</dd>
@@ -209,15 +250,31 @@ export const Event = () => {
 
           <nav
             className="event-page__pagination"
-            aria-label={isOngoing ? '진행중 이벤트 페이지' : '당첨자 발표 페이지'}
+            aria-label={
+              isOngoing
+                ? '진행중 이벤트 페이지'
+                : '당첨자 발표 페이지'
+            }
           >
-            <button
-              type="button"
-              aria-current="page"
-              aria-label="1페이지"
-            >
-              1
-            </button>
+            {Array.from(
+              { length: totalPages },
+              (_, index) => index + 1
+            ).map((number) => {
+              const isActive = isOngoing || winnersPage === number;
+
+              return (
+                <button
+                  key={number}
+                  type="button"
+                  className={isActive ? 'is-active' : ''}
+                  aria-current={isActive ? 'page' : undefined}
+                  aria-label={`${number}페이지`}
+                  onClick={() => setWinnersPage(number)}
+                >
+                  {number}
+                </button>
+              );
+            })}
           </nav>
         </section>
       </div>

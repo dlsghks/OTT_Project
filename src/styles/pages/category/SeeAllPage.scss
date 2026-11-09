@@ -1,0 +1,132 @@
+@use "../../common/_figma-tokens" as figma;
+
+// Figma '전체보기' 공통 화면: PC 한 줄 6개, 2:3 포스터, 웨이브 좋아요 컬러.
+// 다른 팀원이 작성한 전역 CSS를 건드리지 않고 이 페이지 클래스에서만 스타일을 적용합니다.
+$wavve-blue: figma.$primary-main;
+$color-muted: figma.$neutral-3;
+$poster-gap-x: 18px; // 기존 포스터 사이 간격(가이드에서 개별 규격 미확인)
+$poster-gap-y: figma.$space-3xl;
+
+.see-all-page {
+  box-sizing: border-box;
+  min-height: calc(100vh - 96px);
+  margin-inline: calc(var(--page-side-padding, 110px) * -1);
+  padding: 60px var(--page-side-padding, 110px) 120px;
+  background: figma.$neutral-black;
+  color: figma.$neutral-white;
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  &__inner {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  &__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: figma.$space-2xl;
+    margin-bottom: 52px;
+  }
+
+  &__title-group {
+    min-width: 0;
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(18px, 3.125vw, 24px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+      word-break: keep-all;
+    }
+
+    p {
+      margin: 0;
+      color: $color-muted;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+  }
+
+  &__like {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    margin-top: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: figma.$neutral-white;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &.is-active { color: $wavve-blue; }
+    &:hover:not(.is-active) { color: figma.$primary-main; }
+    &:focus-visible { outline: 2px solid $wavve-blue; outline-offset: 3px; }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: $poster-gap-x;
+    row-gap: $poster-gap-y;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__grid-item { min-width: 0; }
+
+  // 이 페이지에만 ContentCard 포스터 스타일을 적용합니다.
+  .content-card__thumbnail {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    border-radius: 12px;
+    background-color: figma.$neutral-4;
+  }
+
+  .content-card__info { display: none; }
+
+  &__message { color: $color-muted; font-size: 16px; }
+
+  &--missing {
+    p { margin: 0 0 18px; }
+    a { color: figma.$neutral-white; text-decoration: underline; }
+  }
+
+  @media (max-width: 1200px) {
+    &__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 36px;
+    padding-bottom: 80px;
+
+    &__heading { margin-bottom: 32px; gap: 12px; }
+    &__title-group {
+      h1 { font-size: 28px; }
+      p { font-size: 14px; }
+    }
+    &__like { margin-top: 0; }
+    &__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: figma.$space-md;
+      row-gap: figma.$space-2xl;
+    }
+    .content-card__thumbnail { border-radius: 8px; }
+  }
+
+  @media (max-width: 480px) {
+    &__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &__title-group h1 { font-size: 24px; }
+    &__like { flex-basis: 36px; width: 36px; height: 36px; }
+  }
+}

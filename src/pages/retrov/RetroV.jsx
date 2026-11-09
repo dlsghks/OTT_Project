@@ -33,7 +33,7 @@ function youtubeThumb(videoId) {
   return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : null;
 }
 
-// 추천 콘텐츠 썸네일: 직접 넣은 이미지 → TMDB 회차 장면 사진 → 유튜브 썸네일 → 프로그램 배너 사진
+// 추천 · 시청 중 콘텐츠 썸네일: 직접 넣은 이미지 → TMDB 회차 장면 사진 → 유튜브 썸네일 → 프로그램 배너 사진
 function useRecommendationImages(items) {
   const { episodes, onFetchEpisodes } = useRetrovTmdbStore();
 
@@ -87,6 +87,7 @@ function PlayableCard({ item, onPlay, className, children }) {
 export const RetroV = () => {
   const { playingVideo, play, close } = useRetrovPlayer(); // 영상 재생 (유튜브 팝업)
   const recommendCards = useRecommendationImages(recommendations);
+  const watchingCards = useRecommendationImages(watching);
 
   return (
     <div className="retrov-main">
@@ -114,17 +115,21 @@ export const RetroV = () => {
           >
             <span className="rv-rank-card__poster">
               <img
-                src={getImagePath(item.thumbnail)}
+                className={item.poster ? "rv-rank-card__image--poster" : undefined}
+                src={getImagePath(item.poster ?? item.thumbnail)}
                 alt=""
                 loading="lazy"
                 draggable="false"
               />
-              <img
-                className="rv-rank-card__logo"
-                src={getImagePath(item.logo)}
-                alt=""
-                draggable="false"
-              />
+              {/* 디자인 포스터에는 로고가 들어 있어서 사진일 때만 로고를 얹음 */}
+              {!item.poster && (
+                <img
+                  className="rv-rank-card__logo"
+                  src={getImagePath(item.logo)}
+                  alt=""
+                  draggable="false"
+                />
+              )}
             </span>
 
             <img
@@ -143,7 +148,7 @@ export const RetroV = () => {
         variant="watching"
         icon="👑"
         title={`${userName}님이 시청 중인 콘텐츠`}
-        items={watching}
+        items={watchingCards}
         renderItem={(item) => (
           <PlayableCard item={item} onPlay={play} className="rv-thumb-card">
             <span className="rv-thumb-card__image">
@@ -211,10 +216,8 @@ export const RetroV = () => {
           );
 
           return (
-            <Link
-              to={`/retrov/${item.programId}`}
-              className="rv-short-card"
-            >
+            // 누르면 유튜브 쇼츠 바로 재생 (시청 중 · 추천 카드와 같은 재생 팝업)
+            <PlayableCard item={item} onPlay={play} className="rv-short-card">
               <strong className="rv-short-card__caption">
                 <span>{item.caption[0]}</span>
                 <em>{item.caption[1]}</em>
@@ -237,7 +240,7 @@ export const RetroV = () => {
               <span className="rv-short-card__footer">
                 {program?.title} | 오직 <b>wavve</b>에서
               </span>
-            </Link>
+            </PlayableCard>
           );
         }}
       />

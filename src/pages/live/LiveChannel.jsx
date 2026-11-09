@@ -9,6 +9,8 @@ import 'swiper/css';
 import { auth } from '../../firebase/firebase';
 import { liveChatAdapter } from '../../services/liveChat';
 import { livePrograms, liveTop10 } from '../../data/live/liveData';
+// 골프 스페셜 "이번 주 골프 중계" → ?channel=중계 id 로 들어오면 해당 골프 중계 선택
+import { golfLivePrograms } from '../../data/golfData';
 import { LoginModal } from '../../components/common/LoginModal';
 import { getImagePath } from '../../utils/imagePath';
 
@@ -117,7 +119,7 @@ export const LiveChannel = ({
   // 채널 선택
   const selected = useMemo(() => {
     return (
-      [...liveTop10, ...livePrograms].find(
+      [...liveTop10, ...livePrograms, ...golfLivePrograms].find(
         (program) =>
           String(program.channelId) === requestedId ||
           String(program.id) === requestedId
@@ -617,14 +619,6 @@ export const LiveChannel = ({
         ? previous.filter((value) => value !== id)
         : [...previous, id]
     ));
-  };
-
-  const shareTo = (url) => {
-    window.open(
-      url,
-      '_blank',
-      'noopener,noreferrer,width=640,height=520'
-    );
   };
 
   const copyShareUrl = async () => {
