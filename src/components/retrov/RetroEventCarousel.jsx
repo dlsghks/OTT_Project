@@ -42,7 +42,7 @@ export default function RetroEventCarousel({ banners = [] }) {
             className="rv-event__slide"
           >
             {/* 배너를 누르면 이벤트 페이지로 (드래그로 넘길 때는 Swiper 가 클릭을 막음) */}
-            <Link to={banner.link ?? '/event'} className="rv-event__link" draggable={false}>
+            <Link to={banner.link ?? '/eventdetail'} className="rv-event__link" draggable={false}>
               <img
                 src={getImagePath(banner.image)}
                 alt={[banner.title, banner.description].filter(Boolean).join(' ')}
