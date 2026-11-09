@@ -47,3 +47,7 @@ export const normalizeCoinRecords = (value, attendanceDays = []) => {
 // 만료되지 않은 잔여 코인
 export const getAvailableCoin = (record, now = formatCoinDate(new Date())) =>
   record.expiresAt > now ? record.remaining : 0;
+
+// 프로필의 총코인 (코인내역 · 마이페이지 공통)
+export const getCoinTotal = (records = [], now = formatCoinDate(new Date())) =>
+  records.reduce((sum, record) => sum + getAvailableCoin(record, now), 0);

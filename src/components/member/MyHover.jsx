@@ -250,6 +250,12 @@ export const MyHover = ({
       return;
     }
 
+    if (key === "coupon") {
+      close();
+      navigate("/coupon");
+      return;
+    }
+
     if (!onAction) {
       setMessage(`${label} 기능은 준비 중입니다.`);
       return;

@@ -1,11 +1,12 @@
 @use "../../common/figma-tokens" as figma;
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap");
 
-// 코인내역 (/coin) — 웨이브 코인내역 화면 기준, 글자는 스타일 가이드의 Noto Sans KR
+// 코인내역 (/coin) — 글자는 스타일 가이드의 Noto Sans KR (쿠폰내역도 머리글 · 빈 화면 · 페이지 번호를 함께 사용)
 $coin-bg: #1b1b1b;
 $coin-band: #262626;
-$coin-panel: #262626;
-$coin-line: rgba(255, 255, 255, 0.08);
+$coin-panel: figma.$neutral-7;
+$coin-divider: rgba(255, 255, 255, 0.3);
+$coin-line: rgba(255, 255, 255, 0.16);
 $coin-link: #3d84ff;
 
 .coin {
@@ -51,23 +52,15 @@ $coin-link: #3d84ff;
 
   &__inner {
     width: 100%;
-    max-width: 938px;
+    max-width: 954px;
     margin: 0 auto;
-    padding-top: figma.$space-3xl;
+    padding-top: figma.$space-6xl;
   }
 
   &__title-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: figma.$space-lg;
-
-    h2 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 1.4;
-    }
+    justify-content: flex-end;
   }
 
   button.coin__charge {
@@ -75,8 +68,16 @@ $coin-link: #3d84ff;
     align-items: center;
     gap: figma.$space-xs;
     padding: 0;
-    color: $coin-link;
-    font-size: 13px;
+    color: figma.$neutral-white;
+    font-size: 16px;
+
+    svg:last-child {
+      margin-left: figma.$space-md;
+    }
+
+    &:hover {
+      color: $coin-link;
+    }
   }
 
   &__notice {
@@ -89,28 +90,28 @@ $coin-link: #3d84ff;
   &__summary {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin: figma.$space-lg 0 0;
-    padding: figma.$space-xl 0;
+    margin: figma.$space-xl 0 0;
+    padding: figma.$space-3xl 0;
     border-radius: figma.$radius-2;
     background: $coin-panel;
 
     > div {
-      padding: figma.$space-sm 0;
+      padding: figma.$space-lg 0;
       text-align: center;
 
       + div {
-        border-left: 1px solid $coin-line;
+        border-left: 2px solid $coin-divider;
       }
     }
 
     dt {
-      color: figma.$neutral-3;
-      font-size: 14px;
+      color: figma.$neutral-1;
+      font-size: 18px;
     }
 
     dd {
-      margin: figma.$space-xs 0 0;
-      font-size: 36px;
+      margin: figma.$space-sm 0 0;
+      font-size: 48px;
       font-weight: 500;
       line-height: 1.2;
     }
@@ -118,26 +119,20 @@ $coin-link: #3d84ff;
 
   &__tabs {
     display: flex;
-    align-items: center;
-    margin-top: figma.$space-3xl;
-    padding-bottom: figma.$space-md;
-    border-bottom: 1px solid $coin-line;
+    margin-top: figma.$space-7xl;
 
     button {
-      padding: 0;
+      min-width: 138px;
+      padding: figma.$space-lg;
+      border-bottom: 3px solid transparent;
       color: figma.$neutral-3;
-      font-size: 16px;
+      font-size: 18px;
       line-height: 1.4;
 
-      + button {
-        margin-left: figma.$space-md;
-        padding-left: figma.$space-md;
-        border-left: 1px solid $coin-line;
-      }
-
       &.is-active {
+        border-bottom-color: figma.$primary-main;
         color: figma.$neutral-white;
-        font-weight: 700;
+        font-weight: 500;
       }
     }
   }
@@ -156,6 +151,7 @@ $coin-link: #3d84ff;
   }
 
   &__table-wrap {
+    margin-top: figma.$space-xl;
     overflow-x: auto;
   }
 
@@ -163,21 +159,21 @@ $coin-link: #3d84ff;
     width: 100%;
     min-width: 820px;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 18px;
     text-align: center;
+    white-space: nowrap;
 
     th {
-      padding: figma.$space-md figma.$space-xs;
-      border-bottom: 1px solid $coin-line;
-      color: figma.$neutral-2;
-      font-weight: 700;
-      white-space: nowrap;
+      padding: figma.$space-2xl figma.$space-sm;
+      background: $coin-band;
+      color: figma.$neutral-1;
+      font-weight: 400;
     }
 
     td {
-      padding: figma.$space-lg figma.$space-xs;
-      border-bottom: 1px solid $coin-line;
-      color: figma.$neutral-1;
+      padding: figma.$space-6xl figma.$space-sm;
+      border-bottom: 2px solid $coin-line;
+      color: figma.$neutral-white;
       line-height: 1.4;
     }
   }
@@ -185,21 +181,35 @@ $coin-link: #3d84ff;
   &__pagination {
     display: flex;
     justify-content: center;
-    gap: figma.$space-sm;
-    margin-top: figma.$space-3xl;
+    gap: figma.$space-md;
+    margin-top: figma.$space-6xl;
 
     button {
-      width: 28px;
-      height: 28px;
+      width: 44px;
+      height: 44px;
       padding: 0;
-      border: 1px solid transparent;
-      border-radius: figma.$radius-3;
+      border: 0;
+      border-radius: figma.$radius-1;
       color: figma.$neutral-3;
-      font-size: 13px;
+      font-size: 16px;
 
       &.is-active {
-        border-color: figma.$neutral-white;
+        background: figma.$primary-main;
         color: figma.$neutral-white;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    &__table {
+      font-size: 14px;
+
+      th {
+        padding: figma.$space-lg figma.$space-sm;
+      }
+
+      td {
+        padding: figma.$space-2xl figma.$space-sm;
       }
     }
   }
@@ -219,19 +229,33 @@ $coin-link: #3d84ff;
       padding-top: figma.$space-2xl;
     }
 
-    &__title-row h2 {
-      font-size: 16px;
+    button.coin__charge {
+      font-size: 14px;
     }
 
     &__summary {
       padding: figma.$space-md 0;
+
+      > div {
+        padding: figma.$space-sm 0;
+      }
 
       dt {
         font-size: 12px;
       }
 
       dd {
+        margin-top: figma.$space-xs;
         font-size: 24px;
+      }
+    }
+
+    &__tabs {
+      margin-top: figma.$space-3xl;
+
+      button {
+        min-width: 110px;
+        font-size: 16px;
       }
     }
   }

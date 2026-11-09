@@ -1,6 +1,7 @@
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
 import { createAttendanceCoin, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
+import { createCouponRecord, markCouponUsed, normalizeCouponRecords } from "../utils/couponRecords";
 import { create } from "zustand";
 import { doc, onSnapshot, runTransaction, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
@@ -27,6 +28,7 @@ export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   viewedEditorPicks: [],
   attendanceDays: [],
   coinRecords: [],
+  couponRecords: [],
   pinSalt: "",
   pinHash: "",
   locked: false,
@@ -52,6 +54,7 @@ const normalize = (data = {}) => {
       viewedEditorPicks: normalizeEditorPicks(saved?.viewedEditorPicks),
       attendanceDays,
       coinRecords: normalizeCoinRecords(saved?.coinRecords, attendanceDays),
+      couponRecords: normalizeCouponRecords(saved?.couponRecords),
       pinSalt,
       pinHash,
       locked: Boolean(pinSalt && pinHash),
@@ -276,5 +279,41 @@ export const saveAttendanceDay = async (profileId, day, ownerId) => {
       attendanceDays
     );
     transaction.set(ref, { profiles: { [profileId]: { attendanceDays, coinRecords } } }, { merge: true });
+  });
+};
+
+const requireSelectedProfile = (profileId, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  if (useAccountStore.getState().selectedProfileId !== profileId) {
+    throw new Error("프로필이 변경됐어요. 다시 시도해주세요.");
+  }
+  return uid;
+};
+
+// 쿠폰 등록: 번호가 틀렸거나 이 프로필에 이미 등록했으면 false 를 돌려줍니다.
+export const registerCoupon = async (profileId, code, ownerId) => {
+  const record = createCouponRecord(code);
+  if (!record) return false;
+  const uid = requireSelectedProfile(profileId, ownerId);
+  const ref = doc(db, "users", uid);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireSelectedProfile(profileId, uid);
+    const records = normalizeCouponRecords(snapshot.data()?.profiles?.[profileId]?.couponRecords);
+    if (records.some((item) => item.id === record.id)) return false;
+    transaction.set(ref, { profiles: { [profileId]: { couponRecords: [record, ...records] } } }, { merge: true });
+    return true;
+  });
+};
+
+// 쿠폰 사용: 보유 쿠폰을 이용 쿠폰으로 옮깁니다.
+export const redeemCoupon = async (profileId, couponId, ownerId) => {
+  const uid = requireSelectedProfile(profileId, ownerId);
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireSelectedProfile(profileId, uid);
+    const records = normalizeCouponRecords(snapshot.data()?.profiles?.[profileId]?.couponRecords);
+    transaction.set(ref, { profiles: { [profileId]: { couponRecords: markCouponUsed(records, couponId) } } }, { merge: true });
   });
 };
