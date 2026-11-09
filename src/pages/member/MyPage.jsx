@@ -1,5 +1,8 @@
 import { WatchHistoryCard } from "../../components/member/WatchHistoryCard";
 import { MyPageEventCarousel } from "../../components/member/MyPageEventCarousel";
+import RetroMobileEventSwiper from "../../components/retrov/RetroMobileEventSwiper";
+import { eventBanners } from "../../data/retrov/retrov";
+import { useMobileLayout } from "../../hooks/useMobileLayout";
 import { MemberInfoModal } from "../../components/member/MemberInfoModal";
 import { getImagePath } from "../../utils/imagePath";
 import { useProfileWatchHistory } from "../../utils/profileWatchHistory";
@@ -11,11 +14,13 @@ import { useEditorPicks } from "../../utils/profileEditorPicks";
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NotificationPanel } from "../../components/common/NotificationPanel";
 import { useAuthState } from "../../hooks/useAuthState";
 import { useNotificationStore } from "../../store/useNotificationStore";
 import { useProfileShorts } from "../../utils/profileShorts";
+import { getCoinTotal } from "../../utils/coinRecords";
+import { getOwnedCoupons } from "../../utils/couponRecords";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
 import emptyImage from "../../assets/mypage/empty-play.png";
@@ -115,8 +120,8 @@ const MyPagePoster = ({ item, isShorts }) => {
 
 // 목록 item 형식: { id, title, image, type: "program" | "movie" | "shorts", to? }
 export const MyPage = ({
-  profileName = "프로필1", avatar = profileImage, passName = "", coinCount = 0,
-  couponCount = 0, retroCount = 0, historyItems = EMPTY_ITEMS,
+  profileName = "프로필1", avatar = profileImage, passName = "",
+  retroCount = 0, historyItems = EMPTY_ITEMS,
   favoriteItems = EMPTY_ITEMS, purchasedItems = EMPTY_ITEMS,
   downloadItems = EMPTY_ITEMS, retroPicks = RETRO_PICKS,
   onAction, onOpenContent,
@@ -129,6 +134,8 @@ export const MyPage = ({
   const { liked: likedEditorPicks } = useEditorPicks();
   const displayedName = selectedProfile.name || profileName;
   const displayedAvatar = selectedProfile.image || avatar;
+  const coinCount = getCoinTotal(selectedProfile.coinRecords); // 선택한 프로필의 총코인
+  const couponCount = getOwnedCoupons(selectedProfile.couponRecords).length; // 선택한 프로필의 보유 쿠폰 수
   const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
   const [activeTab, setActiveTab] = useState("history");
@@ -243,8 +250,11 @@ export const MyPage = ({
     if (dialogTitle && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
   }, [dialogTitle]);
 
+  const navigate = useNavigate();
+  const isMobile = useMobileLayout();
   const requestAction = (action, title) => {
-    if (onAction) onAction(action);
+    if (action === "coupon") navigate("/coupon");
+    else if (onAction) onAction(action);
     else setDialogTitle(title);
   };
   const changeTab = (key) => { setActiveTab(key); setActiveFilter("all"); };
@@ -410,11 +420,11 @@ export const MyPage = ({
 
         <dl className="mypage__summary">
           <div>
-            <dt>보유 코인</dt>
+            <dt><Link className="mypage__summary-link" to="/coin">보유 코인</Link></dt>
             <dd>{coinCount.toLocaleString("ko-KR")}</dd>
           </div>
           <div>
-            <dt>보유 쿠폰</dt>
+            <dt><Link className="mypage__summary-link" to="/coupon">보유 쿠폰</Link></dt>
             <dd>{couponCount.toLocaleString("ko-KR")}</dd>
           </div>
           <div>
@@ -614,7 +624,7 @@ export const MyPage = ({
         </section>
       </div>
 
-      <MyPageEventCarousel
+      {isMobile ? <RetroMobileEventSwiper banners={eventBanners} className="mypage__events" /> : <MyPageEventCarousel
         events={EVENTS}
         renderBanner={(event) => (
           <>
@@ -661,7 +671,7 @@ export const MyPage = ({
             ))}
           </>
         )}
-      />
+      />}
 
       {isNotificationOpen &&
         createPortal(

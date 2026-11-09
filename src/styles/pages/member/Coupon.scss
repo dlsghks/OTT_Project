@@ -1,0 +1,316 @@
+@use "../../common/figma-tokens" as figma;
+
+// 쿠폰내역 (/coupon) — 공통 틀은 Coin.scss 의 .coin 을 사용
+$coupon-line: rgba(255, 255, 255, 0.16);
+
+.coupon {
+  button.coupon__register,
+  button.coupon__use {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: figma.$radius-2;
+    background: figma.$neutral-7;
+    color: figma.$neutral-white;
+    font-size: 18px;
+
+    &:hover:not(:disabled),
+    &:active:not(:disabled) {
+      background: figma.$primary-main;
+    }
+  }
+
+  button.coupon__register {
+    gap: figma.$space-2xl;
+
+    img {
+      width: 31px;
+      height: 28px;
+      max-width: none;
+    }
+
+    width: 356px;
+    max-width: 100%;
+    height: 82px;
+    margin: figma.$space-7xl auto 0;
+    display: flex;
+  }
+
+  button.coupon__use {
+    width: 190px;
+    height: 64px;
+  }
+
+  &__tabs {
+    display: flex;
+    margin-top: figma.$space-7xl;
+
+    button {
+      padding: figma.$space-lg;
+      border-bottom: 3px solid transparent;
+      color: figma.$neutral-3;
+      font-size: 18px;
+      line-height: 1.4;
+
+      span {
+        margin-left: figma.$space-sm;
+      }
+
+      &.is-active {
+        border-bottom-color: figma.$primary-main;
+        color: figma.$neutral-white;
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__list {
+    margin: figma.$space-md 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) clamp(150px, 20vw, 380px) 190px;
+    align-items: center;
+    gap: figma.$space-6xl;
+    padding: figma.$space-6xl figma.$space-4xl figma.$space-6xl figma.$space-6xl;
+    border-bottom: 2px solid $coupon-line;
+  }
+
+  img.coupon__icon {
+    width: 31px;
+    height: 28px;
+    max-width: none;
+  }
+
+  &__used {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 190px;
+    height: 64px;
+    color: figma.$neutral-4;
+    font-size: 18px;
+  }
+
+  &__info {
+    min-width: 0;
+
+    strong {
+      display: block;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    p {
+      margin: figma.$space-md 0 0;
+      color: figma.$neutral-3;
+      font-size: 15px;
+    }
+  }
+
+  &__expire {
+    span {
+      color: figma.$neutral-3;
+      font-size: 15px;
+    }
+
+    p {
+      margin: figma.$space-sm 0 0;
+      color: figma.$neutral-1;
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    &__item {
+      gap: figma.$space-2xl;
+      padding: figma.$space-2xl 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    button.coupon__register {
+      height: 64px;
+      margin-top: figma.$space-3xl;
+      font-size: 16px;
+    }
+
+    &__tabs {
+      margin-top: figma.$space-3xl;
+
+      button {
+        font-size: 16px;
+      }
+    }
+
+    &__item {
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: figma.$space-md;
+    }
+
+    img.coupon__icon {
+      width: 24px;
+      height: auto;
+    }
+
+    &__used {
+      grid-column: 2;
+      width: 100%;
+      height: 48px;
+      font-size: 16px;
+    }
+
+    &__info strong {
+      font-size: 17px;
+    }
+
+    &__info p,
+    &__expire span {
+      font-size: 13px;
+    }
+
+    &__expire {
+      grid-column: 2;
+
+      p {
+        font-size: 15px;
+      }
+    }
+
+    button.coupon__use {
+      grid-column: 2;
+      width: 100%;
+      height: 48px;
+      font-size: 16px;
+    }
+  }
+}
+
+// 쿠폰 등록 팝업 (WavveAccountModal 안, 팝업은 body 로 렌더링)
+dialog.wavve-account-modal:has(.coupon-register) {
+  --wam-gap: 28px;
+  --wam-radius: 12px;
+
+  .coupon-register__title,
+  .coupon-register__label {
+    display: block;
+    color: figma.$neutral-white;
+    font-weight: 500;
+  }
+
+  .coupon-register__desc {
+    margin-top: figma.$space-sm;
+    color: figma.$neutral-3;
+  }
+
+  .coupon-register__label {
+    margin-bottom: figma.$space-md;
+  }
+
+  .wam-input {
+    border-radius: figma.$radius-1;
+
+    &:focus,
+    &:focus-visible {
+      border-color: figma.$primary-main;
+      outline: 0;
+    }
+
+    &.is-error,
+    &.is-error:focus {
+      border-color: #ff7a85;
+    }
+  }
+
+  .coupon-register__hint {
+    margin-top: figma.$space-sm;
+    color: figma.$neutral-4;
+    font-size: 13px;
+
+    &.is-error {
+      color: #ff3b4e;
+    }
+  }
+
+  .wam-button:disabled {
+    font-size: 16px;
+  }
+
+  .wam-button--primary {
+    border-radius: figma.$radius-2;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .coupon-register__notes {
+    color: figma.$neutral-2;
+    font-size: 14px;
+
+    ul {
+      margin: figma.$space-md 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      position: relative;
+      padding-left: 8px;
+      line-height: 30px;
+
+      &::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+
+  .coupon-register__notes-title {
+    color: figma.$neutral-3;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    --wam-width: 560px;
+    --wam-header: 56px;
+    --wam-header-x: 20px;
+    --wam-title: 18px;
+    --wam-font: 14px;
+    --wam-button-font: 16px;
+    --wam-control: 48px;
+    --wam-control-x: 14px;
+    --wam-x: 20px;
+    --wam-y: 24px;
+    --wam-gap: 20px;
+
+    .wam-input {
+      font-size: 16px;
+
+      &::placeholder {
+        font-size: 14px;
+      }
+    }
+
+    .wam-button:disabled,
+    .wam-button--primary {
+      font-size: 16px;
+    }
+
+    .coupon-register__notes {
+      font-size: 13px;
+
+      li {
+        line-height: 1.7;
+      }
+    }
+
+    .coupon-register__notes-title {
+      font-size: 14px;
+    }
+  }
+}
