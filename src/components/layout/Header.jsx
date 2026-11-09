@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useLocation } from 'react-router-dom';
 
 import { MyHover } from '../member/MyHover';
 import { NotificationPanel } from '../common/NotificationPanel';
@@ -20,6 +19,8 @@ import bellIcon from '../../assets/icons/lyra-icon-bell-02.svg';
 import searchIcon from '../../assets/icons/lyra-icon-search.svg';
 
 import '../../styles/layout/Header.scss';
+
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 const EMPTY_NOTIFICATIONS = [];
 
@@ -207,9 +208,12 @@ export const Header = ({
             <ul aria-label="메인 메뉴">
               {mainMenu.map((menu) => (
                 <li key={menu.id}>
-                  <Link to={menu.path}>
+                  <NavLink
+                    to={menu.path}
+                    className={({ isActive }) => isActive ? 'is-active' : ''}
+                  >
                     {menu.menu}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>

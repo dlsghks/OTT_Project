@@ -61,7 +61,7 @@ export const useRetrovTmdbStore = create((set, get) => ({
   onFetchTvDetail: (id) => {
     if (!id || get().tvDetail[id]) return Promise.resolve(get().tvDetail[id]);
     return once(`tv_${id}`, async () => {
-      const data = await fetchTmdb(`/tv/${id}?language=ko-KR`);
+      const data = await fetchTmdb(`/tv/${id}?language=ko-KR&append_to_response=aggregate_credits`);
       if (data) set((state) => ({ tvDetail: { ...state.tvDetail, [id]: data } }));
       return data;
     });

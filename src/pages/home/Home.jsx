@@ -1,3 +1,4 @@
+import { homeCollectionLink, homeCollectionTitle } from '../../data/editorCollections';
 import { useEffect, useState } from 'react';
 
 import { HomeHero } from '../../components/home/HomeHero';
@@ -27,7 +28,7 @@ import {
 } from '../../data/home/homeSeeAll';
 
 import '../../styles/pages/home/Home.scss';
-import '../../styles/components/HomeResponsive.scss';
+import '../../styles/components/home/HomeResponsive.scss';
 
 // 화면에 보여줄 순서
 // 기존 섹션 사이에 새 카테고리를 섞어서 배치한다.
@@ -116,6 +117,7 @@ export const Home = () => {
             appResponsive
             key={`existing-${id}`}
             {...section}
+            moreLink={homeCollectionLink(id)}
           />
         );
       }
@@ -128,12 +130,7 @@ export const Home = () => {
 
       if (!items.length) return null;
 
-      const title =
-        id === 'travel'
-          ? '일상을 벗어나는 여행 예능'
-          : id === 'music-entertainment'
-            ? '듣고 웃고 즐기는 음악 예능'
-            : section.title;
+      const title = homeCollectionTitle(section);
 
       return (
         <ContentSection
@@ -141,6 +138,7 @@ export const Home = () => {
           key={`existing-${id}`}
           {...section}
           title={title}
+          moreLink={homeCollectionLink(id)}
           items={items}
           cardType={
             id === 'jung-hyung-don'

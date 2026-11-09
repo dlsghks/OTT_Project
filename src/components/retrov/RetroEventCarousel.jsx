@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { getImagePath } from '../../utils/imagePath';
 
@@ -8,6 +9,10 @@ import '../../styles/components/retrov/RetroEventCarousel.scss';
 export default function RetroEventCarousel({ banners = [] }) {
   const swiperRef = useRef(null);
   const canSlide = banners.length > 1;
+  // loop + centeredSlides 는 슬라이드가 적으면(3개) 한쪽 옆 배너를 못 채워 끊겨 보임 → 6개 이상이 되도록 복제
+  const slides = canSlide
+    ? Array.from({ length: Math.ceil(6 / banners.length) }, () => banners).flat()
+    : banners;
 
   if (!banners.length) return null;
 
@@ -31,17 +36,20 @@ export default function RetroEventCarousel({ banners = [] }) {
         watchOverflow
         className="rv-event__swiper"
       >
-        {banners.map((banner) => (
+        {slides.map((banner, index) => (
           <SwiperSlide
-            key={banner.id}
+            key={`${banner.id}-${index}`}
             className="rv-event__slide"
           >
-            <img
-              src={getImagePath(banner.image)}
-              alt={[banner.title, banner.description].filter(Boolean).join(' ')}
-              draggable={false}
-              loading="lazy"
-            />
+            {/* 배너를 누르면 이벤트 페이지로 (드래그로 넘길 때는 Swiper 가 클릭을 막음) */}
+            <Link to={banner.link ?? '/eventdetail'} className="rv-event__link" draggable={false}>
+              <img
+                src={getImagePath(banner.image)}
+                alt={[banner.title, banner.description].filter(Boolean).join(' ')}
+                draggable={false}
+                loading="lazy"
+              />
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

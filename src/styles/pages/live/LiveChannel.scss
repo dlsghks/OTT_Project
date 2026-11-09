@@ -1,5 +1,5 @@
 .live-channel-page {
-  background: #09090b;
+  background: #111;
   color: #fff;
   min-height: 100vh;
   padding: 0;
@@ -21,14 +21,14 @@
 
   h2 {
     margin: 0;
-    font-size: 20px
+    font-size: 1.5rem
   }
 }
 
 .live-channel-layout {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(300px, 3fr);
-  gap: 20px;
+  grid-template-columns: minmax(0, 7fr) minmax(18.75rem, 3fr);
+  gap: 1.5rem;
   align-items: start
 }
 
@@ -40,7 +40,7 @@
 .live-player {
   aspect-ratio: 16/9;
   background: #050505 center/cover;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
   position: relative
 }
@@ -48,29 +48,29 @@
 .live-player__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, .76);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 18px;
-  padding: 20px
+  gap: 1.5rem;
+  padding: 1.25rem
 }
 
 .live-player__overlay h2 {
-  font-size: 22px
+  font-size: 1.5rem
 }
 
 .live-player__overlay p {
   margin: 0;
-  color: #bbb
+  color: #fff
 }
 
 .live-player__button {
   border: 1px solid #fff;
-  border-radius: 28px;
-  padding: 12px 32px;
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
   background: transparent;
   color: #fff
 }
@@ -79,72 +79,72 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin: 20px 0 34px
+  gap: 0.75rem;
+  margin: 1.25rem 0 2.125rem
 }
 
 .live-channel-info__text {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 0.75rem;
   min-width: 0
 }
 
 .live-channel-info__text>strong {
-  font-size: 27px;
+  font-size: 2.5rem;
   white-space: nowrap
 }
 
 .live-channel-info__text>div {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 0.25rem;
   min-width: 0
 }
 
 .live-channel-info__text b {
-  font-size: 18px;
+  font-size: 1.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap
 }
 
 .live-channel-info__text span {
-  font-size: 13px;
+  font-size: 1rem;
   color: #aaa
 }
 
 .live-channel-info__actions {
   display: flex;
-  gap: 8px;
+  gap: 0.625rem;
   flex-shrink: 0
 }
 
 .live-channel-info__actions button {
   border: 0;
-  background: #242426;
-  border-radius: 30px;
-  padding: 10px 15px
+  background: #222;
+  border-radius: 999px;
+  padding: 0.75rem 1.25rem
 }
 
 .live-channel-info__actions button[aria-pressed=true] {
-  color: #ff4169
+  color: #F93950;
 }
 
 .live-schedule {
-  margin-bottom: 46px
+  margin-bottom: 3.75rem
 }
 
 .live-schedule__heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px
+  margin-bottom: 0.625rem
 }
 
 .live-schedule__heading a {
-  font-size: 13px;
-  color: #bbb
+  font-size: 0.875rem;
+  color: #aaa
 }
 
 .live-schedule__slider {
@@ -153,30 +153,30 @@
 
 .live-schedule__item {
   box-sizing: border-box;
-  background: #222224;
+  background: #222;
   border: 1px solid transparent;
   border-radius: 10px;
-  min-height: 86px;
-  padding: 16px;
+  min-height: 5.375rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 8px
+  gap: 0.5rem
 }
 
 .live-schedule__item.is-current {
   border-color: #ddd;
-  background: #151517
+  background: #222
 }
 
 .live-schedule__item strong {
-  font-size: 14px;
+  font-size: 0.875rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis
 }
 
 .live-schedule__item small {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #aaa
 }
 
@@ -185,10 +185,10 @@
   top: 0;
   bottom: 0;
   z-index: 5;
-  width: 42px;
+  width: 3rem;
   background: linear-gradient(90deg, #08080bdd, transparent);
   border: 0;
-  font-size: 34px;
+  font-size: 2rem;
   opacity: 0;
   transition: opacity .2s
 }
@@ -207,13 +207,13 @@
 }
 
 .live-top20 h2 {
-  margin-bottom: 16px
+  margin-bottom: 0.625rem
 }
 
 .live-top20__grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px 12px
+  gap: 1.125rem 0.75rem
 }
 
 .live-top20__card {
@@ -226,8 +226,8 @@
 
 .live-top20__image {
   aspect-ratio: 16/9;
-  background: #262632;
-  border-radius: 5px;
+  background: #222;
+  border-radius: 10px;
   overflow: hidden
 }
 
@@ -240,12 +240,12 @@
 .live-top20__meta {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  margin-top: 5px
+  gap: 0.5rem;
+  margin-top: 0.3125rem
 }
 
 .live-top20__meta em {
-  font-size: 30px;
+  font-size: 3.25rem;
   font-weight: 800;
   line-height: 1
 }
@@ -254,12 +254,12 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 3px
+  gap: 0.25rem
 }
 
 .live-top20__meta strong,
 .live-top20__meta span {
-  font-size: 12px;
+  font-size: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap
@@ -272,13 +272,13 @@
 .live-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 14px
+  gap: 1rem
 }
 
 .live-chat,
 .live-channel-list {
-  background: #151720;
-  border-radius: 12px;
+  background: #222;
+  border-radius: 10px;
   overflow: hidden
 }
 
@@ -286,13 +286,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 16px;
-  font-size: 18px
+  gap: 0.5rem;
+  padding: 1.25rem;
+  font-size: 1.5rem
 }
 
 .live-sidebar__heading a {
-  font-size: 12px;
+  font-size: 1rem;
   color: #bbb
 }
 
@@ -304,12 +304,12 @@
 }
 
 .live-chat__preview {
-  margin: 0 14px 14px;
-  padding: 13px;
+  margin: 0 0.875rem 0.875rem;
+  padding: 1.25rem;
   background: #08090e;
-  border-radius: 8px;
-  color: #999;
-  font-size: 13px;
+  border-radius: 10px;
+  color: #aaa;
+  font-size: 1.125rem;
   cursor: pointer
 }
 
@@ -325,20 +325,20 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 14px;
-  font-size: 13px;
-  color: #cbd1ed
+  padding: 1.25rem;
+  font-size: 1.125rem;
+  color: #aaa
 }
 
 .live-chat__messages p {
-  margin: 0 0 14px
+  margin: 0 0 1.25rem
 }
 
 .live-chat__form {
   display: flex;
-  margin: 12px;
+  margin: 1.25rem;
   border: 1px solid #444;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden
 }
 
@@ -348,14 +348,14 @@
   background: transparent;
   border: 0;
   color: white;
-  padding: 12px;
+  padding: 0.75rem 1.25rem;
   outline: 0
 }
 
 .live-chat__form button {
   border: 0;
-  background: #323747;
-  padding: 0 14px
+  background: #666;
+  padding: 0 1.25rem
 }
 
 .live-chat__form button:disabled {
@@ -366,14 +366,14 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  height: 670px
+  height: 41.875rem
 }
 
 .live-channel-list__filters {
   display: flex;
   overflow-x: auto;
-  gap: 4px;
-  padding: 0 14px 12px;
+  gap: 0.75rem;
+  padding: 0 1.25rem 0.75rem;
   scrollbar-width: none
 }
 
@@ -381,9 +381,9 @@
   flex-shrink: 0;
   background: transparent;
   border: 0;
-  padding: 8px;
+  padding: 0.25rem 0.5rem;
   border-radius: 6px;
-  font-size: 12px
+  font-size: 1rem
 }
 
 .live-channel-list__filters button.active {
@@ -394,7 +394,7 @@
   overflow-y: auto;
   flex: 1;
   min-height: 0;
-  padding: 0 14px 12px
+  padding: 0 1.25rem 0.75rem
 }
 
 .live-channel-list__item {
@@ -403,9 +403,9 @@
   background: none;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
   text-align: left;
-  padding: 8px 0
+  padding: 0.5rem 0
 }
 
 .live-channel-list__item.active .live-channel-list__thumb {
@@ -416,8 +416,8 @@
   position: relative;
   flex: 0 0 40%;
   aspect-ratio: 16/9;
-  background: #292c36;
-  border-radius: 7px;
+  background: #222;
+  border-radius: 10px;
   overflow: hidden
 }
 
@@ -429,36 +429,36 @@
 
 .live-channel-list__thumb>span {
   position: absolute;
-  top: 4px;
-  left: 4px;
-  background: #000b;
-  font-size: 10px;
-  padding: 2px
+  top: 0.25rem;
+  left: 0.25rem;
+  background: #000;
+  font-size: 0.625rem;
+  padding: 0.125rem
 }
 
 .live-channel-list__progress {
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 3px;
-  background: #2764fa
+  height: 0.25rem;
+  background: #1351F9
 }
 
 .live-channel-list__item>div:last-child {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px
+  gap: 0.625rem
 }
 
 .live-channel-list__item strong {
-  font-size: 13px;
-  line-height: 1.4
+  font-size: 1rem;
+  line-height: 1
 }
 
 .live-channel-list__item small {
   color: #aaa;
-  font-size: 12px
+  font-size: 1rem
 }
 
 .live-share-backdrop {
@@ -468,21 +468,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 1.25rem;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .live-share-modal {
   position: relative;
   display: block;
-  flex: 0 1 475px;
-  width: 475px;
+  flex: 0 1 29.6875rem;
+  width: 29.6875rem;
   min-width: 0;
   max-width: 100%;
-  height: 280px;
+  height: 17.5rem;
   min-height: 0;
-  padding: 82px 24px 16px;
+  padding: 5.125rem 1.5rem 1rem;
   box-sizing: border-box;
   overflow: hidden;
 
@@ -497,29 +497,29 @@
 
   h2 {
     position: absolute;
-    top: 18px;
-    left: 24px;
+    top: 1.125rem;
+    left: 1.5rem;
 
     display: flex;
     align-items: center;
-    height: 32px;
+    height: 2rem;
     margin: 0;
     padding: 0;
 
-    font-size: 21px;
+    font-size: 1.3125rem;
     font-weight: 700;
     line-height: 1;
   }
 
   &__close {
     position: absolute;
-    inset: 18px 18px auto auto;
+    inset: 1.125rem 1.125rem auto auto;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
     min-width: 0;
     min-height: 0;
     margin: 0;
@@ -533,8 +533,8 @@
 
     svg {
       display: block;
-      width: 20px;
-      height: 20px;
+      width: 1.25rem;
+      height: 1.25rem;
     }
   }
 
@@ -542,11 +542,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 1.25rem;
 
     width: 100%;
-    height: 54px;
-    margin: 18px 0 0;
+    height: 3.375rem;
+    margin: 1.125rem 0 0;
     padding: 0;
 
     button {
@@ -554,14 +554,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex: 0 0 54px;
+      flex: 0 0 3.375rem;
 
-      width: 54px;
-      height: 54px;
-      min-width: 54px;
-      max-width: 54px;
-      min-height: 54px;
-      max-height: 54px;
+      width: 3.375rem;
+      height: 3.375rem;
+      min-width: 3.375rem;
+      max-width: 3.375rem;
+      min-height: 3.375rem;
+      max-height: 3.375rem;
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -575,8 +575,8 @@
       img {
         display: block;
         flex: 0 0 auto;
-        width: 24px;
-        height: 24px;
+        width: 1.5rem;
+        height: 1.5rem;
         max-width: none;
         margin: 0;
         object-fit: contain;
@@ -587,13 +587,13 @@
   &__copy {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.625rem;
 
-    width: 422px;
+    width: 26.375rem;
     max-width: 100%;
-    height: 52px;
-    margin: 25px auto 0;
-    padding: 8px 16px;
+    height: 3.25rem;
+    margin: 1.5625rem auto 0;
+    padding: 0.5rem 1rem;
     box-sizing: border-box;
 
     border: 1px solid #505050;
@@ -605,7 +605,7 @@
       flex: 1 1 0;
       width: 0;
       min-width: 0;
-      height: 34px;
+      height: 2.125rem;
       margin: 0;
       padding: 0;
 
@@ -616,7 +616,7 @@
       color: #a0a0a0;
 
       font-family: inherit;
-      font-size: 14px;
+      font-size: 0.875rem;
       line-height: normal;
       text-overflow: ellipsis;
     }
@@ -626,11 +626,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex: 0 0 56px;
+      flex: 0 0 3.5rem;
 
-      width: 56px;
-      min-width: 56px;
-      height: 34px;
+      width: 3.5rem;
+      min-width: 3.5rem;
+      height: 2.125rem;
       min-height: 0;
       margin: 0;
       padding: 0;
@@ -642,7 +642,7 @@
       color: #fff;
 
       font-family: inherit;
-      font-size: 14px;
+      font-size: 0.875rem;
       font-weight: 700;
       cursor: pointer;
 
@@ -655,34 +655,34 @@
   }
 
   &__feedback {
-    min-height: 18px;
-    margin: 12px 0 0;
-    padding: 0 4px;
+    min-height: 1.125rem;
+    margin: 0.75rem 0 0;
+    padding: 0 0.25rem;
   }
 
   &__message {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 0.4375rem;
     margin: 0;
     padding: 0;
 
     color: #fff;
-    font-size: 12px;
-    line-height: 18px;
+    font-size: 0.75rem;
+    line-height: 1.125rem;
 
     svg {
       display: block;
-      flex: 0 0 12px;
-      width: 12px;
-      height: 12px;
+      flex: 0 0 0.75rem;
+      width: 0.75rem;
+      height: 0.75rem;
     }
   }
 
   button:focus-visible,
   input:focus-visible {
     outline: 2px solid #7da7ff;
-    outline-offset: 2px;
+    outline-offset: 0.125rem;
   }
 }
 
@@ -690,13 +690,13 @@
 .live-share-modal .live-share-modal__copy {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.625rem;
 
-  width: 422px;
+  width: 26.375rem;
   max-width: 100%;
-  height: 52px;
-  margin: 22px auto 0;
-  padding: 8px 10px 8px 16px;
+  height: 3.25rem;
+  margin: 1.375rem auto 0;
+  padding: 0.5rem 0.625rem 0.5rem 1rem;
   box-sizing: border-box;
 
   background: #000;
@@ -717,15 +717,15 @@
     border-radius: 0;
     box-shadow: none;
     color: #a0a0a0;
-    font-size: 14px;
+    font-size: 0.875rem;
     text-overflow: ellipsis;
   }
 
   button {
-    flex: 0 0 56px;
-    width: 56px;
-    min-width: 56px;
-    height: 34px;
+    flex: 0 0 3.5rem;
+    width: 3.5rem;
+    min-width: 3.5rem;
+    height: 2.125rem;
     margin: 0;
     padding: 0;
 
@@ -735,7 +735,7 @@
     border-radius: 8px;
     box-shadow: none;
     color: #fff;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 700;
 
     &:hover,
@@ -748,23 +748,23 @@
 }
 
 .live-share-modal .live-share-modal__feedback {
-  min-height: 20px;
-  margin-top: 12px;
+  min-height: 1.25rem;
+  margin-top: 0.75rem;
 }
 
 .live-share-modal .live-share-modal__message {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 0.4375rem;
   margin: 0;
   padding: 0;
-  font-size: 13px;
-  line-height: 20px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
 
   svg {
     flex-shrink: 0;
-    width: 15px;
-    height: 15px;
+    width: 0.9375rem;
+    height: 0.9375rem;
   }
 }
 
