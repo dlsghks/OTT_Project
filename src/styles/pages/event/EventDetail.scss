@@ -296,6 +296,7 @@ $event-muted: #8b93a3;
 }
 
 @media (max-width: 768px) {
+
   .attendance-event__benefits,
   .ticket-event__list {
     grid-template-columns: 1fr;
@@ -535,7 +536,77 @@ $event-muted: #8b93a3;
   }
 }
 
+/* =============================================
+   출석체크 히어로 디자인 통일
+   기존 출석 달력 및 콘텐츠 유지
+============================================= */
+
+.attendance-event {
+  padding-top: 0;
+
+  >.event-page__header {
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100vw;
+    min-height: clamp(17.5rem, 28.125vw, 33.75rem);
+
+    margin-left: calc(50% - 50vw);
+    padding: 3rem 1.5rem;
+
+    overflow: hidden;
+
+    // 출석체크 전용 블루 + 시안
+    background:
+      radial-gradient(ellipse 60% 85% at 18% 24%,
+        rgba(20, 90, 225, 0.58),
+        transparent 76%),
+      radial-gradient(ellipse 60% 85% at 84% 35%,
+        rgba(70, 197, 213, 0.35),
+        transparent 76%),
+      linear-gradient(180deg,
+        #061b37 0%,
+        #071324 58%,
+        #000 100%);
+
+    text-align: center;
+
+    // EVENT 배지
+    .event-page__label {
+      margin-bottom: 1rem;
+      background: #1351f9;
+    }
+
+    // 메인 타이틀
+    h1 {
+      margin: 0;
+      color: #fff;
+
+      font-size: clamp(2rem, 3.75vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.19;
+      word-break: keep-all;
+    }
+
+    // 이벤트 기간
+    .event-page__period {
+      margin-top: 1.125rem;
+      color: #fff;
+
+      font-size: clamp(1rem, 1.25vw, 1.5rem);
+      line-height: 1.45;
+    }
+  }
+}
+
+
 @media (max-width: 768px) {
+
   .mma-event__winners,
   .mma-event__steps,
   .mma-event__lineup,
