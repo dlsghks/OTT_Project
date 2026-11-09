@@ -2,8 +2,8 @@
 @use "../../common/slider-navigation" as nav;
 
 /* =========================
-   카테고리 페이지 (예능·드라마·영화·시사교양·애니·해외시리즈)
-   카드 크기 · 배지 · 순위 숫자는 공통(common/_card.scss, ContentCard.scss)
+   카테고리 페이지
+   예능·드라마·영화·시사교양·애니·해외시리즈
 ========================= */
 
 $chip-blue: figma.$primary-main;
@@ -12,12 +12,13 @@ $chip-gray: figma.$neutral-8;
 $chip-gray-hover: figma.$neutral-7;
 $chip-border: rgba(255, 255, 255, 0.08);
 
-// 장르 필터 / 요일 버튼 공통
+/* 장르 필터 / 요일 버튼 공통 */
 @mixin chip-button {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 
   border: 1px solid $chip-border;
   border-radius: 8px;
@@ -30,7 +31,9 @@ $chip-border: rgba(255, 255, 255, 0.08);
   white-space: nowrap;
   cursor: pointer;
 
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 
   &:hover {
     background: $chip-gray-hover;
@@ -81,10 +84,9 @@ $chip-border: rgba(255, 255, 255, 0.08);
     }
   }
 
-  // 오른쪽은 페이지 여백을 넘어 화면 끝까지
   &__slider {
     position: relative;
-    margin-right: calc(var(--page-side-padding) * -1);
+    margin-right: 0;
   }
 
   &__swiper {
@@ -92,29 +94,32 @@ $chip-border: rgba(255, 255, 255, 0.08);
     overflow: hidden;
   }
 
-  // 다음 콘텐츠 그라데이션 (0% 투명 → 100% 검정)
   &__fade {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 5;
-
-    width: calc(var(--card-w) + var(--card-gap));
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #000 100%);
-    pointer-events: none;
+    display: none;
   }
 
   &__arrow {
     @include nav.section-arrow;
   }
+
+  &__slider:hover &__arrow,
+  &__slider:focus-within &__arrow {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
-/* 장르 필터 (히어로 아래 간격 60px) */
+/* 장르 필터 */
 .category-filter {
   display: flex;
-  gap: 10px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 16px;
+
+  min-width: 0;
+  max-width: 100%;
   margin: 60px 0 40px;
+
   overflow-x: auto;
   scrollbar-width: none;
 
@@ -153,6 +158,13 @@ $chip-border: rgba(255, 255, 255, 0.08);
     color: #8b93a3;
     font-size: 14px;
   }
+
+  &__recommend-note {
+    margin: 12px 0 0;
+    color: #9a9a9a;
+    font-size: 13px;
+    line-height: 1.5;
+  }
 }
 
 /* 전체 보기 그리드 */
@@ -161,6 +173,7 @@ $chip-border: rgba(255, 255, 255, 0.08);
     display: grid;
     grid-template-columns: repeat(auto-fill, var(--card-w));
     gap: 32px var(--card-gap);
+
     margin: 0;
     padding: 0;
     list-style: none;
@@ -172,6 +185,7 @@ $chip-border: rgba(255, 255, 255, 0.08);
   }
 }
 
+/* 모바일 */
 @media (max-width: 768px) {
   .category-filter {
     margin: 32px 0 28px;
@@ -195,21 +209,59 @@ $chip-border: rgba(255, 255, 255, 0.08);
   }
 }
 
-// 서브페이지 섹션 슬라이더: 홈과 동일한 화살표 영역
+@media (max-width: 767px) {
+  .category-row .category-row__arrow {
+    width: 36px;
+    font-size: 36px;
+  }
+}
+
+/* PC 카드 크기 */
+@media (min-width: 1025px) and (max-width: 1919px) {
+  .category-row__swiper {
+    container-type: inline-size;
+
+    .swiper-slide.card-slide {
+      width: min(
+        318px,
+        calc((100cqw - 4 * var(--card-gap)) / 4.5)
+      );
+    }
+  }
+}
+
+/* PC 장르 버튼: 왼쪽 정렬 + 마우스 드래그 */
+@media (min-width: 1025px) {
+  .category-page nav.category-filter {
+    gap: 15px;
+    justify-content: flex-start;
+    user-select: none;
+    cursor: grab;
+
+    > button.category-filter__button {
+      flex: 0 0 auto;
+      height: 60px;
+      padding: 0 30px;
+      font-size: 20px;
+      border-radius: 10px;
+      cursor: grab;
+    }
+
+    &[data-dragging="true"],
+    &[data-dragging="true"] > button.category-filter__button {
+      cursor: grabbing;
+    }
+  }
+
+  .category-row__swiper .swiper-wrapper {
+    height: auto;
+  }
+}
+/* 기존 콘텐츠 슬라이더 화살표 스타일 복원 */
 .category-row {
   .category-row__slider {
     position: relative;
     margin-right: 0;
-  }
-
-  .category-row__swiper {
-    width: 100%;
-    overflow: hidden;
-  }
-
-  // 기존 상시 그라데이션 제거
-  .category-row__fade {
-    display: none;
   }
 
   .category-row__arrow {
@@ -229,21 +281,24 @@ $chip-border: rgba(255, 255, 255, 0.08);
     }
   }
 }
-
-.weekday-row__recommend-note {
-  margin: 12px 0 0;
-  color: #9a9a9a;
-  font-size: 13px;
-  line-height: 1.5;
-}
-@media (min-width: 1025px) and (max-width: 1919px) {
-  .category-row__swiper {
-    container-type: inline-size;
-    .swiper-wrapper { height: auto; }
-    .swiper-slide.card-slide { width: min(318px, calc((100cqw - 4 * var(--card-gap)) / 4.5)); }
-  }
+/* 화살표와 그라데이션을 포스터 높이 안으로 제한 */
+.category-page .category-row .category-row__arrow {
+  top: 0;
+  bottom: auto;
+  height: var(--poster-arrow-height, var(--card-h));
 }
 
-@media (min-width: 1025px) {
-  .category-row__swiper .swiper-wrapper { height: auto; }
+/* 카테고리 페이지의 세로 포스터 제목 숨기기 */
+.category-page .category-row .content-card__info > h3 {
+  display: none;
+}
+
+/* 포스터 위 검정 그라데이션을 연하게 */
+.category-page .category-row .category-row__arrow::before {
+  opacity: 0.8;
+}
+
+/* 화살표는 선명하게 */
+.category-page .category-row .category-row__arrow::after {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
 }

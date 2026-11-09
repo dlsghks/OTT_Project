@@ -8,6 +8,7 @@ export const normalizeEditorPicks = (value) => {
     seen.add(record.to);
     return [{
       id: record.to,
+      savedAt: Number.isFinite(record.savedAt) && record.savedAt > 0 ? record.savedAt : 0,
       to: record.to,
       title: record.title.trim(),
       description: typeof record.description === 'string' ? record.description : '',
@@ -28,10 +29,10 @@ export const updateEditorPicks = (value, entry, kind) => {
   if (kind === 'like' && previous.some(item => item.id === record.id)) {
     return previous.filter(item => item.id !== record.id);
   }
-  return [record, ...previous.filter(item => item.id !== record.id)].slice(0, 100);
+  return [{ ...record, savedAt: Date.now() }, ...previous.filter(item => item.id !== record.id)].slice(0, 100);
 };
 
 // Refresh a saved collection's artwork without toggling its heart or changing its order.
 export const refreshEditorPick = (value, entry) => normalizeEditorPicks(value).map(previous =>
-  previous.id === entry.id ? { ...entry, cover: entry.cover || previous.cover } : previous
+  previous.id === entry.id ? { ...entry, cover: entry.cover || previous.cover, savedAt: previous.savedAt } : previous
 );

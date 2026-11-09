@@ -20,7 +20,9 @@ export const Layout = () => {
 
   const isLogin = pathname.replace(/\/+$/, "") === "/login";
 
-  const isShorts = pathname.replace(/\/+$/, "") === "/shorts";
+  const isShorts = ["/shorts", "/retrov/shorts"].includes(
+    pathname.replace(/\/+$/, "")
+  );
 
   // 숏츠에서는 영상 피드 내부만 스크롤
   useEffect(() => {

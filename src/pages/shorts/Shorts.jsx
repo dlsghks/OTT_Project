@@ -1,25 +1,48 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { ShortsPlayer } from "../../components/shorts/ShortsPlayer";
 import { ShortsShareModal } from "../../components/shorts/ShortsShareModal";
-import { categoryPages } from "../../data/categoryData";
 import mobileHeartOutline from "../../assets/shorts/mobile/heart-outline.svg";
 import mobileShareIcon from "../../assets/shorts/mobile/share.svg";
-import { shortsData } from "../../data/shortsData";
+import { shortsData, SHORTS_FILTERS } from "../../data/shortsData";
 import { saveShortsHistory, toggleShortsLike, useProfileShorts } from "../../utils/profileShorts";
 import heartOutline from "../../assets/shorts/heart-outline.svg";
 import heartFilled from "../../assets/shorts/heart-filled.svg";
 import shareIcon from "../../assets/shorts/share.svg";
 import "../../styles/pages/shorts/Shorts.scss";
+import "../../styles/pages/shorts/ShortsLikeCount.scss";
 
-const SHORTS_GENRES = categoryPages.entertainment.filters.filter(
-  (genre) => !['all', 'original'].includes(genre.id)
-);
-
+// 필터 변경 시 피드를 새로 시작하여 스크롤·재생 상태를 초기화합니다.
 export const Shorts = ({ items = shortsData, onGenreChange }) => {
+  const [params, setParams] = useSearchParams();
+  const filterOptions = useMemo(() => SHORTS_FILTERS.filter((filter) =>
+    filter.id === "all" || items.some((item) => item.genres?.includes(filter.id))
+  ), [items]);
+  const requestedGenre = params.get("genre") || "all";
+  const selectedGenre = filterOptions.some((filter) => filter.id === requestedGenre)
+    ? requestedGenre : "all";
+  const filteredItems = useMemo(() => selectedGenre === "all" ? items
+    : items.filter((item) => item.genres?.includes(selectedGenre)), [items, selectedGenre]);
+
+  const selectGenre = (genre) => {
+    if (genre === selectedGenre) return;
+    setParams((previous) => {
+      const next = new URLSearchParams(previous);
+      next.delete("short");
+      if (genre === "all") next.delete("genre");
+      else next.set("genre", genre);
+      return next;
+    }, { replace: true });
+    onGenreChange?.(genre);
+  };
+
+  return <ShortsFeed key={selectedGenre} items={filteredItems}
+    selectedGenre={selectedGenre} filterOptions={filterOptions} onGenreChange={selectGenre} />;
+};
+
+const ShortsFeed = ({ items, selectedGenre, filterOptions, onGenreChange }) => {
   const [isApp, setIsApp] = useState(() => window.matchMedia('(max-width: 1024px)').matches);
   const [playback, setPlayback] = useState({ id: null, playing: false });
-  const [selectedGenre, setSelectedGenre] = useState(SHORTS_GENRES[0]?.id);
 
   useEffect(() => {
     const media = window.matchMedia('(max-width: 1024px)');
@@ -153,10 +176,10 @@ export const Shorts = ({ items = shortsData, onGenreChange }) => {
     <>
       <div className={`shorts-screen${isPlaying ? ' shorts-screen--playing' : ''}`}>
         <nav className="shorts-screen__genres" aria-label="숏츠 장르" hidden={isPlaying}>
-          {SHORTS_GENRES.map(genre => (
+          {filterOptions.map(genre => (
             <button key={genre.id} type="button" aria-pressed={selectedGenre === genre.id}
               className={selectedGenre === genre.id ? 'is-active' : ''}
-              onClick={() => { setSelectedGenre(genre.id); onGenreChange?.(genre.id); }}>
+              onClick={() => onGenreChange(genre.id)}>
               {genre.label}
             </button>
           ))}
@@ -208,7 +231,9 @@ export const Shorts = ({ items = shortsData, onGenreChange }) => {
                           <img src={liked ? heartFilled : heartOutline} alt="" />
                         </picture>
                       </span>
-                      <span className="shorts-page__like-count">{new Intl.NumberFormat('ko-KR', { notation: 'compact', maximumFractionDigits: 1 }).format((item.likeCount || 0) + (liked ? 1 : 0))}</span>
+                      <span className="shorts-page__like-count" aria-live="polite">
+                        {Math.max(0, Number(item.likeCount) || 0) + (liked ? 1 : 0)}
+                      </span>
                     </button>
                     <button className="shorts-page__action" type="button" aria-label="영상 공유" aria-haspopup="dialog" onClick={() => setShareItem(item)}>
                       <span className="shorts-page__action-icon"><picture>
@@ -218,7 +243,13 @@ export const Shorts = ({ items = shortsData, onGenreChange }) => {
                       <span>공유</span>
                     </button>
                     {item.programImage && (
-                      <img className="shorts-page__program-image" src={item.programImage} alt="관련 프로그램" width={72} height={72} />
+                      item.programTo ? (
+                        <Link to={item.programTo} aria-label={`${item.programName || item.episode || "프로그램"} 상세페이지 보기`}>
+                          <img className="shorts-page__program-image" src={item.programImage} alt="" width={72} height={72} />
+                        </Link>
+                      ) : (
+                        <img className="shorts-page__program-image" src={item.programImage} alt="관련 프로그램" width={72} height={72} />
+                      )
                     )}
                   </aside>
                 )}

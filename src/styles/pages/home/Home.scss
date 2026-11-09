@@ -606,7 +606,6 @@
 }
 
 @media (min-width: 1025px) {
-
   .ranking-section__swiper .swiper-wrapper,
   .home-categories__swiper .swiper-wrapper {
     height: auto;
@@ -615,4 +614,39 @@
   .ranking-section__swiper .content-card {
     height: auto;
   }
+}
+
+/* 웨이브 홈의 좌우 여백까지 포함한 배경 */
+main.site-inner:has(> .wavve-home) {
+  background: linear-gradient(180deg, #071a2e 17.3077%, #000000 100%);
+}
+
+/* 콘텐츠 목록 화살표 */
+.wavve-home .content-section__arrow::before {
+  opacity: 0.8;
+}
+
+.wavve-home .content-section__arrow::after {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+}
+
+.wavve-home .content-section .content-section__arrow {
+  top: 0;
+  bottom: auto;
+  height: var(--thumbnail-arrow-height, var(--card-h));
+}
+
+/* 랭킹 화살표 */
+.wavve-home .ranking-section .ranking-section__arrow {
+  top: 0;
+  bottom: auto;
+  height: var(--ranking-poster-height, var(--card-h));
+}
+
+.wavve-home .ranking-section .ranking-section__arrow::before {
+  opacity: 0.35;
+}
+
+.wavve-home .ranking-section .ranking-section__arrow::after {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
 }
