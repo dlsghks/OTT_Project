@@ -24,6 +24,7 @@ import { DramaDetail } from "../pages/contents/DramaDetail";
 import { CurrentaffairsDetail } from "../pages/contents/CurrentaffairsDetail";
 import { AnimationDetail } from "../pages/contents/AnimationDetail";
 import { GlobalDetail } from "../pages/contents/GlobalDetail";
+import { HomeContentDetail } from '../pages/homeContent/HomeContentDetail';
 
 // 라이브
 import { Live } from "../pages/live/Live";
@@ -122,6 +123,10 @@ export const AppRouter = () => {
         <Route
           path="/globaldetail/:programId"
           element={<GlobalDetail />}
+        />
+        <Route
+          path="/home-content/:sectionId/:contentId"
+          element={<HomeContentDetail />}
         />
 
         {/* 라이브 */}

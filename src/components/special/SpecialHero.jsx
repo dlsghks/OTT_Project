@@ -6,13 +6,14 @@ import '../../styles/components/special/SpecialHero.scss';
 // - tag   : 로고 위 작은 태그 이미지
 // - tags  : 해시태그 칩, 누르면 SectionRenderer 가 부여한 section-{id} 앵커로 스크롤
 export const SpecialHero = ({ title, description, hero = {}, tags = [] }) => {
-  const { background, logo, tag, short = false } = hero;
+  const { background, logo, tag, short = false, theme } = hero;
 
   const scrollTo = (id) =>
     document.getElementById(`section-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
-    <header className={`special-hero ${short ? 'special-hero--short' : ''}`}>
+    <header className={`special-hero ${short ? 'special-hero--short' : ''}`}
+      data-theme={theme}>
       {background && (
         <div
           className="special-hero__background"

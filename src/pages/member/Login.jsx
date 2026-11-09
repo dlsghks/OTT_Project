@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import wavveLogo from "../../assets/login/wavve-logo.png";
-import naverIcon from "../../assets/login/naver.png";
+import googleIcon from "../../assets/login/googleLogo.png";
 import kakaoIcon from "../../assets/login/kakao.png";
 import appleIcon from "../../assets/login/apple.png";
 import glowLeft from "../../assets/login/glow-left.png";
@@ -14,7 +14,7 @@ import "../../styles/pages/member/Login.scss";
 import { AccountHelpModal } from "../../components/member/AccountHelpModal";
 
 const providers = [
-  { key: "naver", label: "네이버로 시작하기", icon: naverIcon },
+  { key: "google", label: "Google로 계속하기", icon: googleIcon },
   { key: "kakao", label: "카카오로 시작하기", icon: kakaoIcon },
   { key: "apple", label: "Apple로 계속하기", icon: appleIcon },
 ];
@@ -23,6 +23,7 @@ const providers = [
 export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
   const navigate = useNavigate();
   const onLogin = useAuthStore((state) => state.onLogin);
+  const signInSocial = useAuthStore((state) => state.onSocialLogin);
   const location = useLocation();
   const returnTo = location.state?.returnTo || '/';
   const [emailFormOpen, setEmailFormOpen] = useState(false);
@@ -54,17 +55,32 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
       setIsSubmitting(false);
     }
   };
+
+  const completeSocialLogin = async (provider) => {
+    await (onSocialLogin ?? signInSocial)(provider);
+    navigate("/profileselect", { replace: true, state: { returnTo } });
+  };
+
   const handleSocialLogin = async (provider) => {
-    if (!onSocialLogin) {
-      setMessage("소셜 로그인 기능은 아직 연결되지 않았습니다.");
-      return;
-    }
+    if (isSubmitting) return;
+
     setMessage("");
     setIsSubmitting(true);
+
     try {
-      await onSocialLogin(provider);
-    } catch {
-      setMessage("로그인을 완료하지 못했습니다. 다시 시도해주세요.");
+      await completeSocialLogin(provider);
+    } catch (error) {
+      if (error.code === "auth/popup-closed-by-user") return;
+
+      if (error.code === "auth/popup-blocked") {
+        setMessage("브라우저에서 팝업을 허용한 후 다시 시도해주세요.");
+      } else if (error.code === "auth/account-exists-with-different-credential") {
+        setMessage("이미 가입된 이메일이에요. 기존 로그인 방식으로 로그인해주세요.");
+      } else if (error.code === "auth/operation-not-allowed") {
+        setMessage("이 로그인 방식은 아직 활성화되지 않았어요.");
+      } else {
+        setMessage("로그인을 완료하지 못했습니다. 다시 시도해주세요.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -147,11 +163,7 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
       {accountHelp === "id" && (
         <FindIdModal
           onClose={() => setAccountHelp(null)}
-          onSocialLogin={
-            onSocialLogin
-              ? (provider) => handleSocialLogin(provider)
-              : undefined
-          }
+          onSocialLogin={completeSocialLogin}
         />
       )}
 

@@ -134,8 +134,20 @@ export const LiveHero = ({
         slidesPerView="auto"
         slidesPerGroup={1}
         centeredSlides={false}
-        slidesOffsetBefore={110}
-        spaceBetween={8}
+        // slidesOffsetBefore={110}
+        // spaceBetween={8}
+        slidesOffsetBefore={20}
+        spaceBetween={12}
+        breakpoints={{
+          769: {
+            slidesOffsetBefore: 64,
+            spaceBetween: 18,
+          },
+          1440: {
+            slidesOffsetBefore: 110,
+            spaceBetween: 18,
+          },
+        }}
         loop={false}
         speed={600}
         grabCursor={true}
@@ -180,16 +192,13 @@ export const LiveHero = ({
                 }
               >
                 {/* 영상은 재생하지 않고 썸네일만 표시 */}
+                {/* 상단 왼쪽: LIVE 배지 */}
+                <span className="live-hero__badge">
+                  ● 라이브
+                </span>
 
+                {/* 오른쪽 중앙: 방송 정보 */}
                 <div className="live-hero__info">
-                  <span className="live-hero__badge">
-                    ● 라이브
-                  </span>
-
-                  <strong className="live-hero__rank">
-                    {program.viewerRank ?? index + 1}
-                  </strong>
-
                   <h2>{program.channel}</h2>
 
                   <p>{program.title}</p>
@@ -200,23 +209,31 @@ export const LiveHero = ({
                     </small>
                   )}
 
-                  <div className="live-hero__progress">
-                    <span
-                      style={{
-                        width: `${typeof getProgress === 'function'
-                          ? getProgress(program)
-                          : 0
-                          }%`,
-                      }}
-                    />
-                  </div>
-
                   <Link
                     to={getWatchPath(program)}
                     onClick={(event) => event.stopPropagation()}
                   >
                     시청하기
                   </Link>
+                </div>
+
+                {/* 왼쪽 아래: 순위 + 진행바 */}
+                <div className="live-hero__ranking">
+                  <strong className="live-hero__rank">
+                    {program.viewerRank ?? index + 1}
+                  </strong>
+
+                  <div className="live-hero__progress">
+                    <span
+                      style={{
+                        width: `${typeof getProgress === 'function'
+                            ? getProgress(program)
+                            : 0
+                          }%`,
+                      }}
+                    />
+                  </div>
+                  
                 </div>
               </article>
             </SwiperSlide>
