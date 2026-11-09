@@ -1,7 +1,7 @@
 
 .terms-page {
-  width: calc(100% + 220px);
-  margin-left: -110px;
+  width: calc(100% + var(--page-side-padding) * 2);
+  margin-inline: calc(var(--page-side-padding) * -1);
   background: #1b1b1b;
   color: #fff;
   font-family: "Noto Sans KR", sans-serif;

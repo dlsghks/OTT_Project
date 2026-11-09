@@ -1,7 +1,7 @@
 .notice-page {
     // 공통 site-inner 좌우 패딩 상쇄
-    width: calc(100% + 220px);
-    margin-left: -110px;
+    width: calc(100% + var(--page-side-padding) * 2);
+    margin-inline: calc(var(--page-side-padding) * -1);
 
     color: #fff;
     background: #1b1b1b;
