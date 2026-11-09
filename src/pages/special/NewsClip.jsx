@@ -5,8 +5,8 @@ import { getNewsClip, getTabClips } from '../../data/newsClips';
 import { findYoutubeVideo } from '../../services/youtubeClip';
 import { DetailMessage } from '../../components/detail/DetailMessage';
 
-import '../../styles/pages/TotalSubDetail.scss';
-import '../../styles/pages/Special.scss';
+import '../../styles/pages/shared/TotalSubDetail.scss';
+import '../../styles/pages/special/Special.scss';
 
 // 뉴스 클립 재생 (/news/clip/:clipId) — 웨이브 /player/clip 구성
 // 제목 · 출처 · 분류 · 날짜 → 영상 + 기사(영상 설명) / 오른쪽 추천 영상(같은 분류)

@@ -61,21 +61,21 @@ export const programs = [
 export const eventBanners = [
   {
     id: "favorite-scene",
-    link: "/event/favorite-scene", // 우리 결혼했어요 최애 장면 투표 (src/data/retrov/retrovEvents.js)
+    link: "/eventdetail/favorite-scene", // 우리 결혼했어요 최애 장면 투표 (src/data/retrov/retrovEvents.js)
     image: `${IMG}/event/favorite-scene.png`,
     title: "나의 최애 장면은?!",
     description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",
   },
   {
     id: "next-line",
-    link: "/event/next-line", // 거침없이 하이킥 명대사 퀴즈
+    link: "/eventdetail/next-line", // 거침없이 하이킥 명대사 퀴즈
     image: `${IMG}/event/next-line.png`,
     title: "다음에 올 명대사는?",
     description: "그때 그 대사, 아직 기억하나요?",
   },
   {
     id: "what-next",
-    link: "/event/what-next", // 풀하우스 다음 장면 투표
+    link: "/eventdetail/what-next", // 풀하우스 다음 장면 투표
     image: `${IMG}/event/what-next.png`,
     title: "잠깐! 이다음에 무슨 일이?",
     description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",

@@ -15,7 +15,7 @@ import {
 
 import '../../styles/pages/home/Home.scss';
 import '../../styles/pages/category/Category.scss';
-import '../../styles/components/HomeResponsive.scss';
+import '../../styles/components/home/HomeResponsive.scss';
 import '../../styles/responsive/CategoryResponsive.scss';
 
 export const CategoryPage = ({ page }) => {
