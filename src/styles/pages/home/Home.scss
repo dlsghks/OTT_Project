@@ -134,10 +134,17 @@
     cursor: pointer;
 
     &:hover,
-    &:focus-visible { opacity: 1; }
+    &:focus-visible {
+      opacity: 1;
+    }
 
-    &--prev { right: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 1.125rem); }
-    &--next { left: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 1.125rem); }
+    &--prev {
+      right: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 1.125rem);
+    }
+
+    &--next {
+      left: calc(50% + min(var(--hero-max-width) / 2, 50% - var(--hero-side-space)) + 1.125rem);
+    }
   }
 
   &__counter {
@@ -170,7 +177,14 @@
     user-select: none;
     -webkit-user-drag: none;
   }
+
+  @media (width > 1024px) {
+    width: calc(100% + var(--page-side-padding) * 2);
+    margin-inline: calc(var(--page-side-padding) * -1);
+  }
 }
+
+
 
 .home-categories {
   width: 100%;
@@ -560,20 +574,45 @@
 @media (min-width: 1025px) and (max-width: 1919px) {
   .ranking-section__swiper {
     container-type: inline-size;
-    .swiper-wrapper { height: auto; }
-    .swiper-slide { width: min(318px, calc((100cqw - 72px) / 4.5)); }
+
+    .swiper-wrapper {
+      height: auto;
+    }
+
+    .swiper-slide {
+      width: min(318px, calc((100cqw - 72px) / 4.5));
+    }
   }
+
   .home-categories__swiper {
     container-type: inline-size;
-    .swiper-wrapper { height: auto; }
-    .swiper-slide { width: clamp(160px, 14vw, 198.85px); }
+
+    .swiper-wrapper {
+      height: auto;
+    }
+
+    .swiper-slide {
+      width: clamp(160px, 14vw, 198.85px);
+    }
   }
-  .home-categories__card { height: auto; }
-  .ranking-section__swiper .content-card { height: auto; }
+
+  .home-categories__card {
+    height: auto;
+  }
+
+  .ranking-section__swiper .content-card {
+    height: auto;
+  }
 }
 
 @media (min-width: 1025px) {
+
   .ranking-section__swiper .swiper-wrapper,
-  .home-categories__swiper .swiper-wrapper { height: auto; }
-  .ranking-section__swiper .content-card { height: auto; }
+  .home-categories__swiper .swiper-wrapper {
+    height: auto;
+  }
+
+  .ranking-section__swiper .content-card {
+    height: auto;
+  }
 }
