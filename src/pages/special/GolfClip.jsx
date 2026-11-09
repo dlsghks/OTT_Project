@@ -4,8 +4,8 @@ import { getGolfClipOrLatest, getGolfClipRecommends } from '../../data/golfData'
 import { NewsClipBody } from './NewsClip';
 import { DetailMessage } from '../../components/detail/DetailMessage';
 
-import '../../styles/pages/TotalSubDetail.scss';
-import '../../styles/pages/Special.scss';
+import '../../styles/pages/shared/TotalSubDetail.scss';
+import '../../styles/pages/special/Special.scss';
 
 // 골프 클립 재생 (/golf/clip/:clipId) — 뉴스 클립 재생 화면(NewsClipBody)을 그대로 사용
 // - clipId: 웨이브 콘텐츠 id (예: S31_20261101_KLPGA_FR_H001.1)

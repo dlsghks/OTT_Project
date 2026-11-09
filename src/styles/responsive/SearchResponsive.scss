@@ -79,3 +79,18 @@
     .search-page__contents-grid, .search-page__movie-list { gap: 10px; }
   }
 }
+
+// 모바일 추천 가로 슬라이드 규칙이 검색 결과 그리드에 적용되지 않도록 분리
+@media (max-width: 1024px) {
+  .search-page .search-page__results-grid .content-card {
+    width: 100%;
+    flex: initial;
+  }
+  .search-page .search-page__results-grid .content-card__info {
+    display: block;
+    margin-top: 0.5rem;
+  }
+  .search-page .search-page__results-grid .content-card__thumbnail {
+    aspect-ratio: 2 / 3;
+  }
+}

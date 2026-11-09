@@ -1,0 +1,947 @@
+// 레트로브 투표 이벤트 (/eventdetail/what-next · /eventdetail/favorite-scene · /eventdetail/next-line) — 디자인 기준: 1920px
+// 색상은 이벤트마다 --vote-* 변수로 바꿈 (coral: 풀하우스 / magenta: 우리 결혼했어요 / purple: 거침없이 하이킥)
+@use "sass:math";
+@use "../../retrov/fonts";
+@use "../../retrov/variables" as *;
+
+// Noto Sans KR 굵기 (index.html 은 400 만 불러옴) — 버튼 · 리드 문구 · 유의사항
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
+@font-face {
+  font-family: "Wavve PADO";
+  src: url("../../../assets/fonts/WavvePADO-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+$vote-pado: "Wavve PADO", "Noto Sans KR", sans-serif; // 제목 · 본문 (픽셀 문구 제외)
+$vote-noto: "Noto Sans KR", sans-serif; // 리드 문구 · 버튼 · 유의사항
+
+// 1920px 기준 px → 화면 너비에 비례 (작은 화면은 $min 까지만 줄어듦)
+@function fluid($px, $min) {
+  @return clamp(#{$min}px, #{math.div($px, 19.2)}vw, #{$px}px);
+}
+
+.rv-vote-event {
+  --vote-accent: #ff5541;
+  --vote-accent-end: #f0453a;
+  --vote-hero-top: #fff1f3;
+  --vote-hero-bottom: #ffe3e8;
+  --vote-soft: #fff0f2;
+  --vote-line: #ffd3da;
+  --vote-promo: #ffbcb1;
+  --vote-ink: #2a2530;
+  --vote-sparkle: #ff9eab; // 반짝이
+  --vote-heart: #ff9fb6; // 하트 (하이킥은 번개)
+
+  padding-bottom: fluid(120, 60);
+  font-family: $vote-pado;
+  font-synthesis: none; // Wavve PADO 는 한 굵기뿐이라 가짜 굵게 처리 막기
+
+  &--magenta {
+    --vote-accent: #d6006e;
+    --vote-accent-end: #e01f86;
+    --vote-hero-top: #fff0f6;
+    --vote-hero-bottom: #fbdfeb;
+    --vote-soft: #fde9f2;
+    --vote-line: #f5bfd6;
+    --vote-promo: #f8c6db;
+    --vote-sparkle: #f0809a; // 시안 star.svg
+    --vote-heart: #f394ae; // 시안 heart.svg
+  }
+
+  &--purple {
+    --vote-accent: #6a38cf;
+    --vote-accent-end: #7d4be0;
+    --vote-hero-top: #fffbea;
+    --vote-hero-bottom: #fff0c6;
+    --vote-soft: #fff8e1;
+    --vote-line: #f1dfa6;
+    --vote-promo: #fbe7a6;
+    --vote-sparkle: #b9a2ee;
+    --vote-heart: #f6c94a;
+  }
+
+  // 공통 이벤트 페이지(.event-page)의 max-width 960px 해제 — 가운데 종이 1380px
+  &.event-page {
+    max-width: none;
+  }
+
+  // :where() 로 우선순위를 낮춰 .rv-vote-event__button 의 글꼴(Noto Sans KR)이 적용되도록
+  :where(button) {
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* ---------- 상단 바: [프로그램] 이벤트명 / 이벤트 기간 ---------- */
+  &__bar {
+    // 페이지 좌우 여백(.site-inner padding)만큼 바깥으로 — 100vw 는 스크롤바 폭 때문에 가로 스크롤이 생겨서 사용 안 함
+    margin-inline: calc(var(--page-side-padding, 0px) * -1);
+    padding: fluid(28, 16) $retrov-side;
+    background: #1a1a1a;
+
+    h1 {
+      margin: 0;
+      font-size: fluid(30, 18);
+      font-weight: 700;
+      line-height: 1.4;
+      word-break: keep-all;
+    }
+
+    p {
+      margin: 6px 0 0;
+      font-size: fluid(15, 12);
+      color: $retrov-text-muted;
+    }
+  }
+
+  /* ---------- 가운데 흰 종이 ---------- */
+  &__paper {
+    width: min(1380px, 100%);
+    margin: fluid(60, 24) auto 0;
+    overflow: hidden;
+    background: #fff;
+    color: var(--vote-ink);
+  }
+
+  /* ---------- 히어로 ---------- */
+  &__hero {
+    position: relative;
+    isolation: isolate; // 장식(z-index: -1)이 배경 위 · 글씨 아래에 오도록
+    display: grid;
+    justify-items: center;
+    padding: fluid(150, 48) 20px fluid(110, 40);
+    background: linear-gradient(180deg, var(--vote-hero-top), var(--vote-hero-bottom));
+    text-align: center;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: fluid(20, 8);
+    margin: 0;
+    font-size: fluid(44, 20);
+
+    span {
+      font-family: $vote-noto;
+      font-weight: 400;
+    }
+
+    img {
+      width: auto;
+      height: fluid(98, 40);
+    }
+  }
+
+  &__headline {
+    display: grid;
+    margin: fluid(30, 12) 0 0;
+    font-size: fluid(96, 36);
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    word-break: keep-all;
+
+    em {
+      font-style: normal;
+      color: var(--vote-accent);
+    }
+  }
+
+  &__lead {
+    margin: fluid(40, 16) 0 0;
+    font-family: $vote-noto;
+    font-size: fluid(34, 16);
+    font-weight: 700;
+  }
+
+  &__desc {
+    display: grid;
+    gap: 0.3em;
+    margin: fluid(24, 10) 0 0;
+    font-family: $retrov-pixel;
+    font-size: fluid(28, 13);
+    color: #6f6670;
+  }
+
+  &__art {
+    width: fluid(420, 160);
+    height: auto;
+    margin-top: fluid(40, 16);
+  }
+
+  // 명대사: 레트로 TV 그림 (587 x 357)
+  &--purple &__art {
+    width: fluid(587, 230);
+  }
+
+  /* ---------- 배경 장식 (반짝이 · 하트 · 번개) ---------- */
+  // --s: 모바일 기준 크기 → 화면에 비례해 1920px 에서 2.4배까지
+  &__deco {
+    position: absolute;
+    z-index: -1;
+    width: clamp(calc(var(--s) * 1px), calc(var(--s) * 0.25vw), calc(var(--s) * 2.4px));
+    height: auto;
+    pointer-events: none;
+
+    &--sparkle {
+      fill: var(--vote-sparkle);
+    }
+
+    &--heart,
+    &--bolt {
+      fill: var(--vote-heart);
+    }
+
+    // 우결 히어로의 흐린 큰 하트
+    &--soft {
+      fill: var(--vote-heart);
+      opacity: 0.35;
+      filter: blur(3px);
+    }
+  }
+
+  // 우결: 따옴표 그림 — 오른쪽 위 그대로 + 왼쪽 아래는 좌우 반전 (디자인 기준 종이 안쪽에 배치)
+  &--magenta &__hero {
+    padding-bottom: fluid(440, 120);
+  }
+
+  &__art--top,
+  &__art--bottom {
+    position: absolute;
+    z-index: -1;
+    margin: 0;
+  }
+
+  &__art--top {
+    top: 5%;
+    right: 4%;
+    width: 24%;
+  }
+
+  &__art--bottom {
+    bottom: 7%;
+    left: 9%;
+    width: 26%;
+    transform: scaleX(-1);
+  }
+
+  /* ---------- 섹션 공통 ---------- */
+  &__section {
+    padding: fluid(120, 48) clamp(20px, 6.7%, 92px);
+
+    &--vote {
+      position: relative;
+      isolation: isolate;
+      background: linear-gradient(180deg, var(--vote-soft), #fff 140%);
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: fluid(42, 20);
+    font-weight: 800;
+    word-break: keep-all;
+  }
+
+  &__subtitle {
+    margin: fluid(14, 8) 0 0;
+    font-family: $retrov-pixel;
+    font-size: fluid(22, 12);
+    color: #7a7178;
+    word-break: keep-all;
+  }
+
+  /* ---------- 참여 방법 ---------- */
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: fluid(24, 8);
+    margin: fluid(56, 20) 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      position: relative;
+      display: grid;
+      gap: fluid(12, 6);
+      padding: fluid(32, 12) fluid(32, 12);
+      border: 2px solid var(--vote-line);
+      border-radius: 10px;
+      background: linear-gradient(180deg, #fff, var(--vote-soft));
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+
+      // 오른쪽 위 반짝이 장식 (시안 star.svg 모양)
+      &::after {
+        content: "";
+        position: absolute;
+        top: fluid(24, 8);
+        right: fluid(24, 8);
+        width: fluid(19, 12);
+        aspect-ratio: 1;
+        background: var(--vote-line);
+        mask: url("../../../assets/retrov/deco-star.svg") center / contain no-repeat;
+      }
+    }
+
+    em {
+      justify-self: start;
+      padding: 0.25em 0.9em;
+      border-radius: 4px;
+      background: var(--vote-accent);
+      color: #fff;
+      font-family: $retrov-pixel;
+      font-size: fluid(18, 10);
+      font-style: normal;
+    }
+
+    strong {
+      font-size: fluid(26, 13);
+      font-weight: 800;
+    }
+
+    span {
+      font-family: $retrov-pixel;
+      font-size: fluid(18, 10);
+      color: #7a7178;
+    }
+  }
+
+  /* ---------- 장면 TV (누르면 재생) ---------- */
+  &__tv-button {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+
+    &:hover .rv-vote-event__play,
+    &:focus-visible .rv-vote-event__play {
+      opacity: 1;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--vote-accent);
+      outline-offset: 4px;
+      border-radius: 12px;
+    }
+
+    // 유튜브 썸네일(4:3 안에 16:9 + 위아래 검은 띠)은 확대해서 띠를 잘라냄
+    .retro-tv__screen img[src*="i.ytimg.com"] {
+      scale: 1.334;
+    }
+  }
+
+  &__tv {
+    width: min(840px, 100%);
+    margin: fluid(56, 20) auto 0;
+  }
+
+  &__play {
+    position: absolute;
+    top: 49%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: fluid(80, 44);
+    height: fluid(80, 44);
+    padding-left: 4px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+
+  /* ---------- 투표 폼 ---------- */
+  &__form {
+    margin-top: fluid(56, 20);
+
+    fieldset {
+      display: grid;
+      gap: fluid(20, 10);
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+  }
+
+  &__question {
+    margin-bottom: fluid(12, 4);
+    padding: 0;
+    font-size: fluid(28, 15);
+    font-weight: 800;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    min-height: fluid(110, 52);
+    padding: 0 fluid(40, 16);
+    border: 2px solid #ececec;
+    border-radius: 6px;
+    background: #fff;
+    font-family: $retrov-pixel;
+    font-size: fluid(26, 14);
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: var(--vote-line);
+    }
+
+    &:has(input:checked) {
+      border-color: var(--vote-accent);
+      box-shadow: 0 0 0 2px var(--vote-accent) inset;
+    }
+
+    &:has(input:focus-visible) {
+      outline: 3px solid var(--vote-accent);
+      outline-offset: 3px;
+    }
+
+    input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  // 우결: 장면 카드 (TV + 설명), 카드를 누르면 선택
+  &__scene {
+    display: grid;
+    grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+    align-items: center;
+    gap: fluid(48, 14);
+    padding: fluid(44, 14);
+    border: 3px solid transparent;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: border-color 0.2s;
+
+    &.is-selected {
+      border-color: var(--vote-accent);
+    }
+
+    &:has(input:focus-visible) {
+      outline: 3px solid var(--vote-accent);
+      outline-offset: 3px;
+    }
+  }
+
+  &__scene-info {
+    display: grid;
+    justify-items: start;
+    gap: fluid(14, 6);
+    cursor: pointer;
+
+    input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    em {
+      padding: 0.25em 0.9em;
+      border-radius: 4px;
+      background: var(--vote-accent);
+      color: #fff;
+      font-family: $retrov-pixel;
+      font-size: fluid(18, 10);
+      font-style: normal;
+    }
+
+    strong {
+      font-size: fluid(30, 15);
+      font-weight: 800;
+      word-break: keep-all;
+    }
+  }
+
+  &__couple {
+    font-size: fluid(20, 12);
+    font-weight: 700;
+  }
+
+  &__scene-text {
+    display: grid;
+    font-family: $retrov-pixel;
+    font-size: fluid(18, 11);
+    line-height: 1.6;
+    color: #7a7178;
+  }
+
+  /* ---------- 버튼 (투표 · 결과 재생 · 프로그램 보러 가기) ---------- */
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    width: 100%;
+    min-height: fluid(100, 52);
+    margin-top: fluid(36, 16);
+    padding: 0 20px;
+    border: 0;
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--vote-accent-end), var(--vote-accent));
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    color: #fff;
+    font-family: $vote-noto;
+    font-size: fluid(28, 15);
+    font-weight: 700;
+    text-decoration: none;
+    transition: filter 0.2s, opacity 0.2s;
+
+    &:hover:not(:disabled) {
+      filter: brightness(1.06);
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--vote-ink);
+      outline-offset: 3px;
+    }
+  }
+
+  /* ---------- 투표 결과 ---------- */
+  &__result {
+    margin-top: fluid(56, 20);
+
+    h3 {
+      margin: 0;
+      font-size: fluid(48, 22);
+      font-weight: 900;
+    }
+
+    > p {
+      margin: fluid(16, 6) 0 0;
+      font-family: $retrov-pixel;
+      font-size: fluid(26, 13);
+      color: #8a7f88;
+    }
+
+    ol {
+      display: grid;
+      gap: fluid(36, 12);
+      margin: fluid(48, 20) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      display: grid;
+      gap: fluid(26, 10);
+      padding: fluid(44, 16) fluid(36, 16);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    li.is-mine {
+      box-shadow: 0 0 0 2px var(--vote-accent) inset;
+    }
+  }
+
+  &__result-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4em 1.2em;
+    font-family: $retrov-pixel;
+    font-size: fluid(26, 14);
+
+    strong {
+      font-weight: normal;
+      font-size: 0.9em;
+    }
+
+    em {
+      padding: 0.15em 0.7em;
+      border-radius: 999px;
+      background: var(--vote-accent);
+      color: #fff;
+      font-size: 0.7em;
+      font-style: normal;
+    }
+  }
+
+  &__bar-track {
+    display: block;
+    height: fluid(16, 8);
+    border-radius: 999px;
+    background: var(--vote-soft);
+
+    span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--vote-accent);
+      transition: width 0.6s ease;
+    }
+  }
+
+  /* ---------- 프로그램 카드 ---------- */
+  &__promo {
+    display: grid;
+    grid-template-columns: minmax(0, 32%) minmax(0, 1fr);
+    align-items: center;
+    gap: fluid(48, 16);
+    margin-top: fluid(56, 20);
+    padding: fluid(44, 16);
+    border-radius: 8px;
+    background: var(--vote-promo);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+    > img {
+      width: 100%;
+      aspect-ratio: 261 / 375;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: fluid(46, 20);
+      font-weight: 800;
+    }
+
+    p {
+      display: grid;
+      margin: fluid(24, 10) 0 0;
+      font-family: $retrov-pixel;
+      font-size: fluid(22, 12);
+      line-height: 1.6;
+    }
+  }
+
+  /* ---------- 유의사항 ---------- */
+  &__notice {
+    padding: fluid(80, 32) clamp(20px, 6.7%, 92px) fluid(120, 48);
+    font-family: $vote-noto;
+
+    h2 {
+      margin: 0;
+      font-size: fluid(26, 15);
+      font-weight: 700;
+    }
+
+    ul {
+      margin: fluid(24, 10) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      position: relative;
+      padding-left: 0.8em;
+      font-size: fluid(17, 11);
+      line-height: 1.8;
+      color: #6f6670;
+
+      &::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+}
+
+// 모바일 · 태블릿 (사이트 모바일 레이아웃 1024px 이하) — 반응형 디자인 기준
+// 상단 바 숨김, 종이를 화면 끝까지, 참여 방법은 가운데 정렬 + 세로 카드, 장면 · 프로그램 카드는 가로 2단 유지
+@media (max-width: 1024px) {
+  .rv-vote-event {
+    padding-bottom: 0;
+
+    // 공통 이벤트 페이지(.event-page)의 모바일 위쪽 여백 해제 — 헤더 바로 아래부터 히어로
+    &.event-page {
+      padding-top: 0;
+    }
+
+    &__bar {
+      display: none;
+    }
+
+    &__paper {
+      width: auto;
+      margin: 0 calc(var(--page-side-padding, 0px) * -1);
+    }
+
+    /* 히어로 */
+    &__hero {
+      padding: 56px 20px 32px;
+    }
+
+    &__brand {
+      gap: 8px;
+      font-size: 15px;
+
+      img {
+        height: 40px;
+      }
+    }
+
+    &__headline {
+      margin-top: 10px;
+      font-size: 30px;
+      line-height: 1.3;
+    }
+
+    &__lead {
+      margin-top: 14px;
+      font-size: 12px;
+    }
+
+    &__desc {
+      margin-top: 10px;
+      font-size: 9px;
+    }
+
+    &__art {
+      width: 150px;
+      margin-top: 16px;
+    }
+
+    &--magenta &__hero {
+      padding-bottom: 110px;
+    }
+
+    &__art--top,
+    &__art--bottom {
+      width: 100px;
+      margin-top: 0;
+    }
+
+    &__art--top {
+      top: 8%;
+      right: -3%;
+    }
+
+    &__art--bottom {
+      bottom: 4%;
+      left: -3%;
+    }
+
+    &--purple &__art {
+      width: 230px;
+    }
+
+    /* 섹션 공통 */
+    &__section {
+      padding: 40px 26px;
+    }
+
+    &__title {
+      font-size: 15px;
+    }
+
+    &__subtitle {
+      margin-top: 6px;
+      font-size: 8px;
+    }
+
+    /* 참여 방법: 히어로 배경 이어서, 가운데 정렬 */
+    &__section--steps {
+      padding: 24px 26px 40px;
+      background: linear-gradient(180deg, var(--vote-hero-bottom), var(--vote-soft));
+      text-align: center;
+
+      .rv-vote-event__title {
+        font-size: 20px;
+      }
+
+      .rv-vote-event__subtitle {
+        margin-top: 8px;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+    }
+
+    &__steps {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 32px;
+      text-align: left;
+
+      li {
+        gap: 10px;
+        padding: 22px 28px;
+
+        &::after {
+          top: 24px;
+          right: 96px;
+          width: 16px;
+        }
+      }
+
+      em {
+        font-size: 12px;
+      }
+
+      strong {
+        font-size: 16px;
+      }
+
+      span {
+        font-size: 13px;
+      }
+    }
+
+    /* 투표 */
+    &__tv {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    &__play {
+      width: 44px;
+      height: 44px;
+    }
+
+    &__form {
+      margin-top: 20px;
+
+      fieldset {
+        gap: 8px;
+      }
+    }
+
+    &__question {
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    &__option {
+      min-height: 34px;
+      padding: 0 14px;
+      font-size: 11px;
+    }
+
+    &__scene {
+      grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+      border-width: 2px;
+    }
+
+    &__scene-info {
+      gap: 5px;
+
+      em {
+        font-size: 8px;
+      }
+
+      strong {
+        font-size: 11px;
+      }
+    }
+
+    &__couple {
+      font-size: 9px;
+    }
+
+    &__scene-text {
+      font-size: 8px;
+    }
+
+    &__button {
+      min-height: 32px;
+      margin-top: 16px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    /* 투표 결과 */
+    &__result {
+      margin-top: 20px;
+
+      h3 {
+        font-size: 18px;
+      }
+
+      > p {
+        font-size: 11px;
+      }
+
+      ol {
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      li {
+        gap: 10px;
+        padding: 14px;
+        border-radius: 8px;
+      }
+    }
+
+    &__result-label {
+      font-size: 12px;
+    }
+
+    &__bar-track {
+      height: 8px;
+    }
+
+    /* 프로그램 카드: 포스터 + 설명 가로 2단 */
+    &__promo {
+      grid-template-columns: minmax(0, 33%) minmax(0, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+      padding: 14px;
+
+      h3 {
+        font-size: 14px;
+      }
+
+      p {
+        margin-top: 10px;
+        font-size: 10px;
+      }
+
+      .rv-vote-event__button {
+        font-size: 11px;
+      }
+    }
+
+    /* 유의사항 */
+    &__notice {
+      padding: 24px 26px 40px;
+
+      h2 {
+        font-size: 14px;
+      }
+
+      ul {
+        margin-top: 16px;
+      }
+
+      li {
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-vote-event__bar-track span {
+    transition: none;
+  }
+}

@@ -15,6 +15,18 @@ const moduleURL = async (url) => {
   return result;
 };
 
-// 실제 환경 변수/API를 사용하지 않고 순수 데이터 모듈만 읽는다.
-export const loadData = async (name) =>
-  import(await moduleURL(new URL('../src/data/' + name + '.js', import.meta.url)));
+const DATA_PATHS = {
+  homeData: 'home/homeData',
+  requestedHomeSections: 'home/requestedHomeSections',
+  weeklyContentData: 'home/weeklyContentData',
+};
+
+export const loadData = async (name) => {
+  const path = DATA_PATHS[name] ?? name;
+
+  return import(
+    await moduleURL(
+      new URL('../src/data/' + path + '.js', import.meta.url)
+    )
+  );
+};

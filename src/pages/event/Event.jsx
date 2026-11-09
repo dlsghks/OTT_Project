@@ -159,6 +159,12 @@ export const Event = () => {
 
   return (
     <div className="event-page">
+      <div className="event-page__hero">
+        <img
+          src={getImagePath('/images/events/event-banner-MMA.jpg')}
+          alt="MMA2026 이벤트"
+        />
+      </div>
       <div className="event-page__content">
         <div
           className="event-page__tabs"
