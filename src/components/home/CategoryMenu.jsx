@@ -1,3 +1,5 @@
+import { CategoryLogo } from './CategoryLogo';
+import '../../styles/components/home/CategoryButtonStates.scss';
 import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -80,11 +82,11 @@ export const CategoryMenu = ({ items = [] }) => {
             <div className="home-categories__app-row" key={rowIndex}>
               {row.map((item, index) => item.path ? (
                 <NavLink key={`${item.label}-${index}`} to={item.path} end={item.path === '/'} className="home-categories__card" aria-label={item.label} draggable={false}>
-                  <img src={item.image} alt={item.label} draggable={false} />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </NavLink>
               ) : (
                 <div key={`${item.label}-${index}`} className="home-categories__card home-categories__card--static" title={item.label}>
-                  <img src={item.image} alt={item.label} draggable={false} />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </div>
               ))}
             </div>
@@ -119,19 +121,11 @@ export const CategoryMenu = ({ items = [] }) => {
                   aria-label={item.label}
                   draggable={false}
                 >
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    draggable={false}
-                  />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </NavLink>
               ) : (
                 <div className="home-categories__card home-categories__card--static" title={item.label}>
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    draggable={false}
-                  />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </div>
               )}
             </SwiperSlide>

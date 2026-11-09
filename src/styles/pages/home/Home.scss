@@ -577,3 +577,46 @@
   .home-categories__swiper .swiper-wrapper { height: auto; }
   .ranking-section__swiper .content-card { height: auto; }
 }
+
+/* 웨이브-메인: 좌우 여백까지 포함한 페이지 배경 */
+main.site-inner:has(> .wavve-home) {
+  background: linear-gradient(
+    180deg,
+    #071a2e 17.3077%,
+    #000000 100%
+  );
+}
+
+/* 메인 카드 목록의 그라데이션을 연하게 */
+.wavve-home .content-section__arrow::before {
+  opacity: 0.8;
+}
+
+/* 화살표는 선명하게 */
+.wavve-home .content-section__arrow::after {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+}
+
+/* 메인 화살표 영역을 실제 썸네일 높이로 제한 */
+.wavve-home .content-section .content-section__arrow {
+  top: 0;
+  bottom: auto;
+  height: var(--thumbnail-arrow-height, var(--card-h));
+}
+
+/* 랭킹 화살표: 실제 포스터 높이만 사용 */
+.wavve-home .ranking-section .ranking-section__arrow {
+  top: 0;
+  bottom: auto;
+  height: var(--ranking-poster-height, var(--card-h));
+}
+
+/* 포스터 위 그라데이션 밝기 */
+.wavve-home .ranking-section .ranking-section__arrow::before {
+  opacity: 0.35;
+}
+
+/* 화살표 선명도 */
+.wavve-home .ranking-section .ranking-section__arrow::after {
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+}

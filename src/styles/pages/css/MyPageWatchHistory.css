@@ -1,0 +1,131 @@
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-group {
+  min-height: 0;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-list--history {
+  align-items: flex-start;
+  gap: 18px;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-list--history > li {
+  flex: 0 0 calc((100cqw - 36px) / 3.2);
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-card:focus-visible {
+  outline: 2px solid #1351f9;
+  outline-offset: 4px;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-thumbnail {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1490196078);
+  border-radius: 10px;
+  background: #181818;
+  box-sizing: border-box;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-thumbnail > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-duration {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.7333333333);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-progress {
+  position: absolute;
+  inset: auto 0 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2509803922);
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-progress > span {
+  display: block;
+  height: 100%;
+  background: #ff3154;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-title, .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-program {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-title {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-program {
+  margin-top: 4px;
+  color: #a5a5a5;
+  font-size: 15px;
+}
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-slider--history .mypage__editor-arrow {
+  top: 0;
+  bottom: 75px;
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-list--history {
+    gap: 12px;
+  }
+  .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-list--history > li {
+    flex-basis: calc((100cqw - 24px) / 2.3);
+  }
+}
+@media (max-width: 600px) {
+  .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-list--history {
+    gap: 10px;
+  }
+  .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__editor-list--history > li {
+    flex-basis: calc((100cqw - 10px) / 1.35);
+  }
+  .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-title {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-program {
+    margin-top: 2px;
+    font-size: 12px;
+  }
+  .wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-duration {
+    right: 6px;
+    bottom: 8px;
+    font-size: 12px;
+  }
+}
+.wavve-mypage .mypage__history-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1490196078);
+}
+.wavve-mypage .mypage__history-progress > span {
+  background: #1351f9;
+}
+
+.wavve-mypage .mypage__library .mypage__library-panel--history .mypage__history-progress > span {
+  background: #1351f9;
+}

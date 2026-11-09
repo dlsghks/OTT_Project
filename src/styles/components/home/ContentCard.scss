@@ -228,3 +228,8 @@
     transition: none;
   }
 }
+
+/* 세로 포스터 카드만 제목 숨기기 */
+.content-section--default .content-card__info > h3 {
+  display: none;
+}

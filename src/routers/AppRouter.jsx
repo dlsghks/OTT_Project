@@ -33,6 +33,7 @@ import { Schedule } from "../pages/live/Schedule";
 // 레트로브
 import { RetroV } from "../pages/retrov/RetroV";
 import { RetrovDetail } from "../pages/retrov/RetrovDetail";
+import { RetrovShorts } from "../pages/retrov/RetrovShorts";
 
 // 이벤트
 import { Event } from "../pages/event/Event";
@@ -131,6 +132,17 @@ export const AppRouter = () => {
         {/* 레트로브 */}
         <Route path="/retrov" element={<RetroV />} />
         <Route path="/retrov/:programId" element={<RetrovDetail />} />
+        <Route path="/retrov" element={<RetroV />} />
+
+        <Route
+          path="/retrov/shorts"
+          element={<RetrovShorts />}
+        />
+
+        <Route
+          path="/retrov/:programId"
+          element={<RetrovDetail />}
+        />
 
         {/* 이벤트 */}
         <Route path="/event" element={<Event />} />

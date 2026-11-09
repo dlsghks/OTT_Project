@@ -16,7 +16,7 @@ export const DetailLayout = ({ hero, children, player, actions }) => {
 
       <div className="movie-detail__sections">{children}</div>
 
-      {player.video && <YoutubePlayerModal video={player.video} onClose={player.closeVideo} />}
+      {player.video && <YoutubePlayerModal video={{ ...player.video, historyItem: player.video.historyItem ?? actions.historyItem }} onClose={player.closeVideo} />}
 
       <LoginModal isOpen={actions.loginOpen} onClose={actions.onCloseLogin} />
     </div>

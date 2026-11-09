@@ -1,3 +1,4 @@
+import { normalizeWatchHistory, updateWatchHistory } from "../utils/watchHistoryRecords";
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
 import { create } from "zustand";
@@ -16,6 +17,7 @@ export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   image: `${import.meta.env.BASE_URL}images/profiles/${id}.png`,
   likedIds: [],
   watchedIds: [],
+  watchHistory: [],
   likedContents: [],
   likedEditorPicks: [],
   viewedEditorPicks: [],
@@ -38,6 +40,7 @@ const normalize = (data = {}) => {
         : profile.image,
       likedIds: ids(saved?.likedIds),
       watchedIds: ids(saved?.watchedIds).slice(0, 100),
+      watchHistory: normalizeWatchHistory(saved?.watchHistory),
       likedContents: normalizeContentFavorites(saved?.likedContents),
       likedEditorPicks: normalizeEditorPicks(saved?.likedEditorPicks),
       viewedEditorPicks: normalizeEditorPicks(saved?.viewedEditorPicks),
@@ -239,5 +242,24 @@ export const changeContentFavorite = async (profileId, item, ownerId) => {
     validateProfile();
     const likedContents = toggleContentFavorite(snapshot.data()?.profiles?.[profileId]?.likedContents, record);
     transaction.set(ref, { profiles: { [profileId]: { likedContents } } }, { merge: true });
+  });
+};
+
+// 실제 재생을 시작한 작품만 현재 계정·프로필에 저장합니다.
+export const saveWatchHistoryRecord = async (profileId, item, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const validate = () => {
+    requireAccount(profileId, uid);
+    if (useAccountStore.getState().selectedProfileId !== profileId) {
+      throw new Error("프로필이 변경됐어요. 다시 재생해주세요.");
+    }
+  };
+  validate();
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    validate();
+    const watchHistory = updateWatchHistory(snapshot.data()?.profiles?.[profileId]?.watchHistory, item);
+    transaction.set(ref, { profiles: { [profileId]: { watchHistory } } }, { merge: true });
   });
 };

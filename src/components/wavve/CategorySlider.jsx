@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -15,6 +15,7 @@ export const CategorySlider = ({
   ranked = false,
 }) => {
   const swiperRef = useRef(null);
+  const sliderRef = useRef(null);
 
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
@@ -22,14 +23,32 @@ export const CategorySlider = ({
   const updateNavigation = (swiper) => {
     if (!swiper || swiper.destroyed) return;
 
-    setCanPrev(
-      !swiper.isBeginning && !swiper.isLocked
+    setCanPrev(!swiper.isBeginning && !swiper.isLocked);
+    setCanNext(!swiper.isEnd && !swiper.isLocked);
+  };
+
+  // 화살표와 그라데이션의 높이를 실제 포스터에 맞춤
+  useEffect(() => {
+    const slider = sliderRef.current;
+    const thumbnail = slider?.querySelector(
+      '.content-card__thumbnail'
     );
 
-    setCanNext(
-      !swiper.isEnd && !swiper.isLocked
-    );
-  };
+    if (!slider || !thumbnail) return;
+
+    const updateHeight = () => {
+      slider.style.setProperty(
+        '--poster-arrow-height',
+        `${thumbnail.getBoundingClientRect().height}px`
+      );
+    };
+
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(thumbnail);
+    updateHeight();
+
+    return () => observer.disconnect();
+  }, [items]);
 
   return (
     <section className="category-row">
@@ -47,7 +66,10 @@ export const CategorySlider = ({
         {headerExtra}
       </div>
 
-      <div className="category-row__slider">
+      <div
+        ref={sliderRef}
+        className="category-row__slider"
+      >
         <Swiper
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
@@ -95,9 +117,7 @@ export const CategorySlider = ({
             type="button"
             className="category-row__arrow category-row__arrow--prev"
             aria-label={`${title} 이전 콘텐츠`}
-            onClick={() =>
-              swiperRef.current?.slidePrev()
-            }
+            onClick={() => swiperRef.current?.slidePrev()}
           >
             <span aria-hidden="true">‹</span>
           </button>
@@ -108,9 +128,7 @@ export const CategorySlider = ({
             type="button"
             className="category-row__arrow category-row__arrow--next"
             aria-label={`${title} 다음 콘텐츠`}
-            onClick={() =>
-              swiperRef.current?.slideNext()
-            }
+            onClick={() => swiperRef.current?.slideNext()}
           >
             <span aria-hidden="true">›</span>
           </button>

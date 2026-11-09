@@ -70,6 +70,7 @@ export const useDetailActions = (item) => {
   };
 
   return {
+    historyItem: item ? { ...item, image: getImagePath(item.image), to: pathname } : null,
     user,
     isLiked,
     likeBusy,

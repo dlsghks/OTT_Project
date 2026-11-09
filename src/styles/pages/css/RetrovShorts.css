@@ -1,0 +1,43 @@
+.retrov-shorts-back {
+  position: fixed;
+  top: 116px;
+  left: 24px;
+  z-index: 105;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2509803922);
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+.retrov-shorts-back:hover {
+  background: #252525;
+}
+.retrov-shorts-back:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.retrov-shorts-back > span {
+  font-size: 20px;
+  line-height: 1;
+}
+
+@media (max-width: 1024px) {
+  .retrov-shorts-back {
+    top: calc(8px + env(safe-area-inset-top, 0px));
+    left: 16px;
+    min-height: 44px;
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  .site-inner:has(> .retrov-shorts-back) .shorts-screen__genres {
+    top: calc(62px + env(safe-area-inset-top, 0px));
+  }
+}
