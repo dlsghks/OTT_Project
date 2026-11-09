@@ -1,5 +1,6 @@
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
+import { createAttendanceCoin, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
 import { create } from "zustand";
 import { doc, onSnapshot, runTransaction, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
@@ -9,6 +10,11 @@ const ids = (value) => Array.isArray(value)
   ? [...new Set(value.filter((id) => typeof id === "string" && id))] : [];
 const text = (value, fallback) => typeof value === "string" && value.trim()
   ? value.trim() : fallback;
+// 출석 날짜 목록: YYYY-MM-DD 형식만 중복 없이 최신순 366일까지
+const attendanceDates = (value) => Array.isArray(value)
+  ? [...new Set(value.filter((day) => typeof day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(day)))]
+    .sort().slice(-366)
+  : [];
 
 export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   id,
@@ -19,6 +25,8 @@ export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   likedContents: [],
   likedEditorPicks: [],
   viewedEditorPicks: [],
+  attendanceDays: [],
+  coinRecords: [],
   pinSalt: "",
   pinHash: "",
   locked: false,
@@ -29,6 +37,7 @@ const normalize = (data = {}) => {
     const saved = data.profiles?.[profile.id];
     const pinSalt = typeof saved?.pinSalt === "string" ? saved.pinSalt : "";
     const pinHash = typeof saved?.pinHash === "string" ? saved.pinHash : "";
+    const attendanceDays = attendanceDates(saved?.attendanceDays);
     return {
       ...profile,
       name: text(saved?.name, profile.name),
@@ -41,6 +50,8 @@ const normalize = (data = {}) => {
       likedContents: normalizeContentFavorites(saved?.likedContents),
       likedEditorPicks: normalizeEditorPicks(saved?.likedEditorPicks),
       viewedEditorPicks: normalizeEditorPicks(saved?.viewedEditorPicks),
+      attendanceDays,
+      coinRecords: normalizeCoinRecords(saved?.coinRecords, attendanceDays),
       pinSalt,
       pinHash,
       locked: Boolean(pinSalt && pinHash),
@@ -239,5 +250,31 @@ export const changeContentFavorite = async (profileId, item, ownerId) => {
     validateProfile();
     const likedContents = toggleContentFavorite(snapshot.data()?.profiles?.[profileId]?.likedContents, record);
     transaction.set(ref, { profiles: { [profileId]: { likedContents } } }, { merge: true });
+  });
+};
+
+// 출석체크: 프로필별 출석 날짜와 코인 적립을 한 번에 저장합니다. 같은 날짜는 한 번만 기록됩니다.
+export const saveAttendanceDay = async (profileId, day, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const validateProfile = () => {
+    requireAccount(profileId, uid);
+    if (useAccountStore.getState().selectedProfileId !== profileId) {
+      throw new Error("프로필이 변경됐어요. 다시 시도해주세요.");
+    }
+  };
+  validateProfile();
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    validateProfile();
+    const saved = snapshot.data()?.profiles?.[profileId];
+    const previous = attendanceDates(saved?.attendanceDays);
+    if (previous.includes(day)) return;
+    const attendanceDays = attendanceDates([...previous, day]);
+    const coinRecords = normalizeCoinRecords(
+      [createAttendanceCoin(day, formatCoinDate(new Date())), ...(saved?.coinRecords ?? [])],
+      attendanceDays
+    );
+    transaction.set(ref, { profiles: { [profileId]: { attendanceDays, coinRecords } } }, { merge: true });
   });
 };

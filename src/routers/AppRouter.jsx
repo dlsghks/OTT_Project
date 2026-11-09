@@ -69,6 +69,7 @@ import { MyPage } from "../pages/member/MyPage";
 import { Settings } from "../pages/member/Settings";
 import InquiryDetail from "../pages/support/InquiryDetail";
 import Voucher from "../pages/member/Voucher";
+import Coin from "../pages/member/Coin";
 
 export const AppRouter = () => {
   return (
@@ -163,6 +164,7 @@ export const AppRouter = () => {
 
         {/* 이용원 구매 */}
         <Route path="/voucher" element={<Voucher />} />
+        <Route path="/coin" element={<Coin />} />
 
         {/* 회원 */}
         <Route path="/login" element={<Login />} />

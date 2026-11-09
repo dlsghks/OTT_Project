@@ -146,7 +146,8 @@ $event-muted: #8b93a3;
   }
 
   &__calendar {
-    margin-top: 24px;
+    max-width: 460px; // 달력 폭 (양옆으로 퍼지지 않도록 가운데 정렬)
+    margin: 24px auto 0;
     padding: 24px;
     border-radius: 12px;
     background: $event-panel;
@@ -237,6 +238,14 @@ $event-muted: #8b93a3;
       cursor: default;
     }
   }
+
+  // 출석 저장 실패 안내
+  &__message {
+    margin: 12px 0 0;
+    color: #ff8a8a;
+    font-size: 14px;
+    text-align: center;
+  }
 }
 
 /* 티켓 */
@@ -314,7 +323,8 @@ $event-muted: #8b93a3;
 .attendance-event__image {
   display: block;
   width: 100%;
-  margin-top: 36px;
+  max-width: 800px; // 다른 이미지 이벤트 포스터와 같은 폭
+  margin: 0 auto;
   border-radius: 12px;
 }
 

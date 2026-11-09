@@ -1,0 +1,238 @@
+@use "../../common/figma-tokens" as figma;
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap");
+
+// 코인내역 (/coin) — 웨이브 코인내역 화면 기준, 글자는 스타일 가이드의 Noto Sans KR
+$coin-bg: #1b1b1b;
+$coin-band: #262626;
+$coin-panel: #262626;
+$coin-line: rgba(255, 255, 255, 0.08);
+$coin-link: #3d84ff;
+
+.coin {
+  min-height: 100vh;
+  padding-bottom: figma.$space-max;
+  background: $coin-bg;
+  box-shadow: 0 0 0 100vmax $coin-bg;
+  clip-path: inset(0 -100vmax);
+  color: figma.$neutral-white;
+  font-family: "Noto Sans KR", sans-serif;
+
+  &,
+  * {
+    box-sizing: border-box;
+  }
+
+  button {
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid figma.$primary-main;
+      outline-offset: 2px;
+    }
+  }
+
+  &__header {
+    padding: figma.$space-3xl 0;
+    background: $coin-band;
+    box-shadow: 0 0 0 100vmax $coin-band;
+    clip-path: inset(0 -100vmax);
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+  }
+
+  &__inner {
+    width: 100%;
+    max-width: 938px;
+    margin: 0 auto;
+    padding-top: figma.$space-3xl;
+  }
+
+  &__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: figma.$space-lg;
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+  }
+
+  button.coin__charge {
+    display: inline-flex;
+    align-items: center;
+    gap: figma.$space-xs;
+    padding: 0;
+    color: $coin-link;
+    font-size: 13px;
+  }
+
+  &__notice {
+    margin: figma.$space-sm 0 0;
+    color: figma.$neutral-3;
+    font-size: 13px;
+    text-align: right;
+  }
+
+  &__summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: figma.$space-lg 0 0;
+    padding: figma.$space-xl 0;
+    border-radius: figma.$radius-2;
+    background: $coin-panel;
+
+    > div {
+      padding: figma.$space-sm 0;
+      text-align: center;
+
+      + div {
+        border-left: 1px solid $coin-line;
+      }
+    }
+
+    dt {
+      color: figma.$neutral-3;
+      font-size: 14px;
+    }
+
+    dd {
+      margin: figma.$space-xs 0 0;
+      font-size: 36px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    align-items: center;
+    margin-top: figma.$space-3xl;
+    padding-bottom: figma.$space-md;
+    border-bottom: 1px solid $coin-line;
+
+    button {
+      padding: 0;
+      color: figma.$neutral-3;
+      font-size: 16px;
+      line-height: 1.4;
+
+      + button {
+        margin-left: figma.$space-md;
+        padding-left: figma.$space-md;
+        border-left: 1px solid $coin-line;
+      }
+
+      &.is-active {
+        color: figma.$neutral-white;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &__empty {
+    display: grid;
+    justify-items: center;
+    gap: figma.$space-md;
+    padding: figma.$space-6xl 0;
+    color: figma.$neutral-3;
+
+    p {
+      margin: 0;
+      font-size: 16px;
+    }
+  }
+
+  &__table-wrap {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: center;
+
+    th {
+      padding: figma.$space-md figma.$space-xs;
+      border-bottom: 1px solid $coin-line;
+      color: figma.$neutral-2;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: figma.$space-lg figma.$space-xs;
+      border-bottom: 1px solid $coin-line;
+      color: figma.$neutral-1;
+      line-height: 1.4;
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    gap: figma.$space-sm;
+    margin-top: figma.$space-3xl;
+
+    button {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: figma.$radius-3;
+      color: figma.$neutral-3;
+      font-size: 13px;
+
+      &.is-active {
+        border-color: figma.$neutral-white;
+        color: figma.$neutral-white;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding-bottom: figma.$space-6xl;
+
+    &__header {
+      padding: figma.$space-2xl 0;
+
+      h1 {
+        font-size: 18px;
+      }
+    }
+
+    &__inner {
+      padding-top: figma.$space-2xl;
+    }
+
+    &__title-row h2 {
+      font-size: 16px;
+    }
+
+    &__summary {
+      padding: figma.$space-md 0;
+
+      dt {
+        font-size: 12px;
+      }
+
+      dd {
+        font-size: 24px;
+      }
+    }
+  }
+}
