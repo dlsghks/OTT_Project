@@ -173,9 +173,131 @@ $hero-base: 1920;
   }
 }
 
+//  모든 스페셜 히어로의 공통 배경 효과
+//  영화+는 기존 디자인 유지
+
+.special-hero:is([data-theme='mma'],
+  [data-theme='golf'],
+  [data-theme='news'],
+  [data-theme='wonly'],
+  [data-theme='tooniverse'],
+  [data-theme='kids'],
+  [data-theme='kbs'],
+  [data-theme='mbc'],
+  [data-theme='cj-enm'],
+  [data-theme='jtbc']) {
+  isolation: isolate;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    background:
+      linear-gradient(135deg,
+        var(--special-glow-left) 0%,
+        rgba(0, 0, 0, 0) 42%),
+      linear-gradient(315deg,
+        var(--special-glow-right) 0%,
+        rgba(0, 0, 0, 0) 45%),
+      linear-gradient(180deg,
+        rgba(0, 0, 0, 0.20) 0%,
+        rgba(0, 0, 0, 0.08) 38%,
+        rgba(0, 0, 0, 0) 100%);
+
+    pointer-events: none;
+  }
+
+  .special-hero__background {
+    opacity: 0.78;
+    filter: saturate(0.95);
+  }
+
+  .special-hero__inner {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// 골프·뉴스의 기존 가로형 배경 이미지 비율 유지
+.special-hero:is([data-theme='golf'],
+  [data-theme='news']) .special-hero__background {
+  // 실제 배너 이미지 비율에 맞춤
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1920 / 380;
+
+  // 이미지가 잘리지 않도록 유지
+  background-size: cover;
+  background-position: center top;
+  background-color: transparent;
+
+  // 이미지 높이 안에서 자연스럽게 사라지도록 처리
+  -webkit-mask-image: linear-gradient(to bottom,
+      #000 0%,
+      #000 40%,
+      transparent 100%);
+
+  mask-image: linear-gradient(to bottom,
+      #000 0%,
+      #000 40%,
+      transparent 100%);
+}
+
+
+
 // 웨이브처럼 필터 탭(영화+ · 골프 · 뉴스)은 hero 바로 아래에 붙인다 (필터 스타일은 Category.scss)
-.special-hero + .category-filter {
+.special-hero+.category-filter {
   margin-top: 0;
+}
+
+// 스페셜 페이지 섹션 제목 선명도 개선
+
+.special-page:has(> .special-hero[data-theme]:not([data-theme='movieplus'])) {
+  .category-page__sections {
+    position: relative;
+    z-index: 1;
+  }
+
+  .category-row__title h2 {
+    color: #ffffff;
+    opacity: 1;
+  }
+}
+
+// 골프 · 뉴스 페이지 필터 버튼 선명도 개선
+.special-page>.special-hero:is([data-theme='golf'],
+  [data-theme='news'])+.category-filter {
+  position: relative;
+  z-index: 3;
+  opacity: 1;
+  filter: none;
+
+  // 기본 필터 버튼
+  .category-filter__button {
+    background-color: #2e2e30;
+    color: #ffffff;
+    opacity: 1;
+    filter: none;
+
+    &:hover {
+      background-color: #3c3c40;
+    }
+
+    // 선택된 필터 버튼
+    &.is-active {
+      background-color: #1351f9;
+      border-color: #1351f9;
+      color: #ffffff;
+      opacity: 1;
+
+      &:hover {
+        background-color: #0f40c6;
+      }
+    }
+  }
 }
 
 @media (max-width: 768px) {
