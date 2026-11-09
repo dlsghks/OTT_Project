@@ -538,7 +538,18 @@ export const homeContentBySection = {
   'jung-hyung-don': jungHyungDonItems,
 
   // 기존 버라이어티 연결 복구
-  variety: selectItems(varietyTitles),
+  variety: selectItems(varietyTitles).map((entry) => {
+    if (entry.id === 'home-new-series-08') {
+      return { ...entry, link: '/collection/home--jung-hyung-don' };
+    }
+
+    if (entry.tmdbId) {
+      return { ...entry, link: `/entertainmentdetail/${entry.tmdbId}` };
+    }
+
+    const params = new URLSearchParams({ title: entry.title, kind: 'multi' });
+    return { ...entry, link: `/open?${params.toString()}` };
+  }),
 
   // 추가한 프로그램도 예능 전체보기에 포함
   'all-entertainment': categoryPages.entertainment.items,

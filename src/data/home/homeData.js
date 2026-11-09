@@ -86,6 +86,15 @@ const dramaItems = [
   }
 ];
 
+const tmdbSearchLink = (entry, kind) => {
+  const params = new URLSearchParams({
+    title: entry.tmdbTitle || entry.title,
+    kind,
+  });
+
+  return `/open?${params.toString()}`;
+};
+
 // HOPE 전용 영화 목록. 포스터 미지정 시 ContentCard의 기존 TMDB 조회를 사용한다.
 export const hopeItems = [
   { ...item('hope-marty-supreme', '마티 슈프림', 'movie', '', '개별구매'), badges: ['새로운', '개별구매'] },
@@ -102,8 +111,16 @@ export const hopeItems = [
   item('hope-lady-bird', '레이디 버드', 'movie', '', '개별구매'),
   item('hope-call-me', '콜 미 바이 유어 네임', 'movie', '', '개별구매'),
   item('hope-interstellar', '인터스텔라', 'movie', '', '개별구매'),
-].map((entry) => withContent(entry, 'home'));
+].map((entry) => {
+  const movie = withContent(entry, 'home');
 
+  return {
+    ...movie,
+    link: movie.tmdbId
+      ? `/moviedetail/${movie.tmdbId}`
+      : tmdbSearchLink(movie, 'movie'),
+  };
+});
 
 const comingSoonItems = [
   {
@@ -201,6 +218,20 @@ export const homeSections = [
   }
 ];
 
+const rankingDetailLinks = {
+  4: '/entertainmentdetail/ent-03', // 놀면 뭐하니?
+  5: '/entertainmentdetail/ent-07', // 라디오스타
+  6: '/entertainmentdetail/ent-02', // 나 혼자 산다
+  7: '/entertainmentdetail/ent-52', // 스모킹 건
+  8: '/entertainmentdetail/ent-50', // 심야괴담회
+  13: '/entertainmentdetail/ent-23', // 유 퀴즈 온 더 블럭
+  15: '/entertainmentdetail/ent-04', // 전지적 참견 시점
+  16: '/entertainmentdetail/ent-51', // 탐정들의 영업비밀
+  17: '/entertainmentdetail/ent-43', // 전설의 사내
+  18: '/entertainmentdetail/30801', // 1박 2일
+  19: '/entertainmentdetail/ent-26', // 슈퍼맨이 돌아왔다
+};
+
 
 
 export const rankingItems = [
@@ -227,7 +258,14 @@ export const rankingItems = [
   { id: 18, title: "1박 2일", kind: "series", image: "", badge: "", isOriginal: false },
   { id: 19, title: "슈퍼맨이 돌아왔다", kind: "series", image: "", badge: "", isOriginal: false },
   { id: 20, title: "더 커뮤니티", kind: "series", image: "", badge: "", isOriginal: false },
-].map((entry) => withContent(entry, 'ranking'));
+].map((entry) => {
+  const program = withContent(entry, 'ranking');
+
+  return {
+    ...program,
+    link: rankingDetailLinks[program.id] ?? tmdbSearchLink(program, 'multi'),
+  };
+});
 
 
 export const eventBanners = [

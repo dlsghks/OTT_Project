@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Heart, Share, ChevronDown, ChevronUp } from 'lucide-react';
 import { DetailInfo } from './DetailInfo';
 import { getInfoRows } from '../../services/tmdbDetail';
+import { ShareModal } from '../common/ShareModal';
 
 // 상세 페이지 상단 히어로 (영화 · 시리즈 공통)
 // - select: 시청하기 왼쪽 선택 박스 (영화: 자막, 시리즈: 시즌)
@@ -23,11 +24,12 @@ export const DetailHero = ({
   actions,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   // 펼치기 직전의 히어로 높이 · 내용 시작 위치 (펼친 뒤에도 같은 자리에 고정)
   const [frame, setFrame] = useState(null);
   const heroRef = useRef(null);
   const contentRef = useRef(null);
-  const { user, isLiked, onLogin, onLike, onShare } = actions;
+  const { user, isLiked, onLogin, onLike } = actions;
   const infoRows = getInfoRows(info);
 
   const expand = () => {
@@ -93,7 +95,7 @@ export const DetailHero = ({
               <span>관심</span>
             </button>
 
-            <button type="button" className="movie-hero__icon" onClick={onShare}>
+            <button type="button" className="movie-hero__icon" onClick={() => setIsShareModalOpen(true)}>
               <Share size={24} />
               <span>공유</span>
             </button>
@@ -143,6 +145,10 @@ export const DetailHero = ({
           </button>
         ))}
       </section>
+
+      {isShareModalOpen && (
+        <ShareModal title={title} onClose={() => setIsShareModalOpen(false)} />
+      )}
     </>
   );
 };
