@@ -4,7 +4,7 @@ import { Navigate, useSearchParams } from 'react-router-dom';
 import { findTmdbDetailPath } from '../../services/tmdbFind';
 import { DetailMessage } from '../../components/detail/DetailMessage';
 
-import '../../styles/pages/TotalSubDetail.scss';
+import '../../styles/pages/shared/TotalSubDetail.scss';
 
 // 스페셜 페이지 콘텐츠 클릭 → TMDB id 확인 → 상세 페이지로 이동 (/open?title=...&kind=movie|multi)
 export const TmdbOpen = () => {

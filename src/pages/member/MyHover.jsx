@@ -6,7 +6,7 @@ import { auth } from "../../firebase/firebase";
 import userIcon from "../../assets/myhover/user.svg";
 import defaultProfile from "../../assets/myhover/profile.png";
 import rightArrow from "../../assets/myhover/right-arrow.svg";
-import "../../styles/components/MyHover.scss";
+import "../../styles/components/member/MyHover.scss";
 
 const PROFILE_KEY = "wavve-active-profile";
 
