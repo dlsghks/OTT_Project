@@ -138,7 +138,7 @@ const comingSoonItems = [
   },
   {
     id: "coming-soon-03",
-    title: "옆자리, 프란체스카",
+    title: "내 새끼의 연애3",
     description: "11월 6일, 오전 11시 공개",
     image: "/images/home/section/preview03.jpg",
     isOriginal: true
@@ -156,7 +156,10 @@ const comingSoonItems = [
     image: "/images/home/section/preview05.jpg",
     isOriginal: true
   },
-];
+].map((item) => ({
+  ...item,
+  link: `/home-content/coming-soon/${item.id}`,
+}));
 
 
 // 메인 페이지 콘텐츠 섹션

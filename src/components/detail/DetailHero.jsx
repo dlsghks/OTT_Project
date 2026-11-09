@@ -21,6 +21,8 @@ export const DetailHero = ({
   info = [],
   select,
   onWatch,
+  showWatch = true,
+  watchActions,
   actions,
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -68,20 +70,24 @@ export const DetailHero = ({
 
           <div className="movie-hero__actions">
             {/* 로그인 전에는 로그인 버튼만 표시 */}
-            {user ? (
-              <>
-                {select}
-                <button type="button" className="movie-hero__buy" onClick={onWatch}>시청하기</button>
-              </>
-            ) : (
-              <button
-                type="button"
-                className="movie-hero__buy movie-hero__buy--login"
-                onClick={onLogin}
-              >
-                로그인
-              </button>
-            )}
+            {watchActions ?? (showWatch && (
+              user ? (
+                <>
+                  {select}
+                  <button type="button" className="movie-hero__buy" onClick={onWatch}>
+                    시청하기
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="movie-hero__buy movie-hero__buy--login"
+                  onClick={onLogin}
+                >
+                  로그인
+                </button>
+              )
+            ))}
 
             <button
               type="button"
