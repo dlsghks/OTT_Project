@@ -1,4 +1,4 @@
-// 레트로브 투표 이벤트 (/event/what-next · /event/favorite-scene · /event/next-line)
+// 레트로브 투표 이벤트 (/eventdetail/what-next · /eventdetail/favorite-scene · /eventdetail/next-line)
 // 레트로브 이벤트 배너(src/data/retrov/retrov.js 의 eventBanners)를 누르면 연결되는 페이지 데이터
 // 화면: src/components/event/RetroVoteEvent.jsx / 스타일: src/styles/pages/event/RetroVoteEvent.scss
 //
