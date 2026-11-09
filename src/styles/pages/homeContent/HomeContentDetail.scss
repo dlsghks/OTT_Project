@@ -122,7 +122,11 @@
         width: clamp(9rem, 15vw, 17.5rem);
         background: #fff;
         color: #151515;
-        cursor: default;
+        cursor: pointer;
+
+        &:disabled {
+            cursor: default;
+        }
     }
 
     @media (max-width: 768px) {
@@ -141,4 +145,19 @@
     color: #fff;
     opacity: 1;
     cursor: default;
+}
+
+.home-content-sections__play {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid #80aaff;
+        outline-offset: 3px;
+    }
 }

@@ -8,6 +8,8 @@ import { homeContentBySection } from '../../data/home/requestedHomeSections';
 import { useDetailActions } from '../../hooks/useDetailActions';
 import { getImagePath } from '../../utils/imagePath';
 import '../../styles/pages/homeContent/HomeContentDetail.scss';
+import { useVideoPlayer } from '../../hooks/useVideoPlayer';
+import { searchYoutube } from '../../services/youtubeSearch';
 
 const comingSoonItems =
     homeSections.find((section) => section.id === 'coming-soon')?.items ?? [];
@@ -18,6 +20,17 @@ const mySonVideos = [
     { title: '티저2', duration: '1분 미만' },
     { title: '티저1', duration: '1분 미만' },
 ];
+
+const jungEpisodes = [...homeContentBySection['jung-hyung-don']]
+    .sort((a, b) => b.episodeNumber - a.episodeNumber)
+    .map((episode) => ({
+        ...episode,
+        title: `${episode.episodeNumber}. ${episode.title}`,
+        date: episode.updatedAt,
+        searchQuery: episode.title,
+    }));
+
+const JUNG_CHANNEL_ID = 'UCsbNh54XE17pOZrdqW3VyXQ';
 
 const videoLists = {
     'coming-soon-01': {
@@ -101,7 +114,27 @@ const HomeContentBody = ({ item, sectionId }) => {
     const isComingSoon = sectionId === 'coming-soon';
     const isLineup = isComingSoon && item.id === 'coming-soon-01';
     const isMunmu = isComingSoon && item.id === 'coming-soon-04';
-    const { episodes = [], trailers = [] } = videoLists[item.id] ?? {};
+    const isJung = sectionId === 'jung-hyung-don';
+    const { episodes = [], trailers = [] } = isJung
+        ? { episodes: jungEpisodes }
+        : videoLists[item.id] ?? {};
+
+    const player = useVideoPlayer();
+
+    const playJungEpisode = (episode) => {
+        if (episode.id === 'jung-hyung-don-1') {
+            player.openVideo({
+                videoId: 'Yd-1nb4iPGo',
+                title: episode.title,
+                date: episode.date,
+            });
+            return;
+        }
+        player.openSearch(
+            { title: episode.title, source: { query: episode.searchQuery } },
+            () => searchYoutube(episode.searchQuery, JUNG_CHANNEL_ID)
+        );
+    };
     const upcomingWatchAction = isComingSoon && episodes.length === 0 ? (
         <button
             type="button"
@@ -133,32 +166,43 @@ const HomeContentBody = ({ item, sectionId }) => {
     return (
         <DetailLayout
             actions={actions}
-            player={{ video: null }}
+            player={player}
             hero={
                 <DetailHero
-                    title={item.title}
-                    backdrop={getImagePath(item.image)}
+                    title={isJung ? '정형돈의 제목없음 TV' : item.title}
+                    logo={isJung ? getImagePath('/images/home/section/jung/jungTitle.png') : undefined}
+                    backdrop={getImagePath(isJung ? '/images/home/section/jung/jungHero.jpg' : item.image)}
                     meta={isComingSoon ? 'Coming Soon' : '정형돈의 제목없음 TV'}
                     overview={isComingSoon ? item.description : `업로드 ${item.updatedAt}`}
                     showWatch={false}
-                    watchActions={isLineup || isMunmu ? (
+                    watchActions={isLineup || isMunmu || isJung ? (
                         <div className="home-lineup-actions">
                             {actions.user ? (
-                                <button type="button" className="movie-hero__buy" onClick={showVideos}>
-                                    +     {isMunmu ? '에피소드 티저1 보기' : '에피소드 보기'}
+                                <button
+                                    type="button"
+                                    className="movie-hero__buy"
+                                    onClick={showVideos}
+                                >
+                                    {isMunmu ? '에피소드 티저1 보기' : '에피소드 보기'}
                                 </button>
                             ) : (
                                 <>
                                     <button
                                         type="button"
                                         className="movie-hero__buy home-lineup-actions__preview"
-                                        disabled
-                                        title="미리보기 영상 준비 중"
+                                        disabled={!isJung || !episodes[0]}
+                                        onClick={isJung && episodes[0]
+                                            ? () => playJungEpisode(episodes[0])
+                                            : undefined}
                                     >
                                         <span aria-hidden="true">▶</span> 미리보기
                                     </button>
 
-                                    <button type="button" className="movie-hero__buy" onClick={actions.onLogin}>
+                                    <button
+                                        type="button"
+                                        className="movie-hero__buy"
+                                        onClick={actions.onLogin}
+                                    >
                                         로그인
                                     </button>
                                 </>
@@ -169,19 +213,21 @@ const HomeContentBody = ({ item, sectionId }) => {
                 />
             }
         >
-            {isComingSoon && (
+            {(isComingSoon || isJung) && (
                 <ComingSoonSections
                     item={item}
+                    episodes={episodes}
+                    trailers={trailers}
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
+                    onPlay={isJung ? playJungEpisode : undefined}
                 />
             )}
         </DetailLayout>
     );
 };
 
-const ComingSoonSections = ({ item, activeTab, setActiveTab }) => {
-    const { episodes = [], trailers = [] } = videoLists[item.id] ?? {};
+const ComingSoonSections = ({ item, episodes, trailers, activeTab, setActiveTab, onPlay }) => {
     const tabs = [
         ...(episodes.length ? [{ id: 'episodes', label: '에피소드' }] : []),
         ...(trailers.length ? [{ id: 'trailers', label: '관련영상' }] : []),
@@ -211,11 +257,18 @@ const ComingSoonSections = ({ item, activeTab, setActiveTab }) => {
                     <ul className={`home-content-sections__list home-content-sections__list--${activeTab}`}>
                         {videos.map((video) => (
                             <li key={video.title} className="home-content-sections__item">
-                                <img
-                                    src={getImagePath(video.image ?? item.image)}
-                                    alt=""
-                                    loading="lazy"
-                                />
+                                {onPlay ? (
+                                    <button
+                                        type="button"
+                                        className="home-content-sections__play"
+                                        aria-label={`${video.title} 재생`}
+                                        onClick={() => onPlay(video)}
+                                    >
+                                        <img src={getImagePath(video.image ?? item.image)} alt="" loading="lazy" />
+                                    </button>
+                                ) : (
+                                    <img src={getImagePath(video.image ?? item.image)} alt="" loading="lazy" />
+                                )}
                                 <div>
                                     <h3>{video.title}</h3>
                                     {(video.duration || video.date) && (

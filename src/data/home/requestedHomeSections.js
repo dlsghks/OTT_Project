@@ -443,10 +443,10 @@ const jungVideoData = [
     updatedAt: '2026-10-16',
   },
 
-
-
-
 ];
+
+const jungEpisodeNumbers = [14, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+const jungDurations = ['49분', '18분', '17분', '15분', '44분', '45분', '39분', '38분', '53분', '1시간 1분'];
 
 const jungHyungDonItems = jungVideoData.map((video, index) => {
   const number = index + 1;
@@ -456,8 +456,11 @@ const jungHyungDonItems = jungVideoData.map((video, index) => {
 
   return {
     id: `jung-hyung-don-${number}`,
+    link: `/home-content/jung-hyung-don/jung-hyung-don-${number}`,
     title: video.title,
     updatedAt: video.updatedAt,
+    episodeNumber: jungEpisodeNumbers[index],
+    duration: jungDurations[index],
     kind: 'series',
     image: `/images/home/section/jung/${filename}`,
     badge: '',

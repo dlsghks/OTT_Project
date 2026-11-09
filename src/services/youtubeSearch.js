@@ -23,19 +23,26 @@ function saveYoutubeCache(cache) {
 const youtubeVideos = loadYoutubeCache(); // key: 검색어 → videoId (못 찾으면 null)
 
 // 검색어로 유튜브 영상 1개 찾기 → videoId (못 찾으면 null)
-export async function searchYoutube(searchQuery) {
-  if (searchQuery in youtubeVideos) return youtubeVideos[searchQuery];
-  if (!YOUTUBE_KEY) {
-    console.warn("VITE_YOUTUBE_API_KEY 가 없어 유튜브를 검색할 수 없습니다.");
-    return null;
-  }
+export async function searchYoutube(searchQuery, channelId) {
+  const cacheKey = channelId ? `${channelId}:${searchQuery}` : searchQuery;
+  if (cacheKey in youtubeVideos) return youtubeVideos[cacheKey];
 
   try {
-    const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&regionCode=KR&q=${encodeURIComponent(
-        searchQuery
-      )}&key=${YOUTUBE_KEY}`
-    );
+    const params = new URLSearchParams({
+      part: 'snippet',
+      type: 'video',
+      maxResults: '1',
+      regionCode: 'KR',
+      q: searchQuery,
+      key: YOUTUBE_KEY,
+    });
+
+    if (channelId) {
+      params.set('channelId', channelId);
+      params.set('videoEmbeddable', 'true');
+    }
+
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`);
     const data = await res.json();
     if (data.error) {
       // 사용량 초과 등 — 결과를 저장하지 않아야 나중에 다시 시도 가능
@@ -43,7 +50,7 @@ export async function searchYoutube(searchQuery) {
       return null;
     }
     const videoId = data.items?.[0]?.id?.videoId ?? null;
-    youtubeVideos[searchQuery] = videoId;
+    youtubeVideos[cacheKey] = videoId;
     saveYoutubeCache(youtubeVideos);
     return videoId;
   } catch (error) {
