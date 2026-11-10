@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { Check, ChevronDown } from "lucide-react";
 
@@ -67,6 +67,7 @@ const FeatureValue = ({ value }) => {
 };
 
 export const Voucher = () => {
+    const navigate = useNavigate();
     const [bannerOpen, setBannerOpen] = useState(false);
 
     const toggleBanner = () => {
@@ -529,7 +530,11 @@ export const Voucher = () => {
             >
                 <h2 id="voucher-checkout-title">{receipt ? (receipt.isChange ? "이용권 변경 완료" : "이용권 구매 완료") : "가상결제"}</h2>
                 {receipt ? (
-                    <form method="dialog">
+                    <form method="dialog" onSubmit={(event) => {
+                        if (!receipt.isChange) return;
+                        event.preventDefault();
+                        navigate("/mypage", { replace: true });
+                    }}>
                         <p>{receipt.name} {receipt.months}개월 {receipt.isChange ? "이용권으로 변경됐어요." : "가상결제가 완료됐어요."}</p>
                         <div className="voucher__checkout-actions">
                             <Link to="/mypage?billing=1">결제 내역 보기</Link>
