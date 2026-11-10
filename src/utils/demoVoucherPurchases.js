@@ -40,6 +40,19 @@ export function getDemoVoucherPurchases(uid) {
   }
 }
 
+export function getDemoVoucherPurchasesInPeriod(purchases, months, now) {
+  // 결제 표시와 같은 한국시간 기준으로 월말은 대상 월의 마지막 날에 맞춥니다.
+  const koreaOffset = 9 * 60 * 60 * 1000;
+  const from = new Date(now + koreaOffset);
+  const day = from.getUTCDate();
+  from.setUTCDate(1);
+  from.setUTCMonth(from.getUTCMonth() - months);
+  const lastDay = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth() + 1, 0)).getUTCDate();
+  from.setUTCDate(Math.min(day, lastDay));
+  const start = from.getTime() - koreaOffset;
+  return purchases.filter(({ purchasedAt }) => purchasedAt >= start && purchasedAt <= now);
+}
+
 // 변경된 이용권은 직전 이용권을 대체합니다. 구매 이력은 그대로 보관합니다.
 export function getActiveDemoVoucher(purchases, now = Date.now()) {
   const latest = purchases[0];

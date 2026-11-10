@@ -66,7 +66,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
   const watchUrl = video.videoId
     ? `https://www.youtube.com/watch?${watchParams}`
     : `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
-  const status = video.videoId ? "ready" : video.status ?? "loading"; // loading | notFound | ready
+  const status = video.videoId ? "ready" : video.mbcUrl ? "external" : video.status ?? "loading";
 
   return (
     <div className="yt-modal" role="dialog" aria-modal="true" aria-labelledby="yt-modal-title">
@@ -82,9 +82,14 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
           {video.date && <time dateTime={video.date.replaceAll(".", "-")}>{video.date}</time>}
 
           {/* 퍼가기가 막힌 영상 · 못 찾은 영상일 때를 위한 유튜브 링크 */}
-          {status !== "loading" && (
+          {status !== "loading" && status !== "external" && (
             <a className="yt-modal__external" href={watchUrl} target="_blank" rel="noopener noreferrer">
               {status === "ready" ? "재생이 안 되나요? YouTube에서 보기 ↗" : "YouTube에서 직접 찾아보기 ↗"}
+            </a>
+          )}
+          {status === "ready" && video.mbcUrl && (
+            <a className="yt-modal__external" href={video.mbcUrl} target="_blank" rel="noopener noreferrer">
+              MBC 다시보기 ↗
             </a>
           )}
         </div>
@@ -93,6 +98,12 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
       <div className="yt-modal__player">
         {status === "ready" ? (
           <TrackedYoutubeFrame key={src} src={src} video={video} onPlaybackStart={recordPlayback} onPlaybackProgress={persistPlayback} />
+        ) : status === "external" ? (
+          <div className="yt-modal__status">
+            <a className="yt-modal__external" href={video.mbcUrl} target="_blank" rel="noopener noreferrer">
+              MBC에서 다시보기 ↗
+            </a>
+          </div>
         ) : (
           <p className="yt-modal__status" role="status">
             {status === "loading" ? "영상을 찾는 중이에요…" : "재생할 수 있는 영상을 찾지 못했어요."}

@@ -167,6 +167,10 @@ function ProgramFanPage({ programId, program }) {
       if (target) play(target);
       return;
     }
+    if (season?.firstEpisode) {
+      play({ id: `${programId}-${seasonId}-e1`, title: `${season.label} 1회`, ...season.firstEpisode });
+      return;
+    }
     if (!tmdb) return;
     const first = (episodes[`${tmdb.id}_${tmdb.season}`] ?? [])[0];
     play(first ? episodeToVideo(first, tmdb, tmdbBackdrop, youtubeVideos, program.youtubeIds?.[seasonId], undefined, program.descriptionStrip) : {

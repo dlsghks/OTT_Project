@@ -23,7 +23,7 @@ import { useProfileShorts } from "../../utils/profileShorts";
 import { getCoinTotal } from "../../utils/coinRecords";
 import { getOwnedCoupons } from "../../utils/couponRecords";
 import { useDemoMoviePurchases } from "../../utils/demoMoviePurchases";
-import { getActiveDemoVoucher, getDemoVoucherPurchases } from "../../utils/demoVoucherPurchases";
+import { getActiveDemoVoucher, getDemoVoucherPurchases, getDemoVoucherPurchasesInPeriod } from "../../utils/demoVoucherPurchases";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
 import emptyImage from "../../assets/mypage/empty-play.png";
@@ -161,7 +161,7 @@ export const MyPage = ({
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isVoucherLoginOpen, setIsVoucherLoginOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
-  const [billingMonths, setBillingMonths] = useState(null);
+  const [billingPeriod, setBillingPeriod] = useState(null);
   const [openedAt] = useState(Date.now);
   const dialogRef = useRef(null);
   const id = useId();
@@ -171,9 +171,10 @@ export const MyPage = ({
     .filter((movie) => movie.downloadedAt !== null)
     .map((movie) => ({ ...movie, savedAt: movie.downloadedAt }));
   const demoPurchases = getDemoVoucherPurchases(user?.uid);
-  const visiblePurchases = billingMonths === null
-    ? demoPurchases
-    : demoPurchases.filter((purchase) => purchase.months === billingMonths);
+  const billingMonths = billingPeriod?.months ?? null;
+  const visiblePurchases = billingPeriod
+    ? getDemoVoucherPurchasesInPeriod(demoPurchases, billingPeriod.months, billingPeriod.now)
+    : demoPurchases;
   const activeDemoPass = getActiveDemoVoucher(demoPurchases, openedAt);
   const voucherActionLabel = passName || activeDemoPass ? "이용권 변경" : "이용권 구매";
   const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
@@ -342,7 +343,7 @@ export const MyPage = ({
   const isMobile = useMobileLayout();
   const closeDialog = () => {
     setDialogTitle("");
-    setBillingMonths(null);
+    setBillingPeriod(null);
     if (!billingFromReceipt) return;
     const params = new URLSearchParams(location.search);
     params.delete("billing");
@@ -846,13 +847,13 @@ export const MyPage = ({
         <h2 id={`${id}-dialog-title`}>{visibleDialogTitle}</h2>
         {visibleDialogTitle === BILLING_TITLE ? (
           <>
-            <div className="mypage__billing-filters" role="group" aria-label="결제한 이용권 기간">
+            <div className="mypage__billing-filters" role="group" aria-label="결제일 조회 기간">
               {BILLING_MONTH_OPTIONS.map((months) => (
                 <button
                   key={months ?? "all"}
                   type="button"
                   aria-pressed={billingMonths === months}
-                  onClick={() => setBillingMonths(months)}
+                  onClick={() => setBillingPeriod(months === null ? null : { months, now: Date.now() })}
                 >
                   {months === null ? "전체" : `${months}개월`}
                 </button>
@@ -874,7 +875,7 @@ export const MyPage = ({
               <p role="status">
                 {billingMonths === null
                   ? "이 브라우저에 저장된 가상결제 내역이 없습니다."
-                  : `${billingMonths}개월 이용권 결제 내역이 없습니다.`}
+                  : `최근 ${billingMonths}개월 내 결제 내역이 없습니다.`}
               </p>
             )}
           </>
