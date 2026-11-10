@@ -1037,3 +1037,57 @@
     color: #b7b7b7;
   }
 }
+
+.wavve-mypage {
+  .mypage__library-actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mypage__library-edit,
+  .mypage__library-remove {
+    min-height: 32px;
+    padding: 4px 10px;
+    border: 1px solid #777;
+    border-radius: 6px;
+    background: #1c1c1c;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+  }
+
+  .mypage__library-item {
+    position: relative;
+  }
+
+  .mypage__library-remove {
+    position: absolute;
+    z-index: 2;
+    top: 6px;
+    right: 6px;
+  }
+
+  .mypage__library-feedback {
+    margin: 4px 0 8px;
+    color: #c9c9c9;
+    font-size: 13px;
+  }
+
+  @media (max-width: 1024px) {
+    .mypage__filter-row {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mypage__library-actions {
+      margin-left: auto;
+    }
+  }
+}
