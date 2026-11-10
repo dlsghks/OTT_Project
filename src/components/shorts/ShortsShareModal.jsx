@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import closeIcon from "../../assets/shorts/share-modal/close.svg";
 import glow from "../../assets/shorts/share-modal/glow.svg";
 import copiedIcon from "../../assets/shorts/share-modal/copied.png";
-import naverIcon from "../../assets/shorts/share-modal/naver.svg";
 import kakaoIcon from "../../assets/shorts/share-modal/kakao.svg";
 import instagramIcon from "../../assets/shorts/share-modal/instagram.svg";
 import xIcon from "../../assets/shorts/share-modal/x.svg";
@@ -152,11 +151,10 @@ export function ShortsShareModal({ item, onClose }) {
   };
 
   const services = [
-    { name: "네이버", icon: naverIcon, action: () => openWeb(`https://share.naver.com/web/shareView?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`) },
+    { name: "Gmail", icon: gmailIcon, action: () => openWeb(`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`) },
     { name: "카카오톡", icon: kakaoIcon, action: shareKakao },
     { name: "인스타그램", icon: instagramIcon, action: shareInstagram },
     { name: "X", icon: xIcon, action: () => openWeb(`https://x.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`) },
-    { name: "Gmail", icon: gmailIcon, action: () => openWeb(`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`) },
     { name: "메일", icon: mailIcon, action: () => { window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`; } },
     { name: "메시지", icon: messageIcon, action: shareMessage },
   ];
