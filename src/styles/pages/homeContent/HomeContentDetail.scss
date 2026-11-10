@@ -63,6 +63,16 @@
     &__item {
         min-width: 0;
 
+        &--playable {
+            position: relative;
+
+            .home-content-sections__play::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+            }
+        }
+
         img {
             display: block;
             width: 100%;
