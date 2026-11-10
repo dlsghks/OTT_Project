@@ -1016,6 +1016,28 @@
     }
   }
 }
+.wavve-mypage .mypage__billing-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 16px 0;
+
+  button {
+    min-height: 44px;
+    padding: 0 8px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background: #262626;
+    font-size: 13px;
+
+    &[aria-pressed="true"] {
+      border-color: #81a3ff;
+      background: #1351f9;
+    }
+  }
+}
+
 .mypage__billing-history {
   display: grid;
   gap: 12px;

@@ -53,6 +53,7 @@ import mobileHeart4 from "../../assets/mobile/heart-4.svg";
 const MOBILE_HEARTS = [mobileHeart0, mobileHeart1, mobileHeart2, mobileHeart3, mobileHeart4];
 const EMPTY_ITEMS = [];
 const BILLING_TITLE = "이용권 · 결제 내역";
+const BILLING_MONTH_OPTIONS = [null, 1, 3, 6, 12];
 const billingDateTime = new Intl.DateTimeFormat("ko-KR", {
   dateStyle: "medium",
   timeStyle: "medium",
@@ -160,6 +161,7 @@ export const MyPage = ({
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isVoucherLoginOpen, setIsVoucherLoginOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
+  const [billingMonths, setBillingMonths] = useState(null);
   const [openedAt] = useState(Date.now);
   const dialogRef = useRef(null);
   const id = useId();
@@ -169,6 +171,9 @@ export const MyPage = ({
     .filter((movie) => movie.downloadedAt !== null)
     .map((movie) => ({ ...movie, savedAt: movie.downloadedAt }));
   const demoPurchases = getDemoVoucherPurchases(user?.uid);
+  const visiblePurchases = billingMonths === null
+    ? demoPurchases
+    : demoPurchases.filter((purchase) => purchase.months === billingMonths);
   const activeDemoPass = getActiveDemoVoucher(demoPurchases, openedAt);
   const voucherActionLabel = passName || activeDemoPass ? "이용권 변경" : "이용권 구매";
   const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
@@ -337,6 +342,7 @@ export const MyPage = ({
   const isMobile = useMobileLayout();
   const closeDialog = () => {
     setDialogTitle("");
+    setBillingMonths(null);
     if (!billingFromReceipt) return;
     const params = new URLSearchParams(location.search);
     params.delete("billing");
@@ -839,21 +845,39 @@ export const MyPage = ({
       >
         <h2 id={`${id}-dialog-title`}>{visibleDialogTitle}</h2>
         {visibleDialogTitle === BILLING_TITLE ? (
-          demoPurchases.length ? (
-            <ul className="mypage__billing-history">
-              {demoPurchases.map((purchase) => (
-                <li key={purchase.id}>
-                  <strong>{purchase.name} · {purchase.months}개월</strong>
-                  <span>{purchase.amount.toLocaleString("ko-KR")}원 · 가상결제 승인</span>
-                  <time dateTime={new Date(purchase.purchasedAt).toISOString()}>
-                    {billingDateTime.format(purchase.purchasedAt)}
-                  </time>
-                </li>
+          <>
+            <div className="mypage__billing-filters" role="group" aria-label="결제한 이용권 기간">
+              {BILLING_MONTH_OPTIONS.map((months) => (
+                <button
+                  key={months ?? "all"}
+                  type="button"
+                  aria-pressed={billingMonths === months}
+                  onClick={() => setBillingMonths(months)}
+                >
+                  {months === null ? "전체" : `${months}개월`}
+                </button>
               ))}
-            </ul>
-          ) : (
-            <p>이 브라우저에 저장된 가상결제 내역이 없습니다.</p>
-          )
+            </div>
+            {visiblePurchases.length ? (
+              <ul className="mypage__billing-history">
+                {visiblePurchases.map((purchase) => (
+                  <li key={purchase.id}>
+                    <strong>{purchase.name} · {purchase.months}개월</strong>
+                    <span>{purchase.amount.toLocaleString("ko-KR")}원 · 가상결제 승인</span>
+                    <time dateTime={new Date(purchase.purchasedAt).toISOString()}>
+                      {billingDateTime.format(purchase.purchasedAt)}
+                    </time>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p role="status">
+                {billingMonths === null
+                  ? "이 브라우저에 저장된 가상결제 내역이 없습니다."
+                  : `${billingMonths}개월 이용권 결제 내역이 없습니다.`}
+              </p>
+            )}
+          </>
         ) : (
           <p>현재 준비 중인 서비스입니다.</p>
         )}
