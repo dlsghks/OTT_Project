@@ -1137,3 +1137,36 @@
   .notification-panel__guest-title { font-size: 14px; }
   .notification-panel__login { min-width: 112px; margin-top: 4px; font-size: 14px; }
 }
+
+
+.wavve-mypage .mypage__profile-toast {
+  position: fixed;
+  inset-inline: 16px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 120;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin-inline: auto;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: #303030;
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+  animation: mypage-profile-toast 3s ease both;
+}
+
+@keyframes mypage-profile-toast {
+  0%, 100% { opacity: 0; transform: translateY(14px); }
+  8%, 90% { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__profile-toast {
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wavve-mypage .mypage__profile-toast { animation: none; }
+}

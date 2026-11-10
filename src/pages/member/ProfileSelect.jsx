@@ -1,7 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useRef, useState } from "react";
+import { Plus } from "lucide-react";
 import { ProfilePinModal } from "../../components/common/ProfilePinModal";
-import { useAccountStore, chooseProfile, verifyProfilePin } from "../../store/useAccountStore";
+import { useAccountStore, chooseProfile, verifyProfilePin, MAX_PROFILES } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
 import lockIcon from "../../assets/lock.png";
 import logo from "../../assets/wavve_logo_w.svg";
@@ -40,6 +41,7 @@ export const ProfileSelect = () => {
     setMessage("");
     setPinError("");
     const latest = useAccountStore.getState().profiles.find((p) => p.id === profile.id);
+    if (!latest) return;
     if (latest.locked) {
       setPendingProfile(latest);
       return;
@@ -95,9 +97,24 @@ export const ProfileSelect = () => {
               </button>
             </li>
           ))}
+          {profiles.length < MAX_PROFILES && (
+            <li>
+              <button
+                className="profile-select__profile"
+                type="button"
+                disabled={busy}
+                onClick={() => navigate("/profileadd")}
+              >
+                <span className="profile-select__avatar profile-select__avatar--add">
+                  <Plus aria-hidden="true" />
+                </span>
+                <span className="profile-select__name">프로필 추가</span>
+              </button>
+            </li>
+          )}
         </ul>
         {pendingProfile && <ProfilePinModal key={pendingProfile.id} error={pinError} onConfirm={verifyPin} onClose={cancelPin} />}
-        <p className="profile-select__notice">• 이용권 유/무에 상관없이 프로필 4개가 기본으로 제공됩니다.</p>
+        <p className="profile-select__notice">• 이용권 유/무에 상관없이 프로필을 최대 {MAX_PROFILES}개까지 만들 수 있어요.</p>
         {busy && <p role="status">프로필을 확인하고 있어요.</p>}
         {message && <p className="profile-select__message" role="alert">{message}</p>}
       </section>

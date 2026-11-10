@@ -143,6 +143,19 @@
     }
   }
 
+  &__avatar--add {
+    display: grid;
+    place-items: center;
+    background: #303030;
+    color: #fff;
+
+    svg {
+      width: 36%;
+      height: 36%;
+      stroke-width: 1.5;
+    }
+  }
+
   // 잠긴 프로필
   &__lock-overlay {
     position: absolute;
