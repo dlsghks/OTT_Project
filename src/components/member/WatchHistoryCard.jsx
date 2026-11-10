@@ -10,7 +10,7 @@ const formatTime = (value) => {
   const rest = String(seconds % 60).padStart(2, "0");
   return hours ? `${hours}:${String(minutes).padStart(2, "0")}:${rest}` : `${minutes}:${rest}`;
 };
-export const WatchHistoryCard = ({ item, onOpenContent }) => {
+export const WatchHistoryCard = ({ item, onOpenContent, onPlay }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const videoThumb = item.videoId ? `https://i.ytimg.com/vi/${encodeURIComponent(item.videoId)}/hqdefault.jpg` : "";
   const images = [...new Set([item.thumbnailUrl, videoThumb, item.image, emptyImage].filter(Boolean))];
@@ -31,7 +31,9 @@ export const WatchHistoryCard = ({ item, onOpenContent }) => {
     <strong className="mypage__history-title">{title}</strong>
     <span className="mypage__history-program">{item.title}</span>
   </>;
-  return onOpenContent ? (
-    <button className="mypage__history-card" type="button" onClick={() => onOpenContent(item)} aria-label={`${item.title} 상세 보기`}>{body}</button>
+  const onActivate = onPlay ?? onOpenContent;
+  const actionLabel = onPlay ? `${title} 재생` : `${item.title} 상세 보기`;
+  return onActivate ? (
+    <button className="mypage__history-card" type="button" onClick={() => onActivate(item)} aria-label={actionLabel}>{body}</button>
   ) : <Link className="mypage__history-card" to={item.to} aria-label={`${item.title} 상세 보기`}>{body}</Link>;
 };

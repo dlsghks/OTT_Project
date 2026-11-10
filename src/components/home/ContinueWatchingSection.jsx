@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react';
+import YoutubePlayerModal from '../common/YoutubePlayerModal';
 import { ContentSection } from './ContentSection';
 import { WatchHistoryCard } from '../member/WatchHistoryCard';
 import { useProfileWatchHistory } from '../../utils/profileWatchHistory';
@@ -12,9 +14,35 @@ export const ContinueWatchingSection = () => {
   if (!items.length) return null;
 
   return (
+    <ContinueWatchingContent
+      key={JSON.stringify([ownerId, profileId])}
+      name={name}
+      items={items}
+    />
+  );
+};
+
+function ContinueWatchingContent({ name, items }) {
+  const [video, setVideo] = useState(null);
+  const closeVideo = useCallback(() => setVideo(null), []);
+
+  const play = (item) => {
+    const startSeconds = item.duration > 0 && item.position >= item.duration
+      ? 0
+      : item.position;
+
+    setVideo({
+      videoId: item.videoId,
+      title: item.episodeTitle || item.title,
+      thumbnailUrl: item.thumbnailUrl,
+      historyItem: item,
+      startSeconds,
+    });
+  };
+
+  return (
     <div className="home-continue-watching">
       <ContentSection
-        key={`${ownerId}:${profileId}`}
         title={`${name}님이 시청중인 컨텐츠`}
         items={items}
         cardType="wide"
@@ -24,9 +52,11 @@ export const ContinueWatchingSection = () => {
           <WatchHistoryCard
             key={`${item.id}:${item.thumbnailUrl || item.videoId || item.image}`}
             item={item}
+            onPlay={item.videoId ? play : undefined}
           />
         )}
       />
+      {video && <YoutubePlayerModal video={video} onClose={closeVideo} />}
     </div>
   );
-};
+}
