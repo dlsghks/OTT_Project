@@ -1,5 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
+import kakaoIcon from '../../assets/share/kakao.svg';
 import xIcon from '../../assets/share/x.png';
 import threadsIcon from '../../assets/share/threads.png';
 import instagramIcon from '../../assets/share/instagram.png';
@@ -8,6 +9,7 @@ import '../../styles/pages/live/LiveChannel.scss';
 const messages = {
     success: '링크가 복사되었습니다.',
     instagram: '인스타그램에서 복사한 링크를 붙여넣어 주세요.',
+    kakao: '카카오톡 대화방에 복사한 링크를 붙여넣어 주세요.',
     error: '복사하지 못했습니다. 링크를 선택해 직접 복사해 주세요.',
 };
 
@@ -39,6 +41,29 @@ export const ShareModal = ({ title, onClose }) => {
         }
     };
 
+    const shareKakao = async () => {
+        setStatus('');
+        const kakao = window.Kakao;
+        try {
+            if (kakao?.isInitialized?.() && kakao.Share?.sendDefault) {
+                await kakao.Share.sendDefault({
+                    objectType: 'text',
+                    text: title || '웨이브에서 보기',
+                    link: { webUrl: url, mobileWebUrl: url },
+                    buttonTitle: '웨이브에서 보기',
+                });
+                return;
+            }
+            if (navigator.share) {
+                await navigator.share({ title, url });
+                return;
+            }
+        } catch (error) {
+            if (error?.name === 'AbortError') return;
+        }
+        await copyLink('kakao');
+    };
+
     return createPortal(
         <div
             className="live-share-backdrop"
@@ -66,6 +91,9 @@ export const ShareModal = ({ title, onClose }) => {
                 <h2 id={headingId}>공유하기</h2>
 
                 <div className="live-share-modal__sns">
+                    <button type="button" className="live-share-modal__kakao" aria-label="카카오톡에 공유" onClick={shareKakao}>
+                        <img src={kakaoIcon} alt="" width="48" height="48" />
+                    </button>
                     {services.map(({ name, icon, href, copyBeforeSharing }) => (
                         <a
                             key={name}
