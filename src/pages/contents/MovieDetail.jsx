@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { auth } from '../../firebase/firebase';
 import { getIndividualPurchaseMovie } from '../../data/individualPurchaseMovies';
-import { saveDemoMoviePurchase, useDemoMoviePurchases } from '../../utils/demoMoviePurchases';
+import { saveDemoMovieDownload, saveDemoMoviePurchase, useDemoMoviePurchases } from '../../utils/demoMoviePurchases';
 import { MoviePurchaseDialog } from '../../components/detail/MoviePurchaseDialog';
+import demoVideoUrl from '../../assets/videos/movie-download-demo.mp4?url';
 import { categoryPages } from '../../data/categoryData';
 import { useMovieStore } from '../../store/useMovieStore';
 import {
@@ -43,6 +44,8 @@ const MovieDetailBody = ({ movieId }) => {
 
   const [searchFailed, setSearchFailed] = useState(false);
   const [purchaseAccount, setPurchaseAccount] = useState(null);
+  const [downloadBusy, setDownloadBusy] = useState(false);
+  const [downloadResult, setDownloadResult] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,9 +72,46 @@ const MovieDetailBody = ({ movieId }) => {
   } : null);
   const uid = actions.user?.uid;
   const purchases = useDemoMoviePurchases(uid);
-  const needsPurchase = offer && !purchases.some((record) => record.id === offer.id);
+  const purchasedMovie = purchases.find((record) => record.id === offer?.id);
+  const needsPurchase = offer && !purchasedMovie;
   const sections = tmdbId ? movieSections[tmdbId] ?? [] : [];
   const notFound = searchFailed || (!localMovie && !tmdbId) || movie === false;
+
+  const downloadMovie = async () => {
+    if (!purchasedMovie || !uid || downloadBusy) return;
+    setDownloadBusy(true);
+    setDownloadResult(null);
+
+    try {
+      const response = await fetch(demoVideoUrl);
+      if (!response.ok) throw new Error('다운로드 파일을 불러오지 못했어요.');
+      const file = await response.blob();
+      const fileType = await file.slice(4, 8).text();
+      if (fileType !== 'ftyp' || auth.currentUser?.uid !== uid) {
+        throw new Error('다운로드를 시작할 수 없어요.');
+      }
+
+      const downloadUrl = URL.createObjectURL(file);
+      try {
+        saveDemoMovieDownload(uid, offer.tmdbId);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        const filename = purchasedMovie.title.replace(/[<>:"/\\|?*]/g, '-');
+        link.download = `${filename}-시연영상.mp4`;
+        document.body.appendChild(link);
+        try { link.click(); }
+        finally { link.remove(); }
+      } finally {
+        // 브라우저가 다운로드 URL을 읽을 시간을 확보한 뒤 해제합니다.
+        window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 60_000);
+      }
+      setDownloadResult({ uid, success: true });
+    } catch {
+      setDownloadResult({ uid, success: false });
+    } finally {
+      setDownloadBusy(false);
+    }
+  };
 
   if (notFound) {
     return <DetailMessage message="영화 정보를 찾을 수 없습니다." backLink="/movie" backLabel="영화 페이지로 돌아가기" />;
@@ -118,6 +158,15 @@ const MovieDetailBody = ({ movieId }) => {
           ) : undefined}
           onWatch={() => player.openTrailer({ title, videos: movie.videos?.results })}
           actions={actions}
+          onDownload={purchasedMovie ? downloadMovie : undefined}
+          downloadBusy={downloadBusy}
+          downloadNotice={downloadResult && downloadResult.uid === uid && (
+            <p role="status" className="movie-hero__download-status">
+              {downloadResult.success ? (
+                <>시연 영상 다운로드를 시작했어요. <Link to="/mypage?tab=downloads">다운로드 콘텐츠 보기</Link></>
+              ) : '다운로드를 시작하지 못했어요. 다시 시도해주세요.'}
+            </p>
+          )}
         />
       )}
     >

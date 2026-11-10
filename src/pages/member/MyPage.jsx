@@ -142,9 +142,10 @@ export const MyPage = ({
   const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState(() =>
-    new URLSearchParams(location.search).get("tab") === "purchases" ? "purchases" : "history"
-  );
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = new URLSearchParams(location.search).get("tab");
+    return ["purchases", "downloads"].includes(tab) ? tab : "history";
+  });
   const [activeFilter, setActiveFilter] = useState("all");
   const [editingScope, setEditingScope] = useState("");
   const [isRemoving, setIsRemoving] = useState(false);
@@ -156,6 +157,9 @@ export const MyPage = ({
   const id = useId();
   const { user, isLoggedIn } = useAuthState();
   const purchasedMovies = useDemoMoviePurchases(user?.uid);
+  const downloadedMovies = purchasedMovies
+    .filter((movie) => movie.downloadedAt !== null)
+    .map((movie) => ({ ...movie, savedAt: movie.downloadedAt }));
   const demoPurchases = getDemoVoucherPurchases(user?.uid);
   const activeDemoPass = demoPurchases.find((purchase) => purchase.expiresAt > openedAt);
   const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
@@ -246,7 +250,9 @@ export const MyPage = ({
     purchases: [...purchasedMovies, ...withoutShorts(purchasedItems).filter((item) =>
       !purchasedMovies.some((movie) => movie.id === item.id)
     )],
-    downloads: withoutShorts(downloadItems),
+    downloads: [...downloadedMovies, ...withoutShorts(downloadItems).filter((item) =>
+      !downloadedMovies.some((movie) => movie.id === item.id)
+    )],
   };
   // 종류별 구분 없이 최근 담은 순서로 표시합니다.
   const currentItems = (activeTab === "favorites"
