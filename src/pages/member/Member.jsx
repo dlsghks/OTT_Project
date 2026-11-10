@@ -2,7 +2,9 @@ import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
-import naverIcon from "../../assets/member/naver.svg";
+import { useAuthStore } from "../../store/useAuthStore";
+import { getSocialLoginError } from "../../utils/socialLoginError";
+import googleIcon from "../../assets/login/googleLogo.png";
 import kakaoIcon from "../../assets/member/kakao.svg";
 import appleIcon from "../../assets/member/apple.svg";
 import glowLeft from "../../assets/login/glow-left.png";
@@ -10,13 +12,14 @@ import glowRight from "../../assets/login/glow-right.png";
 import "../../styles/pages/member/Member.scss";
 
 const providers = [
-  { key: "naver", name: "네이버", icon: naverIcon },
+  { key: "google", name: "구글", icon: googleIcon },
   { key: "kakao", name: "카카오", icon: kakaoIcon },
   { key: "apple", name: "Apple", icon: appleIcon },
 ];
 
 export const Member = ({ onSocialLogin, onServiceInfo } = {}) => {
   const navigate = useNavigate();
+  const signInSocial = useAuthStore((state) => state.onSocialLogin);
   const submitting = useRef(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,7 +61,8 @@ export const Member = ({ onSocialLogin, onServiceInfo } = {}) => {
 
   const handleSocial = async (provider) => {
     if (submitting.current) return;
-    if (!onSocialLogin) {
+    const signIn = onSocialLogin ?? (provider === "google" ? signInSocial : null);
+    if (!signIn) {
       setMessage("소셜 가입은 아직 연결되지 않았습니다. 이메일로 가입해주세요.");
       return;
     }
@@ -66,13 +70,13 @@ export const Member = ({ onSocialLogin, onServiceInfo } = {}) => {
     setIsSubmitting(true);
     setMessage("");
     try {
-      const result = await onSocialLogin(provider);
+      const result = await signIn(provider);
       navigate("/profileselect", {
         replace: true,
         state: { returnTo: result?.isNewUser === false ? "/" : "/voucher" },
       });
-    } catch {
-      setMessage("소셜 가입을 완료하지 못했습니다. 다시 시도해주세요.");
+    } catch (error) {
+      setMessage(getSocialLoginError(error));
     } finally {
       submitting.current = false;
       setIsSubmitting(false);

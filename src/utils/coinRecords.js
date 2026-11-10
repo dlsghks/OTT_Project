@@ -1,5 +1,6 @@
 // 코인 적립 기록: 프로필별로 계정(Firestore)에 저장합니다. 날짜는 "YYYY-MM-DD HH:mm" 문자열입니다.
 export const ATTENDANCE_COIN = 100;
+export const COIN_CHARGE_OPTIONS = [1000, 5000, 10000];
 // x2 날짜 (달력 표시 · 출석 일수 · 코인 2배 공통, src/data/eventPages.js 에서 사용)
 export const ATTENDANCE_DOUBLE_DAYS = [1, 6, 8, 13, 14, 15, 21, 22, 27, 28, 29];
 const VALID_DAYS = 60; // 적립일로부터 유효기간
@@ -27,6 +28,24 @@ export const createAttendanceCoin = (day, chargedAt = `${day} 00:00`) => {
   };
 };
 
+export const createCoinCharge = (amount, requestId, date = new Date()) => {
+  if (!COIN_CHARGE_OPTIONS.includes(amount) || typeof requestId !== "string" ||
+      !/^[0-9a-f-]{36}$/.test(requestId)) {
+    throw new Error("충전할 코인 금액을 확인해주세요.");
+  }
+  const expires = new Date(date.getFullYear(), date.getMonth(), date.getDate() + VALID_DAYS, 23, 59);
+  return {
+    id: `charge-${requestId}`,
+    kind: "charge",
+    amount,
+    remaining: amount,
+    name: "충전 코인",
+    reason: "가상 코인 충전",
+    chargedAt: formatCoinDate(date),
+    expiresAt: formatCoinDate(expires),
+  };
+};
+
 // 저장값 검증 + 코인 기능 이전에 출석한 날짜도 적립 기록으로 채움 (최신순)
 export const normalizeCoinRecords = (value, attendanceDays = []) => {
   const saved = (Array.isArray(value) ? value : []).filter((item) => item
@@ -39,9 +58,10 @@ export const normalizeCoinRecords = (value, attendanceDays = []) => {
     const record = createAttendanceCoin(day);
     if (!records.has(record.id)) records.set(record.id, record);
   });
+  const now = formatCoinDate(new Date());
   return [...records.values()]
     .sort((a, b) => b.chargedAt.localeCompare(a.chargedAt))
-    .slice(0, MAX_RECORDS);
+    .filter((record, index) => index < MAX_RECORDS || record.expiresAt > now);
 };
 
 // 만료되지 않은 잔여 코인
