@@ -8,6 +8,10 @@ import { doc, onSnapshot, runTransaction, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 
 const PROFILE_IDS = ["profile1", "profile2", "profile3", "profile4"];
+export const MAX_PROFILES = PROFILE_IDS.length;
+const getProfileIds = (data) => PROFILE_IDS.filter((id) =>
+  id === "profile1" || id === data.selectedProfileId || Boolean(data.profiles?.[id])
+);
 const ids = (value) => Array.isArray(value)
   ? [...new Set(value.filter((id) => typeof id === "string" && id))] : [];
 const text = (value, fallback) => typeof value === "string" && value.trim()
@@ -18,9 +22,9 @@ const attendanceDates = (value) => Array.isArray(value)
     .sort().slice(-366)
   : [];
 
-export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
+const defaultProfile = (id) => ({
   id,
-  name: `프로필${index + 1}`,
+  name: `프로필${id.slice(-1)}`,
   image: `${import.meta.env.BASE_URL}images/profiles/${id}.png`,
   likedIds: [],
   watchedIds: [],
@@ -34,10 +38,11 @@ export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   pinSalt: "",
   pinHash: "",
   locked: false,
-}));
+});
 
 const normalize = (data = {}) => {
-  const profiles = defaultProfiles().map((profile) => {
+  const profiles = getProfileIds(data).map((id) => {
+    const profile = defaultProfile(id);
     const saved = data.profiles?.[profile.id];
     const pinSalt = typeof saved?.pinSalt === "string" ? saved.pinSalt : "";
     const pinHash = typeof saved?.pinHash === "string" ? saved.pinHash : "";
@@ -74,7 +79,7 @@ const initial = () => ({
   uid: null,
   ready: false,
   error: "",
-  profiles: defaultProfiles(),
+  profiles: [defaultProfile("profile1")],
   selectedProfileId: "profile1",
 });
 
@@ -126,7 +131,7 @@ const requireAccount = (profileId, ownerId) => {
   const state = useAccountStore.getState();
   if (!state.ready || !state.uid || auth.currentUser?.uid !== state.uid ||
       (ownerId && ownerId !== state.uid) ||
-      (profileId && !PROFILE_IDS.includes(profileId))) {
+      (profileId && !state.profiles.some((profile) => profile.id === profileId))) {
     throw new Error("로그인 계정과 프로필을 다시 확인해주세요.");
   }
   return state.uid;
@@ -137,15 +142,37 @@ export const chooseProfile = async (profileId, ownerId) => {
   await setDoc(doc(db, "users", uid), { selectedProfileId: profileId }, { merge: true });
 };
 
-export const updateProfile = async (profileId, name, image, ownerId) => {
-  const uid = requireAccount(profileId, ownerId);
+const getProfileDetails = (name, image) => {
   const imageFile = image.split("/").pop();
-  if (!name.trim() || name.trim().length > 12 || !/^profile[1-4]\.png$/.test(imageFile)) {
+  const trimmedName = name.trim();
+  if (!trimmedName || trimmedName.length > 12 || !/^profile[1-4]\.png$/.test(imageFile)) {
     throw new Error("프로필 이름과 이미지를 확인해주세요.");
   }
-  await setDoc(doc(db, "users", uid), {
-    profiles: { [profileId]: { name: name.trim(), imageFile } },
-  }, { merge: true });
+  return { name: trimmedName, imageFile };
+};
+
+export const updateProfile = async (profileId, name, image, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const profile = getProfileDetails(name, image);
+  await setDoc(doc(db, "users", uid), { profiles: { [profileId]: profile } }, { merge: true });
+};
+
+export const addProfile = async (name, image, ownerId) => {
+  const uid = requireAccount(null, ownerId);
+  const profile = getProfileDetails(name, image);
+  const ref = doc(db, "users", uid);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(null, uid);
+    const existingIds = getProfileIds(snapshot.data() ?? {});
+    const profileId = PROFILE_IDS.find((id) => !existingIds.includes(id));
+    if (!profileId) throw new Error("프로필은 최대 4개까지 추가할 수 있어요.");
+
+    transaction.set(ref, {
+      profiles: { [profileId]: profile },
+      selectedProfileId: profileId,
+    }, { merge: true });
+  });
 };
 
 // 트랜잭션으로 최신 서버 목록을 기준으로 변경합니다.
