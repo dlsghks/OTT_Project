@@ -38,7 +38,7 @@ export const Member = ({ onSocialLogin, onServiceInfo } = {}) => {
     setMessage("");
     try {
       await createUserWithEmailAndPassword(auth, email.trim(), password);
-      navigate("/profileselect", { replace: true });
+      navigate("/profileselect", { replace: true, state: { returnTo: "/voucher" } });
     } catch (error) {
       const errors = {
         "auth/email-already-in-use": "이미 가입된 이메일입니다. 로그인해주세요.",
@@ -66,8 +66,11 @@ export const Member = ({ onSocialLogin, onServiceInfo } = {}) => {
     setIsSubmitting(true);
     setMessage("");
     try {
-      await onSocialLogin(provider);
-      navigate("/profileselect", { replace: true });
+      const result = await onSocialLogin(provider);
+      navigate("/profileselect", {
+        replace: true,
+        state: { returnTo: result?.isNewUser === false ? "/" : "/voucher" },
+      });
     } catch {
       setMessage("소셜 가입을 완료하지 못했습니다. 다시 시도해주세요.");
     } finally {

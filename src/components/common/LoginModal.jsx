@@ -35,9 +35,11 @@ export const LoginModal = ({ isOpen, onClose }) => {
     setIsSigningIn(true);
 
     try {
-      await signInSocial('google');
+      const result = await signInSocial('google');
       onClose();
-      navigate('/profileselect', { state: loginState });
+      navigate('/profileselect', {
+        state: result.isNewUser ? { returnTo: '/voucher' } : loginState,
+      });
     } catch (error) {
       setMessage(getSocialLoginError(error));
     } finally {
