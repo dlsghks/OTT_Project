@@ -1,4 +1,5 @@
 import { withContent } from '../contentCatalog';
+import { individualPurchaseMovies } from '../individualPurchaseMovies';
 import { homeContentBySection } from './requestedHomeSections';
 
 // 실제 포스터 이미지 URL을 넣으면 바로 표시됩니다. 현재는 이미지 없는 카드도 동작합니다.
@@ -113,6 +114,8 @@ export const hopeItems = [
   item('hope-interstellar', '인터스텔라', 'movie', '', '개별구매'),
 ].map((entry) => {
   const movie = withContent(entry, 'home');
+  const offer = individualPurchaseMovies.find(({ title }) => title === entry.title);
+  if (offer) return { ...movie, tmdbId: offer.tmdbId, link: offer.link };
 
   return {
     ...movie,

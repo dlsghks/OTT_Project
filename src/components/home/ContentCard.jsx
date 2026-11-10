@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getIndividualPurchaseMovie } from "../../data/individualPurchaseMovies";
 import { getImagePath } from "../../utils/imagePath";
 import { getTmdbPoster, logTmdbDiagnostic } from "../../services/tmdb";
 import "../../styles/components/home/ContentCard.scss";
@@ -41,6 +42,15 @@ const ContentCardBody = ({ item, rank, onPosterLoad }) => {
 
   // 이미지 표시 가능 여부
   const showPoster = Boolean(poster) && !imageError;
+  const movieId = item.link?.match(/^\/moviedetail\/(\d+)$/)?.[1]
+    ?? (item.kind === 'movie' ? item.tmdbId : null);
+  const isIndividualPurchase = Boolean(getIndividualPurchaseMovie(movieId));
+  const badges = Array.isArray(item.badges) && item.badges.length > 0
+    ? item.badges
+    : item.badge ? [item.badge] : [];
+  const visibleBadges = isIndividualPurchase
+    ? ['개별구매', ...badges.filter((badge) => badge !== '개별구매')]
+    : badges;
 
   return (
     <Link
@@ -69,9 +79,9 @@ const ContentCardBody = ({ item, rank, onPosterLoad }) => {
         )}
 
         {/* 좌측 상단 상태 배지 */}
-        {Array.isArray(item.badges) && item.badges.length > 0 ? (
+        {visibleBadges.length > 0 && (
           <div className="content-card__badges">
-            {item.badges.map((badge) => (
+            {visibleBadges.map((badge) => (
               <span
                 key={badge}
                 className={`content-card__badge ${
@@ -84,18 +94,6 @@ const ContentCardBody = ({ item, rank, onPosterLoad }) => {
               </span>
             ))}
           </div>
-        ) : (
-          item.badge && (
-            <span
-              className={`content-card__badge ${
-                item.badge === "개별구매"
-                  ? "content-card__badge--purchase"
-                  : "content-card__badge--new"
-              }`}
-            >
-              {item.badge}
-            </span>
-          )
         )}
 
         {/* 우측 상단 Wavve Original 로고 */}

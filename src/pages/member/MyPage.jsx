@@ -21,6 +21,7 @@ import { useNotificationStore } from "../../store/useNotificationStore";
 import { useProfileShorts } from "../../utils/profileShorts";
 import { getCoinTotal } from "../../utils/coinRecords";
 import { getOwnedCoupons } from "../../utils/couponRecords";
+import { useDemoMoviePurchases } from "../../utils/demoMoviePurchases";
 import { getDemoVoucherPurchases } from "../../utils/demoVoucherPurchases";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
@@ -140,7 +141,10 @@ export const MyPage = ({
   const couponCount = getOwnedCoupons(selectedProfile.couponRecords).length; // 선택한 프로필의 보유 쿠폰 수
   const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
-  const [activeTab, setActiveTab] = useState("history");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(() =>
+    new URLSearchParams(location.search).get("tab") === "purchases" ? "purchases" : "history"
+  );
   const [activeFilter, setActiveFilter] = useState("all");
   const [editingScope, setEditingScope] = useState("");
   const [isRemoving, setIsRemoving] = useState(false);
@@ -151,7 +155,7 @@ export const MyPage = ({
   const dialogRef = useRef(null);
   const id = useId();
   const { user, isLoggedIn } = useAuthState();
-  const location = useLocation();
+  const purchasedMovies = useDemoMoviePurchases(user?.uid);
   const demoPurchases = getDemoVoucherPurchases(user?.uid);
   const activeDemoPass = demoPurchases.find((purchase) => purchase.expiresAt > openedAt);
   const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
@@ -239,7 +243,9 @@ export const MyPage = ({
         !savedPrograms.some((saved) => saved.id === item.id)
       ),
     ],
-    purchases: withoutShorts(purchasedItems),
+    purchases: [...purchasedMovies, ...withoutShorts(purchasedItems).filter((item) =>
+      !purchasedMovies.some((movie) => movie.id === item.id)
+    )],
     downloads: withoutShorts(downloadItems),
   };
   // 종류별 구분 없이 최근 담은 순서로 표시합니다.
@@ -498,7 +504,7 @@ export const MyPage = ({
           </div>
           <div>
             <dt>구매 콘텐츠</dt>
-            <dd>{purchasedItems.length.toLocaleString("ko-KR")}</dd>
+            <dd>{lists.purchases.length.toLocaleString("ko-KR")}</dd>
           </div>
           <div className="mypage__retro-summary">
             <dt>레트로 콘텐츠</dt>
