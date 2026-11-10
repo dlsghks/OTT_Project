@@ -49,11 +49,6 @@ dialog.wavve-account-modal {
 
       img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-      &--kakao {
-        background: #fee500;
-        img { width: 54%; height: 54%; object-fit: contain; }
-      }
-
       &--facebook {
         background: #1877f2;
         color: #fff;
