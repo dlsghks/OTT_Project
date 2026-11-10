@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ChevronRight, CircleAlert, Copyright } from "lucide-react";
 
+import { saveCoinCharge } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useProfileShorts } from "../../utils/profileShorts";
-import { formatCoinDate, getAvailableCoin, getCoinTotal } from "../../utils/coinRecords";
+import { COIN_CHARGE_OPTIONS, formatCoinDate, getAvailableCoin, getCoinTotal } from "../../utils/coinRecords";
 
 import "../../styles/pages/member/Coin.scss";
 
@@ -21,7 +22,13 @@ const displayDate = (value) => value.replace(/^(\d{4})-(\d{2})-(\d{2}) /, "$1. $
 export default function Coin() {
   const user = useAuthStore((state) => state.user);
   const authReady = useAuthStore((state) => state.authReady);
-  const { profile } = useProfileShorts();
+  const { profile, ownerId } = useProfileShorts();
+  const chargeDialog = useRef(null);
+  const chargeRequest = useRef(null);
+  const charging = useRef(false);
+  const [chargeAmount, setChargeAmount] = useState(COIN_CHARGE_OPTIONS[0]);
+  const [isCharging, setIsCharging] = useState(false);
+  const [chargeError, setChargeError] = useState("");
   const [tab, setTab] = useState("earned");
   const [page, setPage] = useState(1);
   const [notice, setNotice] = useState("");
@@ -32,8 +39,8 @@ export default function Coin() {
 
   const records = user ? profile.coinRecords ?? [] : [];
   const now = formatCoinDate(new Date());
-  const bonusCoin = getCoinTotal(records, now);
-  const chargedCoin = 0; // 코인 충전 기능이 생기면 충전분을 합산
+  const chargedCoin = getCoinTotal(records.filter((record) => record.kind === "charge"), now);
+  const bonusCoin = getCoinTotal(records, now) - chargedCoin;
   const rows = tab === "earned" ? records : []; // 코인 사용 기능이 생기면 소진 내역 연결
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -45,6 +52,34 @@ export default function Coin() {
     setPage(1);
   };
 
+  const openCharge = () => {
+    chargeRequest.current = null;
+    setChargeAmount(COIN_CHARGE_OPTIONS[0]);
+    setChargeError("");
+    setNotice("");
+    chargeDialog.current.showModal();
+  };
+
+  const confirmCharge = async (event) => {
+    event.preventDefault();
+    if (charging.current) return;
+    charging.current = true;
+    setIsCharging(true);
+    setChargeError("");
+    try {
+      chargeRequest.current ??= crypto.randomUUID();
+      const amount = await saveCoinCharge(profile.id, chargeAmount, chargeRequest.current, ownerId);
+      chargeDialog.current?.close();
+      changeTab("earned");
+      setNotice(`${money(amount)}코인을 충전했어요.`);
+    } catch {
+      setChargeError("충전을 완료하지 못했어요. 다시 시도해주세요.");
+    } finally {
+      charging.current = false;
+      setIsCharging(false);
+    }
+  };
+
   return (
     <div className="coin">
       <header className="coin__header">
@@ -53,7 +88,7 @@ export default function Coin() {
 
       <div className="coin__inner">
         <div className="coin__title-row">
-          <button type="button" className="coin__charge" onClick={() => setNotice("코인 충전은 준비 중입니다.")}>
+          <button type="button" className="coin__charge" onClick={openCharge} disabled={!user} aria-haspopup="dialog">
             <Copyright size={18} aria-hidden="true" />
             코인충전
             <ChevronRight size={16} aria-hidden="true" />
@@ -115,13 +150,13 @@ export default function Coin() {
               <tbody>
                 {pageRows.map((record) => (
                   <tr key={record.id}>
-                    <td>{money(record.amount)}</td>
+                    <td>{record.kind === "charge" ? `${money(record.amount)}원` : money(record.amount)}</td>
                     <td>{record.name}</td>
                     <td>{record.reason}</td>
                     <td>{money(getAvailableCoin(record, now))}</td>
                     <td>{displayDate(record.chargedAt)}</td>
                     <td>{displayDate(record.expiresAt)}</td>
-                    <td>-</td>
+                    <td>{record.kind === "charge" ? "가상 결제" : "-"}</td>
                     <td>자동결제 대상이 아님</td>
                   </tr>
                 ))}
@@ -144,6 +179,40 @@ export default function Coin() {
           </nav>
         </>
       )}
+      <dialog
+        className="coin__charge-dialog"
+        ref={chargeDialog}
+        aria-labelledby="coin-charge-title"
+        onCancel={(event) => {
+          if (charging.current) event.preventDefault();
+        }}
+      >
+        <form onSubmit={confirmCharge} aria-busy={isCharging}>
+          <h2 id="coin-charge-title">코인 충전</h2>
+          <p>가상 결제로 코인을 충전할 수 있어요. 실제 결제는 이루어지지 않아요.</p>
+          <fieldset disabled={isCharging || Boolean(chargeError)}>
+            <legend>충전 금액</legend>
+            {COIN_CHARGE_OPTIONS.map((amount) => (
+              <label key={amount}>
+                <input
+                  type="radio"
+                  name="coin-charge-amount"
+                  value={amount}
+                  checked={chargeAmount === amount}
+                  onChange={() => setChargeAmount(amount)}
+                />
+                <span>{money(amount)}코인</span>
+                <span>{money(amount)}원</span>
+              </label>
+            ))}
+          </fieldset>
+          {chargeError && <p role="alert">{chargeError}</p>}
+          <div className="coin__charge-actions">
+            <button type="button" disabled={isCharging} onClick={() => chargeDialog.current.close()}>취소</button>
+            <button type="submit" disabled={isCharging}>{isCharging ? "충전 중…" : "가상 결제로 충전"}</button>
+          </div>
+        </form>
+      </dialog>
     </div>
   );
 }

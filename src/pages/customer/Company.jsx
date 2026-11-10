@@ -70,7 +70,7 @@ export const Company = () => {
         <div className="company-page__bi"><div className="company-page__brand">wavve</div><div><h3>JUST DIVE!</h3><p>웨이브의 브랜드 아이덴티티는 콘텐츠를 즐기는 새로운 경험과 즐거움을 표현합니다.</p><p>다양한 콘텐츠를 자유롭게 발견하고 몰입하는 순간을 지향합니다.</p></div></div>
       </section>
       <section className="company-page__section" id="company-award"><SectionTitle>Award</SectionTitle><div className="company-page__awards"><div><strong>BRAND</strong><small>KOREA MARKETING AWARDS</small></div><div><strong>15th</strong><small>KOREA ASSEMBLY GRAND AWARD</small></div></div><p className="company-page__muted">수상 내역의 상세 문구와 원본 이미지가 확보되면 교체할 수 있도록 구성했습니다.</p></section>
-      <section className="company-page__section" id="company-location"><SectionTitle>오시는 길</SectionTitle><div className="company-page__map"><p>콘텐츠웨이브(주)</p><a href="https://map.naver.com/p/search/서울특별시%20영등포구%20여의나루로%2060" target="_blank" rel="noreferrer">지도에서 위치 확인 ↗</a></div><div className="company-page__address"><strong>주소</strong><p>서울특별시 영등포구 여의나루로 60 포스트타워 15층</p></div></section>
+      <section className="company-page__section" id="company-location"><SectionTitle>오시는 길</SectionTitle><div className="company-page__map"><p>콘텐츠웨이브(주)</p><a href="https://www.google.com/maps/search/?api=1&amp;query=서울특별시%20영등포구%20여의나루로%2060" target="_blank" rel="noreferrer">지도에서 위치 확인 ↗</a></div><div className="company-page__address"><strong>주소</strong><p>서울특별시 영등포구 여의나루로 60 포스트타워 15층</p></div></section>
       <p className="company-page__disclaimer">본 페이지는 학습용 비공식 Wavve 리디자인입니다. 연혁 및 수상 상세 자료는 예시이며 공식 정보가 아닙니다.</p>
     </div>
   );

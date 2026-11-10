@@ -1,7 +1,7 @@
 import { normalizeWatchHistory, updateWatchHistory } from "../utils/watchHistoryRecords";
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
-import { createAttendanceCoin, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
+import { createAttendanceCoin, createCoinCharge, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
 import { createCouponRecord, markCouponUsed, normalizeCouponRecords } from "../utils/couponRecords";
 import { create } from "zustand";
 import { doc, onSnapshot, runTransaction, setDoc } from "firebase/firestore";
@@ -292,6 +292,24 @@ const requireSelectedProfile = (profileId, ownerId) => {
     throw new Error("프로필이 변경됐어요. 다시 시도해주세요.");
   }
   return uid;
+};
+
+export const saveCoinCharge = async (profileId, amount, requestId, ownerId) => {
+  const uid = requireSelectedProfile(profileId, ownerId);
+  const record = createCoinCharge(amount, requestId);
+  const ref = doc(db, "users", uid);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireSelectedProfile(profileId, uid);
+    const saved = snapshot.data()?.profiles?.[profileId];
+    const records = normalizeCoinRecords(saved?.coinRecords, attendanceDates(saved?.attendanceDays));
+    const existing = records.find((item) => item.id === record.id);
+    if (existing) return existing.amount;
+
+    const coinRecords = normalizeCoinRecords([record, ...records]);
+    transaction.set(ref, { profiles: { [profileId]: { coinRecords } } }, { merge: true });
+    return record.amount;
+  });
 };
 
 // 쿠폰 등록: 번호가 틀렸거나 이 프로필에 이미 등록했으면 false 를 돌려줍니다.
