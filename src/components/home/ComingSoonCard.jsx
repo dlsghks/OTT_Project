@@ -1,5 +1,4 @@
 
-import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { getImagePath } from "../../utils/imagePath";
 import "../../styles/components/home/ComingSoonCard.scss";
@@ -8,13 +7,17 @@ export const ComingSoonCard = ({
   item,
   isFavorite,
   onFavoriteClick,
+  onPlay,
 }) => {
-  const detailPath = `/home-content/coming-soon/${item.id}`;
   return (
     <div className="coming-soon-card">
-      {/* 썸네일을 감싸는 링크 */}
-      <Link to={detailPath} className="coming-soon-card__link">
-        <div className="coming-soon-card__thumbnail">
+      <button
+        type="button"
+        className="coming-soon-card__play"
+        aria-label={`${item.title} 라인업 영상 재생`}
+        onClick={onPlay}
+      >
+        <span className="coming-soon-card__thumbnail">
           <img
             src={getImagePath(item.image)}
             alt={item.title}
@@ -31,15 +34,16 @@ export const ComingSoonCard = ({
               draggable="false"
             />
           )}
-        </div>
-      </Link>
+        </span>
+      </button>
 
       <div className="coming-soon-card__info">
         <div className="coming-soon-card__text">
-          {/* // 제목을 감싸는 링크 */}
-          <Link to={detailPath}>
-            <h3>{item.title}</h3>
-          </Link>
+          <h3>
+            <button type="button" className="coming-soon-card__play" onClick={onPlay}>
+              {item.title}
+            </button>
+          </h3>
 
           <p>{item.description}</p>
         </div>
