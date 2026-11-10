@@ -5,10 +5,22 @@
 //   - s{시즌}/panels/{캐릭터id}.png      : 아이콘 클릭 시 보이는 명대사 카드 (1420x780)
 //   - videos/{영상id}.jpg                : 영상 카드 썸네일
 // TODO: 시즌 2·3 캐릭터, 캐릭터·카드 이미지 받으면 채우기
-// TODO: 영상 링크(videoId) 없음 → 카드 클릭 시 재생되지 않음 (엑셀 받으면 채우기)
 // TODO: 영상 제목/설명/날짜는 시안 이미지에서 읽은 임시 값 — 실제 데이터로 교체 필요
 
 const IMG = "/images/retrov/high-kick";
+const mbcReplayList = "https://m.imbc.com/vod/vodlist/1000385100000100000";
+
+// 회차별 MBC YouTube 영상 첫 파트
+const seasonOneVideoIds = {
+  1: "7bDomwM-TsA", 2: "NvEnOwuTx2o", 4: "YZ5dWf20nC4", 5: "Y_c_lH3Bf_o",
+  6: "28TJLi6OMKw", 7: "xki3bZpoSPI", 8: "pnPjixS_KDg", 9: "8y8v6TiKx8g", 10: "tFFEeRYfmpY",
+  11: "Fv1KGInTQSc", 12: "qrAlnNhSf1s", 13: "DPebNAYkYA0", 19: "yWhrXHbuGd4",
+  24: "SELLbWdNBu4", 31: "BJtc4d8JgTo", 42: "C3xMdm3CC8k", 44: "hSULaDxrCeI",
+  63: "EGu50ATFcY4", 64: "Q83j5KVHFxs", 65: "85kd5Onndo4", 66: "L7TOJXIOH-Q",
+  67: "Jwm-eH5YgSk", 68: "9ogxOfqvbO0", 69: "5GWjWbKEZPc", 70: "YIAb6vKWJpg",
+  71: "S26sp1uAArk", 72: "jCGOFZSzuQM", 73: "dcd6DFevdMI", 74: "NJJLQLCzcG0",
+  79: "Q1filVetVuw", 88: "ZsHE5pnGEdc", 125: "r84b7ojlNoc", 165: "qcX4K0kZfVw",
+};
 
 const character = (season, id, name) => ({
   id,
@@ -20,11 +32,10 @@ const character = (season, id, name) => ({
 // 영상 카드: video(id, 제목, 설명, 방영일)
 // - 썸네일은 TMDB 고유 id + 회차 번호(제목의 "N화/N회/에피소드 N")로 장면 사진을 찾아 자동 표시
 //   (직접 넣을 이미지가 있으면 5번째 인자로 경로 전달)
-// - 영상은 TMDB → 유튜브 검색 순으로 찾아 재생 (src/store/useRetrovTmdbStore.js)
 const video = (id, title, description, date, image = null) => ({
   id,
-  videoId: null,
-  playlistId: null,
+  videoId: seasonOneVideoIds[Number(id.split("-").at(-1))] ?? null,
+  mbcUrl: mbcReplayList,
   image,
   title,
   description,
@@ -48,6 +59,7 @@ export const highKick = {
       id: "season-1",
       label: "거침없이 하이킥!",
       playLabel: "1화 보기",
+      firstEpisode: { videoId: seasonOneVideoIds[1], mbcUrl: "https://playvod.imbc.com/Templete/VodView?bid=1000385100001100000" },
       characters: [
         character(1, "leesoonjae", "이순재"),
         character(1, "namoonhee", "나문희"),
@@ -59,8 +71,20 @@ export const highKick = {
         character(1, "shinji", "신지"),
       ],
     },
-    { id: "season-2", label: "지붕 뚫고 하이킥!", playLabel: "1화 보기", characters: [] },
-    { id: "season-3", label: "하이킥! 짧은 다리의 역습", playLabel: "1화 보기", characters: [] },
+    {
+      id: "season-2",
+      label: "지붕 뚫고 하이킥!",
+      playLabel: "1화 보기",
+      firstEpisode: { videoId: "Hc9yWeFpK2g", mbcUrl: "https://m.imbc.com/vod/vodlist/1002164100000100000" },
+      characters: [],
+    },
+    {
+      id: "season-3",
+      label: "하이킥! 짧은 다리의 역습",
+      playLabel: "1화 보기",
+      firstEpisode: { videoId: "PmG1qzUsneU", mbcUrl: "https://playvod.imbc.com/Templete/VodView?bid=1002633100003100000" },
+      characters: [],
+    },
   ],
 
   description: [
