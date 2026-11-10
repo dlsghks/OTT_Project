@@ -41,7 +41,7 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
 
     try {
       await onLogin(email, password);
-      navigate("/profileselect", { replace: true });
+      navigate("/profileselect", { replace: true, state: { returnTo } });
     } catch (error) {
       if (error.code === "auth/too-many-requests") {
         setMessage("시도가 너무 많습니다. 잠시 후 다시 시도해주세요.");

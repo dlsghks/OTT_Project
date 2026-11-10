@@ -15,6 +15,7 @@ import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LoginModal } from "../../components/common/LoginModal";
 import { NotificationPanel } from "../../components/common/NotificationPanel";
 import { useAuthState } from "../../hooks/useAuthState";
 import { useNotificationStore } from "../../store/useNotificationStore";
@@ -52,6 +53,12 @@ import mobileHeart4 from "../../assets/mobile/heart-4.svg";
 const MOBILE_HEARTS = [mobileHeart0, mobileHeart1, mobileHeart2, mobileHeart3, mobileHeart4];
 const EMPTY_ITEMS = [];
 const BILLING_TITLE = "이용권 · 결제 내역";
+const billingDateTime = new Intl.DateTimeFormat("ko-KR", {
+  dateStyle: "medium",
+  timeStyle: "medium",
+  timeZone: "Asia/Seoul",
+  hourCycle: "h23",
+});
 const TABS = [
   { key: "history", label: "시청 내역", title: "아직 시청한 콘텐츠가 없어요" },
   { key: "favorites", label: "관심 콘텐츠", title: "아직 관심 콘텐츠가 없어요" },
@@ -151,6 +158,7 @@ export const MyPage = ({
   const [isRemoving, setIsRemoving] = useState(false);
   const [editFeedback, setEditFeedback] = useState(null);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isVoucherLoginOpen, setIsVoucherLoginOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [openedAt] = useState(Date.now);
   const dialogRef = useRef(null);
@@ -212,6 +220,13 @@ export const MyPage = ({
       );
     };
 
+    const handleOutsidePress = (event) => {
+      if (notificationButtonRef.current?.contains(event.target) ||
+          notificationPanelRef.current?.contains(event.target)) return;
+      setIsNotificationOpen(false);
+      setNotificationPosition(null);
+    };
+
     const handleKeyDown = (event) => {
       if (event.key !== "Escape") return;
       setIsNotificationOpen(false);
@@ -223,6 +238,7 @@ export const MyPage = ({
     window.addEventListener("resize", updatePosition);
     window.addEventListener("scroll", updatePosition, true);
     window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handleOutsidePress, true);
 
     const observer = new ResizeObserver(updatePosition);
     if (notificationButtonRef.current) observer.observe(notificationButtonRef.current);
@@ -231,6 +247,7 @@ export const MyPage = ({
       window.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition, true);
       window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handleOutsidePress, true);
       observer.disconnect();
     };
   }, [isNotificationOpen]);
@@ -328,9 +345,11 @@ export const MyPage = ({
   };
 
   const requestAction = (action, title) => {
-    if (action === "coupon") navigate("/coupon");
+    if (action === "purchase-pass" && !isLoggedIn) setIsVoucherLoginOpen(true);
+    else if (action === "coupon") navigate("/coupon");
     else if (onAction) onAction(action);
     else if (action === "purchase-pass") navigate("/voucher");
+    else if (action === "support") navigate("/support");
     else setDialogTitle(title);
   };
   const changeTab = (key) => {
@@ -780,12 +799,11 @@ export const MyPage = ({
         createPortal(
           <div
             ref={notificationPanelRef}
-            className="header-notification-portal"
+            className={`header-notification-portal${isLoggedIn ? "" : " mypage__guest-notification"}`}
             style={{
               position: "absolute",
               top: notificationPosition?.top ?? 0,
               left: notificationPosition?.left ?? 0,
-              width: "min(480px, calc(100vw - 32px))",
               visibility: notificationPosition ? "visible" : "hidden",
               zIndex: 1000,
             }}
@@ -802,6 +820,11 @@ export const MyPage = ({
           </div>,
           document.body
         )}
+
+      {isVoucherLoginOpen && !isLoggedIn && createPortal(
+        <LoginModal isOpen returnTo="/voucher" onClose={() => setIsVoucherLoginOpen(false)} />,
+        document.body
+      )}
 
       <dialog
         className="mypage__dialog"
@@ -823,7 +846,7 @@ export const MyPage = ({
                   <strong>{purchase.name} · {purchase.months}개월</strong>
                   <span>{purchase.amount.toLocaleString("ko-KR")}원 · 가상결제 승인</span>
                   <time dateTime={new Date(purchase.purchasedAt).toISOString()}>
-                    {new Date(purchase.purchasedAt).toLocaleDateString("ko-KR")}
+                    {billingDateTime.format(purchase.purchasedAt)}
                   </time>
                 </li>
               ))}
@@ -833,12 +856,6 @@ export const MyPage = ({
           )
         ) : (
           <p>현재 준비 중인 서비스입니다.</p>
-        )}
-
-        {visibleDialogTitle === "고객센터" && (
-          <Link to="/notice" onClick={() => dialogRef.current.close()}>
-            공지사항 보기
-          </Link>
         )}
 
         <form method="dialog">
