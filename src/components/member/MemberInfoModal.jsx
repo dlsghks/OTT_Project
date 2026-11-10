@@ -199,7 +199,7 @@ export function MemberInfoModal({ onClose }) {
     }
   };
 
-  return (
+  const memberInfoModal = (
     <WavveAccountModal title="회원정보 수정" busy={busy} success={saved}
       successMessage="회원정보가 수정되었어요" onClose={onClose}>
       {(close) => (
@@ -288,11 +288,17 @@ export function MemberInfoModal({ onClose }) {
             <button className="wam-button" type="button" onClick={close} disabled={busy}>{saved ? "닫기" : "취소"}</button>
             <button className="wam-button wam-button--primary" type="submit" disabled={busy || loading || authLoading || !user || loadedUid !== user.uid}>{busy ? "저장 중…" : "수정하기"}</button>
           </div>
-          {snsOwnerId && snsOwnerId === user?.uid && (
-            <SnsConnectionModal user={user} onClose={() => setSnsOwnerId(null)} />
-          )}
         </form>
       )}
     </WavveAccountModal>
+  );
+
+  return (
+    <>
+      {memberInfoModal}
+      {snsOwnerId && snsOwnerId === user?.uid && (
+        <SnsConnectionModal user={user} onClose={() => setSnsOwnerId(null)} />
+      )}
+    </>
   );
 }
