@@ -3,7 +3,6 @@ import { WavveAccountModal } from "../common/WavveAccountModal";
 
 import kakaoIcon from "../../assets/login/kakao.png";
 import googleIcon from "../../assets/login/googleLogo.png";
-import appleIcon from "../../assets/login/apple.png";
 
 import "../../styles/pages/member/FindIdModal.scss";
 
@@ -12,7 +11,6 @@ const socialProviders = [
   { key: "t", name: "T아이디", text: "T" },
   { key: "google", name: "구글", icon: googleIcon },
   { key: "facebook", name: "Facebook", text: "f" },
-  { key: "apple", name: "Apple", icon: appleIcon },
 ];
 
 export function FindIdModal({
@@ -245,7 +243,7 @@ export function FindIdModal({
                         disabled={busy}
                         onClick={() =>
                           runAction(
-                            onSocialLogin && ["google", "kakao", "apple"].includes(provider.key)
+                            onSocialLogin && ["google", "kakao"].includes(provider.key)
                               ? () => onSocialLogin(provider.key)
                               : null,
                             `${provider.name} 로그인은 아직 연결되지 않았어요.`

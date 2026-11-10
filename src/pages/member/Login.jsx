@@ -2,10 +2,10 @@ import { FindIdModal } from "../../components/member/FindIdModal";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
+import { getSocialLoginError } from "../../utils/socialLoginError";
 import wavveLogo from "../../assets/login/wavve-logo.png";
 import googleIcon from "../../assets/login/googleLogo.png";
 import kakaoIcon from "../../assets/login/kakao.png";
-import appleIcon from "../../assets/login/apple.png";
 import glowLeft from "../../assets/login/glow-left.png";
 import glowRight from "../../assets/login/glow-right.png";
 import mobileGlowLeft from "../../assets/login/mobile/glow-left.svg";
@@ -16,7 +16,6 @@ import { AccountHelpModal } from "../../components/member/AccountHelpModal";
 const providers = [
   { key: "google", label: "Google로 계속하기", icon: googleIcon },
   { key: "kakao", label: "카카오로 시작하기", icon: kakaoIcon },
-  { key: "apple", label: "Apple로 계속하기", icon: appleIcon },
 ];
 
 // 실제 인증 함수를 연결할 수 있도록 콜백으로 분리했습니다.
@@ -70,17 +69,7 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
     try {
       await completeSocialLogin(provider);
     } catch (error) {
-      if (error.code === "auth/popup-closed-by-user") return;
-
-      if (error.code === "auth/popup-blocked") {
-        setMessage("브라우저에서 팝업을 허용한 후 다시 시도해주세요.");
-      } else if (error.code === "auth/account-exists-with-different-credential") {
-        setMessage("이미 가입된 이메일이에요. 기존 로그인 방식으로 로그인해주세요.");
-      } else if (error.code === "auth/operation-not-allowed") {
-        setMessage("이 로그인 방식은 아직 활성화되지 않았어요.");
-      } else {
-        setMessage("로그인을 완료하지 못했습니다. 다시 시도해주세요.");
-      }
+      setMessage(getSocialLoginError(error));
     } finally {
       setIsSubmitting(false);
     }
