@@ -175,7 +175,8 @@ export const Voucher = () => {
             return;
         }
 
-        checkoutDialog.current.close();
+        setSelectedId(null);
+        setCheckout(null);
         setReceipt(checkout);
     };
 
@@ -492,22 +493,25 @@ export const Voucher = () => {
                 </div>
             </div>
 
-            {receipt && (
-                <div className="voucher__message" role="status">
-                    <p>{receipt.name} {receipt.months}개월 가상결제가 완료됐어요.</p>
-                    <Link to="/mypage?billing=1">결제 내역 보기</Link>
-                    <button type="button" onClick={() => setReceipt(null)}>닫기</button>
-                </div>
-            )}
-
             <dialog
                 ref={checkoutDialog}
                 className="voucher__checkout"
                 aria-labelledby="voucher-checkout-title"
-                onClose={() => setCheckout(null)}
+                onClose={() => {
+                    setCheckout(null);
+                    setReceipt(null);
+                }}
             >
-                <h2 id="voucher-checkout-title">가상결제</h2>
-                {checkout && (
+                <h2 id="voucher-checkout-title">{receipt ? "이용권 구매 완료" : "가상결제"}</h2>
+                {receipt ? (
+                    <form method="dialog">
+                        <p>{receipt.name} {receipt.months}개월 가상결제가 완료됐어요.</p>
+                        <div className="voucher__checkout-actions">
+                            <Link to="/mypage?billing=1">결제 내역 보기</Link>
+                            <button type="submit" autoFocus>확인</button>
+                        </div>
+                    </form>
+                ) : checkout && (
                     <form onSubmit={approveCheckout}>
                         <p>시연용 결제입니다. 실제 청구는 발생하지 않습니다.</p>
                         <dl>

@@ -1043,20 +1043,23 @@
         gap: 10px;
         margin-top: 12px;
 
-        button {
+        button,
+        a {
             flex: 1;
             min-height: 44px;
             border-radius: 6px;
             background: #383838;
         }
 
+        a {
+            display: grid;
+            place-items: center;
+            text-align: center;
+            color: inherit;
+        }
+
         button[type="submit"] {
             background: #1351f9;
         }
     }
-}
-
-.voucher__message a {
-    color: #fff;
-    text-decoration: underline;
 }
