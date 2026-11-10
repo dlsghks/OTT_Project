@@ -1,22 +1,21 @@
 import { useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
-import naverShareIcon from '../../assets/member/naver.svg';
-import kakaoShareIcon from '../../assets/member/kakao.svg';
-import appleShareIcon from '../../assets/member/apple.svg';
 import '../../styles/pages/live/LiveChannel.scss';
 
 const messages = {
     success: '링크가 복사되었습니다.',
     error: '복사하지 못했습니다. 링크를 선택해 직접 복사해 주세요.',
-    sns: 'SNS 공유는 아직 연결 전입니다. 링크를 복사해 공유해 주세요.',
-    unsupported: '기기 공유를 지원하지 않습니다. 링크를 복사해 주세요.',
-    shareError: '공유 메뉴를 열지 못했습니다. 링크를 복사해 주세요.',
 };
 
 export const ShareModal = ({ title, onClose }) => {
     const headingId = useId();
     const [status, setStatus] = useState('');
     const url = window.location.href;
+    const services = [
+        { name: 'X', href: `https://x.com/intent/tweet?${new URLSearchParams({ url, text: title ?? '' })}` },
+        { name: 'Threads', href: `https://www.threads.com/intent/post?${new URLSearchParams({ url, text: title ?? '' })}` },
+        { name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({ u: url })}` },
+    ];
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -33,20 +32,6 @@ export const ShareModal = ({ title, onClose }) => {
             setStatus('success');
         } catch {
             setStatus('error');
-        }
-    };
-
-    const shareOnDevice = async () => {
-        if (typeof navigator.share !== 'function') {
-            setStatus('unsupported');
-            return;
-        }
-
-        try {
-            await navigator.share({ title, url });
-            setStatus('');
-        } catch (error) {
-            if (error?.name !== 'AbortError') setStatus('shareError');
         }
     };
 
@@ -77,15 +62,11 @@ export const ShareModal = ({ title, onClose }) => {
                 <h2 id={headingId}>공유하기</h2>
 
                 <div className="live-share-modal__sns">
-                    <button type="button" aria-label="네이버 공유 안내" onClick={() => setStatus('sns')}>
-                        <img src={naverShareIcon} alt="" />
-                    </button>
-                    <button type="button" aria-label="카카오톡 공유 안내" onClick={() => setStatus('sns')}>
-                        <img src={kakaoShareIcon} alt="" />
-                    </button>
-                    <button type="button" aria-label="기기 공유 메뉴 열기" onClick={shareOnDevice}>
-                        <img src={appleShareIcon} alt="" />
-                    </button>
+                    {services.map(({ name, href }) => (
+                        <a key={name} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${name}에 공유`}>
+                            {name}
+                        </a>
+                    ))}
                 </div>
 
                 <div className="live-share-modal__copy">

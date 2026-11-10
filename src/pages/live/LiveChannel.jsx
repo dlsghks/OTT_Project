@@ -12,15 +12,13 @@ import { livePrograms, liveTop10 } from '../../data/live/liveData';
 // 골프 스페셜 "이번 주 골프 중계" → ?channel=중계 id 로 들어오면 해당 골프 중계 선택
 import { golfLivePrograms } from '../../data/golfData';
 import { LoginModal } from '../../components/common/LoginModal';
+import { ShareModal } from '../../components/common/ShareModal';
 import { getImagePath } from '../../utils/imagePath';
 
 import '../../styles/pages/live/LiveChannel.scss';
 
 import { getCachedYoutubeLive } from '../../services/youtube';
 
-import naverShareIcon from '../../assets/member/naver.svg';
-import kakaoShareIcon from '../../assets/member/kakao.svg';
-import appleShareIcon from '../../assets/member/apple.svg';
 
 const formatTime = (value) => {
   const date = new Date(value);
@@ -254,11 +252,6 @@ export const LiveChannel = ({
   const [liked, setLiked] = useState(false);
   const [reminders, setReminders] = useState([]);
   const [shareOpen, setShareOpen] = useState(false);
-  const [copyStatus, setCopyStatus] = useState('');
-
-  const shareUrl = typeof window === 'undefined'
-    ? ''
-    : window.location.href;
 
   // 채팅
   const [chatOpen, setChatOpen] = useState(false);
@@ -379,21 +372,6 @@ export const LiveChannel = ({
       window.removeEventListener('resize', measure);
     };
   }, [selected?.channelId]);
-
-  // 공유 팝업 ESC 닫기
-  useEffect(() => {
-    if (!shareOpen) return;
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') setShareOpen(false);
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [shareOpen]);
 
   // 화질 안내 바깥 클릭 / ESC 닫기
   useEffect(() => {
@@ -619,15 +597,6 @@ export const LiveChannel = ({
         ? previous.filter((value) => value !== id)
         : [...previous, id]
     ));
-  };
-
-  const copyShareUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopyStatus('success');
-    } catch {
-      setCopyStatus('error');
-    }
   };
 
   if (!selected) {
@@ -876,10 +845,7 @@ export const LiveChannel = ({
 
               <button
                 type="button"
-                onClick={() => {
-                  setCopyStatus('');
-                  setShareOpen(true);
-                }}
+                onClick={() => setShareOpen(true)}
               >
                 ↥ 공유
               </button>
@@ -1281,165 +1247,11 @@ export const LiveChannel = ({
         </aside>
       </div>
 
-      {/* 공유 팝업 */}
       {shareOpen && (
-        <div
-          className="live-share-backdrop"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              setShareOpen(false);
-            }
-          }}
-        >
-          <div
-            className="live-share-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="live-share-title"
-          >
-            <button
-              type="button"
-              className="live-share-modal__close"
-              onClick={() => setShareOpen(false)}
-              aria-label="공유 팝업 닫기"
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M4 4L20 20M20 4L4 20"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-
-            <h2 id="live-share-title">공유하기</h2>
-
-            <div className="live-share-modal__sns">
-              <button
-                type="button"
-                aria-label="네이버 공유 안내"
-                onClick={() => {
-                  setCopyStatus('naver');
-                }}
-              >
-                <img src={naverShareIcon} alt="" />
-              </button>
-
-              <button
-                type="button"
-                aria-label="카카오톡 공유 안내"
-                onClick={() => {
-                  setCopyStatus('kakao');
-                }}
-              >
-                <img src={kakaoShareIcon} alt="" />
-              </button>
-
-              <button
-                type="button"
-                aria-label="기기 공유 메뉴 열기"
-                onClick={async () => {
-                  if (!navigator.share) {
-                    setCopyStatus('unsupported');
-                    return;
-                  }
-
-                  try {
-                    await navigator.share({
-                      title: `${selected.channel} - ${selected.title}`,
-                      url: shareUrl,
-                    });
-
-                    setCopyStatus('');
-                  } catch (error) {
-                    if (error.name !== 'AbortError') {
-                      setCopyStatus('shareError');
-                    }
-                  }
-                }}
-              >
-                <img src={appleShareIcon} alt="" />
-              </button>
-            </div>
-
-            <div className="live-share-modal__copy">
-              <input
-                type="text"
-                readOnly
-                value={shareUrl}
-                aria-label="공유할 링크"
-                onFocus={(event) => event.target.select()}
-              />
-
-              <button
-                type="button"
-                onClick={copyShareUrl}
-              >
-                복사
-              </button>
-            </div>
-
-            <div
-              className="live-share-modal__feedback"
-              role="status"
-              aria-live="polite"
-            >
-              {copyStatus === 'success' && (
-                <p className="live-share-modal__message is-success">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
-                  >
-                    <circle cx="10" cy="10" r="9" fill="#27d34d" />
-                    <path
-                      d="M5.5 10L8.5 13L14.5 7"
-                      fill="none"
-                      stroke="#0b0d18"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-
-                  <span>링크가 복사되었습니다.</span>
-                </p>
-              )}
-
-              {copyStatus === 'error' && (
-                <p className="live-share-modal__message">
-                  복사하지 못했습니다. 링크를 선택해 직접 복사해 주세요.
-                </p>
-              )}
-
-              {(copyStatus === 'naver' || copyStatus === 'kakao') && (
-                <p className="live-share-modal__message">
-                  SNS 공유는 아직 연결 전입니다. 링크를 복사해 공유해 주세요.
-                </p>
-              )}
-
-              {copyStatus === 'unsupported' && (
-                <p className="live-share-modal__message">
-                  기기 공유를 지원하지 않습니다. 링크를 복사해 주세요.
-                </p>
-              )}
-
-              {copyStatus === 'shareError' && (
-                <p className="live-share-modal__message">
-                  공유 메뉴를 열지 못했습니다. 링크를 복사해 주세요.
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
+        <ShareModal
+          title={`${selected.channel} - ${selected.title}`}
+          onClose={() => setShareOpen(false)}
+        />
       )}
 
       <LoginModal
