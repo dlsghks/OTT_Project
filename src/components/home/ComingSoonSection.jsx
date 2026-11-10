@@ -1,16 +1,10 @@
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ComingSoonCard } from "./ComingSoonCard";
 import { ContentSection } from "./ContentSection";
 import { LoginModal } from "../common/LoginModal";
-import YoutubePlayerModal from "../common/YoutubePlayerModal";
 import { useAuthState } from "../../hooks/useAuthState";
 import "../../styles/components/home/ComingSoonCard.scss";
-
-const lineupVideo = {
-  videoId: "UWeMT61VgwQ",
-  title: "먼슬리 웨이브 · 11월 라인업",
-};
 
 export const ComingSoonSection = ({
   title,
@@ -22,8 +16,6 @@ export const ComingSoonSection = ({
   const [loginOpen, setLoginOpen] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [notice, setNotice] = useState("");
-  const [lineupOpen, setLineupOpen] = useState(false);
-  const closeLineup = useCallback(() => setLineupOpen(false), []);
 
   const storageKey = user
     ? `wavve-coming-soon-favorites-${user.uid}`
@@ -100,12 +92,9 @@ export const ComingSoonSection = ({
             item={item}
             isFavorite={favorites.includes(item.id)}
             onFavoriteClick={handleFavoriteClick}
-            onPlay={() => setLineupOpen(true)}
           />
         )}
       />
-
-      {lineupOpen && <YoutubePlayerModal video={lineupVideo} onClose={closeLineup} />}
 
       <LoginModal
         isOpen={loginOpen}

@@ -121,6 +121,13 @@ const HomeContentBody = ({ item, sectionId }) => {
 
     const player = useVideoPlayer();
 
+    const playComingSoonVideo = () => {
+        player.openVideo({
+            videoId: 'UWeMT61VgwQ',
+            title: '먼슬리 웨이브 · 11월 라인업',
+        });
+    };
+
     const playJungEpisode = (episode) => {
         if (episode.id === 'jung-hyung-don-1') {
             player.openVideo({
@@ -220,14 +227,15 @@ const HomeContentBody = ({ item, sectionId }) => {
                     trailers={trailers}
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
-                    onPlay={isJung ? playJungEpisode : undefined}
+                    onPlay={isJung ? playJungEpisode : playComingSoonVideo}
+                    playEntireRow={isComingSoon}
                 />
             )}
         </DetailLayout>
     );
 };
 
-const ComingSoonSections = ({ item, episodes, trailers, activeTab, setActiveTab, onPlay }) => {
+const ComingSoonSections = ({ item, episodes, trailers, activeTab, setActiveTab, onPlay, playEntireRow }) => {
     const tabs = [
         ...(episodes.length ? [{ id: 'episodes', label: '에피소드' }] : []),
         ...(trailers.length ? [{ id: 'trailers', label: '관련영상' }] : []),
@@ -256,7 +264,10 @@ const ComingSoonSections = ({ item, episodes, trailers, activeTab, setActiveTab,
                 {(activeTab === 'episodes' || activeTab === 'trailers') && (
                     <ul className={`home-content-sections__list home-content-sections__list--${activeTab}`}>
                         {videos.map((video) => (
-                            <li key={video.title} className="home-content-sections__item">
+                            <li
+                                key={video.title}
+                                className={`home-content-sections__item${playEntireRow ? ' home-content-sections__item--playable' : ''}`}
+                            >
                                 {onPlay ? (
                                     <button
                                         type="button"
