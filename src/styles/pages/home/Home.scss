@@ -403,6 +403,14 @@
   // 제목과 카드 간격
   .home-section__head {
     margin-bottom: 1.625rem;
+
+    > a {
+      color: figma.$neutral-3;
+
+      &:hover {
+        color: figma.$neutral-white;
+      }
+    }
   }
 
   // 슬라이드 영역
