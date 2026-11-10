@@ -24,7 +24,6 @@ export const DetailHero = ({
   showWatch = true,
   watchActions,
   onDownload,
-  downloadBusy = false,
   downloadNotice,
   actions,
 }) => {
@@ -110,12 +109,12 @@ export const DetailHero = ({
             </button>
 
             {onDownload && (
-              <button type="button" className="movie-hero__icon" onClick={onDownload} disabled={downloadBusy}>
+              <button type="button" className="movie-hero__icon" onClick={onDownload}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 3.5v12m-5-5 5 5 5-5M4 15.5v4.5h16v-4.5"
                     stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span>{downloadBusy ? '준비 중' : '다운로드'}</span>
+                <span>다운로드</span>
               </button>
             )}
           </div>

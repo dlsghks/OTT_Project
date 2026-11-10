@@ -6,7 +6,12 @@ import { Check, ChevronDown } from "lucide-react";
 import { auth } from "../../firebase/firebase";
 import { LoginModal } from "../../components/common/LoginModal";
 import { voucherGroups, voucherTabs } from "../../data/voucherData";
-import { saveDemoVoucherPurchase } from "../../utils/demoVoucherPurchases";
+import {
+    getActiveDemoVoucher,
+    getDemoVoucherPurchases,
+    getDemoVoucherSelection,
+    saveDemoVoucherPurchase,
+} from "../../utils/demoVoucherPurchases";
 
 import "../../styles/pages/member/Voucher.scss";
 
@@ -77,6 +82,7 @@ export const Voucher = () => {
 
     const [user, setUser] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
+    const [activeVoucher, setActiveVoucher] = useState(null);
     const [loginModalOpen, setLoginModalOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [checkout, setCheckout] = useState(null);
@@ -84,11 +90,13 @@ export const Voucher = () => {
     const [receipt, setReceipt] = useState(null);
     const checkoutDialog = useRef(null);
 
+    const currentSelection = getDemoVoucherSelection(activeVoucher);
     const group = voucherGroups[activeTab];
     const visiblePlans = group.plans.filter(
         (plan) =>
             activeTab !== "double" ||
             showAll ||
+            plan.id === currentSelection?.planId ||
             !plan.hiddenByDefault
     );
     const selectedPlan =
@@ -96,6 +104,10 @@ export const Voucher = () => {
 
     const isAnnual =
         billing === "annual" && Boolean(selectedPlan?.annual);
+
+    const isCurrentSelection = Boolean(currentSelection &&
+        currentSelection.planId === selectedId &&
+        currentSelection.billing === (isAnnual ? "annual" : "monthly"));
 
     const selectedPrice = selectedPlan
         ? isAnnual
@@ -105,7 +117,14 @@ export const Voucher = () => {
 
     useEffect(() => {
         return onAuthStateChanged(auth, (currentUser) => {
+            const voucher = getActiveDemoVoucher(getDemoVoucherPurchases(currentUser?.uid));
+            const selection = getDemoVoucherSelection(voucher);
+
             setUser(currentUser);
+            setActiveVoucher(voucher);
+            setActiveTab(selection?.tabId ?? "double");
+            setSelectedId(selection?.planId ?? null);
+            setBilling(selection?.billing ?? "monthly");
             setAuthLoading(false);
             setLoginModalOpen(false);
             setMessage("");
@@ -115,9 +134,10 @@ export const Voucher = () => {
     }, []);
 
     const handleTabChange = (id) => {
+        const selection = currentSelection?.tabId === id ? currentSelection : null;
         setActiveTab(id);
-        setSelectedId(null);
-        setBilling("monthly");
+        setSelectedId(selection?.planId ?? null);
+        setBilling(selection?.billing ?? "monthly");
         setBannerOpen(false);
         setShowAll(false);
         setHoveredId(null);
@@ -126,7 +146,7 @@ export const Voucher = () => {
 
     const handlePlanChange = (plan) => {
         setSelectedId((previous) =>
-            previous === plan.id ? null : plan.id
+            previous === plan.id && !isCurrentSelection ? null : plan.id
         );
 
         if (!plan.annual) setBilling("monthly");
@@ -135,7 +155,7 @@ export const Voucher = () => {
     };
 
     const handlePurchase = () => {
-        if (authLoading) return;
+        if (authLoading || isCurrentSelection) return;
         if (!selectedPlan) {
             setMessage("이용권을 먼저 선택해 주세요.");
             return;
@@ -152,6 +172,8 @@ export const Voucher = () => {
         setCheckout({
             uid: user.uid,
             id: crypto.randomUUID(),
+            planId: selectedPlan.id,
+            isChange: Boolean(activeVoucher),
             name: selectedPlan.name,
             months: isAnnual ? 12 : 1,
             amount: selectedPrice,
@@ -175,6 +197,7 @@ export const Voucher = () => {
             return;
         }
 
+        setActiveVoucher(getActiveDemoVoucher(getDemoVoucherPurchases(checkout.uid)));
         setSelectedId(null);
         setCheckout(null);
         setReceipt(checkout);
@@ -338,7 +361,9 @@ export const Voucher = () => {
                                                     <span className="voucher__plan-note">
                                                         {unavailable
                                                             ? "1개월 이용권만 제공"
-                                                            : selectedId === plan.id
+                                                            : currentSelection?.planId === plan.id && currentSelection.billing === billing
+                                                                ? "이용 중인 이용권"
+                                                                : selectedId === plan.id
                                                                 ? "선택한 이용권"
                                                                 : "이용권 선택"}
                                                     </span>
@@ -486,9 +511,9 @@ export const Voucher = () => {
                     <button
                         type="button"
                         onClick={handlePurchase}
-                        disabled={authLoading}
+                        disabled={authLoading || isCurrentSelection}
                     >
-                        이용권 구매하기
+                        {isCurrentSelection ? "이용 중인 이용권" : activeVoucher ? "이용권 변경하기" : "이용권 구매하기"}
                     </button>
                 </div>
             </div>
@@ -502,10 +527,10 @@ export const Voucher = () => {
                     setReceipt(null);
                 }}
             >
-                <h2 id="voucher-checkout-title">{receipt ? "이용권 구매 완료" : "가상결제"}</h2>
+                <h2 id="voucher-checkout-title">{receipt ? (receipt.isChange ? "이용권 변경 완료" : "이용권 구매 완료") : "가상결제"}</h2>
                 {receipt ? (
                     <form method="dialog">
-                        <p>{receipt.name} {receipt.months}개월 가상결제가 완료됐어요.</p>
+                        <p>{receipt.name} {receipt.months}개월 {receipt.isChange ? "이용권으로 변경됐어요." : "가상결제가 완료됐어요."}</p>
                         <div className="voucher__checkout-actions">
                             <Link to="/mypage?billing=1">결제 내역 보기</Link>
                             <button type="submit" autoFocus>확인</button>

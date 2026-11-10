@@ -22,7 +22,7 @@ import { useProfileShorts } from "../../utils/profileShorts";
 import { getCoinTotal } from "../../utils/coinRecords";
 import { getOwnedCoupons } from "../../utils/couponRecords";
 import { useDemoMoviePurchases } from "../../utils/demoMoviePurchases";
-import { getDemoVoucherPurchases } from "../../utils/demoVoucherPurchases";
+import { getActiveDemoVoucher, getDemoVoucherPurchases } from "../../utils/demoVoucherPurchases";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
 import emptyImage from "../../assets/mypage/empty-play.png";
@@ -161,7 +161,8 @@ export const MyPage = ({
     .filter((movie) => movie.downloadedAt !== null)
     .map((movie) => ({ ...movie, savedAt: movie.downloadedAt }));
   const demoPurchases = getDemoVoucherPurchases(user?.uid);
-  const activeDemoPass = demoPurchases.find((purchase) => purchase.expiresAt > openedAt);
+  const activeDemoPass = getActiveDemoVoucher(demoPurchases, openedAt);
+  const voucherActionLabel = passName || activeDemoPass ? "이용권 변경" : "이용권 구매";
   const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
   const visibleDialogTitle = billingFromReceipt ? BILLING_TITLE : dialogTitle;
   const notificationButtonRef = useRef(null);
@@ -492,10 +493,10 @@ export const MyPage = ({
           <button
             className="mypage__pass-button"
             type="button"
-            onClick={() => requestAction("purchase-pass", "이용권 구매")}
+            onClick={() => requestAction("purchase-pass", voucherActionLabel)}
           >
-            <span className="mypage__desktop-copy">이용권 구매</span>
-            <span className="mypage__mobile-copy">이용권 구매하기</span>
+            <span className="mypage__desktop-copy">{voucherActionLabel}</span>
+            <span className="mypage__mobile-copy">{voucherActionLabel}하기</span>
           </button>
         </div>
 
