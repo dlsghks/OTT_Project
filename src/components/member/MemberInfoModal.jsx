@@ -1,5 +1,6 @@
 import { verifyBeforeUpdateEmail } from "firebase/auth";
 import { useEffect, useId, useRef, useState } from "react";
+import { SnsConnectionModal } from "./SnsConnectionModal";
 import { WavveAccountModal } from "../common/WavveAccountModal";
 import { Link } from "react-router-dom";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -29,6 +30,7 @@ export function MemberInfoModal({ onClose }) {
   const [saved, setSaved] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
+  const [snsOwnerId, setSnsOwnerId] = useState(null);
 
 
   useEffect(() => {
@@ -197,7 +199,7 @@ export function MemberInfoModal({ onClose }) {
     }
   };
 
-  return (
+  const memberInfoModal = (
     <WavveAccountModal title="회원정보 수정" busy={busy} success={saved}
       successMessage="회원정보가 수정되었어요" onClose={onClose}>
       {(close) => (
@@ -213,7 +215,15 @@ export function MemberInfoModal({ onClose }) {
               <label htmlFor={`${id}-name`}>이름</label>
               <input className="wam-input" id={`${id}-name`} name="name" autoComplete="name" maxLength={60} required value={form.name} onChange={updateField} placeholder="이름을 입력해주세요" />
               <label htmlFor={`${id}-provider`}>SNS 연동</label>
-              <input className="wam-input" id={`${id}-provider`} readOnly value={user.providerData?.map(provider => ({ "google.com": "Google", password: "이메일" }[provider.providerId] || provider.providerId)).join(", ") || "연동 정보 없음"} />
+              <button
+                className="wam-button member-info-modal__sns"
+                id={`${id}-provider`}
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => setSnsOwnerId(user.uid)}
+              >
+                SNS 연결 관리 <span aria-hidden="true">›</span>
+              </button>
               <label htmlFor={`${id}-gender`}>성별</label>
               <select className="wam-input" id={`${id}-gender`} name="gender" value={form.gender} onChange={updateField}>
                 <option value="">선택 안 함</option><option value="male">남성</option><option value="female">여성</option><option value="other">기타</option>
@@ -281,5 +291,14 @@ export function MemberInfoModal({ onClose }) {
         </form>
       )}
     </WavveAccountModal>
+  );
+
+  return (
+    <>
+      {memberInfoModal}
+      {snsOwnerId && snsOwnerId === user?.uid && (
+        <SnsConnectionModal user={user} onClose={() => setSnsOwnerId(null)} />
+      )}
+    </>
   );
 }
