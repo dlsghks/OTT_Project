@@ -45,6 +45,9 @@ export const EventBanner = ({ items = [] }) => (
                         width: '100%',
                         maxWidth: 'none',
                         height: 'auto',
+                        maxHeight: 96,
+                        objectFit: 'contain',
+                        background: '#000',
                         margin: 0,
                         padding: 0,
                     }}
