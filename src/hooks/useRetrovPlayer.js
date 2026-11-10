@@ -29,7 +29,7 @@ export function useRetrovPlayer() {
       } : null) };
       const request = ++requestRef.current;
 
-      if (video.videoId) {
+      if (video.videoId || video.mbcUrl) {
         setPlayingVideo(video);
         return;
       }

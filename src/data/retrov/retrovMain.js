@@ -94,6 +94,7 @@ function toRecommendation(programId, video) {
     image: video.image ?? null,
     fallbackImage: program.thumbnail,
     videoId: video.videoId ?? (episode && detail.youtubeIds?.[detail.seasons?.[0]?.id]?.[episode]) ?? null,
+    mbcUrl: video.mbcUrl,
     tmdb: target && episode ? { id: target.id, season: target.season, episode } : null,
     source: target ? { tmdbId: target.id, season: target.season, episode, query } : null,
   };
