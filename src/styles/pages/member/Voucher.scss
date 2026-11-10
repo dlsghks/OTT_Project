@@ -75,7 +75,9 @@
     }
 
     &__table-scroll {
+        max-width: 100%;
         overflow-x: auto;
+        overscroll-behavior-x: contain;
     }
 
     &__table {
@@ -422,8 +424,7 @@
         padding-bottom: 175px;
 
         &__purchase-bar {
-            bottom: calc(50px + env(safe-area-inset-bottom, 0px));
-            padding: 14px 0;
+            padding: 14px 0 calc(14px + env(safe-area-inset-bottom, 0px));
         }
 
         &__purchase-inner {
@@ -588,18 +589,6 @@
         }
     }
 
-    @media (max-width: 768px) {
-        &__banner-window:not(.is-open) img {
-            width: 760px;
-            margin-left: calc((100% - 760px) / 2);
-        }
-
-        &__banner-window.is-open img {
-            width: 100%;
-            margin-left: 0;
-        }
-    }
-
     &__billing {
         display: flex;
         justify-content: flex-end;
@@ -674,18 +663,6 @@
     }
 
     @media (max-width: 768px) {
-        &__banner-window img {
-            // 접힌 상태에서도 이미지의 제목 부분을 충분한 크기로 표시
-            width: 760px;
-            max-width: none;
-            margin-left: calc((100% - 760px) / 2);
-        }
-
-        &__banner-window.is-open img {
-            width: 100%;
-            margin-left: 0;
-        }
-
         &__all-plans {
             padding: 18px;
 
@@ -1150,6 +1127,21 @@
 }
 
 @media (max-width: 1024px) {
+    .site-inner:has(> .voucher) {
+        overflow-x: clip;
+    }
+
+    .voucher__banner-window:not(.is-open) {
+        height: auto;
+        // PC 배너의 접힌 높이(110px)를 이미지 너비(1024px)에 비례해 줄입니다.
+        max-height: min(110px, calc((100vw - 2 * var(--page-side-padding, 20px)) * 110 / 1024));
+    }
+
+    // 이용권 선택 중에는 결제 바가 하단 내비게이션 자리를 사용합니다.
+    .site-inner:has(> .voucher .voucher__purchase-bar.is-visible) ~ :is(.wavve-mobile-nav, .wavve-mobile-nav-space) {
+        display: none;
+    }
+
     .voucher__purchase-bar,
     .voucher__purchase-bar.is-visible {
         transform: none;
