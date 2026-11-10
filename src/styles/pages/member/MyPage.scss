@@ -1091,3 +1091,27 @@
     }
   }
 }
+
+
+.header-notification-portal.mypage__guest-notification {
+  width: min(280px, calc(100vw - 32px));
+
+  .notification-panel__head {
+    min-height: 44px;
+    padding: 10px 16px;
+
+    h2 { font-size: 16px; }
+  }
+
+  .notification-panel__guest {
+    min-height: 0;
+    gap: 8px;
+    padding: 16px;
+
+    > svg { width: 28px; height: 28px; margin: 0; }
+    > p { font-size: 13px; line-height: 1.5; }
+  }
+
+  .notification-panel__guest-title { font-size: 14px; }
+  .notification-panel__login { min-width: 112px; margin-top: 4px; font-size: 14px; }
+}

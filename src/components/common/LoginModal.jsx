@@ -5,7 +5,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { getSocialLoginError } from '../../utils/socialLoginError';
 import '../../styles/components/common/LoginModal.scss';
 
-export const LoginModal = ({ isOpen, onClose }) => {
+export const LoginModal = ({ isOpen, onClose, returnTo }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const signInSocial = useAuthStore((state) => state.onSocialLogin);
@@ -13,10 +13,7 @@ export const LoginModal = ({ isOpen, onClose }) => {
   const [message, setMessage] = useState('');
 
   const loginState = {
-    returnTo:
-      location.pathname +
-      location.search +
-      location.hash,
+    returnTo: returnTo ?? (location.pathname + location.search + location.hash),
   };
   useEffect(() => {
     if (!isOpen) return;
