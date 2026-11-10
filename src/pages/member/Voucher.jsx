@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { Check, ChevronDown } from "lucide-react";
 
 import { auth } from "../../firebase/firebase";
 import { LoginModal } from "../../components/common/LoginModal";
 import { voucherGroups, voucherTabs } from "../../data/voucherData";
+import { saveDemoVoucherPurchase } from "../../utils/demoVoucherPurchases";
 
 import "../../styles/pages/member/Voucher.scss";
 
@@ -77,6 +79,10 @@ export const Voucher = () => {
     const [authLoading, setAuthLoading] = useState(true);
     const [loginModalOpen, setLoginModalOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const [checkout, setCheckout] = useState(null);
+    const [checkoutError, setCheckoutError] = useState("");
+    const [receipt, setReceipt] = useState(null);
+    const checkoutDialog = useRef(null);
 
     const group = voucherGroups[activeTab];
     const visiblePlans = group.plans.filter(
@@ -103,6 +109,8 @@ export const Voucher = () => {
             setAuthLoading(false);
             setLoginModalOpen(false);
             setMessage("");
+            setReceipt(null);
+            checkoutDialog.current?.close();
         });
     }, []);
 
@@ -138,9 +146,37 @@ export const Voucher = () => {
             return;
         }
 
-        setMessage(
-            `${selectedPlan.name} ${isAnnual ? "12개월" : "1개월"}을 선택했습니다. 결제 기능은 준비 중입니다.`
-        );
+        setMessage("");
+        setReceipt(null);
+        setCheckoutError("");
+        setCheckout({
+            uid: user.uid,
+            id: crypto.randomUUID(),
+            name: selectedPlan.name,
+            months: isAnnual ? 12 : 1,
+            amount: selectedPrice,
+        });
+    };
+
+    useEffect(() => {
+        if (checkout && !checkoutDialog.current.open) checkoutDialog.current.showModal();
+    }, [checkout]);
+
+    const approveCheckout = (event) => {
+        event.preventDefault();
+        if (!checkoutDialog.current.open || !checkout || auth.currentUser?.uid !== checkout.uid) {
+            return;
+        }
+
+        try {
+            saveDemoVoucherPurchase(checkout);
+        } catch {
+            setCheckoutError("결제 내역을 저장하지 못했습니다. 브라우저 저장 공간을 확인한 뒤 다시 시도해 주세요.");
+            return;
+        }
+
+        checkoutDialog.current.close();
+        setReceipt(checkout);
     };
 
     return (
@@ -405,7 +441,7 @@ export const Voucher = () => {
                             </summary>
                             <p>
                                 페이백 등 이벤트 혜택은 해당 이벤트의 적용 대상과
-                                조건을 확인해 주세요. 현재 실제 결제는 연결되지 않았습니다.
+                                조건을 확인해 주세요. 이 페이지에서는 시연용 가상결제가 진행됩니다.
                             </p>
                         </details>
                     </div>
@@ -455,6 +491,38 @@ export const Voucher = () => {
                     </button>
                 </div>
             </div>
+
+            {receipt && (
+                <div className="voucher__message" role="status">
+                    <p>{receipt.name} {receipt.months}개월 가상결제가 완료됐어요.</p>
+                    <Link to="/mypage?billing=1">결제 내역 보기</Link>
+                    <button type="button" onClick={() => setReceipt(null)}>닫기</button>
+                </div>
+            )}
+
+            <dialog
+                ref={checkoutDialog}
+                className="voucher__checkout"
+                aria-labelledby="voucher-checkout-title"
+                onClose={() => setCheckout(null)}
+            >
+                <h2 id="voucher-checkout-title">가상결제</h2>
+                {checkout && (
+                    <form onSubmit={approveCheckout}>
+                        <p>시연용 결제입니다. 실제 청구는 발생하지 않습니다.</p>
+                        <dl>
+                            <div><dt>이용권</dt><dd>{checkout.name}</dd></div>
+                            <div><dt>이용 기간</dt><dd>{checkout.months}개월</dd></div>
+                            <div><dt>결제 금액</dt><dd>{money(checkout.amount)}원</dd></div>
+                        </dl>
+                        {checkoutError && <p role="alert">{checkoutError}</p>}
+                        <div className="voucher__checkout-actions">
+                            <button type="button" onClick={() => checkoutDialog.current.close()} autoFocus>취소</button>
+                            <button type="submit">가상결제 승인</button>
+                        </div>
+                    </form>
+                )}
+            </dialog>
 
             <LoginModal
                 isOpen={loginModalOpen}
