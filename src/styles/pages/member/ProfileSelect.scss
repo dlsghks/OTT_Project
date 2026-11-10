@@ -99,7 +99,8 @@
       color: #fff;
     }
 
-    &:hover .profile-select__avatar {
+    &:hover .profile-select__avatar,
+    &[aria-current="true"] .profile-select__avatar {
       outline-color: #1351f9;
     }
 
@@ -194,6 +195,18 @@
     font-size: 14px;
     line-height: 20px;
     transition: color 160ms ease;
+  }
+
+  &__current {
+    display: table;
+    margin: 6px auto 0;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: #1351f9;
+    color: #fff;
+    font-size: 12px;
+    line-height: 18px;
+    white-space: nowrap;
   }
 
   &__notice {

@@ -22,6 +22,7 @@ export const ProfileSelect = () => {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const profiles = useAccountStore((state) => state.profiles);
+  const selectedProfileId = useAccountStore((state) => state.selectedProfileId);
   const [message, setMessage] = useState("");
   const [pendingProfile, setPendingProfile] = useState(null);
   const [pinError, setPinError] = useState("");
@@ -87,13 +88,19 @@ export const ProfileSelect = () => {
           {profiles.map((profile) => (
             <li key={profile.id}>
               <button className="profile-select__profile" type="button" disabled={busy}
+                aria-current={profile.id === selectedProfileId ? "true" : undefined}
                 aria-label={`${profile.name}${profile.locked ? " · 잠김" : ""}`}
                 onClick={() => selectProfile(profile)}>
                 <span className={`profile-select__avatar${profile.locked ? " profile-select__avatar--locked" : ""}`}>
                   <img src={profile.image} alt="" />
                   {profile.locked && <span className="profile-select__lock-overlay" aria-hidden="true"><img src={lockIcon} alt="" /></span>}
                 </span>
-                <span className="profile-select__name">{profile.name}</span>
+                <span className="profile-select__name">
+                  {profile.name}
+                  {profile.id === selectedProfileId && (
+                    <span className="profile-select__current">현재 프로필</span>
+                  )}
+                </span>
               </button>
             </li>
           ))}
