@@ -341,6 +341,19 @@ export const MyPage = ({
 
   const navigate = useNavigate();
   const isMobile = useMobileLayout();
+  const profileSaved = location.state?.profileSaved === true;
+
+  useEffect(() => {
+    if (!profileSaved) return;
+    const timeout = window.setTimeout(() => {
+      navigate(
+        { pathname: location.pathname, search: location.search, hash: location.hash },
+        { replace: true, preventScrollReset: true, state: { ...location.state, profileSaved: false } }
+      );
+    }, 3000);
+    return () => window.clearTimeout(timeout);
+  }, [location, navigate, profileSaved]);
+
   const closeDialog = () => {
     setDialogTitle("");
     setBillingPeriod(null);
@@ -428,6 +441,9 @@ export const MyPage = ({
 
   return (
     <section className="wavve-mypage" aria-label="마이페이지">
+      {profileSaved && (
+        <div className="mypage__profile-toast" role="status">프로필이 저장됐습니다.</div>
+      )}
       <div className="mypage__inner">
         <div className="mypage__profile-row">
           <img
