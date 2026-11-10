@@ -321,6 +321,32 @@ export const redeemCoupon = async (profileId, couponId, ownerId) => {
     transaction.set(ref, { profiles: { [profileId]: { couponRecords: markCouponUsed(records, couponId) } } }, { merge: true });
   });
 };
+const libraryNormalizers = new Map([
+  ["watchHistory", normalizeWatchHistory],
+  ["likedContents", normalizeContentFavorites],
+  ["likedEditorPicks", normalizeEditorPicks],
+]);
+
+export const removeLibraryRecord = async (profileId, field, itemId, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const normalize = libraryNormalizers.get(field);
+  if (!normalize || !itemId) throw new Error("삭제할 콘텐츠를 확인해주세요.");
+
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(profileId, uid);
+    if (useAccountStore.getState().selectedProfileId !== profileId) {
+      throw new Error("프로필이 변경됐어요. 다시 시도해주세요.");
+    }
+
+    const records = normalize(snapshot.data()?.profiles?.[profileId]?.[field]);
+    const remaining = records.filter((record) => record.id !== itemId);
+    if (remaining.length === records.length) return;
+    transaction.set(ref, { profiles: { [profileId]: { [field]: remaining } } }, { merge: true });
+  });
+};
+
 // 실제 재생을 시작한 작품만 현재 계정·프로필에 저장합니다.
 export const saveWatchHistoryRecord = async (profileId, item, ownerId) => {
   const uid = requireAccount(profileId, ownerId);

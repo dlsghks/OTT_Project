@@ -5,12 +5,12 @@ import { eventBanners } from "../../data/retrov/retrov";
 import { useMobileLayout } from "../../hooks/useMobileLayout";
 import { MemberInfoModal } from "../../components/member/MemberInfoModal";
 import { getImagePath } from "../../utils/imagePath";
-import { useProfileWatchHistory } from "../../utils/profileWatchHistory";
-import { useProfileFavorites } from "../../utils/profileFavorites";
+import { saveProfileWatchHistory, useProfileWatchHistory } from "../../utils/profileWatchHistory";
+import { saveContentFavorite, useProfileFavorites } from "../../utils/profileFavorites";
 import { EditorCollectionCard } from "../../components/member/EditorCollectionCard";
 import "../../styles/pages/member/MyPageUnifiedRow.scss";
 import { EditorCollectionSlider } from "../../components/member/EditorCollectionSlider";
-import { useEditorPicks } from "../../utils/profileEditorPicks";
+import { saveEditorPick, useEditorPicks } from "../../utils/profileEditorPicks";
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -129,7 +129,7 @@ export const MyPage = ({
   onAction, onOpenContent,
 } = {}) => {
   const {
-    profile: selectedProfile,
+    profile: selectedProfile, ownerId,
   } = useProfileShorts();
   const { favorites: savedFavorites } = useProfileFavorites();
   const { history: savedWatchHistory } = useProfileWatchHistory();
@@ -142,6 +142,9 @@ export const MyPage = ({
 
   const [activeTab, setActiveTab] = useState("history");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [editingScope, setEditingScope] = useState("");
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [editFeedback, setEditFeedback] = useState(null);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [openedAt] = useState(Date.now);
@@ -252,6 +255,49 @@ export const MyPage = ({
   const displayCount = visibleItems.length;
   const filterLabel = FILTERS.find(filter => filter.key === activeFilter)?.label;
   const currentTab = TABS.find((tab) => tab.key === activeTab);
+  const editScope = JSON.stringify([ownerId, selectedProfile.id, activeTab]);
+  const isEditing = editingScope === editScope;
+  const canRemove = (item) => {
+    if (activeTab === "history") return savedWatchHistory.some((record) => record.id === item.id);
+    if (activeTab !== "favorites") return false;
+    return item.type === "editor" || savedFavorites.some((record) => record.id === item.id);
+  };
+  const showEditButton = isEditing || visibleItems.some(canRemove);
+
+  const removeItem = async (item) => {
+    if (!isEditing || isRemoving || !canRemove(item)) return;
+
+    setIsRemoving(true);
+    setEditFeedback(null);
+    const profileId = selectedProfile.id;
+    const options = { remove: true };
+    try {
+      if (activeTab === "history") {
+        await saveProfileWatchHistory(profileId, item, ownerId, options);
+      } else if (item.type === "editor") {
+        await saveEditorPick(profileId, item, "like", ownerId, options);
+      } else {
+        await saveContentFavorite(profileId, item, ownerId, options);
+      }
+      setEditFeedback({ scope: editScope, message: "목록에서 삭제했어요." });
+    } catch {
+      setEditFeedback({ scope: editScope, message: "삭제하지 못했어요. 다시 시도해주세요." });
+    } finally {
+      setIsRemoving(false);
+    }
+  };
+
+  const renderRemoveButton = (item) => isEditing && canRemove(item) && (
+    <button
+      className="mypage__library-remove"
+      type="button"
+      aria-label={`${item.episodeTitle || item.title} 삭제`}
+      disabled={isRemoving}
+      onClick={() => void removeItem(item)}
+    >
+      삭제
+    </button>
+  );
 
   useEffect(() => {
     if (visibleDialogTitle && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
@@ -274,7 +320,12 @@ export const MyPage = ({
     else if (action === "purchase-pass") navigate("/voucher");
     else setDialogTitle(title);
   };
-  const changeTab = (key) => { setActiveTab(key); setActiveFilter("all"); };
+  const changeTab = (key) => {
+    setActiveTab(key);
+    setActiveFilter("all");
+    setEditingScope("");
+    setEditFeedback(null);
+  };
   const handleTabKeyDown = (event, index) => {
     let nextIndex;
     if (event.key === "ArrowRight") nextIndex = (index + 1) % TABS.length;
@@ -312,7 +363,7 @@ export const MyPage = ({
     );
 
     return (
-      <li key={item.id}>
+      <li key={item.id} className={retro ? undefined : "mypage__library-item"}>
         {onOpenContent && !isShorts ? (
           <button
             className={className}
@@ -331,6 +382,7 @@ export const MyPage = ({
             {body}
           </Link>
         )}
+        {!retro && renderRemoveButton(item)}
       </li>
     );
   };
@@ -503,10 +555,29 @@ export const MyPage = ({
                 ))}
               </div>
 
-              <p className="mypage__total" aria-live="polite">
-                {filterLabel} {displayCount}개
-              </p>
+              <div className="mypage__library-actions">
+                <p className="mypage__total" aria-live="polite">
+                  {filterLabel} {displayCount}개
+                </p>
+                {showEditButton && (
+                  <button
+                    className="mypage__library-edit"
+                    type="button"
+                    disabled={isRemoving}
+                    onClick={() => {
+                      setEditingScope(isEditing ? "" : editScope);
+                      setEditFeedback(null);
+                    }}
+                  >
+                    {isEditing ? "편집 완료" : "편집"}
+                  </button>
+                )}
+              </div>
             </div>
+
+            {editFeedback?.scope === editScope && (
+              <p className="mypage__library-feedback" role="status">{editFeedback.message}</p>
+            )}
 
             {visibleItems.length ? (
               <section className="mypage__editor-group" aria-label={`${filterLabel} 콘텐츠`}>
@@ -514,12 +585,14 @@ export const MyPage = ({
                   key={`${selectedProfile.id}:${activeTab}:${activeFilter}`}
                   collections={visibleItems}
                   renderItem={(item) => activeTab === "history" ? (
-                    <li key={`history:${item.id}`}>
+                    <li key={`history:${item.id}`} className="mypage__library-item">
                       <WatchHistoryCard key={`${item.id}:${item.thumbnailUrl || item.videoId || item.image}`} item={item} onOpenContent={onOpenContent} />
+                      {renderRemoveButton(item)}
                     </li>
                   ) : item.type === "editor" ? (
-                    <li key={`editor:${item.id}`} className="mypage__library-editor-item">
+                    <li key={`editor:${item.id}`} className="mypage__library-editor-item mypage__library-item">
                       <EditorCollectionCard collection={item} />
+                      {renderRemoveButton(item)}
                     </li>
                   ) : renderCard(item)}
                   cardType={activeTab === "history" ? "history" : "posters"}
