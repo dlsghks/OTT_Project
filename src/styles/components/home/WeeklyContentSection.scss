@@ -5,11 +5,19 @@
   min-width: 0;
   margin-bottom: 80px;
 
+  &__controls {
+    margin-bottom: 26px;
+
+    > a {
+      flex-shrink: 0;
+    }
+  }
+
   &__days {
     display: flex;
     gap: 10px;
+    min-width: 0;
     max-width: 100%;
-    margin-bottom: 26px;
     padding: 4px;
     overflow-x: auto;
   }

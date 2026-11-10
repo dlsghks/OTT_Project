@@ -1,6 +1,6 @@
 import { CategoryLogo } from './CategoryLogo';
 import '../../styles/components/home/CategoryButtonStates.scss';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -15,7 +15,6 @@ const getCategoryImage = (image = '') => {
 };
 
 export const CategoryMenu = ({ items = [] }) => {
-  const swiperRef = useRef(null);
   const appDragRef = useRef(null);
   const appDraggedRef = useRef(false);
 
@@ -49,14 +48,6 @@ export const CategoryMenu = ({ items = [] }) => {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
-  };
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(false);
-
-  const updateNavigation = (swiper) => {
-    if (!swiper) return;
-    setCanPrev(!swiper.isBeginning && !swiper.isLocked);
-    setCanNext(!swiper.isEnd && !swiper.isLocked);
   };
 
   return (
@@ -96,10 +87,6 @@ export const CategoryMenu = ({ items = [] }) => {
       <div className="home-categories__slider">
         <Swiper
           className="home-categories__swiper"
-          onSwiper={(swiper) => { swiperRef.current = swiper; updateNavigation(swiper); }}
-          onSlideChange={updateNavigation}
-          onResize={updateNavigation}
-          onBreakpoint={updateNavigation}
           slidesPerView="auto"
           slidesPerGroup={5}
           spaceBetween={10}
@@ -131,16 +118,6 @@ export const CategoryMenu = ({ items = [] }) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        {canPrev && (
-          <button type="button" className="home-categories__arrow home-categories__arrow--prev" aria-label="카테고리 이전" onClick={() => swiperRef.current?.slidePrev()}>
-            <span>‹</span>
-          </button>
-        )}
-        {canNext && (
-          <button type="button" className="home-categories__arrow home-categories__arrow--next" aria-label="카테고리 다음" onClick={() => swiperRef.current?.slideNext()}>
-            <span>›</span>
-          </button>
-        )}
       </div>
     </nav>
   );
