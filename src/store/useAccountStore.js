@@ -137,11 +137,6 @@ const requireAccount = (profileId, ownerId) => {
   return state.uid;
 };
 
-export const chooseProfile = async (profileId, ownerId) => {
-  const uid = requireAccount(profileId, ownerId);
-  await setDoc(doc(db, "users", uid), { selectedProfileId: profileId }, { merge: true });
-};
-
 const getProfileDetails = (name, image) => {
   const imageFile = image.split("/").pop();
   const trimmedName = name.trim();
@@ -149,6 +144,30 @@ const getProfileDetails = (name, image) => {
     throw new Error("프로필 이름과 이미지를 확인해주세요.");
   }
   return { name: trimmedName, imageFile };
+};
+
+// 이전 버전에서 선택만 했던 프로필도 다른 프로필로 전환하기 전에 기록합니다.
+const getLegacySelectedProfile = (data) => {
+  const id = data.selectedProfileId;
+  if (id === "profile1" || !PROFILE_IDS.includes(id) || data.profiles?.[id]) return null;
+  return defaultProfile(id);
+};
+
+export const chooseProfile = async (profileId, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const ref = doc(db, "users", uid);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(profileId, uid);
+    const data = snapshot.data() ?? {};
+    if (!getProfileIds(data).includes(profileId)) {
+      throw new Error("선택한 프로필을 다시 확인해주세요.");
+    }
+    const legacy = getLegacySelectedProfile(data);
+    const patch = { selectedProfileId: profileId };
+    if (legacy) patch.profiles = { [legacy.id]: getProfileDetails(legacy.name, legacy.image) };
+    transaction.set(ref, patch, { merge: true });
+  });
 };
 
 export const updateProfile = async (profileId, name, image, ownerId) => {
@@ -164,12 +183,16 @@ export const addProfile = async (name, image, ownerId) => {
   return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     requireAccount(null, uid);
-    const existingIds = getProfileIds(snapshot.data() ?? {});
+    const data = snapshot.data() ?? {};
+    const existingIds = getProfileIds(data);
     const profileId = PROFILE_IDS.find((id) => !existingIds.includes(id));
     if (!profileId) throw new Error("프로필은 최대 4개까지 추가할 수 있어요.");
 
+    const legacy = getLegacySelectedProfile(data);
+    const profiles = { [profileId]: profile };
+    if (legacy) profiles[legacy.id] = getProfileDetails(legacy.name, legacy.image);
     transaction.set(ref, {
-      profiles: { [profileId]: profile },
+      profiles,
       selectedProfileId: profileId,
     }, { merge: true });
   });
