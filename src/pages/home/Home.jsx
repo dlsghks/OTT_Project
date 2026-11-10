@@ -1,3 +1,4 @@
+import { individualPurchaseMovies } from '../../data/individualPurchaseMovies';
 import { ContinueWatchingSection } from '../../components/home/ContinueWatchingSection';
 import { homeCollectionLink, homeCollectionTitle } from '../../data/editorCollections';
 import { useEffect, useState } from 'react';
@@ -220,6 +221,8 @@ export const Home = () => {
 
         {/* TOP 랭킹 */}
         <RankingSection items={rankingItems} />
+
+        <ContentSection title="개별구매 영화" items={individualPurchaseMovies} appResponsive />
 
         {/* 기존 섹션 + 영화·드라마 + 추가 15개 섹션 */}
         {homeSectionOrder.map(renderHomeSection)}
