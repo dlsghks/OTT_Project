@@ -21,6 +21,7 @@ import { useNotificationStore } from "../../store/useNotificationStore";
 import { useProfileShorts } from "../../utils/profileShorts";
 import { getCoinTotal } from "../../utils/coinRecords";
 import { getOwnedCoupons } from "../../utils/couponRecords";
+import { getDemoVoucherPurchases } from "../../utils/demoVoucherPurchases";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
 import emptyImage from "../../assets/mypage/empty-play.png";
@@ -49,6 +50,7 @@ import mobileHeart4 from "../../assets/mobile/heart-4.svg";
 
 const MOBILE_HEARTS = [mobileHeart0, mobileHeart1, mobileHeart2, mobileHeart3, mobileHeart4];
 const EMPTY_ITEMS = [];
+const BILLING_TITLE = "이용권 · 결제 내역";
 const TABS = [
   { key: "history", label: "시청 내역", title: "아직 시청한 콘텐츠가 없어요" },
   { key: "favorites", label: "관심 콘텐츠", title: "아직 관심 콘텐츠가 없어요" },
@@ -142,10 +144,15 @@ export const MyPage = ({
   const [activeFilter, setActiveFilter] = useState("all");
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
+  const [openedAt] = useState(Date.now);
   const dialogRef = useRef(null);
   const id = useId();
   const { user, isLoggedIn } = useAuthState();
   const location = useLocation();
+  const demoPurchases = getDemoVoucherPurchases(user?.uid);
+  const activeDemoPass = demoPurchases.find((purchase) => purchase.expiresAt > openedAt);
+  const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
+  const visibleDialogTitle = billingFromReceipt ? BILLING_TITLE : dialogTitle;
   const notificationButtonRef = useRef(null);
   const notificationPanelRef = useRef(null);
   const [notificationPosition, setNotificationPosition] = useState(null);
@@ -247,14 +254,24 @@ export const MyPage = ({
   const currentTab = TABS.find((tab) => tab.key === activeTab);
 
   useEffect(() => {
-    if (dialogTitle && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
-  }, [dialogTitle]);
+    if (visibleDialogTitle && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
+  }, [visibleDialogTitle]);
 
   const navigate = useNavigate();
   const isMobile = useMobileLayout();
+  const closeDialog = () => {
+    setDialogTitle("");
+    if (!billingFromReceipt) return;
+    const params = new URLSearchParams(location.search);
+    params.delete("billing");
+    const search = params.toString();
+    navigate({ search: search ? `?${search}` : "" }, { replace: true, preventScrollReset: true });
+  };
+
   const requestAction = (action, title) => {
     if (action === "coupon") navigate("/coupon");
     else if (onAction) onAction(action);
+    else if (action === "purchase-pass") navigate("/voucher");
     else setDialogTitle(title);
   };
   const changeTab = (key) => { setActiveTab(key); setActiveFilter("all"); };
@@ -351,7 +368,7 @@ export const MyPage = ({
               </Link>
             </div>
 
-            <p>{passName || "보유하신 이용권이 없습니다"}</p>
+            <p>{passName || (activeDemoPass ? `${activeDemoPass.name} (가상결제)` : "보유하신 이용권이 없습니다")}</p>
           </div>
 
           <div className="mypage__mobile-actions">
@@ -579,7 +596,7 @@ export const MyPage = ({
 
             <button
               type="button"
-              onClick={() => requestAction("billing", "이용권 · 결제 내역")}
+              onClick={() => requestAction("billing", BILLING_TITLE)}
             >
               이용권 · 결제 내역<span aria-hidden="true">›</span>
             </button>
@@ -704,17 +721,35 @@ export const MyPage = ({
         className="mypage__dialog"
         ref={dialogRef}
         aria-labelledby={`${id}-dialog-title`}
-        onClose={() => setDialogTitle("")}
+        onClose={closeDialog}
         onClick={(event) => {
           if (event.target === event.currentTarget) {
             dialogRef.current.close();
           }
         }}
       >
-        <h2 id={`${id}-dialog-title`}>{dialogTitle}</h2>
-        <p>현재 준비 중인 서비스입니다.</p>
+        <h2 id={`${id}-dialog-title`}>{visibleDialogTitle}</h2>
+        {visibleDialogTitle === BILLING_TITLE ? (
+          demoPurchases.length ? (
+            <ul className="mypage__billing-history">
+              {demoPurchases.map((purchase) => (
+                <li key={purchase.id}>
+                  <strong>{purchase.name} · {purchase.months}개월</strong>
+                  <span>{purchase.amount.toLocaleString("ko-KR")}원 · 가상결제 승인</span>
+                  <time dateTime={new Date(purchase.purchasedAt).toISOString()}>
+                    {new Date(purchase.purchasedAt).toLocaleDateString("ko-KR")}
+                  </time>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>이 브라우저에 저장된 가상결제 내역이 없습니다.</p>
+          )
+        ) : (
+          <p>현재 준비 중인 서비스입니다.</p>
+        )}
 
-        {dialogTitle === "고객센터" && (
+        {visibleDialogTitle === "고객센터" && (
           <Link to="/notice" onClick={() => dialogRef.current.close()}>
             공지사항 보기
           </Link>
