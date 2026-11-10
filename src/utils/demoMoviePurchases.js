@@ -25,6 +25,7 @@ function readPurchases(uid) {
           to: movie.link,
           image: typeof record.image === 'string' ? record.image : '',
           savedAt: record.savedAt,
+          downloadedAt: Number.isFinite(record.downloadedAt) ? record.downloadedAt : null,
         }];
       } catch {
         return [];
@@ -43,6 +44,18 @@ export function saveDemoMoviePurchase(uid, tmdbId, image) {
   if (readPurchases(uid).some((record) => record.id === movie.id)) return;
 
   localStorage.setItem(key, JSON.stringify({ image, amount: movie.price, savedAt: Date.now() }));
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+export function saveDemoMovieDownload(uid, tmdbId) {
+  const movie = getIndividualPurchaseMovie(tmdbId);
+  if (!uid || !movie) throw new Error('구매한 영화를 확인해주세요.');
+
+  const key = `${accountPrefix(uid)}${movie.tmdbId}`;
+  const record = JSON.parse(localStorage.getItem(key));
+  if (!Number.isFinite(record?.savedAt)) throw new Error('구매 기록이 없어요.');
+
+  localStorage.setItem(key, JSON.stringify({ ...record, downloadedAt: Date.now() }));
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
