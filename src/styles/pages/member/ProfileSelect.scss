@@ -529,3 +529,69 @@
     transition: none;
   }
 }
+
+.profile-select {
+  &__edit,
+  &__remove,
+  &__delete-actions button {
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1px solid #595959;
+    border-radius: 8px;
+    background: #303030;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid #81a3ff;
+      outline-offset: 2px;
+    }
+
+    &:disabled {
+      opacity: .6;
+      cursor: default;
+    }
+  }
+
+  &__edit,
+  &__remove {
+    margin-top: 16px;
+  }
+
+  &__remove {
+    color: #ffb4b4;
+  }
+
+  &__delete-dialog form {
+    margin-top: 24px;
+
+    label {
+      display: grid;
+      gap: 8px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #595959;
+      border-radius: 8px;
+      background: #303030;
+      color: #fff;
+    }
+  }
+
+  &__delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+
+    button[type="submit"] {
+      border-color: #a3424a;
+      background: #842831;
+    }
+  }
+}
