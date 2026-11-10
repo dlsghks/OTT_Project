@@ -56,8 +56,11 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
   };
 
   const completeSocialLogin = async (provider) => {
-    await (onSocialLogin ?? signInSocial)(provider);
-    navigate("/profileselect", { replace: true, state: { returnTo } });
+    const result = await (onSocialLogin ?? signInSocial)(provider);
+    navigate("/profileselect", {
+      replace: true,
+      state: { returnTo: result?.isNewUser ? "/voucher" : returnTo },
+    });
   };
 
   const handleSocialLogin = async (provider) => {

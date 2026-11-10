@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import {
   browserLocalPersistence, onAuthStateChanged, setPersistence,
-  signInWithEmailAndPassword, signOut, OAuthProvider, signInWithPopup,
+  signInWithEmailAndPassword, signOut, OAuthProvider, signInWithPopup, getAdditionalUserInfo,
 } from "firebase/auth";
 import { auth, googleProvider } from "../firebase/firebase";
 import { watchAccount } from "./useAccountStore";
@@ -29,7 +29,7 @@ export const useAuthStore = create(() => ({
 
     await setPersistence(auth, browserLocalPersistence);
     const result = await signInWithPopup(auth, provider);
-    return result.user;
+    return { user: result.user, isNewUser: getAdditionalUserInfo(result)?.isNewUser === true };
   },
 
   onLogout: async () => {
