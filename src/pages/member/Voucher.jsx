@@ -204,6 +204,56 @@ export const Voucher = () => {
         setReceipt(checkout);
     };
 
+    const renderPlanButton = (plan) => {
+        const unavailable = billing === "annual" && !plan.annual;
+        const price = billing === "annual" ? plan.annual : plan.monthly;
+
+        return (
+            <button
+                type="button"
+                className={[
+                    "voucher__plan",
+                    selectedId === plan.id ? "is-selected" : "",
+                    hoveredId === plan.id ? "is-hovered" : "",
+                    unavailable ? "is-disabled" : "",
+                ].filter(Boolean).join(" ")}
+                disabled={authLoading || unavailable}
+                aria-pressed={selectedId === plan.id}
+                onClick={() => handlePlanChange(plan)}
+            >
+                {activeTab === "wavve" && plan.id === "wavve-standard" && (
+                    <span className="voucher__recommend">추천</span>
+                )}
+                <span className="voucher__plan-name">
+                    <span className="voucher__plan-dot" aria-hidden="true" />
+                    {plan.name}
+                </span>
+
+                {plan.originalPrice && (
+                    <del className="voucher__original-price">
+                        {money(plan.originalPrice)}원
+                    </del>
+                )}
+
+                <strong className="voucher__plan-price">
+                    {unavailable
+                        ? "미제공"
+                        : `${money(price)}원 / ${billing === "annual" ? "년" : "월"}`}
+                </strong>
+
+                <span className="voucher__plan-note">
+                    {unavailable
+                        ? "1개월 이용권만 제공"
+                        : currentSelection?.planId === plan.id && currentSelection.billing === billing
+                            ? "이용 중인 이용권"
+                            : selectedId === plan.id
+                            ? "선택한 이용권"
+                            : "이용권 선택"}
+                </span>
+            </button>
+        );
+    };
+
     return (
         <div className="voucher">
             <header className="voucher__header">
@@ -289,11 +339,19 @@ export const Voucher = () => {
                         </div>
                     )}
 
+                    <div className="voucher__mobile-plans" role="group" aria-label="이용권 선택">
+                        {visiblePlans.map((plan) => (
+                            <div key={plan.id}>{renderPlanButton(plan)}</div>
+                        ))}
+                    </div>
+
+                    <p className="voucher__comparison-hint">혜택 비교는 표를 옆으로 밀어 확인할 수 있어요.</p>
                     <div className="voucher__table-scroll">
                         <table
                             className="voucher__table"
                             style={{
-                                minWidth: visiblePlans.length === 5 ? 1200 : 950,
+                                "--voucher-table-width": visiblePlans.length === 5 ? "1200px" : "950px",
+                                "--voucher-plan-count": visiblePlans.length,
                             }}
                         >
                             <caption className="voucher__sr-only">
@@ -312,66 +370,19 @@ export const Voucher = () => {
                                         </p>
                                     </th>
 
-                                    {visiblePlans.map((plan) => {
-                                        const unavailable = billing === "annual" && !plan.annual;
-
-                                        const price =
-                                            billing === "annual" ? plan.annual : plan.monthly;
-
-                                        return (
-                                            <th
-                                                key={plan.id}
-                                                scope="col"
-                                                onMouseEnter={() => {
-                                                    if (!unavailable) setHoveredId(plan.id);
-                                                }}
-                                                onMouseLeave={() => setHoveredId(null)}
-                                            >
-                                                <button
-                                                    type="button"
-                                                    className={[
-                                                        "voucher__plan",
-                                                        selectedId === plan.id ? "is-selected" : "",
-                                                        hoveredId === plan.id ? "is-hovered" : "",
-                                                        unavailable ? "is-disabled" : "",
-                                                    ].filter(Boolean).join(" ")}
-                                                    disabled={unavailable}
-                                                    aria-pressed={selectedId === plan.id}
-                                                    onClick={() => handlePlanChange(plan)}
-                                                >
-                                                    {activeTab === "wavve" && plan.id === "wavve-standard" && (
-                                                        <span className="voucher__recommend">추천</span>
-                                                    )}
-                                                    <span className="voucher__plan-name">
-                                                        <span className="voucher__plan-dot" aria-hidden="true" />
-                                                        {plan.name}
-                                                    </span>
-
-                                                    {plan.originalPrice && (
-                                                        <del className="voucher__original-price">
-                                                            {money(plan.originalPrice)}원
-                                                        </del>
-                                                    )}
-
-                                                    <strong className="voucher__plan-price">
-                                                        {unavailable
-                                                            ? "미제공"
-                                                            : `${money(price)}원 / ${billing === "annual" ? "년" : "월"}`}
-                                                    </strong>
-
-                                                    <span className="voucher__plan-note">
-                                                        {unavailable
-                                                            ? "1개월 이용권만 제공"
-                                                            : currentSelection?.planId === plan.id && currentSelection.billing === billing
-                                                                ? "이용 중인 이용권"
-                                                                : selectedId === plan.id
-                                                                ? "선택한 이용권"
-                                                                : "이용권 선택"}
-                                                    </span>
-                                                </button>
-                                            </th>
-                                        );
-                                    })}
+                                    {visiblePlans.map((plan) => (
+                                        <th
+                                            key={plan.id}
+                                            scope="col"
+                                            onMouseEnter={() => {
+                                                if (billing !== "annual" || plan.annual) setHoveredId(plan.id);
+                                            }}
+                                            onMouseLeave={() => setHoveredId(null)}
+                                        >
+                                            {renderPlanButton(plan)}
+                                            <span className="voucher__comparison-name">{plan.name}</span>
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
 
