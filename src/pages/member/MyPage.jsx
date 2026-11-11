@@ -132,7 +132,7 @@ const MyPagePoster = ({ item, isShorts }) => {
 // 목록 item 형식: { id, title, image, type: "program" | "movie" | "shorts", to? }
 export const MyPage = ({
   profileName = "프로필1", avatar = profileImage, passName = "",
-  retroCount = 0, historyItems = EMPTY_ITEMS,
+  historyItems = EMPTY_ITEMS,
   favoriteItems = EMPTY_ITEMS, purchasedItems = EMPTY_ITEMS,
   downloadItems = EMPTY_ITEMS, retroPicks = RETRO_PICKS,
   onAction, onOpenContent,
@@ -141,6 +141,7 @@ export const MyPage = ({
     profile: selectedProfile, ownerId,
   } = useProfileShorts();
   const { favorites: savedFavorites } = useProfileFavorites();
+  const retroCount = savedFavorites.filter((item) => item.to.startsWith("/retrov/")).length;
   const { history: savedWatchHistory } = useProfileWatchHistory();
   const { liked: likedEditorPicks } = useEditorPicks();
   const displayedName = selectedProfile.name || profileName;
