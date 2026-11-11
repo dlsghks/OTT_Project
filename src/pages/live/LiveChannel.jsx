@@ -1,3 +1,4 @@
+import chatToggleArrow from '../../assets/icons/AltArrowDownOutline.svg';
 import { SliderArrow } from '../../components/common/SliderArrow';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -1072,7 +1073,7 @@ export const LiveChannel = ({
               aria-expanded={chatOpen}
             >
               <strong>웨이브 실시간</strong>
-              <span>{chatOpen ? '⌃' : '⌄'}</span>
+              <img className="live-chat__toggle-arrow" src={chatToggleArrow} alt="" aria-hidden="true" width="24" height="24" />
             </button>
 
             {chatOpen ? (
