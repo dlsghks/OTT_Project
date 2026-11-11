@@ -8,8 +8,8 @@
   padding: 0;
   border: 0;
   border-radius: 18.269px;
-  background: #0c0d19;
-  box-shadow: 0 0 40.192px #ffffff26;
+  background: #000;
+  box-shadow: 0 16px 60px #0008;
   color: #fff;
   font-family: "Noto Sans KR", "Pretendard", sans-serif;
   overflow-x: hidden;
@@ -25,7 +25,7 @@
   &__surface {
     position: relative;
     min-height: 250px;
-    padding: 40px 24px 18px;
+    padding: 24px 26px 26px;
     overflow: hidden;
     isolation: isolate;
   }
@@ -57,14 +57,15 @@
     &:hover { background: #ffffff0d; }
   }
 
-  h2 { margin: 0; font-size: 20px; font-weight: 700; line-height: 29px; }
+  h2 { margin: 0; font-size: 24px; font-weight: 700; line-height: 34px; }
 
   &__services {
     display: flex;
     align-items: center;
-    gap: 18.269px;
-    width: calc(100% + 24px);
-    margin-top: 20px;
+    justify-content: safe center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 40px;
     overflow-x: auto;
     scrollbar-width: none;
     &::-webkit-scrollbar { display: none; }
@@ -72,18 +73,19 @@
     > button {
       display: grid;
       place-items: center;
-      flex: 0 0 54.808px;
-      width: 54.808px;
-      height: 54.808px;
+      flex: 0 0 50px;
+      width: 50px;
+      height: 50px;
       margin: 0;
       padding: 0;
       border: 0;
       border-radius: 50%;
-      background: #252735;
+      background: #222;
       transition: background-color 150ms ease;
       scroll-margin: 8px;
-      &:last-child { margin-right: 24px; }
-      &:hover { background: #393c50; }
+      
+      &.is-active { background: #1351f9; }
+      &.is-active > img { filter: contrast(10); mix-blend-mode: screen; }
       &:focus-visible { outline-offset: -3px; }
       > img { position: static; display: block; max-width: none; }
     }
@@ -95,7 +97,7 @@
     gap: 12px;
     width: min(422px, 100%);
     height: 52px;
-    margin-top: 20px;
+    margin-top: 30px;
     padding: 8px 17px 8px 16px;
     border: 1px solid #494949;
     border-radius: 10px;
@@ -125,7 +127,8 @@
       color: #fff;
       font-size: 14px;
       font-weight: 700;
-      &:hover { background: #ffffff14; }
+      &:hover { border-color: #1351f9; }
+      &.is-copied { background: #1351f9; border-color: #1351f9; }
       &:disabled { cursor: wait; opacity: .6; }
     }
   }
@@ -135,7 +138,7 @@
     align-items: center;
     gap: 5px;
     min-height: 16px;
-    margin: 14px 0 0 4px;
+    margin: 10px 0 0;
     font-size: 13px;
     line-height: 16px;
     > img { position: static; display: block; width: 13px; height: 13px; }
@@ -143,21 +146,17 @@
 
   &__notice { margin: 0; padding: 0 28px 18px; color: #b8ccff; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
 }
-// 공유 서비스 아이콘 크기 고정
+// 전달받은 원형 아이콘의 전체 이미지를 사용합니다.
 .shorts-share .shorts-share__services > button > img {
   position: static;
   display: block;
-
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
-  max-width: 22px;
-  max-height: 22px;
-
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  max-height: 50px;
   margin: 0;
-  padding: 0;
   object-fit: contain;
-  transform: none;
 }
 
 // 닫기 아이콘
@@ -179,3 +178,8 @@
 }
 
 
+
+@media (max-width: 480px) {
+  .shorts-share__surface { padding-inline: 20px; }
+  .shorts-share__services { gap: 14px; }
+}
