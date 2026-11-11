@@ -1,3 +1,4 @@
+import { getKakaoShareClient } from '../../utils/kakaoShare';
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import closeIcon from "../../assets/shorts/share-modal/close.svg";
@@ -104,35 +105,28 @@ export function ShortsShareModal({ item, onClose }) {
     void copy("인스타그램에서 메시지나 게시물에 복사한 링크를 붙여넣어주세요.");
   };
 
+  useEffect(() => { void getKakaoShareClient().catch(() => {}); }, []);
+
   const shareKakao = async () => {
     setNotice("");
-    const kakao = window.Kakao;
-    if (kakao?.isInitialized?.() && kakao.Share?.sendDefault) {
-      try {
-        // 카카오 제품 링크에는 등록된 우리 사이트 도메인을 사용합니다.
+    try {
+      const kakao = await getKakaoShareClient();
+      if (kakao?.Share?.sendDefault) {
         await kakao.Share.sendDefault({
           objectType: "text",
           text: body,
           link: { webUrl: appUrl.toString(), mobileWebUrl: appUrl.toString() },
           buttonTitle: "쇼츠 보기",
         });
-      } catch {
-        if (aliveRef.current) setNotice("카카오 공유를 열지 못했어요. 링크를 복사해 공유해주세요.");
+        return;
       }
-      return;
-    }
-
-    if (navigator.share) {
-      try {
+      if (navigator.share) {
         await navigator.share({ title, url });
-      } catch (error) {
-        if (error?.name !== "AbortError" && aliveRef.current) {
-          setNotice("기기 공유를 열지 못했어요. 복사 버튼으로 링크를 공유해주세요.");
-        }
+        return;
       }
-      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
     }
-
     await copy("카카오톡에서 대화방을 열고 복사한 링크를 붙여넣어주세요.");
   };
 

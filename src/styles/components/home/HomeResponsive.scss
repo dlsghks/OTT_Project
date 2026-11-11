@@ -139,8 +139,7 @@
     .content-card__badge { top: 4px; left: 4px; padding: 2px 3px; border-radius: 2px; font-size: 7px; }
     .content-card__badges { inset: 4px 4px auto; gap: 2px; }
     .content-card__original { width: 18%; height: auto; }
-    .content-card__rank { top: 112cqw; left: 3cqw; width: auto; height: 47cqw; }
-    .content-card--ranked::after { height: 12cqw; }
+    .content-card__rank { top: auto; bottom: 3cqw; left: 3cqw; width: auto; height: 47cqw; }
     .content-section__arrow, .ranking-section__arrow { display: none; }
 
     // 요일 버튼

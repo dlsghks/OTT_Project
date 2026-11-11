@@ -16,8 +16,8 @@
 
     &__hero {
         position: relative;
-        width: calc(100% + 220px);
-        margin-left: -110px;
+        width: calc(100% + var(--page-side-padding, 110px) * 2);
+        margin-inline: calc(var(--page-side-padding, 110px) * -1);
 
         // Figma: X 0 / Y 15 / Blur 50 / Spread 5
         // #E310FF / 20%
@@ -155,9 +155,20 @@
             padding: 0;
             border: 0;
             border-radius: 11px;
-            background: #1351ff;
-            color: #fff;
+            background: transparent;
+            color: #999;
             font: inherit;
+            cursor: pointer;
+
+            &[aria-current="page"] {
+                background: #1351ff;
+                color: #fff;
+            }
+
+            &:focus-visible {
+                outline: 2px solid #1351ff;
+                outline-offset: 3px;
+            }
         }
     }
 

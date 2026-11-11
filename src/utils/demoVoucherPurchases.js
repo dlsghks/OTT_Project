@@ -17,6 +17,7 @@ export function saveDemoVoucherPurchase({ uid, id, planId, name, months, amount 
   localStorage.setItem(key, JSON.stringify({
     id, planId, name, months, amount, purchasedAt, expiresAt: expiresAt.getTime(),
   }));
+  window.dispatchEvent(new Event('ott:voucher-updated'));
 }
 
 export function getDemoVoucherPurchases(uid) {
