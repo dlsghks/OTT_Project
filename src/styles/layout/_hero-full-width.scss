@@ -1,9 +1,7 @@
-// 공통 전체 너비 히어로
-
+// Use the layout width so classic vertical scrollbars are excluded.
 .hero-full-width {
-  width: 100vw;
+  width: calc(100% + var(--page-side-padding, 0px) * 2);
   max-width: none;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  margin-inline: calc(var(--page-side-padding, 0px) * -1);
   box-sizing: border-box;
 }
