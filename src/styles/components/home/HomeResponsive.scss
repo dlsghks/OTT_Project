@@ -210,3 +210,17 @@
   .wavve-home .home-hero__text,
   .wavve-home .home-hero__slide::after { transition: none; }
 }
+
+@media (max-width: 1024px) {
+  .wavve-home .home-hope .home-hope__more {
+    left: 24px;
+    right: auto;
+    bottom: 24px;
+    width: 120px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    font-size: 12px;
+    line-height: 1;
+  }
+}

@@ -161,6 +161,7 @@ export const LiveHero = ({
           const thumbnail = getImagePath(
             youtubeVideo?.thumbnail || program.image || ''
           );
+          const fallback = getImagePath(program.fallbackImage || program.image || '');
 
           return (
             <SwiperSlide key={program.id}>
@@ -186,7 +187,9 @@ export const LiveHero = ({
                 style={
                   thumbnail
                     ? {
-                      backgroundImage: `url("${thumbnail}")`,
+                      backgroundImage: fallback
+                        ? `url("${thumbnail}"), url("${fallback}")`
+                        : `url("${thumbnail}")`,
                     }
                     : undefined
                 }
