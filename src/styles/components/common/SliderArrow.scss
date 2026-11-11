@@ -50,7 +50,7 @@
 
   &--next {
     right: 0;
-    &::before { right: 0; background: linear-gradient(90deg, transparent 31.696%, #000); }
+    &::before { right: 0; background: linear-gradient(90deg, transparent 31.696%, rgba(0,0,0,0.8)); }
   }
 
   &:hover { background: transparent; }
