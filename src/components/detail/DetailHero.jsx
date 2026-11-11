@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Heart, Share, ChevronDown, ChevronUp } from 'lucide-react';
 import { DetailInfo } from './DetailInfo';
 import { getInfoRows } from '../../services/tmdbDetail';
+import { ShareModal } from '../common/ShareModal';
 
 // 상세 페이지 상단 히어로 (영화 · 시리즈 공통)
 // - select: 시청하기 왼쪽 선택 박스 (영화: 자막, 시리즈: 시즌)
@@ -20,14 +21,19 @@ export const DetailHero = ({
   info = [],
   select,
   onWatch,
+  showWatch = true,
+  watchActions,
+  onDownload,
+  downloadNotice,
   actions,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   // 펼치기 직전의 히어로 높이 · 내용 시작 위치 (펼친 뒤에도 같은 자리에 고정)
   const [frame, setFrame] = useState(null);
   const heroRef = useRef(null);
   const contentRef = useRef(null);
-  const { user, isLiked, onLogin, onLike, onShare } = actions;
+  const { user, isLiked, onLogin, onLike } = actions;
   const infoRows = getInfoRows(info);
 
   const expand = () => {
@@ -66,20 +72,24 @@ export const DetailHero = ({
 
           <div className="movie-hero__actions">
             {/* 로그인 전에는 로그인 버튼만 표시 */}
-            {user ? (
-              <>
-                {select}
-                <button type="button" className="movie-hero__buy" onClick={onWatch}>시청하기</button>
-              </>
-            ) : (
-              <button
-                type="button"
-                className="movie-hero__buy movie-hero__buy--login"
-                onClick={onLogin}
-              >
-                로그인
-              </button>
-            )}
+            {watchActions ?? (showWatch && (
+              user ? (
+                <>
+                  {select}
+                  <button type="button" className="movie-hero__buy" onClick={onWatch}>
+                    시청하기
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="movie-hero__buy movie-hero__buy--login"
+                  onClick={onLogin}
+                >
+                  로그인
+                </button>
+              )
+            ))}
 
             <button
               type="button"
@@ -93,11 +103,23 @@ export const DetailHero = ({
               <span>관심</span>
             </button>
 
-            <button type="button" className="movie-hero__icon" onClick={onShare}>
+            <button type="button" className="movie-hero__icon" onClick={() => setIsShareModalOpen(true)}>
               <Share size={24} />
               <span>공유</span>
             </button>
+
+            {onDownload && (
+              <button type="button" className="movie-hero__icon" onClick={onDownload}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3.5v12m-5-5 5 5 5-5M4 15.5v4.5h16v-4.5"
+                    stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span>다운로드</span>
+              </button>
+            )}
           </div>
+
+          {downloadNotice}
 
           {/* 줄거리: 평소 2줄, 펼치면 전체 (로고 위치는 그대로, 아래로 늘어남) */}
           {overview && (
@@ -143,6 +165,10 @@ export const DetailHero = ({
           </button>
         ))}
       </section>
+
+      {isShareModalOpen && (
+        <ShareModal title={title} onClose={() => setIsShareModalOpen(false)} />
+      )}
     </>
   );
 };

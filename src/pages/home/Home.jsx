@@ -1,3 +1,5 @@
+import { individualPurchaseMovies } from '../../data/individualPurchaseMovies';
+import { ContinueWatchingSection } from '../../components/home/ContinueWatchingSection';
 import { homeCollectionLink, homeCollectionTitle } from '../../data/editorCollections';
 import { useEffect, useState } from 'react';
 
@@ -29,6 +31,7 @@ import {
 
 import '../../styles/pages/home/Home.scss';
 import '../../styles/components/home/HomeResponsive.scss';
+import '../../styles/components/home/ContinueWatchingSection.scss';
 
 // 화면에 보여줄 순서
 // 기존 섹션 사이에 새 카테고리를 섞어서 배치한다.
@@ -213,8 +216,13 @@ export const Home = () => {
         {/* 카테고리 */}
         <CategoryMenu items={categories} />
 
+        {/* 선택한 프로필의 시청 중 콘텐츠 */}
+        <ContinueWatchingSection />
+
         {/* TOP 랭킹 */}
         <RankingSection items={rankingItems} />
+
+        <ContentSection title="개별구매 영화" items={individualPurchaseMovies} appResponsive />
 
         {/* 기존 섹션 + 영화·드라마 + 추가 15개 섹션 */}
         {homeSectionOrder.map(renderHomeSection)}

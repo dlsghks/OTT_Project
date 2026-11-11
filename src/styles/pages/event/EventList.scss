@@ -8,8 +8,7 @@
         content: '';
         position: absolute;
         inset: 0;
-        left: calc(50% - 50vw);
-        width: 100vw;
+        inset-inline: calc(var(--page-side-padding) * -1);
         z-index: -1;
         background: #000;
         pointer-events: none;
@@ -240,16 +239,17 @@
         }
     }
 }
+
 // 목록 페이지와 상세 페이지가 .event-page를 공유하므로 목록의 폭을 명시적으로 복구
-main.site-inner > .event-page {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0;
+main.site-inner>.event-page {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
 }
 
 // 공통 site-inner 패딩과 무관하게 이벤트 배너는 뷰포트 끝까지 확장
-main.site-inner > .event-page .event-page__hero {
-  width: calc(100% + var(--page-side-padding, 0px) * 2);
-  margin-left: calc(var(--page-side-padding, 0px) * -1);
+main.site-inner>.event-page .event-page__hero {
+    width: calc(100% + var(--page-side-padding, 0px) * 2);
+    margin-left: calc(var(--page-side-padding, 0px) * -1);
 }

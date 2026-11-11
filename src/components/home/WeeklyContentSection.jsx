@@ -16,23 +16,25 @@ export const WeeklyContentSection = ({ itemsByDay = weeklyContentByDay, appRespo
       <div className="content-section__header">
         <div className="content-section__title">
           <SectionTitle id="weekly-content-title">요일별 콘텐츠</SectionTitle>
-          <Link to={`/collection/home--weekly?day=${selectedDay}`}>더보기</Link>
         </div>
       </div>
-      <div className="weekly-content__days" role="group" aria-label="콘텐츠 업데이트 요일">
-        {weekdays.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            className="weekly-content__day"
-            aria-label={`${label}요일`}
-            aria-pressed={selectedDay === id}
-            aria-controls="weekly-content-list"
-            onClick={() => setSelectedDay(id)}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="content-section__title weekly-content__controls">
+        <div className="weekly-content__days" role="group" aria-label="콘텐츠 업데이트 요일">
+          {weekdays.map(({ id, label }) => (
+            <button
+              key={id}
+              type="button"
+              className="weekly-content__day"
+              aria-label={`${label}요일`}
+              aria-pressed={selectedDay === id}
+              aria-controls="weekly-content-list"
+              onClick={() => setSelectedDay(id)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <Link to={`/collection/home--weekly?day=${selectedDay}`}>더보기</Link>
       </div>
       <div id="weekly-content-list" className="weekly-content__list">
         {items.length ? (

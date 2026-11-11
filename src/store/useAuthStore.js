@@ -1,10 +1,16 @@
 import { create } from "zustand";
 import {
   browserLocalPersistence, onAuthStateChanged, setPersistence,
-  signInWithEmailAndPassword, signOut,
+  signInWithEmailAndPassword, signOut, OAuthProvider, signInWithPopup, getAdditionalUserInfo,
 } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth, googleProvider } from "../firebase/firebase";
 import { watchAccount } from "./useAccountStore";
+
+const socialProviders = new Map([
+  ["google", googleProvider],
+  ["kakao", new OAuthProvider("oidc.kakao")],
+  ["apple", new OAuthProvider("apple.com")],
+]);
 
 export const useAuthStore = create(() => ({
   user: null,
@@ -16,6 +22,16 @@ export const useAuthStore = create(() => ({
     // 상태 변경·계정 기록 구독은아래의 인증 관찰자 한 곳에서 처리합니다.
     return result.user;
   },
+
+  onSocialLogin: async (key) => {
+    const provider = socialProviders.get(key);
+    if (!provider) throw new Error("지원하지 않는 로그인 방식입니다.");
+
+    await setPersistence(auth, browserLocalPersistence);
+    const result = await signInWithPopup(auth, provider);
+    return { user: result.user, isNewUser: getAdditionalUserInfo(result)?.isNewUser === true };
+  },
+
   onLogout: async () => {
     await signOut(auth);
   },

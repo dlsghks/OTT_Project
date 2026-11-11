@@ -118,6 +118,8 @@
     }
 
     &__info {
+      flex-wrap: wrap;
+      gap: 6px 16px;
       width: 100%;
       padding-left: 56px;
     }

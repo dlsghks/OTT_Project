@@ -98,6 +98,177 @@
   }
 }
 
+// 모바일 공통 이벤트 배너 (390 x 80 비율, 화면 폭에 꽉 차게)
+.rv-event-mobile {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+
+  &__link {
+    display: block;
+    width: 100%;
+    aspect-ratio: 390 / 80;
+    color: inherit;
+    text-decoration: none;
+    -webkit-user-drag: none;
+  }
+}
+
+// 배너 한 장: 390 x 80 시안의 px 값을 화면 폭에 비례하도록 변환
+@function ev($px) {
+  @return $px * 0.25641vw;
+}
+
+@mixin ev-art($left, $top, $width) {
+  left: ev($left);
+  top: ev($top);
+  width: ev($width);
+}
+
+.rv-event-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: #272727;
+  font-family: "Noto Sans KR", sans-serif;
+
+  &__art {
+    position: absolute;
+    height: auto;
+    max-width: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  &__copy {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: ev(23);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: ev(5);
+    white-space: nowrap;
+
+    h2 {
+      margin: 0;
+      color: inherit;
+      font-size: ev(14);
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    em {
+      font-style: normal;
+    }
+
+    p {
+      margin: 0;
+      color: #777;
+      font-size: ev(8);
+      line-height: 1.25;
+    }
+
+    span {
+      display: block;
+    }
+  }
+
+  &--favorite-scene {
+    background: linear-gradient(90deg, #ffe3ed 0%, #fde5ef 100%);
+
+    em {
+      color: #dc127f;
+    }
+  }
+
+  &--favorite-scene &__art {
+    &--quote-small {
+      @include ev-art(230, -12, 65);
+    }
+
+    &--quote-large {
+      @include ev-art(248, 10, 109);
+    }
+
+    &--heart {
+      @include ev-art(352, 20, 17);
+      opacity: 0.45;
+    }
+
+    &--heart-soft {
+      @include ev-art(330, 40, 20);
+      filter: blur(ev(3));
+      opacity: 0.2;
+    }
+
+    &--heart-blur {
+      @include ev-art(300, -8, 28);
+      filter: blur(ev(4));
+      opacity: 0.25;
+    }
+  }
+
+  &--next-line {
+    background: linear-gradient(90deg, #2c0766 0%, #62069c 55%, #33076c 100%);
+    color: #fff;
+
+    p {
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  &--next-line &__art {
+    &--tv {
+      @include ev-art(241, 3, 123);
+    }
+
+    &--heart {
+      @include ev-art(238, 3, 17);
+    }
+
+    &--heart-blur {
+      @include ev-art(172, 22, 18);
+      filter: blur(ev(1.5));
+      opacity: 0.6;
+    }
+  }
+
+  &--what-next {
+    background: #e9e9e9;
+
+    em {
+      display: block;
+      color: #ff4a17;
+    }
+  }
+
+  &--what-next &__art {
+    &--play {
+      @include ev-art(249, -17, 109);
+    }
+
+    &--heart-blur {
+      @include ev-art(220, 13, 12);
+      filter: blur(ev(1));
+      opacity: 0.35;
+    }
+
+    &--heart {
+      @include ev-art(189, 35, 12);
+      opacity: 0.4;
+    }
+
+    &--heart-soft {
+      @include ev-art(207, 63, 20);
+      filter: blur(ev(1.5));
+      opacity: 0.3;
+    }
+  }
+}
+
 @media (max-width: 640px) {
   .rv-event {
     &__slide {

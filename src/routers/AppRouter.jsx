@@ -24,6 +24,7 @@ import { DramaDetail } from "../pages/contents/DramaDetail";
 import { CurrentaffairsDetail } from "../pages/contents/CurrentaffairsDetail";
 import { AnimationDetail } from "../pages/contents/AnimationDetail";
 import { GlobalDetail } from "../pages/contents/GlobalDetail";
+import { HomeContentDetail } from '../pages/homeContent/HomeContentDetail';
 
 // 라이브
 import { Live } from "../pages/live/Live";
@@ -33,6 +34,7 @@ import { Schedule } from "../pages/live/Schedule";
 // 레트로브
 import { RetroV } from "../pages/retrov/RetroV";
 import { RetrovDetail } from "../pages/retrov/RetrovDetail";
+import { RetrovShorts } from "../pages/retrov/RetrovShorts";
 
 // 이벤트
 import { Event } from "../pages/event/Event";
@@ -69,6 +71,8 @@ import { MyPage } from "../pages/member/MyPage";
 import { Settings } from "../pages/member/Settings";
 import InquiryDetail from "../pages/support/InquiryDetail";
 import Voucher from "../pages/member/Voucher";
+import Coin from "../pages/member/Coin";
+import Coupon from "../pages/member/Coupon";
 
 export const AppRouter = () => {
   return (
@@ -76,6 +80,7 @@ export const AppRouter = () => {
       {/* 공통 레이아웃 미사용 */}
       <Route path="/profileselect" element={<ProfileSelect />} />
       <Route path="/profileedit" element={<ProfileEdit />} />
+      <Route path="/profileadd" element={<ProfileEdit adding />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/inquiry/write" element={<InquiryWrite />} />
 
@@ -122,6 +127,10 @@ export const AppRouter = () => {
           path="/globaldetail/:programId"
           element={<GlobalDetail />}
         />
+        <Route
+          path="/home-content/:sectionId/:contentId"
+          element={<HomeContentDetail />}
+        />
 
         {/* 라이브 */}
         <Route path="/live" element={<Live />} />
@@ -131,6 +140,17 @@ export const AppRouter = () => {
         {/* 레트로브 */}
         <Route path="/retrov" element={<RetroV />} />
         <Route path="/retrov/:programId" element={<RetrovDetail />} />
+        <Route path="/retrov" element={<RetroV />} />
+
+        <Route
+          path="/retrov/shorts"
+          element={<RetrovShorts />}
+        />
+
+        <Route
+          path="/retrov/:programId"
+          element={<RetrovDetail />}
+        />
 
         {/* 이벤트 */}
         <Route path="/event" element={<Event />} />
@@ -163,6 +183,8 @@ export const AppRouter = () => {
 
         {/* 이용원 구매 */}
         <Route path="/voucher" element={<Voucher />} />
+        <Route path="/coin" element={<Coin />} />
+        <Route path="/coupon" element={<Coupon />} />
 
         {/* 회원 */}
         <Route path="/login" element={<Login />} />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { formatDate, pickYoutubeVideo } from '../services/tmdbDetail';
 import { searchYoutube } from '../services/youtubeSearch';
 import { buildTrailerQuery } from '../data/episodeYoutube';
@@ -9,16 +9,20 @@ import { buildTrailerQuery } from '../data/episodeYoutube';
 // - openSearch: 영상을 찾는 동안 팝업을 먼저 열고(찾는 중) 찾으면 재생 (회차 영상)
 export const useVideoPlayer = () => {
   const [video, setVideo] = useState(null);
+  const requestRef = useRef(0);
 
-  const closeVideo = () => setVideo(null);
-  const openVideo = (nextVideo) => setVideo(nextVideo);
+  const closeVideo = () => { requestRef.current++; setVideo(null); };
+  const openVideo = (nextVideo) => { requestRef.current++; setVideo(nextVideo); };
 
   // findVideoId: videoId 를 찾아 돌려주는 함수 (못 찾으면 null)
   const openSearch = async (info, findVideoId) => {
-    const requestId = `${info.title}-${Date.now()}`;
+    const requestId = ++requestRef.current;
     setVideo({ ...info, requestId, status: 'loading' });
 
-    const videoId = await findVideoId();
+    let videoId;
+    try { videoId = await findVideoId(); }
+    catch { videoId = null; }
+    if (requestId !== requestRef.current) return;
 
     // 찾는 사이 다른 영상을 눌렀거나 팝업을 닫았으면 무시
     setVideo((current) => current?.requestId === requestId

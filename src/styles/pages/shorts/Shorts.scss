@@ -412,3 +412,126 @@
     }
   }
 }
+@media (max-width: 1024px) {
+  .shorts-screen .shorts-page {
+    &__slide {
+      padding: 0;
+    }
+
+    &__viewer {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+    }
+  }
+
+  .shorts-screen .shorts-player-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .shorts-screen .shorts-player {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    border-radius: 0;
+    background: #000;
+
+    &__youtube-host {
+      inset: 0;
+      height: 100%;
+    }
+
+    &__tap {
+      inset: 0;
+    }
+  }
+}
+// PC · 작은 노트북
+@media (min-width: 1025px) {
+  .shorts-page {
+    --shorts-header-height: 100px;
+    --shorts-action-size: clamp(28px, 2.3vw, 40px);
+    --shorts-action-gap: clamp(20px, 2vw, 36px);
+    --shorts-poster-size: clamp(48px, 4vw, 72px);
+
+    height: calc(100dvh - 100px);
+
+    &__slide {
+      align-items: center;
+      padding: 24px 130px;
+    }
+
+    &__viewer {
+      align-self: center;
+      width: min(
+        620px,
+        calc((100dvh - 148px) * 474.84 / 828),
+        100%
+      );
+      height: auto;
+    }
+
+    &__actions {
+      bottom: 16px;
+      gap: clamp(14px, 2vh, 24px);
+    }
+
+    &__action-icon > picture > img {
+      width: 100%;
+      height: 100%;
+    }
+
+    &__program-image {
+      transform: none;
+    }
+
+    &__navigation {
+      top: calc(50dvh + 50px);
+      right: clamp(16px, 2vw, 40px);
+
+      button {
+        width: clamp(40px, 3vw, 52px);
+        height: clamp(40px, 3vw, 52px);
+        font-size: 26px;
+      }
+    }
+  }
+}
+@media (max-width: 1024px) {
+  .shorts-screen .shorts-page {
+    &__actions {
+      width: 44px;
+      gap: 12px;
+    }
+
+    &__action {
+      min-height: 0;
+      gap: 4px;
+    }
+
+    &__action-icon {
+      width: 28px;
+      height: 28px;
+
+      > picture > img,
+      > img {
+        width: 28px;
+        height: 28px;
+        max-width: 28px;
+        max-height: 28px;
+        object-fit: contain;
+      }
+    }
+
+    &__program-image {
+      width: 44px;
+      min-width: 44px;
+      max-width: 44px;
+      height: 44px;
+      flex-basis: 44px;
+      margin-top: 0;
+      transform: none;
+    }
+  }
+}

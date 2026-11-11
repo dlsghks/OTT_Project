@@ -1,4 +1,6 @@
-import { useRef, useState } from 'react';
+import { CategoryLogo } from './CategoryLogo';
+import '../../styles/components/home/CategoryButtonStates.scss';
+import { useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -13,7 +15,6 @@ const getCategoryImage = (image = '') => {
 };
 
 export const CategoryMenu = ({ items = [] }) => {
-  const swiperRef = useRef(null);
   const appDragRef = useRef(null);
   const appDraggedRef = useRef(false);
 
@@ -48,14 +49,6 @@ export const CategoryMenu = ({ items = [] }) => {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
   };
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(false);
-
-  const updateNavigation = (swiper) => {
-    if (!swiper) return;
-    setCanPrev(!swiper.isBeginning && !swiper.isLocked);
-    setCanNext(!swiper.isEnd && !swiper.isLocked);
-  };
 
   return (
     <nav className="home-categories" aria-label="콘텐츠 카테고리">
@@ -80,11 +73,11 @@ export const CategoryMenu = ({ items = [] }) => {
             <div className="home-categories__app-row" key={rowIndex}>
               {row.map((item, index) => item.path ? (
                 <NavLink key={`${item.label}-${index}`} to={item.path} end={item.path === '/'} className="home-categories__card" aria-label={item.label} draggable={false}>
-                  <img src={item.image} alt={item.label} draggable={false} />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </NavLink>
               ) : (
                 <div key={`${item.label}-${index}`} className="home-categories__card home-categories__card--static" title={item.label}>
-                  <img src={item.image} alt={item.label} draggable={false} />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </div>
               ))}
             </div>
@@ -94,10 +87,6 @@ export const CategoryMenu = ({ items = [] }) => {
       <div className="home-categories__slider">
         <Swiper
           className="home-categories__swiper"
-          onSwiper={(swiper) => { swiperRef.current = swiper; updateNavigation(swiper); }}
-          onSlideChange={updateNavigation}
-          onResize={updateNavigation}
-          onBreakpoint={updateNavigation}
           slidesPerView="auto"
           slidesPerGroup={5}
           spaceBetween={10}
@@ -119,34 +108,16 @@ export const CategoryMenu = ({ items = [] }) => {
                   aria-label={item.label}
                   draggable={false}
                 >
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    draggable={false}
-                  />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </NavLink>
               ) : (
                 <div className="home-categories__card home-categories__card--static" title={item.label}>
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    draggable={false}
-                  />
+                  <CategoryLogo src={item.image} alt={item.label} />
                 </div>
               )}
             </SwiperSlide>
           ))}
         </Swiper>
-        {canPrev && (
-          <button type="button" className="home-categories__arrow home-categories__arrow--prev" aria-label="카테고리 이전" onClick={() => swiperRef.current?.slidePrev()}>
-            <span>‹</span>
-          </button>
-        )}
-        {canNext && (
-          <button type="button" className="home-categories__arrow home-categories__arrow--next" aria-label="카테고리 다음" onClick={() => swiperRef.current?.slideNext()}>
-            <span>›</span>
-          </button>
-        )}
       </div>
     </nav>
   );

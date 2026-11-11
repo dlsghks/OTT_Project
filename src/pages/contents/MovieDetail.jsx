@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
+import { auth } from '../../firebase/firebase';
+import { getIndividualPurchaseMovie } from '../../data/individualPurchaseMovies';
+import { saveDemoMovieDownload, saveDemoMoviePurchase, useDemoMoviePurchases } from '../../utils/demoMoviePurchases';
+import { MoviePurchaseDialog } from '../../components/detail/MoviePurchaseDialog';
 import { categoryPages } from '../../data/categoryData';
 import { useMovieStore } from '../../store/useMovieStore';
 import {
@@ -38,6 +42,8 @@ const MovieDetailBody = ({ movieId }) => {
   const tmdbId = localMovie ? movieIds[localMovie.title] : Number(movieId) || null;
 
   const [searchFailed, setSearchFailed] = useState(false);
+  const [purchaseAccount, setPurchaseAccount] = useState(null);
+  const [downloadResult, setDownloadResult] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -52,15 +58,33 @@ const MovieDetailBody = ({ movieId }) => {
     }
   }, [localMovie, tmdbId, onFindMovieId, onFetchMovieDetail]);
 
-  const movie = tmdbId ? movieDetail[tmdbId] : null;
+  const offer = getIndividualPurchaseMovie(tmdbId);
+  const movieData = tmdbId ? movieDetail[tmdbId] : null;
+  const movie = movieData === false && offer ? offer : movieData;
+  const image = movie?.poster_path ? `${TMDB_IMG}w500${movie.poster_path}` : localMovie?.poster || localMovie?.image || '';
   const actions = useDetailActions(movie ? {
     id: `movie:${tmdbId}`,
     type: 'movie',
     title: localMovie?.title ?? movie.title,
-    image: movie.poster_path ? `${TMDB_IMG}w500${movie.poster_path}` : localMovie?.poster || localMovie?.image || '',
+    image,
   } : null);
+  const uid = actions.user?.uid;
+  const purchases = useDemoMoviePurchases(uid);
+  const purchasedMovie = purchases.find((record) => record.id === offer?.id);
+  const needsPurchase = offer && !purchasedMovie;
   const sections = tmdbId ? movieSections[tmdbId] ?? [] : [];
   const notFound = searchFailed || (!localMovie && !tmdbId) || movie === false;
+
+  const downloadMovie = () => {
+    if (!purchasedMovie || !uid || auth.currentUser?.uid !== uid) return;
+
+    try {
+      saveDemoMovieDownload(uid, offer.tmdbId);
+      setDownloadResult({ uid, success: true });
+    } catch {
+      setDownloadResult({ uid, success: false });
+    }
+  };
 
   if (notFound) {
     return <DetailMessage message="영화 정보를 찾을 수 없습니다." backLink="/movie" backLabel="영화 페이지로 돌아가기" />;
@@ -96,11 +120,39 @@ const MovieDetailBody = ({ movieId }) => {
               <option value="none">자막 없음</option>
             </select>
           )}
+          watchActions={needsPurchase ? (
+            <button
+              type="button"
+              className="movie-hero__buy"
+              onClick={uid ? () => setPurchaseAccount(uid) : actions.onLogin}
+            >
+              구매하기
+            </button>
+          ) : undefined}
           onWatch={() => player.openTrailer({ title, videos: movie.videos?.results })}
           actions={actions}
+          onDownload={purchasedMovie ? downloadMovie : undefined}
+          downloadNotice={downloadResult && downloadResult.uid === uid && (
+            <p role="status" className="movie-hero__download-status">
+              {downloadResult.success ? (
+                <>내 웨이브에 저장했어요. <Link to="/mypage?tab=downloads">다운로드 콘텐츠 보기</Link></>
+              ) : '내 웨이브에 저장하지 못했어요. 다시 시도해주세요.'}
+            </p>
+          )}
         />
       )}
     >
+      {offer && uid && purchaseAccount === uid && (
+        <MoviePurchaseDialog
+          movie={offer}
+          onClose={() => setPurchaseAccount(null)}
+          onPurchase={() => {
+            if (auth.currentUser?.uid !== uid) throw new Error('계정이 변경됐어요.');
+            saveDemoMoviePurchase(uid, offer.tmdbId, image);
+          }}
+        />
+      )}
+
       {/* 관련영상 */}
       <DetailVideos title={title} videos={videos} onSelect={player.openVideo} />
 

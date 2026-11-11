@@ -1,6 +1,8 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import RetroMobileEventSwiper from './RetroMobileEventSwiper';
+import { useMobileLayout } from '../../hooks/useMobileLayout';
 import { getImagePath } from '../../utils/imagePath';
 
 import 'swiper/css';
@@ -8,6 +10,7 @@ import '../../styles/components/retrov/RetroEventCarousel.scss';
 
 export default function RetroEventCarousel({ banners = [] }) {
   const swiperRef = useRef(null);
+  const isMobile = useMobileLayout();
   const canSlide = banners.length > 1;
   // loop + centeredSlides 는 슬라이드가 적으면(3개) 한쪽 옆 배너를 못 채워 끊겨 보임 → 6개 이상이 되도록 복제
   const slides = canSlide
@@ -15,6 +18,7 @@ export default function RetroEventCarousel({ banners = [] }) {
     : banners;
 
   if (!banners.length) return null;
+  if (isMobile) return <RetroMobileEventSwiper banners={banners} />;
 
   return (
     <section className="rv-event" aria-label="추천 이벤트">
