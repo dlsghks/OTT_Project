@@ -94,7 +94,7 @@
     width: 100%;
     box-sizing: border-box;
 
-    padding: 0 110px 18px;
+    padding: 0 var(--page-side-padding) 18px; // 아래 콘텐츠 · 레트로브 메인과 같은 좌우 여백
   }
 
   &__logo {
@@ -285,7 +285,11 @@
       content: "";
       position: absolute;
       z-index: 0;
-      background: var(--hero-bg) center top / cover no-repeat;
+      // 배경 이미지가 2장(히어로 · TMDB)이어도 모든 장에 같은 위치 · 크기 · 반복 적용
+      background-image: var(--hero-bg);
+      background-position: center top;
+      background-size: cover;
+      background-repeat: no-repeat;
     }
   }
 }
@@ -431,6 +435,7 @@
 
   .retro-video-row__list {
     gap: $retrov-gap-20;
+    margin-right: 0; // 메인처럼 슬라이더 경계에서 카드가 잘리도록
   }
 
   .retro-video-row__item {
@@ -454,6 +459,11 @@
   .retro-video-card__date {
     display: block; // 인라인이면 줄 높이만큼 간격이 더 벌어짐
     line-height: 1.2;
+  }
+
+  // 유튜브 hqdefault(4:3)는 16:9 영상 위아래에 검은 띠가 포함됨 → 4/3배 확대해 띠를 잘라 TMDB 썸네일처럼 화면을 꽉 채움
+  .retro-tv__screen img[src*="i.ytimg.com/vi/"][src$="/hqdefault.jpg"] {
+    transform: scale(1.3334);
   }
 }
 
@@ -542,10 +552,10 @@
   box-sizing: border-box;
 }
 
-// 상세페이지 내부 콘텐츠는 기존 여백 유지
+// 상세페이지 내부 콘텐츠: 레트로브 메인 영상 카드 줄과 같은 좌우 여백
 .rv-detail .rv-container {
-  padding-left: 110px;
-  padding-right: 110px;
+  padding-left: var(--page-side-padding);
+  padding-right: var(--page-side-padding);
 }
 
 @media (max-width: 768px) {
@@ -616,7 +626,10 @@
 
       &::after {
         height: var(--m-hero-h);
-        background: var(--hero-bg) center top / auto var(--m-hero-h) no-repeat;
+        background-image: var(--hero-bg);
+        background-position: center top;
+        background-size: auto var(--m-hero-h);
+        background-repeat: no-repeat;
       }
     }
 
