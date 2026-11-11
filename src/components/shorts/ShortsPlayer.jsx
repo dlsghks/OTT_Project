@@ -296,20 +296,6 @@ export const ShortsPlayer = ({ item, autoPlay = true, onPlaybackChange, onNaviga
           onPointerCancel={() => { swipeRef.current = null; }}
           onClick={() => { if (!swipedRef.current) togglePlay(); swipedRef.current = false; }}
         />
-        <footer className="shorts-player__info">
-          <h2 title={item.title}>{item.title}</h2>
-          <button className="shorts-player__play" type="button" onClick={togglePlay} disabled={!media.ready || failed}
-            aria-label={media.playing ? "일시정지" : "재생"}>
-            <span aria-hidden="true">{media.playing ? "Ⅱ" : "▶"}</span><span>{item.episode}</span>
-          </button>
-          <label className="shorts-player__progress">
-            <span className="shorts-page__sr-only">재생 위치</span>
-            <input type="range" min="0" max={media.duration || 1} step="0.1" value={Math.min(media.time, media.duration || 0)}
-              disabled={!media.ready || !media.duration || failed} onChange={seek}
-              aria-valuetext={`${formatTime(media.time)} / ${formatTime(media.duration)}`}
-              style={{ "--shorts-progress": `${progress}%` }} />
-          </label>
-        </footer>
       </article>
       {(optionsOpen || message) && <div className="shorts-player__youtube-feedback">
         {optionsOpen && <div className="shorts-player__youtube-options" aria-label="영상 옵션">

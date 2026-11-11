@@ -6,7 +6,7 @@ import successIcon from "../../assets/member-info/success.svg";
 import "../../styles/common/WavveAccountModal.scss";
 
 // 회원정보·쿠폰 등의 폼/완료 화면이 공유하는 모달 틀입니다.
-export function WavveAccountModal({ title, busy = false, success = false, successMessage, onClose, children }) {
+export function WavveAccountModal({ title, busy = false, success = false, successMessage, successLabel = "확인", lockScroll = true, onClose, children }) {
   const dialogRef = useRef(null);
   const confirmRef = useRef(null);
   const titleId = useId();
@@ -16,10 +16,11 @@ export function WavveAccountModal({ title, busy = false, success = false, succes
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog.open) dialog.showModal();
+    if (!lockScroll) return;
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = overflow; };
-  }, []);
+  }, [lockScroll]);
 
   useEffect(() => {
     if (success) {
@@ -46,7 +47,7 @@ export function WavveAccountModal({ title, busy = false, success = false, succes
             <div className="wam-mark"><span><img src={successIcon} alt="" /></span></div>
             <p>{successMessage}</p>
           </div>
-          <button ref={confirmRef} type="button" className="wam-button wam-button--primary wam-confirm" onClick={close}>확인</button>
+          <button ref={confirmRef} type="button" className="wam-button wam-button--primary wam-confirm" onClick={close}>{successLabel}</button>
         </div>
       ) : children(close)}
     </dialog>, document.body

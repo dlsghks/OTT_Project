@@ -7,6 +7,7 @@ export const normalizeContentFavorites = value => {
       || typeof item.to !== 'string' || !item.to.startsWith('/') || item.to.startsWith('//')) return [];
     seen.add(item.id);
     return [{ id: item.id, title: item.title.trim(), type: item.type, to: item.to,
+      savedAt: Number.isFinite(item.savedAt) && item.savedAt > 0 ? item.savedAt : 0,
       image: typeof item.image === 'string' ? item.image : '' }];
   }).slice(0, 200);
 };
@@ -15,5 +16,5 @@ export const toggleContentFavorite = (value, item) => {
   const [record] = normalizeContentFavorites([item]);
   if (!record) throw new Error('작품 정보를 확인해주세요.');
   return before.some(item => item.id === record.id)
-    ? before.filter(item => item.id !== record.id) : [record, ...before].slice(0, 200);
+    ? before.filter(item => item.id !== record.id) : [{ ...record, savedAt: Date.now() }, ...before].slice(0, 200);
 };

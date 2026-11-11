@@ -14,6 +14,7 @@ export const useDetailActions = (item) => {
   const { favorites, profileId, ownerId } = useProfileFavorites();
 
   const [loginOpen, setLoginOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const [likeBusy, setLikeBusy] = useState(false);
   const [likeError, setLikeError] = useState('');
 
@@ -58,18 +59,13 @@ export const useDetailActions = (item) => {
     }
   };
 
-  const onShare = () => {
-    if (!user) {
-      setLoginOpen(true);
-      return;
-    }
-
-    navigator.clipboard
-      ?.writeText(window.location.href)
-      .catch(() => {});
+  const onShare = async (title) => {
+    const onShare = () => setShareOpen(true);
+    const onCloseShare = () => setShareOpen(false);
   };
 
   return {
+    historyItem: item ? { ...item, image: getImagePath(item.image), to: pathname } : null,
     user,
     isLiked,
     likeBusy,

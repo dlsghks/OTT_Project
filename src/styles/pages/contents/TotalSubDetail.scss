@@ -247,6 +247,16 @@ $text-sub: figma.$neutral-2;
     }
   }
 
+  &__download-status {
+    margin: 8px 0;
+    font-size: 13px;
+
+    a {
+      color: #9bb8ff;
+      text-decoration: underline;
+    }
+  }
+
   &__overview {
     display: -webkit-box;
     max-width: 820px;

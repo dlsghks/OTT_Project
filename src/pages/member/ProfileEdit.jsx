@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAccountStore, updateProfile, changeProfileLock } from "../../store/useAccountStore";
+import { useAccountStore, updateProfile, addProfile, changeProfileLock, MAX_PROFILES } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
 import logo from "../../assets/wavve_logo_w.svg";
 import "../../styles/pages/member/ProfileEdit.scss";
@@ -10,26 +10,36 @@ const profileImages = [1, 2, 3, 4].map(
     `${import.meta.env.BASE_URL}images/profiles/profile${number}.png`
 );
 
-export const ProfileEdit = () => {
+export const ProfileEdit = ({ adding = false }) => {
   const user = useAuthStore((state) => state.user);
   const profile = useAccountStore((state) => state.profiles.find(
     (p) => p.id === state.selectedProfileId
   ));
+  const hasRoom = useAccountStore((state) => state.profiles.length < MAX_PROFILES);
   if (!user) return <p role="status">로그인 후 프로필을 수정해주세요. <Link to="/login">로그인</Link></p>;
-  return <ProfileEditForm key={`${user.uid}:${profile.id}`} profile={profile} ownerId={user.uid} />;
+  if (adding && !hasRoom) {
+    return <p role="status">프로필은 최대 {MAX_PROFILES}개까지 추가할 수 있어요. <Link to="/profileselect">프로필 선택</Link></p>;
+  }
+  return (
+    <ProfileEditForm
+      key={`${user.uid}:${adding ? "new" : profile.id}`}
+      profile={adding ? null : profile}
+      ownerId={user.uid}
+    />
+  );
 };
 
 const ProfileEditForm = ({ profile, ownerId }) => {
   const navigate = useNavigate();
-  const [savedProfile, setSavedProfile] = useState(profile);
+  const adding = !profile;
   const [busy, setBusy] = useState(false);
   const busyRef = useRef(false);
-  const [name, setName] = useState(savedProfile.name);
-  const [image, setImage] = useState(savedProfile.image);
+  const [name, setName] = useState(profile?.name ?? "");
+  const [image, setImage] = useState(profile?.image ?? profileImages[0]);
   const [imagePickerOpen, setImagePickerOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-  const locked = profile.locked;
+  const locked = profile?.locked;
 
   // null: 닫힘 / setup: PIN 설정 / disable: 잠금 해제
   const [lockMode, setLockMode] = useState(null);
@@ -56,23 +66,20 @@ const ProfileEditForm = ({ profile, ownerId }) => {
   const [pinError, setPinError] = useState("");
 
   const trimmedName = name.trim();
-  const changed =
-    trimmedName !== savedProfile.name || image !== savedProfile.image;
-
-  const canSave = trimmedName.length > 0 && changed && !busy;
+  const canSave = trimmedName.length > 0 && !busy;
 
   const saveProfile = async (event) => {
     event.preventDefault();
     if (!canSave || busyRef.current) return;
     busyRef.current = true;
     setBusy(true);
-    const updatedProfile = { ...savedProfile, name: trimmedName, image };
     try {
-      await updateProfile(savedProfile.id, trimmedName, image, ownerId);
-      setSavedProfile(updatedProfile);
-      setName(trimmedName);
-      setImagePickerOpen(false);
-      setMessage("프로필을 저장했어요.");
+      if (adding) await addProfile(trimmedName, image, ownerId);
+      else await updateProfile(profile.id, trimmedName, image, ownerId);
+
+      if (useAuthStore.getState().user?.uid === ownerId) {
+        navigate("/mypage", { replace: true, state: { profileSaved: true } });
+      }
     } catch (error) {
       setMessage(error.message || "저장하지 못했어요. 다시 시도해주세요.");
     } finally {
@@ -112,7 +119,7 @@ const ProfileEditForm = ({ profile, ownerId }) => {
     busyRef.current = true;
     setBusy(true);
     try {
-      await changeProfileLock(savedProfile.id, pin, lockMode, ownerId);
+      await changeProfileLock(profile.id, pin, lockMode, ownerId);
       setMessage(lockMode === "setup" ? "프로필 잠금을 설정했어요." : "프로필 잠금을 해제했어요.");
       setLockMode(null);
       setPin("");
@@ -136,7 +143,7 @@ const ProfileEditForm = ({ profile, ownerId }) => {
         className="profile-edit__content"
         aria-labelledby="profile-edit-title"
       >
-        <h1 id="profile-edit-title">프로필 설정</h1>
+        <h1 id="profile-edit-title">{adding ? "프로필 추가" : "프로필 설정"}</h1>
 
         <form onSubmit={saveProfile} aria-busy={busy}>
           <img className="profile-edit__avatar" src={image} alt="프로필" />
@@ -186,28 +193,36 @@ const ProfileEditForm = ({ profile, ownerId }) => {
                 setMessage("");
               }}
             />
-
-            <button type="submit" disabled={!canSave}>
-              저장
-            </button>
           </div>
 
-          <div className="profile-edit__lock">
-            <span>프로필 잠금</span>
+          {!adding && (
+            <div className="profile-edit__lock">
+              <span>프로필 잠금</span>
 
-            <button
-              type="button"
-              role="switch"
-              aria-checked={locked}
-              aria-label="프로필 잠금"
-              aria-expanded={lockMode !== null}
-              aria-controls="profile-lock-form"
-              disabled={busy}
-              onClick={openLockForm}
-            >
-              <span />
-            </button>
-          </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={locked}
+                aria-label="프로필 잠금"
+                aria-expanded={lockMode !== null}
+                aria-controls="profile-lock-form"
+                disabled={busy}
+                onClick={openLockForm}
+              >
+                <span />
+              </button>
+            </div>
+          )}
+
+          {message && (
+            <p className="profile-edit__message" role="status">
+              {message}
+            </p>
+          )}
+
+          <button className="profile-edit__save" type="submit" disabled={!canSave}>
+            {busy ? "저장 중…" : "저장하기"}
+          </button>
         </form>
 
         {/* 이름 저장 폼과 분리한 PIN 설정 폼 */}
@@ -301,20 +316,6 @@ const ProfileEditForm = ({ profile, ownerId }) => {
           </dialog>
         )}
 
-        {message && (
-          <p className="profile-edit__message" role="status">
-            {message}
-          </p>
-        )}
-
-        <button
-          className="profile-edit__exit"
-          type="button"
-          disabled={busy}
-          onClick={() => navigate("/mypage")}
-        >
-          나가기
-        </button>
       </section>
     </main>
   );

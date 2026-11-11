@@ -1,4 +1,5 @@
 import { withContent } from '../contentCatalog';
+import { individualPurchaseMovies } from '../individualPurchaseMovies';
 import { homeContentBySection } from './requestedHomeSections';
 
 // 실제 포스터 이미지 URL을 넣으면 바로 표시됩니다. 현재는 이미지 없는 카드도 동작합니다.
@@ -20,11 +21,11 @@ const item = (
 });
 
 export const heroItems = [
-  { id: 'hero-1', title: '오늘의 추천 콘텐츠', subtitle: '웨이브에서 만나는 다양한 이야기', image: '/images/home/hero/main-hero01.jpg', textImage: '/images/home/hero/main-hero-text01.png', link: '/drama' },
-  { id: 'hero-2', title: '놓치면 아쉬운 화제작', subtitle: '지금 인기 있는 작품을 만나보세요', image: '/images/home/hero/main-hero02.jpg', textImage: '/images/home/hero/main-hero-text02.png', link: '/movie' },
-  { id: 'hero-3', title: '레트로브', subtitle: '그때 그 시절의 프로그램을 다시', image: '/images/home/hero/main-hero03.jpg', textImage: '/images/home/hero/main-hero-text03.png', link: '/retrov' },
-  { id: 'hero-4', title: '추천 영화', subtitle: '', image: '/images/home/hero/main-hero04.jpg', textImage: '/images/home/hero/main-hero-text04.png', link: '/movie' },
-  { id: 'hero-5', title: '추천 드라마', subtitle: '', image: '/images/home/hero/main-hero05.jpg', textImage: '/images/home/hero/main-hero-text05.png', link: '/drama' },
+  { id: 'hero-1', title: '김씨네 편의점', image: '/images/home/hero/main-hero01.jpg', textImage: '/images/home/hero/main-hero-text01.png', link: '/globaldetail/68106' },
+  { id: 'hero-2', title: '사랑이 온다', image: '/images/home/hero/main-hero02.jpg', textImage: '/images/home/hero/main-hero-text02.png', link: '/dramadetail/310326' },
+  { id: 'hero-3', title: '골프', image: '/images/home/hero/main-hero03.jpg', textImage: '/images/home/hero/main-hero-text03.png', link: '/special/golf' },
+  { id: 'hero-4', title: 'HOPE', image: '/images/home/hero/main-hero04.jpg', textImage: '/images/home/hero/main-hero-text04.png', link: '/moviedetail/1058424' },
+  { id: 'hero-5', title: '여름방학', image: '/images/home/hero/main-hero05.jpg', textImage: '/images/home/hero/main-hero-text05.png', link: '/dramadetail/335951' },
 ];
 
 const categoryImage = (name) =>
@@ -33,14 +34,14 @@ const categoryImage = (name) =>
 export const categories = [
   { label: '출석체크', path: '/eventdetail/attendance', image: categoryImage('attendance-check') },
   { label: 'MMA', path: '/special/mma', image: categoryImage('mma') },
-  { label: '라이어', path: '/special/liar', image: categoryImage('liar') },
+  // { label: '라이어', path: '/special/liar', image: categoryImage('liar') },
   { label: '골프', path: '/special/golf', image: categoryImage('golf') },
   { label: '영화+', path: '/special/movieplus', image: categoryImage('movie-plus') },
   { label: '뉴스', path: '/special/news', image: categoryImage('news') },
   { label: 'Wavve only', path: '/special/wavve-only', image: categoryImage('wavve-only') },
-  { label: '신인감독 김연경 2', path: '/special/rookie-coach', image: categoryImage('rookie-coach-kim-yeon-koung-2') },
-  { label: '옆자리, 프란체스카', path: '/special/francesca', image: categoryImage('francesca') },
-  { label: '여름방학', path: '/special/summer', image: categoryImage('summer') },
+  // { label: '신인감독 김연경 2', path: '/special/rookie-coach', image: categoryImage('rookie-coach-kim-yeon-koung-2') },
+  // { label: '옆자리, 프란체스카', path: '/special/francesca', image: categoryImage('francesca') },
+  // { label: '여름방학', path: '/special/summer', image: categoryImage('summer') },
   { label: '투니버스', path: '/special/tooniverse', image: categoryImage('tooniverse') },
   { label: '키즈', path: '/special/kids', image: categoryImage('kids') },
   { label: 'KBS', path: '/special/kbs', image: categoryImage('kbs') },
@@ -86,6 +87,15 @@ const dramaItems = [
   }
 ];
 
+const tmdbSearchLink = (entry, kind) => {
+  const params = new URLSearchParams({
+    title: entry.tmdbTitle || entry.title,
+    kind,
+  });
+
+  return `/open?${params.toString()}`;
+};
+
 // HOPE 전용 영화 목록. 포스터 미지정 시 ContentCard의 기존 TMDB 조회를 사용한다.
 export const hopeItems = [
   { ...item('hope-marty-supreme', '마티 슈프림', 'movie', '', '개별구매'), badges: ['새로운', '개별구매'] },
@@ -102,8 +112,18 @@ export const hopeItems = [
   item('hope-lady-bird', '레이디 버드', 'movie', '', '개별구매'),
   item('hope-call-me', '콜 미 바이 유어 네임', 'movie', '', '개별구매'),
   item('hope-interstellar', '인터스텔라', 'movie', '', '개별구매'),
-].map((entry) => withContent(entry, 'home'));
+].map((entry) => {
+  const movie = withContent(entry, 'home');
+  const offer = individualPurchaseMovies.find(({ title }) => title === entry.title);
+  if (offer) return { ...movie, tmdbId: offer.tmdbId, link: offer.link };
 
+  return {
+    ...movie,
+    link: movie.tmdbId
+      ? `/moviedetail/${movie.tmdbId}`
+      : tmdbSearchLink(movie, 'movie'),
+  };
+});
 
 const comingSoonItems = [
   {
@@ -121,7 +141,7 @@ const comingSoonItems = [
   },
   {
     id: "coming-soon-03",
-    title: "옆자리, 프란체스카",
+    title: "내 새끼의 연애3",
     description: "11월 6일, 오전 11시 공개",
     image: "/images/home/section/preview03.jpg",
     isOriginal: true
@@ -139,7 +159,10 @@ const comingSoonItems = [
     image: "/images/home/section/preview05.jpg",
     isOriginal: true
   },
-];
+].map((item) => ({
+  ...item,
+  link: `/home-content/coming-soon/${item.id}`,
+}));
 
 
 // 메인 페이지 콘텐츠 섹션
@@ -201,6 +224,20 @@ export const homeSections = [
   }
 ];
 
+const rankingDetailLinks = {
+  4: '/entertainmentdetail/ent-03', // 놀면 뭐하니?
+  5: '/entertainmentdetail/ent-07', // 라디오스타
+  6: '/entertainmentdetail/ent-02', // 나 혼자 산다
+  7: '/entertainmentdetail/ent-52', // 스모킹 건
+  8: '/entertainmentdetail/ent-50', // 심야괴담회
+  13: '/entertainmentdetail/ent-23', // 유 퀴즈 온 더 블럭
+  15: '/entertainmentdetail/ent-04', // 전지적 참견 시점
+  16: '/entertainmentdetail/ent-51', // 탐정들의 영업비밀
+  17: '/entertainmentdetail/ent-43', // 전설의 사내
+  18: '/entertainmentdetail/30801', // 1박 2일
+  19: '/entertainmentdetail/ent-26', // 슈퍼맨이 돌아왔다
+};
+
 
 
 export const rankingItems = [
@@ -227,7 +264,14 @@ export const rankingItems = [
   { id: 18, title: "1박 2일", kind: "series", image: "", badge: "", isOriginal: false },
   { id: 19, title: "슈퍼맨이 돌아왔다", kind: "series", image: "", badge: "", isOriginal: false },
   { id: 20, title: "더 커뮤니티", kind: "series", image: "", badge: "", isOriginal: false },
-].map((entry) => withContent(entry, 'ranking'));
+].map((entry) => {
+  const program = withContent(entry, 'ranking');
+
+  return {
+    ...program,
+    link: rankingDetailLinks[program.id] ?? tmdbSearchLink(program, 'multi'),
+  };
+});
 
 
 export const eventBanners = [

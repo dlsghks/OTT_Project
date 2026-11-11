@@ -4,7 +4,7 @@ import { findEditorCollection } from '../../data/editorCollections';
 import { getTmdbPoster } from '../../services/tmdb';
 import { getImagePath } from '../../utils/imagePath';
 
-export const EditorCollectionCard = ({ collection }) => {
+export const EditorCollectionCard = ({ collection, variant = "default" }) => {
   const definition = useMemo(() => findEditorCollection(collection.to), [collection.to]);
   const [art, setArt] = useState(null);
   const firstItem = useRef(null);
@@ -35,6 +35,22 @@ export const EditorCollectionCard = ({ collection }) => {
     const poster = await getTmdbPoster(firstItem.current, { skipLocal: true }).catch(() => null);
     setArt({ url: poster || '', failed: !poster });
   };
+  if (variant === "poster") {
+    return (
+      <Link className="mypage__content-card" to={collection.to} aria-label={`${title} 에디터 Pick 열기`}>
+        <div className="mypage__poster-frame">
+          {art?.url ? (
+            <img className="mypage__poster" src={art.url} alt={title}
+              loading="lazy" onError={retryPoster} />
+          ) : (
+            <div className="mypage__collection-poster-status" role="status">
+              {title}
+            </div>
+          )}
+        </div>
+      </Link>
+    );
+  }
   return (
     <Link className="mypage__editor-card" to={collection.to} aria-label={`${title} 에디터 Pick 열기`}>
       {art?.url && <>

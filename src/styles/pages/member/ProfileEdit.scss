@@ -151,23 +151,6 @@
       color: #fff;
       font-size: 13px;
     }
-
-    button {
-      flex: 0 0 86px;
-      height: 44px;
-
-      border: 0;
-      border-radius: 6px;
-      background: #1351f9;
-      color: #fff;
-      font-size: 13px;
-
-      &:disabled {
-        background: #303030;
-        color: #777;
-        cursor: default;
-      }
-    }
   }
 
   &__lock {
@@ -223,7 +206,7 @@
     line-height: 1.5;
   }
 
-  &__exit {
+  &__save {
     width: 190px;
     height: 48px;
     margin-top: 48px;
@@ -234,8 +217,13 @@
     color: #fff;
     font-size: 14px;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: #3268ff;
+    }
+
+    &:disabled {
+      opacity: .5;
+      cursor: default;
     }
   }
 }
