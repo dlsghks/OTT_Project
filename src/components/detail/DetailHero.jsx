@@ -124,7 +124,7 @@ export const DetailHero = ({
               <span>출연 :</span>
               {cast.map((person, index) => (
                 <span key={person.id}>
-                  <u>{person.name}</u>
+                  {person.name}
                   {index < cast.length - 1 && ', '}
                 </span>
               ))}
