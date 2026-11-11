@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { SliderArrow } from '../common/SliderArrow';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -35,7 +36,6 @@ export const ContentSection = ({
   appResponsive = false,
 }) => {
   const swiperRef = useRef(null);
-  const sliderRef = useRef(null);
 
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
@@ -51,36 +51,7 @@ export const ContentSection = ({
   };
 
   // 화살표와 그라데이션 영역을 실제 썸네일 높이에 맞춤
-  useEffect(() => {
-    const slider = sliderRef.current;
-    const thumbnail = slider?.querySelector(
-      '.content-card__thumbnail'
-    );
 
-    if (!slider) return;
-
-    // 다른 종류의 커스텀 카드는 기존 높이 설정 사용
-    if (!thumbnail) {
-      slider.style.removeProperty('--thumbnail-arrow-height');
-      return;
-    }
-
-    const updateHeight = () => {
-      slider.style.setProperty(
-        '--thumbnail-arrow-height',
-        `${thumbnail.getBoundingClientRect().height}px`
-      );
-    };
-
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(thumbnail);
-    updateHeight();
-
-    return () => {
-      observer.disconnect();
-      slider.style.removeProperty('--thumbnail-arrow-height');
-    };
-  }, [items, cardType, renderCard]);
 
   return (
     <section
@@ -106,7 +77,6 @@ export const ContentSection = ({
 
       {/* Swiper 슬라이드 영역 */}
       <div
-        ref={sliderRef}
         className="content-section__slider"
       >
         <Swiper
@@ -181,26 +151,18 @@ export const ContentSection = ({
 
         {/* 이전 버튼 */}
         {canPrev && (
-          <button
-            type="button"
-            className="content-section__arrow content-section__arrow--prev"
+          <SliderArrow direction="prev"
             aria-label="이전 콘텐츠"
             onClick={() => swiperRef.current?.slidePrev()}
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
+           />
         )}
 
         {/* 다음 버튼 */}
         {canNext && (
-          <button
-            type="button"
-            className="content-section__arrow content-section__arrow--next"
+          <SliderArrow direction="next"
             aria-label="다음 콘텐츠"
             onClick={() => swiperRef.current?.slideNext()}
-          >
-            <span aria-hidden="true">›</span>
-          </button>
+           />
         )}
       </div>
     </section>

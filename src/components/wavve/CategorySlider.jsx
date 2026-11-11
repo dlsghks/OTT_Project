@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { SliderArrow } from '../common/SliderArrow';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -15,7 +16,6 @@ export const CategorySlider = ({
   ranked = false,
 }) => {
   const swiperRef = useRef(null);
-  const sliderRef = useRef(null);
 
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
@@ -28,27 +28,7 @@ export const CategorySlider = ({
   };
 
   // 화살표와 그라데이션의 높이를 실제 포스터에 맞춤
-  useEffect(() => {
-    const slider = sliderRef.current;
-    const thumbnail = slider?.querySelector(
-      '.content-card__thumbnail'
-    );
 
-    if (!slider || !thumbnail) return;
-
-    const updateHeight = () => {
-      slider.style.setProperty(
-        '--poster-arrow-height',
-        `${thumbnail.getBoundingClientRect().height}px`
-      );
-    };
-
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(thumbnail);
-    updateHeight();
-
-    return () => observer.disconnect();
-  }, [items]);
 
   return (
     <section className="category-row">
@@ -67,7 +47,6 @@ export const CategorySlider = ({
       </div>
 
       <div
-        ref={sliderRef}
         className="category-row__slider"
       >
         <Swiper
@@ -113,25 +92,17 @@ export const CategorySlider = ({
         </Swiper>
 
         {canPrev && (
-          <button
-            type="button"
-            className="category-row__arrow category-row__arrow--prev"
+          <SliderArrow direction="prev"
             aria-label={`${title} 이전 콘텐츠`}
             onClick={() => swiperRef.current?.slidePrev()}
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
+           />
         )}
 
         {canNext && (
-          <button
-            type="button"
-            className="category-row__arrow category-row__arrow--next"
+          <SliderArrow direction="next"
             aria-label={`${title} 다음 콘텐츠`}
             onClick={() => swiperRef.current?.slideNext()}
-          >
-            <span aria-hidden="true">›</span>
-          </button>
+           />
         )}
       </div>
     </section>
