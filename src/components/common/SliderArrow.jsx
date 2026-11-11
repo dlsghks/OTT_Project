@@ -2,13 +2,13 @@ import { useEffect, useRef } from 'react';
 import '../../styles/components/common/SliderArrow.scss';
 
 // All card lists share the same glyph, edge gradient, and thumbnail bounds.
-export const SliderArrow = ({ direction, ...props }) => {
+export const SliderArrow = ({ direction, thumbnailSelector, ...props }) => {
   const buttonRef = useRef(null);
 
   useEffect(() => {
     const button = buttonRef.current;
     const slider = button.parentElement;
-    const thumbnail = slider.querySelector([
+    const thumbnail = slider.querySelector(thumbnailSelector || [
       '.content-card__thumbnail', '.landscape-card__thumb', '.live-card__thumb',
       '.movie-videos__thumb', '.retro-video-card__play', '.mypage__poster-frame',
       '.mypage__history-thumbnail', '.live-top20__image',

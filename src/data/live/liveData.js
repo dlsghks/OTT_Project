@@ -3,7 +3,8 @@ const thumbnailPath = '/images/live/thumbnail/';
 
 // 하단 라이브 썸네일 30개
 const liveThumbnails = Array.from({ length: 30 }, (_, index) => {
-  const number = String(index + 1).padStart(2, '0');
+  // 실제 파일명: 01~09, 010~030 (앞에 0을 하나 붙인 형식)
+  const number = `0${index + 1}`;
 
   // 25번만 webp
   const extension = index + 1 === 25 ? 'webp' : 'jpg';
