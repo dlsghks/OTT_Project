@@ -5,9 +5,9 @@ import closeIcon from '../../assets/shorts/share-modal/close.svg';
 import glow from '../../assets/shorts/share-modal/glow.svg';
 import gmailIcon from '../../assets/share/gmail.png';
 import kakaoIcon from '../../assets/share/kakao.png';
-import xIcon from '../../assets/share/x.png';
-import instagramIcon from '../../assets/share/instagram.png';
-import threadsIcon from '../../assets/share/threads.png';
+import xIcon from '../../assets/share/popup-x.png';
+import instagramIcon from '../../assets/share/popup-instagram.png';
+import threadsIcon from '../../assets/share/popup-threads.png';
 import mailIcon from '../../assets/share/mail.png';
 import '../../styles/components/shorts/ShortsShareModal.scss';
 
