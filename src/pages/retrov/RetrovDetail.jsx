@@ -401,7 +401,7 @@ function ProgramFanPage({ programId, program }) {
                 <li key={item.id}>
                   <Link to={`/retrov/${item.id}`} className="rv-others__item">
                     <img
-                      src={getImagePath(item.another ?? item.thumbnail ?? item.image)}
+                      src={getImagePath(item.othersLogo ?? item.another ?? item.thumbnail ?? item.image)}
                       alt={item.title}
                       loading="lazy"
                     />

@@ -18,6 +18,7 @@ export const programs = [
     image: `${IMG}/infinite-challenge-logo.png`,
     thumbnail: `${IMG}/infinite-challenge-thumb.jpg`,
     another: `${IMG}/another/infinite-challenge-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
+    othersLogo: `${IMG}/infinite-challenge-logo-w.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 흰색 로고 (메인 배너 로고와 같은 이미지)
   },
   {
     id: "high-kick",
@@ -25,6 +26,7 @@ export const programs = [
     image: `${IMG}/high-kick-logo.png`,
     thumbnail: `${IMG}/high-kick-thumb.jpg`,
     another: `${IMG}/another/high-kick-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
+    othersLogo: `${IMG}/high-kick-logo-w.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 흰색 로고 (메인 배너 로고와 같은 이미지)
   },
   {
     id: "dad-where-are-we-going",
@@ -32,6 +34,7 @@ export const programs = [
     image: `${IMG}/dad-where-logo.png`,
     thumbnail: `${IMG}/dad-where-thumb.jpg`,
     another: `${IMG}/another/dad-where-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
+    othersLogo: `${IMG}/dad-where-logo-w.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 흰색 로고 (메인 배너 로고와 같은 이미지)
   },
   {
     id: "we-got-married",
@@ -39,6 +42,7 @@ export const programs = [
     image: `${IMG}/we-got-married-logo.png`,
     thumbnail: `${IMG}/we-got-married-thumb.jpg`,
     another: `${IMG}/another/we-got-married-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
+    othersLogo: `${IMG}/we-got-married-logo-w.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 흰색 로고 (메인 배너 로고와 같은 이미지)
   },
   {
     id: "boys-over-flowers",
@@ -46,6 +50,7 @@ export const programs = [
     image: `${IMG}/boys-over-flowers-logo.png`,
     thumbnail: `${IMG}/boys-over-flowers-thumb.jpg`,
     another: `${IMG}/another/boys-over-flowers-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
+    othersLogo: `${IMG}/boys-over-flowers-logo-w.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 흰색 로고 (메인 배너 로고와 같은 이미지)
   },
   {
     id: "full-house",
@@ -53,6 +58,7 @@ export const programs = [
     image: `${IMG}/full-house-logo.png`,
     thumbnail: `${IMG}/full-house-thumb.jpg`,
     another: `${IMG}/another/full-house-thumb-b.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 이미지 (320 x 180)
+    othersLogo: `${IMG}/full-house-logo-w.png`, // 상세 하단 "또 다른 그때 그시절 프로그램보기" 흰색 로고 (메인 배너 로고와 같은 이미지)
   },
 ];
 
