@@ -1,3 +1,4 @@
+import { SliderArrow } from '../common/SliderArrow';
 import { useEffect, useId, useRef, useState } from 'react';
 import { EditorCollectionCard } from './EditorCollectionCard';
 
@@ -120,9 +121,9 @@ export const EditorCollectionSlider = ({ collections, renderItem, cardType = 'ed
         {collections.map(collection => renderItem ? renderItem(collection)
           : <li key={collection.id}><EditorCollectionCard collection={collection} /></li>)}
       </ul>
-      {navigation.prev && <button className="mypage__editor-arrow mypage__editor-arrow--prev" type="button"
+      {navigation.prev && <SliderArrow direction="prev"
         aria-label={`이전 ${label}`} aria-controls={id} onClick={() => slide(-1)} />}
-      {navigation.next && <button className="mypage__editor-arrow mypage__editor-arrow--next" type="button"
+      {navigation.next && <SliderArrow direction="next"
         aria-label={`다음 ${label}`} aria-controls={id} onClick={() => slide(1)} />}
     </div>
   );
