@@ -232,3 +232,22 @@
 @media (min-width: 601px) and (max-width: 1024px) {
   .wavve-home .ranking-section .home-section__head .section-title { font-size: 18px; line-height: 26px; }
 }
+
+@media (max-width: 1024px) {
+  .wavve-home .home-events {
+    --home-event-height: 88px;
+    --home-event-image-width: 200%;
+    --home-event-max-height: none;
+    --home-event-offset: -50%;
+  }
+
+  .wavve-home .home-section .home-section__head > a,
+  .wavve-home .content-section__title > a {
+    color: figma.$neutral-3;
+
+    &:hover, &:focus-visible { color: figma.$neutral-3; }
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-home .home-events { --home-event-height: 112px; }
+}

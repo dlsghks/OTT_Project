@@ -24,7 +24,7 @@ export const EventBanner = ({ items = [] }) => (
                 style={{
                     display: 'block',
                     width: '100%',
-                    height: 'auto',
+                    height: 'var(--home-event-height, auto)',
                     minHeight: 0,
                     margin: 0,
                     padding: 0,
@@ -42,13 +42,14 @@ export const EventBanner = ({ items = [] }) => (
                     alt={item.title || 'MMA 이벤트'}
                     style={{
                         display: 'block',
-                        width: '100%',
+                        width: 'var(--home-event-image-width, 100%)',
                         maxWidth: 'none',
-                        height: 'auto',
-                        maxHeight: 96,
+                        height: 'var(--home-event-height, auto)',
+                        maxHeight: 'var(--home-event-max-height, 96px)',
                         objectFit: 'contain',
                         background: '#000',
                         margin: 0,
+                        marginLeft: 'var(--home-event-offset, 0px)',
                         padding: 0,
                     }}
                 />
