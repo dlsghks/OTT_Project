@@ -1175,7 +1175,7 @@
 .wavve-mypage .mypage__voucher {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   min-width: 0;
 }
 .wavve-mypage .mypage__voucher > p {
@@ -1187,11 +1187,11 @@
 }
 .wavve-mypage .mypage__voucher-badge {
   display: block;
-  flex: 0 0 40px;
-  width: 40px;
-  min-width: 40px;
-  max-width: 40px;
-  height: 40px;
+  flex: 0 0 20px;
+  width: 20px;
+  min-width: 20px;
+  max-width: 20px;
+  height: 20px;
   object-fit: contain;
 }
 .wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button {
