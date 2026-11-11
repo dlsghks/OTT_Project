@@ -303,6 +303,17 @@
   text-align: left
 }
 
+.live-chat__toggle-arrow {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
+.live-chat__toggle[aria-expanded="true"] .live-chat__toggle-arrow {
+  transform: rotate(180deg);
+}
+
 .live-chat__preview {
   margin: 0 0.875rem 0.875rem;
   padding: 1.25rem;
