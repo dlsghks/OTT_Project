@@ -3,12 +3,12 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import closeIcon from '../../assets/shorts/share-modal/close.svg';
 import glow from '../../assets/shorts/share-modal/glow.svg';
-import gmailIcon from '../../assets/share/gmail.png';
-import kakaoIcon from '../../assets/share/kakao.png';
-import xIcon from '../../assets/share/popup-x.png';
-import instagramIcon from '../../assets/share/popup-instagram.png';
-import threadsIcon from '../../assets/share/popup-threads.png';
-import mailIcon from '../../assets/share/mail.png';
+import gmailIcon from '../../assets/shorts/share-modal/popup-gmail.svg';
+import kakaoIcon from '../../assets/shorts/share-modal/popup-kakao.svg';
+import xIcon from '../../assets/shorts/share-modal/x.svg';
+import instagramIcon from '../../assets/shorts/share-modal/instagram.svg';
+import threadsIcon from '../../assets/shorts/share-modal/threads.svg';
+import mailIcon from '../../assets/shorts/share-modal/mail.svg';
 import '../../styles/components/shorts/ShortsShareModal.scss';
 
 // 쓰기에 성공한 경우에만 완료 상태를 표시합니다.
@@ -46,7 +46,6 @@ export function ShareDialog({ title = "웨이브", url = window.location.href, k
   const [copying, setCopying] = useState(false);
   const [notice, setNotice] = useState("");
 
-  const [activeService, setActiveService] = useState("");
   const body = `${title}\n${url}`;
 
   useEffect(() => {
@@ -134,7 +133,6 @@ export function ShareDialog({ title = "웨이브", url = window.location.href, k
   ];
 
   const selectService = (name) => {
-    setActiveService(name);
     switch (name) {
       case "Gmail": openWeb(`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`); break;
       case "카카오톡": void shareKakao(); break;
@@ -233,7 +231,6 @@ export function ShareDialog({ title = "웨이브", url = window.location.href, k
               key={service.name}
               aria-label={`${service.name} 공유`}
               title={service.name}
-              className={activeService === service.name ? "is-active" : undefined}
               onClick={() => selectService(service.name)}
             >
               <img src={service.icon} alt="" draggable={false} />
