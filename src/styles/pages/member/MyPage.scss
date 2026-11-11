@@ -53,7 +53,6 @@
 .wavve-mypage .mypage__summary dt { font-size: 18px; font-weight: 600; line-height: 22px; }
 .wavve-mypage .mypage__summary dd { margin-top: 20px; font-size: 20px; line-height: 22px; }
 .wavve-mypage .mypage__summary > .mypage__retro-summary {
-  background: linear-gradient(#000, #000) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
   font-family: "DungGeunMo", "Pretendard", sans-serif;
 }
 .wavve-mypage .mypage__retro-summary dt { font-weight: 400; }
@@ -302,9 +301,6 @@
   }
   .wavve-mypage .mypage__summary dt { color: #adb1bf; font-size: 12px; font-weight: 400; line-height: 22px; }
   .wavve-mypage .mypage__summary dd { margin-top: 0; font-size: 23px; line-height: 30px; }
-  .wavve-mypage .mypage__summary > .mypage__retro-summary {
-    background: linear-gradient(#181b25, #181b25) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
-  }
 
   .wavve-mypage .mypage__library { width: calc(100% - 32px); margin: 31px 16px 0; }
   .wavve-mypage .mypage__library .mypage__tabs { gap: clamp(8px, calc((100vw - 293px) / 3), 32px); min-height: 21.05px; height: 21.05px; }
@@ -973,11 +969,6 @@
   color: #adb1bf;
 }
 
-.wavve-mypage .mypage__summary > .mypage__retro-summary {
-  background:
-    linear-gradient(#181b25, #181b25) padding-box,
-    linear-gradient(110deg, #1351f9, #c700e8) border-box;
-}
 
 // 마이페이지 모든 탭에서 숏츠 배지 제거
 .wavve-mypage .mypage__poster-frame--shorts > .mypage__shorts-badge {
@@ -1229,3 +1220,17 @@
 @media (min-width: 601px) and (max-width: 1024px) {
   .wavve-mypage .mypage__voucher > p { font-size: 13px; }
 }
+
+.wavve-mypage .mypage__summary-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+
+  &:focus-visible { outline: none; }
+  &:focus-visible::after { outline: 2px solid #fff; outline-offset: 3px; }
+}
+
+.wavve-mypage .mypage__library { scroll-margin-top: 110px; }
