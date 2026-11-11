@@ -8,6 +8,7 @@ const CACHE_TIME = 15 * 60 * 1000;
 
 // 라이브 방송이 없는 채널은 5분 뒤 재조회
 const EMPTY_CACHE_TIME = 5 * 60 * 1000;
+const ERROR_CACHE_TIME = 2 * 60 * 1000;
 
 // 동시에 같은 채널을 조회하지 않도록 관리
 const pendingRequests = new Map();
@@ -61,6 +62,9 @@ export const getYoutubeLive = async (
   { throwOnError = false } = {}
 ) => {
   try {
+    const cached = channelId ? getCache(channelId) : null;
+    if (cached) return cached.data;
+
     if (!API_KEY?.trim()) {
       throw new Error(
         'VITE_YOUTUBE_API_KEY가 없습니다. 환경 변수를 확인한 뒤 개발 서버를 재시작해 주세요. 배포 사이트는 다시 빌드·배포해야 합니다.'
@@ -72,10 +76,6 @@ export const getYoutubeLive = async (
         '이 채널에는 youtubeChannelId가 등록되지 않았습니다.'
       );
     }
-
-    const cached = getCache(channelId);
-
-    if (cached) return cached.data;
 
     if (!pendingRequests.has(channelId)) {
       const request = (async () => {
@@ -145,6 +145,7 @@ export const getYoutubeLive = async (
         : error.message || '유튜브 라이브 조회에 실패했습니다.';
 
     console.error('[YouTube Live]', message);
+    if (channelId) setCache(channelId, null, ERROR_CACHE_TIME);
 
     if (throwOnError) {
       throw new Error(message);
