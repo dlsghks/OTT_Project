@@ -1,3 +1,4 @@
+import { SliderArrow } from '../../components/common/SliderArrow';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -952,35 +953,21 @@ export const LiveChannel = ({
               </Swiper>
 
               {schedulePrev && (
-                <button
-                  type="button"
-                  className={
-                    'live-schedule__arrow ' +
-                    'live-schedule__arrow--prev'
-                  }
+                <SliderArrow direction="prev"
                   onClick={() => {
                     scheduleSwiper.current?.slidePrev();
                   }}
                   aria-label="이전 편성"
-                >
-                  ‹
-                </button>
+                 />
               )}
 
               {scheduleNext && (
-                <button
-                  type="button"
-                  className={
-                    'live-schedule__arrow ' +
-                    'live-schedule__arrow--next'
-                  }
+                <SliderArrow direction="next"
                   onClick={() => {
                     scheduleSwiper.current?.slideNext();
                   }}
                   aria-label="다음 편성"
-                >
-                  ›
-                </button>
+                 />
               )}
             </div>
           </section>
@@ -1049,31 +1036,17 @@ export const LiveChannel = ({
               </Swiper>
 
               {topPrev && (
-                <button
-                  type="button"
-                  className={
-                    'live-top20__arrow ' +
-                    'live-top20__arrow--prev'
-                  }
+                <SliderArrow direction="prev"
                   onClick={() => topSwiper.current?.slidePrev()}
                   aria-label="이전 채널"
-                >
-                  ‹
-                </button>
+                 />
               )}
 
               {topNext && (
-                <button
-                  type="button"
-                  className={
-                    'live-top20__arrow ' +
-                    'live-top20__arrow--next'
-                  }
+                <SliderArrow direction="next"
                   onClick={() => topSwiper.current?.slideNext()}
                   aria-label="다음 채널"
-                >
-                  ›
-                </button>
+                 />
               )}
             </div>
           </section>

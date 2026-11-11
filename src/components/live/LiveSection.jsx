@@ -1,3 +1,4 @@
+import { SliderArrow } from '../common/SliderArrow';
 import { SectionTitle } from '../common/SectionTitle';
 
 import { useRef, useState } from 'react';
@@ -72,25 +73,17 @@ export const LiveSection = ({ title, items = [], getProgress }) => {
         </Swiper>
 
         {canPrev && (
-          <button
-            type="button"
-            className="live-section__arrow live-section__arrow--prev"
+          <SliderArrow direction="prev"
             aria-label={`${title} 이전 목록`}
             onClick={() => swiperRef.current?.slidePrev()}
-          >
-            <span>‹</span>
-          </button>
+           />
         )}
 
         {canNext && (
-          <button
-            type="button"
-            className="live-section__arrow live-section__arrow--next"
+          <SliderArrow direction="next"
             aria-label={`${title} 다음 목록`}
             onClick={() => swiperRef.current?.slideNext()}
-          >
-            <span>›</span>
-          </button>
+           />
         )}
       </div>
     </section>
