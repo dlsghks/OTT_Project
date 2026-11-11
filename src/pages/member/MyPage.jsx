@@ -1,4 +1,4 @@
-import { getVoucherBadge } from "../../utils/voucherBadges";
+import { getVoucherBadge, getVoucherEnglishName } from "../../utils/voucherBadges";
 import { WatchHistoryCard } from "../../components/member/WatchHistoryCard";
 import { MyPageEventCarousel } from "../../components/member/MyPageEventCarousel";
 import RetroMobileEventSwiper from "../../components/retrov/RetroMobileEventSwiper";
@@ -181,6 +181,7 @@ export const MyPage = ({
   const currentPassName = passName || activeDemoPass?.name || "";
   const hasVoucher = Boolean(currentPassName);
   const voucherBadge = getVoucherBadge(passName ? { name: passName } : activeDemoPass);
+  const voucherEnglishName = getVoucherEnglishName(passName ? { name: passName } : activeDemoPass);
   const voucherActionLabel = hasVoucher ? "이용권 변경" : "이용권 구매";
   const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
   const visibleDialogTitle = billingFromReceipt ? BILLING_TITLE : dialogTitle;
@@ -481,16 +482,19 @@ export const MyPage = ({
             </div>
 
             <div className="mypage__voucher">
-              <p>{currentPassName || "보유하신 이용권이 없습니다"}</p>
               {hasVoucher && voucherBadge && (
                 <img
                   className="mypage__voucher-badge"
                   src={getImagePath(`/images/voucher/badges/${voucherBadge}`)}
                   alt={`${currentPassName} 이용권 배지`}
-                  width="40"
-                  height="40"
+                  width="20"
+                  height="20"
                 />
               )}
+              <p>
+                {currentPassName || "보유하신 이용권이 없습니다"}
+                {hasVoucher && voucherEnglishName && <> ({voucherEnglishName})</>}
+              </p>
             </div>
           </div>
 
