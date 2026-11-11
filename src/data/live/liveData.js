@@ -12,19 +12,18 @@ const liveThumbnails = Array.from({ length: 30 }, (_, index) => {
   return `${thumbnailPath}livethumbnail${number}.${extension}`;
 });
 
-// TOP 10의 기본 이미지
-// 유튜브 썸네일이 검색되면 LiveHero에서 해당 이미지 우선 표시
+// API 제한 시에도 채널에 맞는 로컬 이미지를 즉시 표시합니다.
 const heroImages = [
-  liveThumbnails[0],
-  liveThumbnails[1],
-  liveThumbnails[2],
-  liveThumbnails[3],
-  liveThumbnails[4],
+  '/images/live/fallback/ytn.svg',
+  '/images/live/fallback/mbn.svg',
+  '/images/live/fallback/kbs1.svg',
+  '/images/live/fallback/yonhap.svg',
+  '/images/live/thumbnail/livethumbnail019.jpg',
   '/images/live/K31.jpg',
   '/images/live/PM1.jpg',
-  liveThumbnails[7],
-  liveThumbnails[8],
-  liveThumbnails[9],
+  '/images/live/thumbnail/livethumbnail026.jpg',
+  '/images/live/fallback/mbc.svg',
+  '/images/live/fallback/tv-chosun.svg',
 ];
 
 const demoRatings = [
@@ -219,7 +218,8 @@ export const liveTop10 = top10Data.map((program, index) => ({
   title: program.title,
   category: '인기 라이브',
 
-  image: program.image || null,
+  image: program.image || heroImages[index],
+  fallbackImage: program.image || heroImages[index],
 
   start: stamp(-25 - index * 2),
   end: stamp(35 + index * 2),

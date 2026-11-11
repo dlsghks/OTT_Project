@@ -80,7 +80,7 @@ export const DetailHero = ({
                   <button type="button" className="movie-hero__buy" onClick={onWatch}>시청하기</button>
                 </>
               ) : (
-                <VoucherWatchActions onPreview={onWatch} onPurchase={actions.onPurchaseVoucher} />
+                <VoucherWatchActions onPurchase={actions.onPurchaseVoucher} />
               )
             ))}
 
@@ -124,7 +124,7 @@ export const DetailHero = ({
               <span>출연 :</span>
               {cast.map((person, index) => (
                 <span key={person.id}>
-                  <u>{person.name}</u>
+                  {person.name}
                   {index < cast.length - 1 && ', '}
                 </span>
               ))}

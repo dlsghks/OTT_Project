@@ -571,7 +571,8 @@
 
     &:hover,
     &:focus-visible {
-      background: rgba(255, 255, 255, 0.2);
+      background: #1351f9;
+      border-color: #1351f9;
     }
   }
 
@@ -641,4 +642,12 @@ main.site-inner:has(> .wavve-home) {
   top: 0;
   bottom: auto;
   height: var(--ranking-poster-height, var(--card-h));
+}
+
+// 공통 페이지 스타일의 로드 순서와 관계없이 홈 더보기 배경을 채웁니다.
+.wavve-home .home-hope__more:hover,
+.wavve-home .home-hope__more:focus-visible {
+  background: #1351f9;
+  border-color: #1351f9;
+  color: #fff;
 }
