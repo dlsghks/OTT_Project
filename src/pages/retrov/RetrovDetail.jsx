@@ -273,7 +273,7 @@ function ProgramFanPage({ programId, program }) {
                   <span className="rv-hero__play-label rv-hero__play-label--mobile" aria-hidden="true">시청하기</span>
                 </button>
               ) : (
-                <VoucherWatchActions onPreview={playFirstEpisode} onPurchase={actions.onPurchaseVoucher} />
+                <VoucherWatchActions onPurchase={actions.onPurchaseVoucher} />
               )}
 
               <button

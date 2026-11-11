@@ -80,7 +80,7 @@ export const DetailHero = ({
                   <button type="button" className="movie-hero__buy" onClick={onWatch}>시청하기</button>
                 </>
               ) : (
-                <VoucherWatchActions onPreview={onWatch} onPurchase={actions.onPurchaseVoucher} />
+                <VoucherWatchActions onPurchase={actions.onPurchaseVoucher} />
               )
             ))}
 

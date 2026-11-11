@@ -195,9 +195,6 @@ const HomeContentBody = ({ item, sectionId }) => {
                                 </button>
                             ) : (
                                 <VoucherWatchActions
-                                    onPreview={isJung && episodes[0]
-                                        ? () => playJungEpisode(episodes[0])
-                                        : isLineup ? playComingSoonVideo : () => player.openTrailer({ title: item.title })}
                                     onPurchase={actions.onPurchaseVoucher}
                                 />
                             )}
