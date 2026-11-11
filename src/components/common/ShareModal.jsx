@@ -1,3 +1,4 @@
+import { getKakaoShareClient } from '../../utils/kakaoShare';
 import { useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 import kakaoIcon from '../../assets/share/kakao.svg';
@@ -17,6 +18,7 @@ export const ShareModal = ({ title, onClose }) => {
     const headingId = useId();
     const [status, setStatus] = useState('');
     const url = window.location.href;
+    useEffect(() => { void getKakaoShareClient().catch(() => {}); }, []);
     const services = [
         { name: 'X', icon: xIcon, href: `https://x.com/intent/tweet?${new URLSearchParams({ url, text: title ?? '' })}` },
         { name: 'Threads', icon: threadsIcon, href: `https://www.threads.com/intent/post?${new URLSearchParams({ url, text: title ?? '' })}` },
@@ -43,8 +45,8 @@ export const ShareModal = ({ title, onClose }) => {
 
     const shareKakao = async () => {
         setStatus('');
-        const kakao = window.Kakao;
         try {
+            const kakao = await getKakaoShareClient();
             if (kakao?.isInitialized?.() && kakao.Share?.sendDefault) {
                 await kakao.Share.sendDefault({
                     objectType: 'text',
