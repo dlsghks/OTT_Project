@@ -129,7 +129,7 @@
       color: #fff;
       font-size: 14px;
       font-weight: 700;
-      &:hover { border-color: #1351f9; }
+      &:hover { background: #1351f9; border-color: #1351f9; }
       &.is-copied { background: #1351f9; border-color: #1351f9; }
       &:disabled { cursor: wait; opacity: .6; }
     }
@@ -184,4 +184,10 @@
 @media (max-width: 480px) {
   .shorts-share__surface { padding-inline: 20px; }
   .shorts-share__services { gap: 14px; }
+}
+
+@media (hover: hover) {
+  .shorts-share .shorts-share__services > button:hover {
+    background: #1351f9;
+  }
 }
