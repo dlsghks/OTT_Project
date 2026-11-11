@@ -13,11 +13,12 @@
   margin: 0 0 max(40px, 3.6vw);
 }
 .category-row__header {
-  margin-bottom: 20px;
+  margin-bottom: 26px;
 }
 .category-row__title {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
 }
 .category-row__title h2 {
@@ -73,7 +74,7 @@
   inset: 50% 0 auto;
   width: 100%;
   aspect-ratio: 48/84;
-  background: url("data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20width%3D%2248%22%20height%3D%2284%22%20viewBox%3D%220%200%2048%2084%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%20id%3D%22Frame%20463%22%3E%0A%3Crect%20width%3D%2248%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22black%22%20fill-opacity%3D%220.8%22%2F%3E%0A%3Cpath%20id%3D%22Vector%2024%22%20d%3D%22M18%2028L33%2041.5L18%2055%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke%3D%22white%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A") center/contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20width%3D%2248%22%20height%3D%2284%22%20viewBox%3D%220%200%2048%2084%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%20id%3D%22Frame%20463%22%3E%0A%3Cpath%20id%3D%22Vector%2024%22%20d%3D%22M18%2028L33%2041.5L18%2055%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke%3D%22white%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A") center/contain no-repeat;
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -166,9 +167,14 @@
   background: #0F40C6;
 }
 .category-filter__button {
+  border: 0;
+  background: #252525;
   height: 44px;
   padding: 0 20px;
   font-size: 16px;
+}
+.category-filter__button:hover, .category-filter__button.is-active:hover {
+  background: #1351F9;
 }
 
 /* 요일별 콘텐츠 */
@@ -279,13 +285,13 @@
 }
 /* PC 장르 버튼: 왼쪽 정렬 + 마우스 드래그 */
 @media (min-width: 1025px) {
-  .category-page nav.category-filter {
+  :is(.category-page, .category-filter-group) nav.category-filter {
     gap: 15px;
     justify-content: flex-start;
     user-select: none;
     cursor: grab;
   }
-  .category-page nav.category-filter > button.category-filter__button {
+  :is(.category-page, .category-filter-group) nav.category-filter > button.category-filter__button {
     flex: 0 0 auto;
     height: 60px;
     padding: 0 30px;
@@ -293,7 +299,7 @@
     border-radius: 10px;
     cursor: grab;
   }
-  .category-page nav.category-filter[data-dragging=true], .category-page nav.category-filter[data-dragging=true] > button.category-filter__button {
+  :is(.category-page, .category-filter-group) nav.category-filter[data-dragging=true], :is(.category-page, .category-filter-group) nav.category-filter[data-dragging=true] > button.category-filter__button {
     cursor: grabbing;
   }
   .category-row__swiper .swiper-wrapper {
@@ -338,7 +344,7 @@
   inset: 50% 0 auto;
   width: 100%;
   aspect-ratio: 48/84;
-  background: url("data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20width%3D%2248%22%20height%3D%2284%22%20viewBox%3D%220%200%2048%2084%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%20id%3D%22Frame%20463%22%3E%0A%3Crect%20width%3D%2248%22%20height%3D%2284%22%20rx%3D%2210%22%20fill%3D%22black%22%20fill-opacity%3D%220.8%22%2F%3E%0A%3Cpath%20id%3D%22Vector%2024%22%20d%3D%22M18%2028L33%2041.5L18%2055%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke%3D%22white%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A") center/contain no-repeat;
+  background: url("data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20width%3D%2248%22%20height%3D%2284%22%20viewBox%3D%220%200%2048%2084%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cg%20id%3D%22Frame%20463%22%3E%0A%3Cpath%20id%3D%22Vector%2024%22%20d%3D%22M18%2028L33%2041.5L18%2055%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke%3D%22white%22%2F%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E%0A") center/contain no-repeat;
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -410,4 +416,8 @@
 /* 화살표는 선명하게 */
 .category-page .category-row .category-row__arrow::after {
   filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+}
+
+.category-filter-group {
+  display: contents;
 }

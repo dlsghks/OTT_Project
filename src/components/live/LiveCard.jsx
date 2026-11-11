@@ -1,64 +1,41 @@
-
+import styles from '../../styles/pages/live/LivePage.module.scss';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getImagePath } from '../../utils/imagePath';
+import { useLiveArtwork } from '../../hooks/useLiveArtwork';
+import { getCachedYoutubeLive } from '../../services/youtube';
+import { liveDesignRanks } from '../../data/live/liveDesignData';
 
-export const LiveCard = ({ program, progress }) => {
-  const [imageError, setImageError] = useState(false);
-
-  // 이미지가 변경되면 오류 상태 초기화
+export const LiveCard = ({ program, ranked = false }) => {
+  const [, setThumbnailVersion] = useState(0);
   useEffect(() => {
-    setImageError(false);
-  }, [program.image]);
-
-  const imageSrc = program.image
-    ? getImagePath(program.image)
-    : null;
-
-  const showImage = imageSrc && !imageError;
-
+    const update = () => setThumbnailVersion((value) => value + 1);
+    window.addEventListener('ott-live-thumbnails-updated', update);
+    return () => window.removeEventListener('ott-live-thumbnails-updated', update);
+  }, []);
+  const liveVideo = getCachedYoutubeLive(program.youtubeChannelId);
+  const { image, logo, title, failImage } = useLiveArtwork(program, liveVideo);
+  const rank = program.viewerRank ?? program.rank;
+  const rankImage = liveDesignRanks[rank - 1];
   return (
-    <Link
-      className="live-card"
-      to={`/livechannel?channel=${encodeURIComponent(
-        program.channelId
-      )}`}
-    >
-      <div className="live-card__thumb">
-        {showImage ? (
-          <img
-            src={imageSrc}
-            alt={program.title || program.channel}
-            draggable={false}
-            loading="lazy"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <span className="live-card__placeholder">
-            {program.channel}
-          </span>
-        )}
-
-        <span className="live-card__badge">
-          무료
-        </span>
-
-        <div className="live-card__progress">
-          <span
-            style={{
-              width: `${progress ?? 0}%`,
-            }}
-          />
+    <Link className={`${styles.card} ${ranked ? styles.rankedCard : ''}`}
+      to={`/livechannel?channel=${encodeURIComponent(program.channelId)}`}
+      aria-label={`${program.channel} ${title || ''} 시청하기`}>
+      <div className={styles.thumb}>
+        {image
+          ? <img key={image} src={image} alt="" loading="lazy" draggable={false} onError={failImage} />
+          : <div className={styles.cardBrandPlaceholder}>
+              {logo ? <img className={styles.cardFallbackLogo} src={logo} alt="" loading="lazy" /> : <span>{program.channel}</span>}
+            </div>}
+      </div>
+      <div className={styles.details}>
+        {ranked && (rankImage
+          ? <img className={styles.cardRank} src={rankImage} alt={`${rank}위`} loading="lazy" />
+          : <strong className={`${styles.cardRank} ${styles.number}`}>{rank}</strong>)}
+        <div className={styles.cardText}>
+          <strong className={styles.channel}>{program.channel}</strong>
+          <span className={styles.title}>{title || '채널 보기'}</span>
         </div>
       </div>
-
-      <strong className="live-card__channel">
-        {program.channel}
-      </strong>
-
-      <span className="live-card__title">
-        {program.title}
-      </span>
     </Link>
   );
 };
