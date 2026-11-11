@@ -122,7 +122,7 @@
     .home-section__head, .content-section__header { margin: 0 0 8px; }
     .home-section__head h2, .content-section__title h2, .weekly-content h2 { font-size: 14px; font-weight: 500; line-height: 20px; }
     .content-section__title { gap: 8px; }
-    .content-section__title a { flex: 0 0 auto; font-size: 10px; }
+    .home-section__head > a, .content-section__title a { flex: 0 0 auto; font-size: 10px; line-height: 20px; }
     .content-section__slider, .ranking-section__slider { margin-right: calc(var(--app-side) * -1); }
     .content-section__swiper, .ranking-section__swiper { overflow: hidden; }
     .content-section__swiper .swiper-slide, .ranking-section__swiper .swiper-slide { width: var(--app-poster); height: auto; }
@@ -223,4 +223,12 @@
     font-size: 12px;
     line-height: 1;
   }
+}
+
+@media (max-width: 1024px) {
+  .wavve-home .ranking-section .home-section__head > a { font-size: 10px; line-height: 20px; }
+  .wavve-home .ranking-section .home-section__head .section-title { font-size: 14px; line-height: 20px; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-home .ranking-section .home-section__head .section-title { font-size: 18px; line-height: 26px; }
 }
