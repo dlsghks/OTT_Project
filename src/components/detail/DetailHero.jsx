@@ -1,3 +1,4 @@
+import { VoucherWatchActions } from '../common/VoucherWatchActions';
 import { useRef, useState } from 'react';
 import { Heart, Share, ChevronDown, ChevronUp } from 'lucide-react';
 import { DetailInfo } from './DetailInfo';
@@ -26,6 +27,7 @@ export const DetailHero = ({
   onDownload,
   downloadNotice,
   actions,
+  hasWatchAccess = actions.hasVoucher,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -33,7 +35,7 @@ export const DetailHero = ({
   const [frame, setFrame] = useState(null);
   const heroRef = useRef(null);
   const contentRef = useRef(null);
-  const { user, isLiked, onLogin, onLike } = actions;
+  const { isLiked, onLike } = actions;
   const infoRows = getInfoRows(info);
 
   const expand = () => {
@@ -71,23 +73,14 @@ export const DetailHero = ({
           </p>
 
           <div className="movie-hero__actions">
-            {/* 로그인 전에는 로그인 버튼만 표시 */}
             {watchActions ?? (showWatch && (
-              user ? (
+              hasWatchAccess ? (
                 <>
                   {select}
-                  <button type="button" className="movie-hero__buy" onClick={onWatch}>
-                    시청하기
-                  </button>
+                  <button type="button" className="movie-hero__buy" onClick={onWatch}>시청하기</button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  className="movie-hero__buy movie-hero__buy--login"
-                  onClick={onLogin}
-                >
-                  로그인
-                </button>
+                <VoucherWatchActions onPreview={onWatch} onPurchase={actions.onPurchaseVoucher} />
               )
             ))}
 
