@@ -1,3 +1,4 @@
+import { getVoucherBadge } from "../../utils/voucherBadges";
 import { WatchHistoryCard } from "../../components/member/WatchHistoryCard";
 import { MyPageEventCarousel } from "../../components/member/MyPageEventCarousel";
 import RetroMobileEventSwiper from "../../components/retrov/RetroMobileEventSwiper";
@@ -177,7 +178,10 @@ export const MyPage = ({
     ? getDemoVoucherPurchasesInPeriod(demoPurchases, billingPeriod.months, billingPeriod.now)
     : demoPurchases;
   const activeDemoPass = getActiveDemoVoucher(demoPurchases, openedAt);
-  const voucherActionLabel = passName || activeDemoPass ? "이용권 변경" : "이용권 구매";
+  const currentPassName = passName || activeDemoPass?.name || "";
+  const hasVoucher = Boolean(currentPassName);
+  const voucherBadge = getVoucherBadge(passName ? { name: passName } : activeDemoPass);
+  const voucherActionLabel = hasVoucher ? "이용권 변경" : "이용권 구매";
   const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
   const visibleDialogTitle = billingFromReceipt ? BILLING_TITLE : dialogTitle;
   const notificationButtonRef = useRef(null);
@@ -446,7 +450,7 @@ export const MyPage = ({
         <div className="mypage__profile-toast" role="status">프로필이 저장됐습니다.</div>
       )}
       <div className="mypage__inner">
-        <div className="mypage__profile-row">
+        <div className={`mypage__profile-row ${hasVoucher ? "mypage__profile-row--subscribed" : ""}`}>
           <img
             className="mypage__profile-img"
             src={displayedAvatar}
@@ -476,7 +480,18 @@ export const MyPage = ({
               </Link>
             </div>
 
-            <p>{passName || (activeDemoPass ? `${activeDemoPass.name} (가상결제)` : "보유하신 이용권이 없습니다")}</p>
+            <div className="mypage__voucher">
+              <p>{currentPassName || "보유하신 이용권이 없습니다"}</p>
+              {hasVoucher && voucherBadge && (
+                <img
+                  className="mypage__voucher-badge"
+                  src={getImagePath(`/images/voucher/badges/${voucherBadge}`)}
+                  alt={`${currentPassName} 이용권 배지`}
+                  width="40"
+                  height="40"
+                />
+              )}
+            </div>
           </div>
 
           <div className="mypage__mobile-actions">
