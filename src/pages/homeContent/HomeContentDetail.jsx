@@ -1,3 +1,4 @@
+import { VoucherWatchActions } from '../../components/common/VoucherWatchActions';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { DetailHero } from '../../components/detail/DetailHero';
@@ -184,7 +185,7 @@ const HomeContentBody = ({ item, sectionId }) => {
                     showWatch={false}
                     watchActions={isLineup || isMunmu || isJung ? (
                         <div className="home-lineup-actions">
-                            {actions.user ? (
+                            {actions.hasVoucher ? (
                                 <button
                                     type="button"
                                     className="movie-hero__buy"
@@ -193,26 +194,12 @@ const HomeContentBody = ({ item, sectionId }) => {
                                     {isMunmu ? '에피소드 티저1 보기' : '에피소드 보기'}
                                 </button>
                             ) : (
-                                <>
-                                    <button
-                                        type="button"
-                                        className="movie-hero__buy home-lineup-actions__preview"
-                                        disabled={!isJung || !episodes[0]}
-                                        onClick={isJung && episodes[0]
-                                            ? () => playJungEpisode(episodes[0])
-                                            : undefined}
-                                    >
-                                        <span aria-hidden="true">▶</span> 미리보기
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        className="movie-hero__buy"
-                                        onClick={actions.onLogin}
-                                    >
-                                        로그인
-                                    </button>
-                                </>
+                                <VoucherWatchActions
+                                    onPreview={isJung && episodes[0]
+                                        ? () => playJungEpisode(episodes[0])
+                                        : isLineup ? playComingSoonVideo : () => player.openTrailer({ title: item.title })}
+                                    onPurchase={actions.onPurchaseVoucher}
+                                />
                             )}
                         </div>
                     ) : upcomingWatchAction}
