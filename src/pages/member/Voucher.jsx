@@ -534,6 +534,11 @@ export const Voucher = () => {
                 ref={checkoutDialog}
                 className="voucher__checkout"
                 aria-labelledby="voucher-checkout-title"
+                onCancel={(event) => {
+                    if (!receipt) return;
+                    event.preventDefault();
+                    navigate("/mypage", { replace: true });
+                }}
                 onClose={() => {
                     setCheckout(null);
                     setReceipt(null);
@@ -542,7 +547,6 @@ export const Voucher = () => {
                 <h2 id="voucher-checkout-title">{receipt ? (receipt.isChange ? "이용권 변경 완료" : "이용권 구매 완료") : "가상결제"}</h2>
                 {receipt ? (
                     <form method="dialog" onSubmit={(event) => {
-                        if (!receipt.isChange) return;
                         event.preventDefault();
                         navigate("/mypage", { replace: true });
                     }}>

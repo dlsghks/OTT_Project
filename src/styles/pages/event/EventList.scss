@@ -155,9 +155,20 @@
             padding: 0;
             border: 0;
             border-radius: 11px;
-            background: #1351ff;
-            color: #fff;
+            background: transparent;
+            color: #999;
             font: inherit;
+            cursor: pointer;
+
+            &[aria-current="page"] {
+                background: #1351ff;
+                color: #fff;
+            }
+
+            &:focus-visible {
+                outline: 2px solid #1351ff;
+                outline-offset: 3px;
+            }
         }
     }
 
