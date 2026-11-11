@@ -1,3 +1,4 @@
+import { SliderArrow } from '../common/SliderArrow';
 import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -46,29 +47,18 @@ export const VideoSlider = ({ label, items = [], getKey = (item) => item.id, ren
         ))}
       </Swiper>
 
-      {/* 오른쪽 그라데이션 (투명 → 검정) */}
-      {canNext && <span className="category-row__fade video-slider__fade" aria-hidden="true" />}
-
       {canPrev && (
-        <button
-          type="button"
-          className="category-row__arrow category-row__arrow--prev video-slider__arrow"
+        <SliderArrow direction="prev"
           aria-label={`${label} 이전`}
           onClick={() => swiperRef.current?.slidePrev()}
-        >
-          ‹
-        </button>
+         />
       )}
 
       {canNext && (
-        <button
-          type="button"
-          className="category-row__arrow category-row__arrow--next video-slider__arrow"
+        <SliderArrow direction="next"
           aria-label={`${label} 다음`}
           onClick={() => swiperRef.current?.slideNext()}
-        >
-          ›
-        </button>
+         />
       )}
     </div>
   );

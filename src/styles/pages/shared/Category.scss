@@ -58,12 +58,13 @@ $chip-border: rgba(255, 255, 255, 0.08);
   margin: 0 0 max(40px, 3.6vw);
 
   &__header {
-    margin-bottom: 20px;
+    margin-bottom: 26px;
   }
 
   &__title {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
 
     h2 {

@@ -1,3 +1,4 @@
+import { SliderArrow } from '../common/SliderArrow';
 import { SectionTitle } from '../common/SectionTitle';
 import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -52,24 +53,16 @@ export default function RetroMainRow({ id, title, icon, items, variant, renderIt
         </Swiper>
 
         {canPrev && (
-          <button
-            type="button"
-            className="rv-main-row__arrow rv-main-row__arrow--prev"
+          <SliderArrow direction="prev"
             onClick={() => swiperRef.current?.slidePrev()}
             aria-label={`${title} 이전`}
-          >
-            ‹
-          </button>
+           />
         )}
         {canNext && (
-          <button
-            type="button"
-            className="rv-main-row__arrow rv-main-row__arrow--next"
+          <SliderArrow direction="next"
             onClick={() => swiperRef.current?.slideNext()}
             aria-label={`${title} 다음`}
-          >
-            ›
-          </button>
+           />
         )}
       </div>
     </section>
