@@ -74,17 +74,13 @@ const getChatName = (user) => {
 };
 
 function ChannelImage({ program, className = '' }) {
-  const [failed, setFailed] = useState(false);
+  const [failedSources, setFailedSources] = useState([]);
+  const src = [
+    imageSrc(program?.image || program?.thumbnail || program?.poster),
+    imageSrc(program?.fallbackImage),
+  ].find((source) => source && !failedSources.includes(source));
 
-  const src = imageSrc(
-    program?.image || program?.thumbnail || program?.poster
-  );
-
-  useEffect(() => {
-    setFailed(false);
-  }, [src]);
-
-  if (!src || failed) {
+  if (!src) {
     return (
       <span className="live-image-fallback">
         {program?.channel || program?.title || 'WAVVE LIVE'}
@@ -98,7 +94,7 @@ function ChannelImage({ program, className = '' }) {
       src={src}
       alt={program?.title || program?.channel || '채널 이미지'}
       loading="lazy"
-      onError={() => setFailed(true)}
+      onError={() => setFailedSources((previous) => [...previous, src])}
     />
   );
 }
