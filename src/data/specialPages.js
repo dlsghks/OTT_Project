@@ -35,6 +35,7 @@ const heroPath = (file) => `${import.meta.env.BASE_URL}images/special-hero/${fil
 const hero = (name, options = {}) => ({
   background: heroPath(`${name}_hero.jpg`),
   logo: heroPath(`${name}_logo.png`),
+  theme: name,
   ...options,
 });
 
@@ -409,7 +410,8 @@ export const specialPages = {
   golf: {
     title: '골프',
     description: '필드를 더 가까이, 단독 밀착 중계! 필드캠',
-    hero: hero('golf', { short: true }),
+    // hero: hero('golf', { short: true }),
+    hero: hero('golf'),
     // 웨이브 필터 탭: 필드캠은 웨이브처럼 필드캠 프로그램 상세로 이동
     filters: [
       { id: 'all', label: '골프 전체' },
@@ -597,7 +599,8 @@ export const specialPages = {
   news: {
     title: '뉴스',
     description: '실시간 뉴스와 시사 프로그램을 한눈에',
-    hero: hero('news', { short: true }),
+    // hero: hero('news', { short: true }),
+    hero: hero('news'),
     // 필터를 누르면 탭 화면(/special/news/:tab)으로 이동 — 웨이브 뉴스 필터와 같은 흐름
     filters: [
       { id: 'all', label: '뉴스 전체' },

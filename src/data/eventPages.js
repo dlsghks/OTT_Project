@@ -6,6 +6,7 @@ import { categoryPages } from './categoryData';
 import { EventWinner } from "../components/event/EventWinner";
 import { eventWinnerData } from "./eventWinnerData";
 import { ImageEvent } from "../components/event/ImageEvent";
+import { ATTENDANCE_DOUBLE_DAYS } from "../utils/coinRecords";
 
 const winnerPages = Object.fromEntries(
   Object.entries(eventWinnerData).map(([id, data]) => [
@@ -27,8 +28,8 @@ export const eventPages = {
     // 웨이브 이벤트 안내 이미지
     image: 'https://image.wavve.com/v1/thumbnails/0_0/operation/image/event/202610/1792488565306044996.jpg',
     benefits: [],
-    // 출석 일수가 2배로 인정되는 날짜 (웨이브 11월 달력의 x2 표시)
-    doubleDays: [1, 6, 8, 13, 14, 15, 21, 22, 27, 28, 29],
+    // 출석 일수 · 코인이 2배로 인정되는 날짜 (웨이브 11월 달력의 x2 표시)
+    doubleDays: ATTENDANCE_DOUBLE_DAYS,
     hotItems: [
       ...categoryPages.drama.items.slice(0, 4),
       ...categoryPages.entertainment.items.slice(0, 4),

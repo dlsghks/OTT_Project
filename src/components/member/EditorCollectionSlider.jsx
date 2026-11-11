@@ -46,10 +46,15 @@ export const EditorCollectionSlider = ({ collections, renderItem, cardType = 'ed
     event.currentTarget.style.scrollSnapType = 'x proximity';
     if (drag.moved && event.type !== 'pointercancel') {
       const list = event.currentTarget;
-      const step = list.firstElementChild.getBoundingClientRect().width + (parseFloat(getComputedStyle(list).columnGap) || 0);
+      const first = list.firstElementChild;
+      const offsets = Array.from(list.children, child => child.offsetLeft - first.offsetLeft);
       const direction = drag.distance < 0 ? 1 : -1;
+      const target = list.scrollLeft;
+      const next = direction > 0
+        ? offsets.find(offset => offset > target + 1) ?? list.scrollWidth - list.clientWidth
+        : offsets.findLast(offset => offset < target - 1) ?? 0;
       list.scrollTo({
-        left: drag.left + direction * Math.max(1, Math.round(Math.abs(drag.distance) / step)) * step,
+        left: next,
         behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
       });
     }
@@ -81,8 +86,12 @@ export const EditorCollectionSlider = ({ collections, renderItem, cardType = 'ed
     const list = listRef.current;
     if (!list) return;
     const first = list.firstElementChild;
-    const step = first ? first.getBoundingClientRect().width + (parseFloat(getComputedStyle(list).columnGap) || 0) : list.clientWidth;
-    list.scrollBy({ left: direction * step, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    if (!first) return;
+    const offsets = Array.from(list.children, child => child.offsetLeft - first.offsetLeft);
+    const next = direction > 0
+      ? offsets.find(offset => offset > list.scrollLeft + 1) ?? list.scrollWidth - list.clientWidth
+      : offsets.findLast(offset => offset < list.scrollLeft - 1) ?? 0;
+    list.scrollTo({ left: next, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   };
   return (
     <div className={`mypage__editor-slider mypage__editor-slider--${cardType}`}>

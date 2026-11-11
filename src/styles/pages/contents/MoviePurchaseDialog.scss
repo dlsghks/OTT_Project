@@ -1,0 +1,36 @@
+.movie-purchase-dialog {
+  width: min(420px, calc(100% - 32px));
+  margin: auto;
+  padding: 24px;
+  border: 1px solid #444;
+  border-radius: 12px;
+  background: #1c1c1c;
+  color: #fff;
+
+  &::backdrop { background: rgb(0 0 0 / 70%); }
+  h2 { font-size: 22px; font-weight: 700; }
+  p { margin: 12px 0; color: #c4c4c4; }
+  dl { display: grid; gap: 8px; margin: 16px 0; }
+  dl > div { display: flex; justify-content: space-between; gap: 12px; }
+  dd { text-align: right; }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+
+    a, button {
+      display: grid;
+      place-items: center;
+      flex: 1;
+      min-height: 44px;
+      padding: 6px;
+      border-radius: 6px;
+      background: #383838;
+      color: inherit;
+      text-align: center;
+    }
+
+    button[type="submit"] { background: #1351f9; }
+  }
+}

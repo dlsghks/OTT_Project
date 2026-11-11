@@ -1,5 +1,6 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
 import { PLAYBACK_SETTINGS_KEY, readPlaybackSettings, savePlaybackSettings } from "../../utils/playbackSettings";
 import "../../styles/pages/member/Settings.scss";
 
@@ -40,6 +41,11 @@ export function Settings() {
   const navigate = useNavigate();
   const location = useLocation();
   const id = useId();
+  const user = useAuthStore((state) => state.user);
+  const onLogout = useAuthStore((state) => state.onLogout);
+  const logoutLock = useRef(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
   const [settings, setSettings] = useState(readPlaybackSettings);
   const [message, setMessage] = useState("");
 
@@ -70,6 +76,22 @@ export function Settings() {
   const goBack = () => {
     if (location.state?.from === "/mypage") navigate(-1);
     else navigate("/mypage", { replace: true });
+  };
+
+  const handleLogout = async () => {
+    if (logoutLock.current) return;
+    logoutLock.current = true;
+    setIsLoggingOut(true);
+    setLogoutError("");
+    try {
+      await onLogout();
+      navigate("/login", { replace: true });
+    } catch {
+      setLogoutError("로그아웃하지 못했어요. 다시 시도해주세요.");
+    } finally {
+      logoutLock.current = false;
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -104,6 +126,19 @@ export function Settings() {
           </section>
         ))}
         {message && <p className="wavve-settings__message" role="status">{message}</p>}
+        {user && (
+          <div className="wavve-settings__account">
+            {logoutError && <p className="wavve-settings__message" role="alert">{logoutError}</p>}
+            <button
+              className="wavve-settings__logout"
+              type="button"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? "로그아웃 중…" : "로그아웃"}
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );

@@ -1,0 +1,280 @@
+@charset "UTF-8";
+/* =========================
+   스페셜 페이지 공통 hero (components/special/SpecialHero.jsx)
+   웨이브 special 페이지(.w-special-title) 구조 기준, 수치는 1920px 화면 기준
+   - 기본형        : 배경 1920×1080 · 높이 540px · 가운데 로고(380×132) + 설명
+   - --short(골프·뉴스): 배경 1920×380 · 왼쪽 로고(높이 60px) · 설명 없음
+   1920px 미만은 vw 로 비율 축소, 1920px 이상은 기준 값 고정
+========================= */
+*:has(> .special-hero) {
+  isolation: isolate;
+}
+
+.special-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: calc(100% + var(--page-side-padding, 110px) * 2);
+  height: min(28.125vw, 540px);
+  min-height: 280px;
+  margin: 0 calc(var(--page-side-padding, 110px) * -1);
+  padding-top: min(6.25vw, 120px);
+}
+.special-hero__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  aspect-ratio: 1920/1080;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: cover;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  pointer-events: none;
+}
+.special-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+.special-hero__tag {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 28px;
+  margin: 0 auto 16px;
+  object-fit: contain;
+}
+.special-hero__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(19.7916666667vw, 380px);
+  min-width: 200px;
+  height: min(6.875vw, 132px);
+  min-height: 70px;
+  margin: 0;
+  overflow: hidden;
+  color: #fff;
+  font-size: min(3.75vw, 72px);
+  font-weight: 700;
+  line-height: 1.19;
+  text-align: center;
+  white-space: nowrap;
+}
+.special-hero__logo {
+  display: block;
+  max-width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  object-fit: contain;
+}
+.special-hero__description {
+  margin: 18px 0 0;
+  color: #fff;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: clamp(16px, 1.25vw, 24px);
+  font-weight: 400;
+  line-height: 1.45;
+  min-height: 2.9em;
+  text-align: center;
+  white-space: pre-line;
+  word-break: keep-all;
+}
+.special-hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+.special-hero__tags button {
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: #2e2e30;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+.special-hero__tags button:hover {
+  background: #3c3c40;
+}
+.special-hero__tags button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.special-hero {
+  /* 골프 · 뉴스: 낮은 배경 + 왼쪽 로고 (웨이브 short-header) */
+}
+.special-hero--short {
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: auto;
+  min-height: 0;
+  padding: min(5.2083333333vw, 100px) 0 min(2.8125vw, 54px) var(--page-side-padding, 110px);
+}
+.special-hero--short .special-hero__background {
+  aspect-ratio: 1920/380;
+}
+.special-hero--short .special-hero__inner {
+  align-items: flex-start;
+}
+.special-hero--short .special-hero__title {
+  justify-content: flex-start;
+  width: auto;
+  min-width: 0;
+  max-width: calc(100vw - var(--page-side-padding, 110px) * 2);
+  height: min(3.125vw, 60px);
+  min-height: 40px;
+  font-size: min(2.2916666667vw, 44px);
+  text-align: left;
+}
+.special-hero--short .special-hero__logo {
+  width: auto;
+  margin: 0;
+}
+
+.special-hero:is([data-theme=mma],
+[data-theme=golf],
+[data-theme=news],
+[data-theme=wonly],
+[data-theme=tooniverse],
+[data-theme=kids],
+[data-theme=kbs],
+[data-theme=mbc],
+[data-theme=cj-enm],
+[data-theme=jtbc]) {
+  isolation: isolate;
+}
+.special-hero:is([data-theme=mma],
+[data-theme=golf],
+[data-theme=news],
+[data-theme=wonly],
+[data-theme=tooniverse],
+[data-theme=kids],
+[data-theme=kbs],
+[data-theme=mbc],
+[data-theme=cj-enm],
+[data-theme=jtbc])::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(135deg, var(--special-glow-left) 0%, rgba(0, 0, 0, 0) 42%), linear-gradient(315deg, var(--special-glow-right) 0%, rgba(0, 0, 0, 0) 45%), linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.08) 38%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+.special-hero:is([data-theme=mma],
+[data-theme=golf],
+[data-theme=news],
+[data-theme=wonly],
+[data-theme=tooniverse],
+[data-theme=kids],
+[data-theme=kbs],
+[data-theme=mbc],
+[data-theme=cj-enm],
+[data-theme=jtbc]) .special-hero__background {
+  opacity: 0.78;
+  filter: saturate(0.95);
+}
+.special-hero:is([data-theme=mma],
+[data-theme=golf],
+[data-theme=news],
+[data-theme=wonly],
+[data-theme=tooniverse],
+[data-theme=kids],
+[data-theme=kbs],
+[data-theme=mbc],
+[data-theme=cj-enm],
+[data-theme=jtbc]) .special-hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.special-hero:is([data-theme=golf],
+[data-theme=news]) .special-hero__background {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1920/380;
+  background-size: cover;
+  background-position: center top;
+  background-color: transparent;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%);
+}
+
+.special-hero + .category-filter {
+  margin-top: 0;
+}
+
+.special-page:has(> .special-hero[data-theme]:not([data-theme=movieplus])) .category-page__sections {
+  position: relative;
+  z-index: 1;
+}
+.special-page:has(> .special-hero[data-theme]:not([data-theme=movieplus])) .category-row__title h2 {
+  color: #ffffff;
+  opacity: 1;
+}
+
+.special-page > .special-hero:is([data-theme=golf],
+[data-theme=news]) + .category-filter {
+  position: relative;
+  z-index: 3;
+  opacity: 1;
+  filter: none;
+}
+.special-page > .special-hero:is([data-theme=golf],
+[data-theme=news]) + .category-filter .category-filter__button {
+  background-color: #2e2e30;
+  color: #ffffff;
+  opacity: 1;
+  filter: none;
+}
+.special-page > .special-hero:is([data-theme=golf],
+[data-theme=news]) + .category-filter .category-filter__button:hover {
+  background-color: #3c3c40;
+}
+.special-page > .special-hero:is([data-theme=golf],
+[data-theme=news]) + .category-filter .category-filter__button.is-active {
+  background-color: #1351f9;
+  border-color: #1351f9;
+  color: #ffffff;
+  opacity: 1;
+}
+.special-page > .special-hero:is([data-theme=golf],
+[data-theme=news]) + .category-filter .category-filter__button.is-active:hover {
+  background-color: #0f40c6;
+}
+
+@media (max-width: 768px) {
+  .special-hero {
+    min-height: 240px;
+    padding-top: 40px;
+  }
+  .special-hero__background {
+    min-height: 320px;
+  }
+  .special-hero__tags button {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+  .special-hero--short {
+    min-height: 0;
+    padding-top: 48px;
+    padding-bottom: 28px;
+  }
+  .special-hero--short .special-hero__background {
+    min-height: 100%;
+  }
+}

@@ -57,12 +57,14 @@ export const programs = [
 ];
 
 // 이벤트 배너 (가운데 + 양옆 미리보기, 메인·상세 공통)
-// image: 1480 x 180 배너 이미지 (public/images/retrov/main/event/) / title·description: 대체 텍스트
+// image: 1480 x 180 배너 이미지 (public/images/retrov/main/event/) / title·description: 대체 텍스트 / mobileTitle: [기본 글자, 강조 글자] · mobileDescription: 줄 단위 (모바일 배너)
 export const eventBanners = [
   {
     id: "favorite-scene",
     link: "/eventdetail/favorite-scene", // 우리 결혼했어요 최애 장면 투표 (src/data/retrov/retrovEvents.js)
     image: `${IMG}/event/favorite-scene.png`,
+    mobileTitle: ["나의 ", "최애장면은?!"],
+    mobileDescription: ["잊지 못할 장면에 투표하고,", "다른 팬들의 선택도 만나보세요"],
     title: "나의 최애 장면은?!",
     description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",
   },
@@ -70,6 +72,8 @@ export const eventBanners = [
     id: "next-line",
     link: "/eventdetail/next-line", // 거침없이 하이킥 명대사 퀴즈
     image: `${IMG}/event/next-line.png`,
+    mobileTitle: ["다음에 올 명대사는?"],
+    mobileDescription: ["그때 그 대사, 아직 기억하나요?"],
     title: "다음에 올 명대사는?",
     description: "그때 그 대사, 아직 기억하나요?",
   },
@@ -77,6 +81,8 @@ export const eventBanners = [
     id: "what-next",
     link: "/eventdetail/what-next", // 풀하우스 다음 장면 투표
     image: `${IMG}/event/what-next.png`,
+    mobileTitle: ["잠깐! 이다음에", "무슨 일이?"],
+    mobileDescription: ["잊지 못할 장면에 투표하고,", "다른 팬들의 선택도 만나보세요"],
     title: "잠깐! 이다음에 무슨 일이?",
     description: "잊지 못할 장면에 투표하고, 다른 팬들의 선택도 만나보세요",
   },

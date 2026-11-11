@@ -25,6 +25,7 @@ import YoutubePlayerModal from '../../components/common/YoutubePlayerModal';
 import CharacterQuiz from '../../components/retrov/CharacterQuiz';
 import CharacterImagePanel from '../../components/retrov/CharacterImagePanel';
 import RetroEventCarousel from '../../components/retrov/RetroEventCarousel';
+import { ShareModal } from '../../components/common/ShareModal';
 
 import '../../styles/pages/retrov/RetrovDetail.scss';
 import '../../styles/pages/retrov/Retrov.scss';
@@ -51,9 +52,17 @@ export const RetrovDetail = () => {
 
 function ProgramFanPage({ programId, program }) {
   const [selectedCharacterId, setSelectedCharacterId] = useState(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   // 로그인 전: 재생 · 관심 · 공유 버튼 → 로그인 팝업 (예능~해외시리즈 상세와 같은 동작)
-  const actions = useDetailActions();
+  const favoriteProgram = programs.find((item) => item.id === programId);
+  const actions = useDetailActions({
+    id: `retrov:${programId}`,
+    title: program.title,
+    type: "program",
+    image: favoriteProgram?.thumbnail || program.hero || program.logo,
+  });
   const { user, isLiked, onLogin, onLike } = actions;
+
   // 펼치기: 펼치기 직전의 히어로 높이 · 내용 시작 위치 (펼친 뒤에도 로고 · 버튼 자리 고정)
   const [expanded, setExpanded] = useState(false);
   const [heroFrame, setHeroFrame] = useState(null);
@@ -164,6 +173,10 @@ function ProgramFanPage({ programId, program }) {
       if (target) play(target);
       return;
     }
+    if (season?.firstEpisode) {
+      play({ id: `${programId}-${seasonId}-e1`, title: `${season.label} 1회`, ...season.firstEpisode });
+      return;
+    }
     if (!tmdb) return;
     const first = (episodes[`${tmdb.id}_${tmdb.season}`] ?? [])[0];
     play(first ? episodeToVideo(first, tmdb, tmdbBackdrop, youtubeVideos, program.youtubeIds?.[seasonId], undefined, program.descriptionStrip) : {
@@ -193,223 +206,220 @@ function ProgramFanPage({ programId, program }) {
     castRef.current?.querySelector(`[data-character="${previousId}"]`)?.focus({ preventScroll: true });
   }
 
-  async function handleShare() {
-    if (!user) {
-      onLogin();
-      return;
-    }
-    const url = window.location.href;
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: program.title, url });
-      } else {
-        await navigator.clipboard.writeText(url);
-        alert("링크가 복사되었습니다.");
-      }
-    } catch {
-      // 공유 취소 시 무시
-    }
-  }
+
 
   return (
     <>
-    {/* 배경색은 모든 프로그램 공통: src/styles/retrov/_variables.scss 의 $retrov-detail-bg */}
-    <div className="rv-detail">
-      {/* 프로그램 배너 */}
-      <section
-        ref={heroRef}
-        className={`rv-hero ${expanded ? "is-expanded" : ""}`}
-        style={
-          // 펼치면 배경은 펼치기 전 높이에 고정(::after)되고 히어로만 아래로 늘어남
-          expanded && heroFrame
-            ? { "--hero-bg": heroBackground, "--hero-height": `${heroFrame.heroHeight}px`, "--content-top": `${heroFrame.contentTop}px` }
-            : { backgroundImage: heroBackground }
-        }
-        aria-labelledby="rv-program-title"
-      >
-        {/* 모바일: 오른쪽 위 닫기 → 레트로브 메인 (PC에서는 숨김) */}
-        <Link to="/retrov" className="rv-hero__close" aria-label="레트로브 메인으로 돌아가기">
-          <img src={closeIcon} alt="" width="16" height="16" />
-        </Link>
+      {/* 배경색은 모든 프로그램 공통: src/styles/retrov/_variables.scss 의 $retrov-detail-bg */}
+      <div className="rv-detail">
+        {/* 프로그램 배너 */}
+        <section
+          ref={heroRef}
+          className={`rv-hero ${expanded ? "is-expanded" : ""}`}
+          style={
+            // 펼치면 배경은 펼치기 전 높이에 고정(::after)되고 히어로만 아래로 늘어남
+            expanded && heroFrame
+              ? { "--hero-bg": heroBackground, "--hero-height": `${heroFrame.heroHeight}px`, "--content-top": `${heroFrame.contentTop}px` }
+              : { backgroundImage: heroBackground }
+          }
+          aria-labelledby="rv-program-title"
+        >
+          {/* 모바일: 오른쪽 위 닫기 → 레트로브 메인 (PC에서는 숨김) */}
+          <Link to="/retrov" className="rv-hero__close" aria-label="레트로브 메인으로 돌아가기">
+            <img src={closeIcon} alt="" width="16" height="16" />
+          </Link>
 
-        <div ref={heroContentRef} className="rv-hero__content">
-          <h1 id="rv-program-title" className="rv-hero__logo">
-            {program.logo
-              ? <img src={getImagePath(program.logo)} alt={program.title} />
-              : program.title}
-          </h1>
+          <div ref={heroContentRef} className="rv-hero__content">
+            <h1 id="rv-program-title" className="rv-hero__logo">
+              {program.logo
+                ? <img src={getImagePath(program.logo)} alt={program.title} />
+                : program.title}
+            </h1>
 
-          <p className="rv-hero__meta">
-            {program.rating && (
-              <span className="rv-hero__rating" aria-label={`${program.rating}세 이상 관람가`}>
-                {program.rating}
-              </span>
-            )}
-            <span>· {program.genre}</span>
-          </p>
-
-          <div className="rv-hero__actions">
-            {seasons.length > 0 && (
-              <label className="rv-hero__season">
-                <span className="sr-only">시즌 선택</span>
-                <select
-                  value={seasonId}
-                  onChange={(e) => {
-                    setSeasonId(e.target.value);
-                    setSelectedCharacterId(null); // 시즌이 바뀌면 열려 있던 청첩장/퀴즈 닫기
-                  }}
-                >
-                  {seasons.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown size={22} aria-hidden="true" />
-              </label>
-            )}
-
-            <button type="button" className="rv-hero__play" onClick={user ? playFirstEpisode : onLogin} aria-label={playLabel}>
-              {/* PC: 회차 문구 / 모바일: 시안대로 "시청하기" */}
-              <span className="rv-hero__play-label">{playLabel}</span>
-              <span className="rv-hero__play-label rv-hero__play-label--mobile" aria-hidden="true">시청하기</span>
-            </button>
-
-            <button
-              type="button"
-              className="rv-hero__icon-btn"
-              aria-pressed={isLiked}
-              onClick={onLike}
-            >
-              <img className="rv-hero__icon" src={isLiked ? likeActiveIcon : likeIcon} alt="" width="37" height="33" />
-              <span>관심</span>
-            </button>
-
-            <button type="button" className="rv-hero__icon-btn" onClick={handleShare}>
-              <img className="rv-hero__icon" src={shareIcon} alt="" width="34" height="28" />
-              <span>공유</span>
-            </button>
-          </div>
-
-          <div className="rv-hero__desc">
-            {program.description.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-            {/* 모바일: 설명 3줄 + 더보기 → 펼치기와 같은 동작 (PC에서는 숨김) */}
-            {!expanded && (
-              <button type="button" className="rv-hero__more" aria-expanded={false} onClick={expandHero}>
-                더보기
-              </button>
-            )}
-          </div>
-
-          {program.cast && (
-            <p className="rv-hero__cast">
-              출연 : {program.cast.join(", ")}
+            <p className="rv-hero__meta">
+              {program.rating && (
+                <span className="rv-hero__rating" aria-label={`${program.rating}세 이상 관람가`}>
+                  {program.rating}
+                </span>
+              )}
+              <span>· {program.genre}</span>
             </p>
+
+            <div className="rv-hero__actions">
+              {seasons.length > 0 && (
+                <label className="rv-hero__season">
+                  <span className="sr-only">시즌 선택</span>
+                  <select
+                    value={seasonId}
+                    onChange={(e) => {
+                      setSeasonId(e.target.value);
+                      setSelectedCharacterId(null); // 시즌이 바뀌면 열려 있던 청첩장/퀴즈 닫기
+                    }}
+                  >
+                    {seasons.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown size={22} aria-hidden="true" />
+                </label>
+              )}
+
+              <button type="button" className="rv-hero__play" onClick={user ? playFirstEpisode : onLogin} aria-label={playLabel}>
+                {/* PC: 회차 문구 / 모바일: 시안대로 "시청하기" */}
+                <span className="rv-hero__play-label">{playLabel}</span>
+                <span className="rv-hero__play-label rv-hero__play-label--mobile" aria-hidden="true">시청하기</span>
+              </button>
+
+              <button
+                type="button"
+                className="rv-hero__icon-btn"
+                aria-pressed={isLiked}
+                disabled={actions.likeBusy}
+                onClick={onLike}
+              >
+                <img className="rv-hero__icon" src={isLiked ? likeActiveIcon : likeIcon} alt="" width="37" height="33" />
+                <span>관심</span>
+              </button>
+
+              <button
+                type="button"
+                className="rv-hero__icon-btn"
+                onClick={() => setIsShareModalOpen(true)}
+              >
+                <img className="rv-hero__icon" src={shareIcon} alt="" width="34" height="28" />
+                <span>공유</span>
+              </button>
+            </div>
+
+            {actions.likeError && <p role="alert">{actions.likeError}</p>}
+
+            <div className="rv-hero__desc">
+              {program.description.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+              {/* 모바일: 설명 3줄 + 더보기 → 펼치기와 같은 동작 (PC에서는 숨김) */}
+              {!expanded && (
+                <button type="button" className="rv-hero__more" aria-expanded={false} onClick={expandHero}>
+                  더보기
+                </button>
+              )}
+            </div>
+
+            {program.cast && (
+              <p className="rv-hero__cast">
+                출연 : {program.cast.join(", ")}
+              </p>
+            )}
+
+            {/* 펼치기: 출연 아래로 상세 정보(개요 · 장르 · 감독 · 작가) → 아래 내용은 그만큼 밀림 */}
+            {expanded && <DetailInfo rows={infoRows} className="rv-hero-info" />}
+          </div>
+
+          {/* 펼치기: 히어로 아래 가운데 / 접기: 상세 정보 아래 가운데 */}
+          {infoRows.length > 0 && (expanded ? (
+            <button type="button" className="rv-hero__toggle rv-hero__toggle--fold" aria-expanded={true} onClick={() => setExpanded(false)}>
+              <ChevronUp size={16} aria-hidden="true" />
+              접기
+            </button>
+          ) : (
+            <button type="button" className="rv-hero__toggle" aria-expanded={false} onClick={expandHero}>
+              <ChevronDown size={16} aria-hidden="true" />
+              펼치기
+            </button>
+          ))}
+        </section>
+
+        {/* 이벤트 배너 */}
+        <RetroEventCarousel banners={eventBanners} />
+
+
+        <div className="rv-container">
+          {/* 캐릭터 선택 (해당 시즌 캐릭터가 없으면 숨김) */}
+          {characters.length > 0 && (
+            <nav
+              ref={castRef}
+              className="rv-cast"
+              aria-label={`${program.title} ${isImagePanel ? panelLabel : "캐릭터 퀴즈"} 선택`}
+            >
+              {characters.map((character) => (
+                <button
+                  key={character.id}
+                  type="button"
+                  className="rv-cast__item"
+                  data-character={character.id}
+                  aria-expanded={selectedCharacterId === character.id}
+                  aria-controls={selectedCharacterId === character.id ? "character-panel" : undefined}
+                  onClick={() => handleCharacterClick(character.id)}
+                >
+                  <img src={getImagePath(character.image)} alt="" />
+                  <span>{character.name}</span>
+                </button>
+              ))}
+            </nav>
           )}
 
-          {/* 펼치기: 출연 아래로 상세 정보(개요 · 장르 · 감독 · 작가) → 아래 내용은 그만큼 밀림 */}
-          {expanded && <DetailInfo rows={infoRows} className="rv-hero-info" />}
+          {/* 캐릭터 아래에 이미지 카드(우결·하이킥·꽃남·풀하우스) 또는 퀴즈(무도) 표시 */}
+          {selectedCharacter && isImagePanel && (
+            <CharacterImagePanel key={selectedCharacter.id} character={selectedCharacter} label={panelLabel} />
+          )}
+          {selectedCharacter && !isImagePanel && (
+            <CharacterQuiz
+              key={selectedCharacter.id}
+              character={selectedCharacter}
+              quiz={characterQuizzes[selectedCharacter.id]}
+              onClose={() => setSelectedCharacterId(null)}
+              onBackToList={backToCharacterList}
+            />
+          )}
+
+          {/* 테마별 영상 목록 */}
+          {sections.map((section) => (
+            <RetroVideoRow
+              key={section.id}
+              id={section.id}
+              title={section.title}
+              videos={section.videos}
+              frame={program.tvFrame}
+              onPlay={play}
+            />
+          ))}
+
+          {/* 다른 프로그램 */}
+          <section className="rv-section rv-others" aria-labelledby="rv-others-title">
+            <SectionTitle id="rv-others-title" className="rv-section__title">
+              {program.othersTitle ?? "또 다른 그때 그시절 프로그램보기"}
+            </SectionTitle>
+
+            <ul className="rv-others__list">
+              {otherPrograms.slice(0, 5).map((item) => (
+                <li key={item.id}>
+                  <Link to={`/retrov/${item.id}`} className="rv-others__item">
+                    <img
+                      src={getImagePath(item.another ?? item.thumbnail ?? item.image)}
+                      alt={item.title}
+                      loading="lazy"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
 
-        {/* 펼치기: 히어로 아래 가운데 / 접기: 상세 정보 아래 가운데 */}
-        {infoRows.length > 0 && (expanded ? (
-          <button type="button" className="rv-hero__toggle rv-hero__toggle--fold" aria-expanded={true} onClick={() => setExpanded(false)}>
-            <ChevronUp size={16} aria-hidden="true" />
-            접기
-          </button>
-        ) : (
-          <button type="button" className="rv-hero__toggle" aria-expanded={false} onClick={expandHero}>
-            <ChevronDown size={16} aria-hidden="true" />
-            펼치기
-          </button>
-        ))}
-      </section>
-
-      {/* 이벤트 배너 */}
-      <RetroEventCarousel banners={eventBanners} />
-
-
-      <div className="rv-container">
-        {/* 캐릭터 선택 (해당 시즌 캐릭터가 없으면 숨김) */}
-        {characters.length > 0 && (
-          <nav
-            ref={castRef}
-            className="rv-cast"
-            aria-label={`${program.title} ${isImagePanel ? panelLabel : "캐릭터 퀴즈"} 선택`}
-          >
-            {characters.map((character) => (
-              <button
-                key={character.id}
-                type="button"
-                className="rv-cast__item"
-                data-character={character.id}
-                aria-expanded={selectedCharacterId === character.id}
-                aria-controls={selectedCharacterId === character.id ? "character-panel" : undefined}
-                onClick={() => handleCharacterClick(character.id)}
-              >
-                <img src={getImagePath(character.image)} alt="" />
-                <span>{character.name}</span>
-              </button>
-            ))}
-          </nav>
-        )}
-
-        {/* 캐릭터 아래에 이미지 카드(우결·하이킥·꽃남·풀하우스) 또는 퀴즈(무도) 표시 */}
-        {selectedCharacter && isImagePanel && (
-          <CharacterImagePanel key={selectedCharacter.id} character={selectedCharacter} label={panelLabel} />
-        )}
-        {selectedCharacter && !isImagePanel && (
-          <CharacterQuiz
-            key={selectedCharacter.id}
-            character={selectedCharacter}
-            quiz={characterQuizzes[selectedCharacter.id]}
-            onClose={() => setSelectedCharacterId(null)}
-            onBackToList={backToCharacterList}
-          />
-        )}
-
-        {/* 테마별 영상 목록 */}
-        {sections.map((section) => (
-          <RetroVideoRow
-            key={section.id}
-            id={section.id}
-            title={section.title}
-            videos={section.videos}
-            frame={program.tvFrame}
-            onPlay={play}
-          />
-        ))}
-
-        {/* 다른 프로그램 */}
-        <section className="rv-section rv-others" aria-labelledby="rv-others-title">
-          <SectionTitle id="rv-others-title" className="rv-section__title">
-            {program.othersTitle ?? "또 다른 그때 그시절 프로그램보기"}
-          </SectionTitle>
-
-          <ul className="rv-others__list">
-            {otherPrograms.slice(0, 5).map((item) => (
-              <li key={item.id}>
-                <Link to={`/retrov/${item.id}`} className="rv-others__item">
-                  <img
-                    src={getImagePath(item.another ?? item.thumbnail ?? item.image)}
-                    alt={item.title}
-                    loading="lazy"
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {/* 유튜브 재생 팝업 */}
+        {playingVideo && <YoutubePlayerModal video={playingVideo} onClose={closePlayer} />}
       </div>
 
-      {/* 유튜브 재생 팝업 */}
-      {playingVideo && <YoutubePlayerModal video={playingVideo} onClose={closePlayer} />}
-    </div>
-
-    {/* 로그인 팝업: 레트로브 글씨체가 섞이지 않도록 .rv-detail 바깥에 */}
-    <LoginModal isOpen={actions.loginOpen} onClose={actions.onCloseLogin} />
+      {/* 로그인 팝업: 레트로브 글씨체가 섞이지 않도록 .rv-detail 바깥에 */}
+      <LoginModal isOpen={actions.loginOpen} onClose={actions.onCloseLogin} />
+      {isShareModalOpen && (
+        <ShareModal
+          title={program.title}
+          onClose={() => setIsShareModalOpen(false)}
+        />
+      )}
     </>
   );
 }

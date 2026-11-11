@@ -1,10 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { Check, ChevronDown } from "lucide-react";
 
 import { auth } from "../../firebase/firebase";
 import { LoginModal } from "../../components/common/LoginModal";
 import { voucherGroups, voucherTabs } from "../../data/voucherData";
+import {
+    getActiveDemoVoucher,
+    getDemoVoucherPurchases,
+    getDemoVoucherSelection,
+    saveDemoVoucherPurchase,
+} from "../../utils/demoVoucherPurchases";
 
 import "../../styles/pages/member/Voucher.scss";
 
@@ -60,6 +67,7 @@ const FeatureValue = ({ value }) => {
 };
 
 export const Voucher = () => {
+    const navigate = useNavigate();
     const [bannerOpen, setBannerOpen] = useState(false);
 
     const toggleBanner = () => {
@@ -75,14 +83,21 @@ export const Voucher = () => {
 
     const [user, setUser] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
+    const [activeVoucher, setActiveVoucher] = useState(null);
     const [loginModalOpen, setLoginModalOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const [checkout, setCheckout] = useState(null);
+    const [checkoutError, setCheckoutError] = useState("");
+    const [receipt, setReceipt] = useState(null);
+    const checkoutDialog = useRef(null);
 
+    const currentSelection = getDemoVoucherSelection(activeVoucher);
     const group = voucherGroups[activeTab];
     const visiblePlans = group.plans.filter(
         (plan) =>
             activeTab !== "double" ||
             showAll ||
+            plan.id === currentSelection?.planId ||
             !plan.hiddenByDefault
     );
     const selectedPlan =
@@ -90,6 +105,10 @@ export const Voucher = () => {
 
     const isAnnual =
         billing === "annual" && Boolean(selectedPlan?.annual);
+
+    const isCurrentSelection = Boolean(currentSelection &&
+        currentSelection.planId === selectedId &&
+        currentSelection.billing === (isAnnual ? "annual" : "monthly"));
 
     const selectedPrice = selectedPlan
         ? isAnnual
@@ -99,17 +118,27 @@ export const Voucher = () => {
 
     useEffect(() => {
         return onAuthStateChanged(auth, (currentUser) => {
+            const voucher = getActiveDemoVoucher(getDemoVoucherPurchases(currentUser?.uid));
+            const selection = getDemoVoucherSelection(voucher);
+
             setUser(currentUser);
+            setActiveVoucher(voucher);
+            setActiveTab(selection?.tabId ?? "double");
+            setSelectedId(selection?.planId ?? null);
+            setBilling(selection?.billing ?? "monthly");
             setAuthLoading(false);
             setLoginModalOpen(false);
             setMessage("");
+            setReceipt(null);
+            checkoutDialog.current?.close();
         });
     }, []);
 
     const handleTabChange = (id) => {
+        const selection = currentSelection?.tabId === id ? currentSelection : null;
         setActiveTab(id);
-        setSelectedId(null);
-        setBilling("monthly");
+        setSelectedId(selection?.planId ?? null);
+        setBilling(selection?.billing ?? "monthly");
         setBannerOpen(false);
         setShowAll(false);
         setHoveredId(null);
@@ -118,7 +147,7 @@ export const Voucher = () => {
 
     const handlePlanChange = (plan) => {
         setSelectedId((previous) =>
-            previous === plan.id ? null : plan.id
+            previous === plan.id && !isCurrentSelection ? null : plan.id
         );
 
         if (!plan.annual) setBilling("monthly");
@@ -127,7 +156,7 @@ export const Voucher = () => {
     };
 
     const handlePurchase = () => {
-        if (authLoading) return;
+        if (authLoading || isCurrentSelection) return;
         if (!selectedPlan) {
             setMessage("이용권을 먼저 선택해 주세요.");
             return;
@@ -138,8 +167,90 @@ export const Voucher = () => {
             return;
         }
 
-        setMessage(
-            `${selectedPlan.name} ${isAnnual ? "12개월" : "1개월"}을 선택했습니다. 결제 기능은 준비 중입니다.`
+        setMessage("");
+        setReceipt(null);
+        setCheckoutError("");
+        setCheckout({
+            uid: user.uid,
+            id: crypto.randomUUID(),
+            planId: selectedPlan.id,
+            isChange: Boolean(activeVoucher),
+            name: selectedPlan.name,
+            months: isAnnual ? 12 : 1,
+            amount: selectedPrice,
+        });
+    };
+
+    useEffect(() => {
+        if (checkout && !checkoutDialog.current.open) checkoutDialog.current.showModal();
+    }, [checkout]);
+
+    const approveCheckout = (event) => {
+        event.preventDefault();
+        if (!checkoutDialog.current.open || !checkout || auth.currentUser?.uid !== checkout.uid) {
+            return;
+        }
+
+        try {
+            saveDemoVoucherPurchase(checkout);
+        } catch {
+            setCheckoutError("결제 내역을 저장하지 못했습니다. 브라우저 저장 공간을 확인한 뒤 다시 시도해 주세요.");
+            return;
+        }
+
+        setActiveVoucher(getActiveDemoVoucher(getDemoVoucherPurchases(checkout.uid)));
+        setSelectedId(null);
+        setCheckout(null);
+        setReceipt(checkout);
+    };
+
+    const renderPlanButton = (plan) => {
+        const unavailable = billing === "annual" && !plan.annual;
+        const price = billing === "annual" ? plan.annual : plan.monthly;
+
+        return (
+            <button
+                type="button"
+                className={[
+                    "voucher__plan",
+                    selectedId === plan.id ? "is-selected" : "",
+                    hoveredId === plan.id ? "is-hovered" : "",
+                    unavailable ? "is-disabled" : "",
+                ].filter(Boolean).join(" ")}
+                disabled={authLoading || unavailable}
+                aria-pressed={selectedId === plan.id}
+                onClick={() => handlePlanChange(plan)}
+            >
+                {activeTab === "wavve" && plan.id === "wavve-standard" && (
+                    <span className="voucher__recommend">추천</span>
+                )}
+                <span className="voucher__plan-name">
+                    <span className="voucher__plan-dot" aria-hidden="true" />
+                    {plan.name}
+                </span>
+
+                {plan.originalPrice && (
+                    <del className="voucher__original-price">
+                        {money(plan.originalPrice)}원
+                    </del>
+                )}
+
+                <strong className="voucher__plan-price">
+                    {unavailable
+                        ? "미제공"
+                        : `${money(price)}원 / ${billing === "annual" ? "년" : "월"}`}
+                </strong>
+
+                <span className="voucher__plan-note">
+                    {unavailable
+                        ? "1개월 이용권만 제공"
+                        : currentSelection?.planId === plan.id && currentSelection.billing === billing
+                            ? "이용 중인 이용권"
+                            : selectedId === plan.id
+                            ? "선택한 이용권"
+                            : "이용권 선택"}
+                </span>
+            </button>
         );
     };
 
@@ -228,11 +339,19 @@ export const Voucher = () => {
                         </div>
                     )}
 
+                    <div className="voucher__mobile-plans" role="group" aria-label="이용권 선택">
+                        {visiblePlans.map((plan) => (
+                            <div key={plan.id}>{renderPlanButton(plan)}</div>
+                        ))}
+                    </div>
+
+                    <p className="voucher__comparison-hint">혜택 비교는 표를 옆으로 밀어 확인할 수 있어요.</p>
                     <div className="voucher__table-scroll">
                         <table
                             className="voucher__table"
                             style={{
-                                minWidth: visiblePlans.length === 5 ? 1200 : 950,
+                                "--voucher-table-width": visiblePlans.length === 5 ? "1200px" : "950px",
+                                "--voucher-plan-count": visiblePlans.length,
                             }}
                         >
                             <caption className="voucher__sr-only">
@@ -251,64 +370,19 @@ export const Voucher = () => {
                                         </p>
                                     </th>
 
-                                    {visiblePlans.map((plan) => {
-                                        const unavailable = billing === "annual" && !plan.annual;
-
-                                        const price =
-                                            billing === "annual" ? plan.annual : plan.monthly;
-
-                                        return (
-                                            <th
-                                                key={plan.id}
-                                                scope="col"
-                                                onMouseEnter={() => {
-                                                    if (!unavailable) setHoveredId(plan.id);
-                                                }}
-                                                onMouseLeave={() => setHoveredId(null)}
-                                            >
-                                                <button
-                                                    type="button"
-                                                    className={[
-                                                        "voucher__plan",
-                                                        selectedId === plan.id ? "is-selected" : "",
-                                                        hoveredId === plan.id ? "is-hovered" : "",
-                                                        unavailable ? "is-disabled" : "",
-                                                    ].filter(Boolean).join(" ")}
-                                                    disabled={unavailable}
-                                                    aria-pressed={selectedId === plan.id}
-                                                    onClick={() => handlePlanChange(plan)}
-                                                >
-                                                    {activeTab === "wavve" && plan.id === "wavve-standard" && (
-                                                        <span className="voucher__recommend">추천</span>
-                                                    )}
-                                                    <span className="voucher__plan-name">
-                                                        <span className="voucher__plan-dot" aria-hidden="true" />
-                                                        {plan.name}
-                                                    </span>
-
-                                                    {plan.originalPrice && (
-                                                        <del className="voucher__original-price">
-                                                            {money(plan.originalPrice)}원
-                                                        </del>
-                                                    )}
-
-                                                    <strong className="voucher__plan-price">
-                                                        {unavailable
-                                                            ? "미제공"
-                                                            : `${money(price)}원 / ${billing === "annual" ? "년" : "월"}`}
-                                                    </strong>
-
-                                                    <span className="voucher__plan-note">
-                                                        {unavailable
-                                                            ? "1개월 이용권만 제공"
-                                                            : selectedId === plan.id
-                                                                ? "선택한 이용권"
-                                                                : "이용권 선택"}
-                                                    </span>
-                                                </button>
-                                            </th>
-                                        );
-                                    })}
+                                    {visiblePlans.map((plan) => (
+                                        <th
+                                            key={plan.id}
+                                            scope="col"
+                                            onMouseEnter={() => {
+                                                if (billing !== "annual" || plan.annual) setHoveredId(plan.id);
+                                            }}
+                                            onMouseLeave={() => setHoveredId(null)}
+                                        >
+                                            {renderPlanButton(plan)}
+                                            <span className="voucher__comparison-name">{plan.name}</span>
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
 
@@ -405,7 +479,7 @@ export const Voucher = () => {
                             </summary>
                             <p>
                                 페이백 등 이벤트 혜택은 해당 이벤트의 적용 대상과
-                                조건을 확인해 주세요. 현재 실제 결제는 연결되지 않았습니다.
+                                조건을 확인해 주세요. 이 페이지에서는 시연용 가상결제가 진행됩니다.
                             </p>
                         </details>
                     </div>
@@ -449,12 +523,51 @@ export const Voucher = () => {
                     <button
                         type="button"
                         onClick={handlePurchase}
-                        disabled={authLoading}
+                        disabled={authLoading || isCurrentSelection}
                     >
-                        이용권 구매하기
+                        {isCurrentSelection ? "이용 중인 이용권" : activeVoucher ? "이용권 변경하기" : "이용권 구매하기"}
                     </button>
                 </div>
             </div>
+
+            <dialog
+                ref={checkoutDialog}
+                className="voucher__checkout"
+                aria-labelledby="voucher-checkout-title"
+                onClose={() => {
+                    setCheckout(null);
+                    setReceipt(null);
+                }}
+            >
+                <h2 id="voucher-checkout-title">{receipt ? (receipt.isChange ? "이용권 변경 완료" : "이용권 구매 완료") : "가상결제"}</h2>
+                {receipt ? (
+                    <form method="dialog" onSubmit={(event) => {
+                        if (!receipt.isChange) return;
+                        event.preventDefault();
+                        navigate("/mypage", { replace: true });
+                    }}>
+                        <p>{receipt.name} {receipt.months}개월 {receipt.isChange ? "이용권으로 변경됐어요." : "가상결제가 완료됐어요."}</p>
+                        <div className="voucher__checkout-actions">
+                            <Link to="/mypage?billing=1">결제 내역 보기</Link>
+                            <button type="submit" autoFocus>확인</button>
+                        </div>
+                    </form>
+                ) : checkout && (
+                    <form onSubmit={approveCheckout}>
+                        <p>시연용 결제입니다. 실제 청구는 발생하지 않습니다.</p>
+                        <dl>
+                            <div><dt>이용권</dt><dd>{checkout.name}</dd></div>
+                            <div><dt>이용 기간</dt><dd>{checkout.months}개월</dd></div>
+                            <div><dt>결제 금액</dt><dd>{money(checkout.amount)}원</dd></div>
+                        </dl>
+                        {checkoutError && <p role="alert">{checkoutError}</p>}
+                        <div className="voucher__checkout-actions">
+                            <button type="button" onClick={() => checkoutDialog.current.close()} autoFocus>취소</button>
+                            <button type="submit">가상결제 승인</button>
+                        </div>
+                    </form>
+                )}
+            </dialog>
 
             <LoginModal
                 isOpen={loginModalOpen}

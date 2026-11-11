@@ -50,6 +50,27 @@
   .wavve-settings__track { display: block; width: 44px; height: 27px; border-radius: 999px; background: #555; transition: background-color .18s; &::after { content: ""; position: absolute; top: 3px; left: 3px; width: 21px; height: 21px; border-radius: 50%; background: #fff; transition: transform .18s; } }
   .wavve-settings__switch > input:checked + .wavve-settings__track { background: #284cf0; &::after { transform: translateX(17px); } }
   .wavve-settings__switch > input:focus-visible + .wavve-settings__track { outline: 2px solid #a4bcff; outline-offset: 3px; }
+  .wavve-settings__account {
+    padding: 16px var(--settings-padding) calc(24px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid #333;
+
+    .wavve-settings__message { padding: 0 0 12px; }
+  }
+  .wavve-settings__logout {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    background: #252525;
+    color: inherit;
+    font: inherit;
+    font-size: var(--settings-heading);
+    cursor: pointer;
+
+    &:focus-visible { outline: 2px solid #81a3ff; outline-offset: 2px; }
+    &:disabled { opacity: .6; cursor: wait; }
+  }
   .wavve-settings__message { margin: 0; padding: 16px var(--settings-padding); color: #ffb4b4; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {

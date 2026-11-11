@@ -1,0 +1,4 @@
+/* 기존 에디터 Pick의 가로 카드 양식과 높이를 유지합니다. */
+.wavve-mypage .mypage__library .mypage__editor-list--posters > li.mypage__library-editor-item {
+  flex: 0 0 calc(var(--editor-height) * 610 / 345);
+}

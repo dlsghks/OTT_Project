@@ -1,5 +1,4 @@
 @use "../../common/figma-tokens" as figma;
-@use "../../common/slider-navigation" as nav;
 
 .home-categories {
   width: 100%;
@@ -57,18 +56,5 @@
     &:hover::after {
       border-color: figma.$primary-main;
     }
-  }
-
-
-  &__arrow {
-    @include nav.section-arrow;
-  }
-
-
-  // 슬라이더 호버 시 좌우 화살표 표시
-  &__slider:focus-within &__arrow,
-  &__slider:hover &__arrow {
-    opacity: 1;
-    pointer-events: auto;
   }
 }

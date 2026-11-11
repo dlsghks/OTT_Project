@@ -1,18 +1,29 @@
+import { WatchHistoryCard } from "../../components/member/WatchHistoryCard";
 import { MyPageEventCarousel } from "../../components/member/MyPageEventCarousel";
+import RetroMobileEventSwiper from "../../components/retrov/RetroMobileEventSwiper";
+import { eventBanners } from "../../data/retrov/retrov";
+import { useMobileLayout } from "../../hooks/useMobileLayout";
 import { MemberInfoModal } from "../../components/member/MemberInfoModal";
 import { getImagePath } from "../../utils/imagePath";
-import { useProfileFavorites } from "../../utils/profileFavorites";
+import { saveProfileWatchHistory, useProfileWatchHistory } from "../../utils/profileWatchHistory";
+import { saveContentFavorite, useProfileFavorites } from "../../utils/profileFavorites";
+import { EditorCollectionCard } from "../../components/member/EditorCollectionCard";
+import "../../styles/pages/member/MyPageUnifiedRow.scss";
 import { EditorCollectionSlider } from "../../components/member/EditorCollectionSlider";
-import { useEditorPicks } from "../../utils/profileEditorPicks";
+import { saveEditorPick, useEditorPicks } from "../../utils/profileEditorPicks";
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LoginModal } from "../../components/common/LoginModal";
 import { NotificationPanel } from "../../components/common/NotificationPanel";
 import { useAuthState } from "../../hooks/useAuthState";
 import { useNotificationStore } from "../../store/useNotificationStore";
-import { shortsData } from "../../data/shortsData";
 import { useProfileShorts } from "../../utils/profileShorts";
+import { getCoinTotal } from "../../utils/coinRecords";
+import { getOwnedCoupons } from "../../utils/couponRecords";
+import { useDemoMoviePurchases } from "../../utils/demoMoviePurchases";
+import { getActiveDemoVoucher, getDemoVoucherPurchases, getDemoVoucherPurchasesInPeriod } from "../../utils/demoVoucherPurchases";
 import profileImage from "../../assets/mypage/profile.png";
 import pencilImage from "../../assets/mypage/pencil.png";
 import emptyImage from "../../assets/mypage/empty-play.png";
@@ -26,7 +37,7 @@ import linesGraphic from "../../assets/mypage/quiz-lines.png";
 import heartImage from "../../assets/mypage/heart.png";
 import heartGlowImage from "../../assets/mypage/heart-glow.png";
 import "../../styles/pages/member/MyPage.scss";
-import "../../styles/pages/member/MyPageShorts.scss";
+import "../../styles/pages/member/MyPageWatchHistory.scss";
 
 import mobilePencil from "../../assets/mobile/pencil.svg";
 import mobileEmpty from "../../assets/mobile/empty.svg";
@@ -41,6 +52,14 @@ import mobileHeart4 from "../../assets/mobile/heart-4.svg";
 
 const MOBILE_HEARTS = [mobileHeart0, mobileHeart1, mobileHeart2, mobileHeart3, mobileHeart4];
 const EMPTY_ITEMS = [];
+const BILLING_TITLE = "이용권 · 결제 내역";
+const BILLING_MONTH_OPTIONS = [null, 1, 3, 6, 12];
+const billingDateTime = new Intl.DateTimeFormat("ko-KR", {
+  dateStyle: "medium",
+  timeStyle: "medium",
+  timeZone: "Asia/Seoul",
+  hourCycle: "h23",
+});
 const TABS = [
   { key: "history", label: "시청 내역", title: "아직 시청한 콘텐츠가 없어요" },
   { key: "favorites", label: "관심 콘텐츠", title: "아직 관심 콘텐츠가 없어요" },
@@ -48,10 +67,10 @@ const TABS = [
   { key: "downloads", label: "다운로드", title: "아직 다운로드한 콘텐츠가 없어요" },
 ];
 const FILTERS = [
+  { key: "all", label: "전체" },
   { key: "editor", label: "에디터 Pick" },
   { key: "program", label: "프로그램" },
   { key: "movie", label: "영화" },
-  { key: "shorts", label: "숏츠" },
 ];
 const RETRO_PICKS = [
   {
@@ -85,17 +104,6 @@ const EVENTS = [
   { id: "lines", eyebrow: "풀하우스 명대사 퀴즈", title: "다음에 올", accent: "명대사는?", description: "그때 그 대사, 아직 기억하나요?", image: linesGraphic },
 ];
 
-// 숏츠 찜·시청 기록은 선택한 계정·프로필의 목록을 사용합니다.
-// 영상별 실제 썸네일을 사용합니다. 고해상도 이미지가 없으면 기본 해상도로 대체합니다.
-const toShortsCard = (item) => ({
-  id: `shorts-${item.id}`,
-  title: item.title,
-  image: item.thumbnailUrl || `https://i.ytimg.com/vi/${encodeURIComponent(item.id)}/maxresdefault.jpg`,
-  fallbackImage: `https://i.ytimg.com/vi/${encodeURIComponent(item.id)}/hqdefault.jpg`,
-  type: "shorts",
-  to: `/shorts?short=${encodeURIComponent(item.id)}`,
-});
-
 const MyPagePoster = ({ item, isShorts }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const sources = isShorts
@@ -123,31 +131,55 @@ const MyPagePoster = ({ item, isShorts }) => {
 
 // 목록 item 형식: { id, title, image, type: "program" | "movie" | "shorts", to? }
 export const MyPage = ({
-  profileName = "프로필1", avatar = profileImage, passName = "", coinCount = 0,
-  couponCount = 0, retroCount = 0, historyItems = EMPTY_ITEMS,
+  profileName = "프로필1", avatar = profileImage, passName = "",
+  historyItems = EMPTY_ITEMS,
   favoriteItems = EMPTY_ITEMS, purchasedItems = EMPTY_ITEMS,
   downloadItems = EMPTY_ITEMS, retroPicks = RETRO_PICKS,
   onAction, onOpenContent,
 } = {}) => {
   const {
-    profile: selectedProfile,
-    likedIds: likedShortsIds,
-    watchedIds: watchedShortsIds,
+    profile: selectedProfile, ownerId,
   } = useProfileShorts();
   const { favorites: savedFavorites } = useProfileFavorites();
+  const retroCount = savedFavorites.filter((item) => item.to.startsWith("/retrov/")).length;
+  const { history: savedWatchHistory } = useProfileWatchHistory();
   const { liked: likedEditorPicks } = useEditorPicks();
   const displayedName = selectedProfile.name || profileName;
   const displayedAvatar = selectedProfile.image || avatar;
+  const coinCount = getCoinTotal(selectedProfile.coinRecords); // 선택한 프로필의 총코인
+  const couponCount = getOwnedCoupons(selectedProfile.couponRecords).length; // 선택한 프로필의 보유 쿠폰 수
   const [isMemberInfoOpen, setIsMemberInfoOpen] = useState(false);
 
-  const [activeTab, setActiveTab] = useState("history");
-  const [activeFilter, setActiveFilter] = useState("program");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = new URLSearchParams(location.search).get("tab");
+    return ["purchases", "downloads"].includes(tab) ? tab : "history";
+  });
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [editingScope, setEditingScope] = useState("");
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [editFeedback, setEditFeedback] = useState(null);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isVoucherLoginOpen, setIsVoucherLoginOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
+  const [billingPeriod, setBillingPeriod] = useState(null);
+  const [openedAt] = useState(Date.now);
   const dialogRef = useRef(null);
   const id = useId();
   const { user, isLoggedIn } = useAuthState();
-  const location = useLocation();
+  const purchasedMovies = useDemoMoviePurchases(user?.uid);
+  const downloadedMovies = purchasedMovies
+    .filter((movie) => movie.downloadedAt !== null)
+    .map((movie) => ({ ...movie, savedAt: movie.downloadedAt }));
+  const demoPurchases = getDemoVoucherPurchases(user?.uid);
+  const billingMonths = billingPeriod?.months ?? null;
+  const visiblePurchases = billingPeriod
+    ? getDemoVoucherPurchasesInPeriod(demoPurchases, billingPeriod.months, billingPeriod.now)
+    : demoPurchases;
+  const activeDemoPass = getActiveDemoVoucher(demoPurchases, openedAt);
+  const voucherActionLabel = passName || activeDemoPass ? "이용권 변경" : "이용권 구매";
+  const billingFromReceipt = new URLSearchParams(location.search).get("billing") === "1";
+  const visibleDialogTitle = billingFromReceipt ? BILLING_TITLE : dialogTitle;
   const notificationButtonRef = useRef(null);
   const notificationPanelRef = useRef(null);
   const [notificationPosition, setNotificationPosition] = useState(null);
@@ -195,6 +227,13 @@ export const MyPage = ({
       );
     };
 
+    const handleOutsidePress = (event) => {
+      if (notificationButtonRef.current?.contains(event.target) ||
+          notificationPanelRef.current?.contains(event.target)) return;
+      setIsNotificationOpen(false);
+      setNotificationPosition(null);
+    };
+
     const handleKeyDown = (event) => {
       if (event.key !== "Escape") return;
       setIsNotificationOpen(false);
@@ -206,6 +245,7 @@ export const MyPage = ({
     window.addEventListener("resize", updatePosition);
     window.addEventListener("scroll", updatePosition, true);
     window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handleOutsidePress, true);
 
     const observer = new ResizeObserver(updatePosition);
     if (notificationButtonRef.current) observer.observe(notificationButtonRef.current);
@@ -214,54 +254,131 @@ export const MyPage = ({
       window.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition, true);
       window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handleOutsidePress, true);
       observer.disconnect();
     };
   }, [isNotificationOpen]);
 
-  // 저장된 ID 순서대로 표시해 가장 최근에 본 영상이 앞에 옵니다.
-  const watchedShorts = watchedShortsIds
-    .map((id) => shortsData.find((item) => item?.id === id))
-    .filter(Boolean)
-    .map(toShortsCard);
-
-  const likedShorts = shortsData
-    .filter((item) => item && likedShortsIds.includes(item.id))
-    .map(toShortsCard);
-
+  // 숏츠 좋아요는 이 목록에 포함하지 않습니다.
+  const withoutShorts = (items) => items.filter((item) => item.type !== "shorts");
+  const savedPrograms = withoutShorts(savedFavorites);
   const lists = {
-    history: [
-      ...watchedShorts,
-      ...historyItems.filter((item) =>
-        !watchedShorts.some((short) => short.id === item.id)
+    history: [...savedWatchHistory, ...withoutShorts(historyItems).filter((item) =>
+      !savedWatchHistory.some((saved) => saved.id === item.id)
+    )],
+    favorites: [
+      ...savedPrograms,
+      ...withoutShorts(favoriteItems).filter((item) =>
+        !savedPrograms.some((saved) => saved.id === item.id)
       ),
     ],
-    // 관심 숏츠는 현재 프로필의 좋아요 목록을 사용합니다.
-    favorites: [
-      ...savedFavorites,
-      ...favoriteItems.filter((item) => item.type !== "shorts" && !savedFavorites.some(saved => saved.id === item.id)),
-      ...likedShorts,
-    ],
-    purchases: purchasedItems,
-    downloads: downloadItems,
+    purchases: [...purchasedMovies, ...withoutShorts(purchasedItems).filter((item) =>
+      !purchasedMovies.some((movie) => movie.id === item.id)
+    )],
+    downloads: [...downloadedMovies, ...withoutShorts(downloadItems).filter((item) =>
+      !downloadedMovies.some((movie) => movie.id === item.id)
+    )],
   };
-  const currentItems = lists[activeTab];
-  const visibleItems = currentItems.filter((item) => item.type === activeFilter);
-  const editorCollections = activeTab === 'favorites' ? likedEditorPicks : [];
-  const editorHeading = '관심 에디터 Pick';
-  const isEditorFilter = activeTab === 'favorites' && activeFilter === 'editor';
-  const displayCount = isEditorFilter ? editorCollections.length : visibleItems.length;
+  // 종류별 구분 없이 최근 담은 순서로 표시합니다.
+  const currentItems = (activeTab === "favorites"
+    ? [...lists.favorites, ...likedEditorPicks.map((item) => ({ ...item, type: "editor" }))]
+    : lists[activeTab]
+  ).sort((a, b) => activeTab === "history"
+    ? (Number(b.watchedAt) || 0) - (Number(a.watchedAt) || 0)
+    : (Number(b.savedAt) || 0) - (Number(a.savedAt) || 0));
+  const visibleItems = activeFilter === "all" ? currentItems
+    : currentItems.filter((item) => item.type === activeFilter);
+  const isEditorFilter = activeTab === "favorites" && activeFilter === "editor";
+  const displayCount = visibleItems.length;
   const filterLabel = FILTERS.find(filter => filter.key === activeFilter)?.label;
   const currentTab = TABS.find((tab) => tab.key === activeTab);
+  const editScope = JSON.stringify([ownerId, selectedProfile.id, activeTab]);
+  const isEditing = editingScope === editScope;
+  const canRemove = (item) => {
+    if (activeTab === "history") return savedWatchHistory.some((record) => record.id === item.id);
+    if (activeTab !== "favorites") return false;
+    return item.type === "editor" || savedFavorites.some((record) => record.id === item.id);
+  };
+  const showEditButton = isEditing || visibleItems.some(canRemove);
+
+  const removeItem = async (item) => {
+    if (!isEditing || isRemoving || !canRemove(item)) return;
+
+    setIsRemoving(true);
+    setEditFeedback(null);
+    const profileId = selectedProfile.id;
+    const options = { remove: true };
+    try {
+      if (activeTab === "history") {
+        await saveProfileWatchHistory(profileId, item, ownerId, options);
+      } else if (item.type === "editor") {
+        await saveEditorPick(profileId, item, "like", ownerId, options);
+      } else {
+        await saveContentFavorite(profileId, item, ownerId, options);
+      }
+      setEditFeedback({ scope: editScope, message: "목록에서 삭제했어요." });
+    } catch {
+      setEditFeedback({ scope: editScope, message: "삭제하지 못했어요. 다시 시도해주세요." });
+    } finally {
+      setIsRemoving(false);
+    }
+  };
+
+  const renderRemoveButton = (item) => isEditing && canRemove(item) && (
+    <button
+      className="mypage__library-remove"
+      type="button"
+      aria-label={`${item.episodeTitle || item.title} 삭제`}
+      disabled={isRemoving}
+      onClick={() => void removeItem(item)}
+    >
+      삭제
+    </button>
+  );
 
   useEffect(() => {
-    if (dialogTitle && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
-  }, [dialogTitle]);
+    if (visibleDialogTitle && dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal();
+  }, [visibleDialogTitle]);
+
+  const navigate = useNavigate();
+  const isMobile = useMobileLayout();
+  const profileSaved = location.state?.profileSaved === true;
+
+  useEffect(() => {
+    if (!profileSaved) return;
+    const timeout = window.setTimeout(() => {
+      navigate(
+        { pathname: location.pathname, search: location.search, hash: location.hash },
+        { replace: true, preventScrollReset: true, state: { ...location.state, profileSaved: false } }
+      );
+    }, 3000);
+    return () => window.clearTimeout(timeout);
+  }, [location, navigate, profileSaved]);
+
+  const closeDialog = () => {
+    setDialogTitle("");
+    setBillingPeriod(null);
+    if (!billingFromReceipt) return;
+    const params = new URLSearchParams(location.search);
+    params.delete("billing");
+    const search = params.toString();
+    navigate({ search: search ? `?${search}` : "" }, { replace: true, preventScrollReset: true });
+  };
 
   const requestAction = (action, title) => {
-    if (onAction) onAction(action);
+    if (action === "purchase-pass" && !isLoggedIn) setIsVoucherLoginOpen(true);
+    else if (action === "coupon") navigate("/coupon");
+    else if (onAction) onAction(action);
+    else if (action === "purchase-pass") navigate("/voucher");
+    else if (action === "support") navigate("/support");
     else setDialogTitle(title);
   };
-  const changeTab = (key) => { setActiveTab(key); setActiveFilter(key === "favorites" ? "editor" : "program"); };
+  const changeTab = (key) => {
+    setActiveTab(key);
+    setActiveFilter("all");
+    setEditingScope("");
+    setEditFeedback(null);
+  };
   const handleTabKeyDown = (event, index) => {
     let nextIndex;
     if (event.key === "ArrowRight") nextIndex = (index + 1) % TABS.length;
@@ -299,7 +416,7 @@ export const MyPage = ({
     );
 
     return (
-      <li key={item.id}>
+      <li key={item.id} className={retro ? undefined : "mypage__library-item"}>
         {onOpenContent && !isShorts ? (
           <button
             className={className}
@@ -318,12 +435,16 @@ export const MyPage = ({
             {body}
           </Link>
         )}
+        {!retro && renderRemoveButton(item)}
       </li>
     );
   };
 
   return (
     <section className="wavve-mypage" aria-label="마이페이지">
+      {profileSaved && (
+        <div className="mypage__profile-toast" role="status">프로필이 저장됐습니다.</div>
+      )}
       <div className="mypage__inner">
         <div className="mypage__profile-row">
           <img
@@ -355,7 +476,7 @@ export const MyPage = ({
               </Link>
             </div>
 
-            <p>{passName || "보유하신 이용권이 없습니다"}</p>
+            <p>{passName || (activeDemoPass ? `${activeDemoPass.name} (가상결제)` : "보유하신 이용권이 없습니다")}</p>
           </div>
 
           <div className="mypage__mobile-actions">
@@ -415,25 +536,25 @@ export const MyPage = ({
           <button
             className="mypage__pass-button"
             type="button"
-            onClick={() => requestAction("purchase-pass", "이용권 구매")}
+            onClick={() => requestAction("purchase-pass", voucherActionLabel)}
           >
-            <span className="mypage__desktop-copy">이용권 구매</span>
-            <span className="mypage__mobile-copy">이용권 구매하기</span>
+            <span className="mypage__desktop-copy">{voucherActionLabel}</span>
+            <span className="mypage__mobile-copy">{voucherActionLabel}하기</span>
           </button>
         </div>
 
         <dl className="mypage__summary">
           <div>
-            <dt>보유 코인</dt>
+            <dt><Link className="mypage__summary-link" to="/coin">보유 코인</Link></dt>
             <dd>{coinCount.toLocaleString("ko-KR")}</dd>
           </div>
           <div>
-            <dt>보유 쿠폰</dt>
+            <dt><Link className="mypage__summary-link" to="/coupon">보유 쿠폰</Link></dt>
             <dd>{couponCount.toLocaleString("ko-KR")}</dd>
           </div>
           <div>
             <dt>구매 콘텐츠</dt>
-            <dd>{purchasedItems.length.toLocaleString("ko-KR")}</dd>
+            <dd>{lists.purchases.length.toLocaleString("ko-KR")}</dd>
           </div>
           <div className="mypage__retro-summary">
             <dt>레트로 콘텐츠</dt>
@@ -465,7 +586,7 @@ export const MyPage = ({
           </div>
 
           <div
-            className="mypage__library-panel"
+            className={`mypage__library-panel${activeTab === "history" ? " mypage__library-panel--history" : ""}`}
             role="tabpanel"
             id={`${id}-panel`}
             aria-labelledby={`${id}-tab-${activeTab}`}
@@ -477,11 +598,7 @@ export const MyPage = ({
                 aria-label="콘텐츠 필터"
               >
                 {FILTERS.filter(
-                  (filter) =>
-                    (filter.key !== "editor" || activeTab === "favorites") &&
-                    (filter.key !== "shorts" ||
-                      activeTab === "history" ||
-                      activeTab === "favorites")
+                  (filter) => filter.key !== "editor" || activeTab === "favorites"
                 ).map((filter) => (
                   <button
                     key={filter.key}
@@ -494,35 +611,50 @@ export const MyPage = ({
                 ))}
               </div>
 
-              <p className="mypage__total" aria-live="polite">
-                {filterLabel} {displayCount}개
-              </p>
+              <div className="mypage__library-actions">
+                <p className="mypage__total" aria-live="polite">
+                  {filterLabel} {displayCount}개
+                </p>
+                {showEditButton && (
+                  <button
+                    className="mypage__library-edit"
+                    type="button"
+                    disabled={isRemoving}
+                    onClick={() => {
+                      setEditingScope(isEditing ? "" : editScope);
+                      setEditFeedback(null);
+                    }}
+                  >
+                    {isEditing ? "편집 완료" : "편집"}
+                  </button>
+                )}
+              </div>
             </div>
 
-            {isEditorFilter && editorCollections.length ? (
-              <section
-                className="mypage__editor-group"
-                aria-label={editorHeading}
-              >
-                <EditorCollectionSlider collections={editorCollections} />
-              </section>
-            ) : activeTab === "favorites" && visibleItems.length ? (
-              <section
-                className="mypage__editor-group"
-                aria-label={`관심 ${filterLabel}`}
-              >
+            {editFeedback?.scope === editScope && (
+              <p className="mypage__library-feedback" role="status">{editFeedback.message}</p>
+            )}
+
+            {visibleItems.length ? (
+              <section className="mypage__editor-group" aria-label={`${filterLabel} 콘텐츠`}>
                 <EditorCollectionSlider
-                  key={`${selectedProfile.id}:${activeFilter}`}
+                  key={`${selectedProfile.id}:${activeTab}:${activeFilter}`}
                   collections={visibleItems}
-                  renderItem={(item) => renderCard(item)}
-                  cardType={activeFilter === "shorts" ? "shorts" : "posters"}
+                  renderItem={(item) => activeTab === "history" ? (
+                    <li key={`history:${item.id}`} className="mypage__library-item">
+                      <WatchHistoryCard key={`${item.id}:${item.thumbnailUrl || item.videoId || item.image}`} item={item} onOpenContent={onOpenContent} />
+                      {renderRemoveButton(item)}
+                    </li>
+                  ) : item.type === "editor" ? (
+                    <li key={`editor:${item.id}`} className="mypage__library-editor-item mypage__library-item">
+                      <EditorCollectionCard collection={item} />
+                      {renderRemoveButton(item)}
+                    </li>
+                  ) : renderCard(item)}
+                  cardType={activeTab === "history" ? "history" : "posters"}
                   label={filterLabel}
                 />
               </section>
-            ) : !isEditorFilter && visibleItems.length ? (
-              <ul className="mypage__library-grid">
-                {visibleItems.map((item) => renderCard(item))}
-              </ul>
             ) : (
               <div className="mypage__empty">
                 <div className="mypage__empty-group">
@@ -547,7 +679,7 @@ export const MyPage = ({
                         ? {
                           program: "관심 프로그램이 없어요",
                           movie: "관심 영화가 없어요",
-                          shorts: "관심 숏츠가 없어요",
+                          all: "아직 관심 콘텐츠가 없어요",
                         }[activeFilter]
                         : currentItems.length
                           ? "선택한 종류의 콘텐츠가 없어요"
@@ -561,7 +693,6 @@ export const MyPage = ({
                     {
                       program: "/entertainment",
                       movie: "/movie",
-                      shorts: "/shorts",
                       editor: "/entertainment/all",
                     }[activeFilter] || "/entertainment"
                   }
@@ -594,7 +725,7 @@ export const MyPage = ({
 
             <button
               type="button"
-              onClick={() => requestAction("billing", "이용권 · 결제 내역")}
+              onClick={() => requestAction("billing", BILLING_TITLE)}
             >
               이용권 · 결제 내역<span aria-hidden="true">›</span>
             </button>
@@ -639,7 +770,7 @@ export const MyPage = ({
         </section>
       </div>
 
-      <MyPageEventCarousel
+      {isMobile ? <RetroMobileEventSwiper banners={eventBanners} className="mypage__events" /> : <MyPageEventCarousel
         events={EVENTS}
         renderBanner={(event) => (
           <>
@@ -686,18 +817,17 @@ export const MyPage = ({
             ))}
           </>
         )}
-      />
+      />}
 
       {isNotificationOpen &&
         createPortal(
           <div
             ref={notificationPanelRef}
-            className="header-notification-portal"
+            className={`header-notification-portal${isLoggedIn ? "" : " mypage__guest-notification"}`}
             style={{
               position: "absolute",
               top: notificationPosition?.top ?? 0,
               left: notificationPosition?.left ?? 0,
-              width: "min(480px, calc(100vw - 32px))",
               visibility: notificationPosition ? "visible" : "hidden",
               zIndex: 1000,
             }}
@@ -715,24 +845,59 @@ export const MyPage = ({
           document.body
         )}
 
+      {isVoucherLoginOpen && !isLoggedIn && createPortal(
+        <LoginModal isOpen returnTo="/voucher" onClose={() => setIsVoucherLoginOpen(false)} />,
+        document.body
+      )}
+
       <dialog
         className="mypage__dialog"
         ref={dialogRef}
         aria-labelledby={`${id}-dialog-title`}
-        onClose={() => setDialogTitle("")}
+        onClose={closeDialog}
         onClick={(event) => {
           if (event.target === event.currentTarget) {
             dialogRef.current.close();
           }
         }}
       >
-        <h2 id={`${id}-dialog-title`}>{dialogTitle}</h2>
-        <p>현재 준비 중인 서비스입니다.</p>
-
-        {dialogTitle === "고객센터" && (
-          <Link to="/notice" onClick={() => dialogRef.current.close()}>
-            공지사항 보기
-          </Link>
+        <h2 id={`${id}-dialog-title`}>{visibleDialogTitle}</h2>
+        {visibleDialogTitle === BILLING_TITLE ? (
+          <>
+            <div className="mypage__billing-filters" role="group" aria-label="결제일 조회 기간">
+              {BILLING_MONTH_OPTIONS.map((months) => (
+                <button
+                  key={months ?? "all"}
+                  type="button"
+                  aria-pressed={billingMonths === months}
+                  onClick={() => setBillingPeriod(months === null ? null : { months, now: Date.now() })}
+                >
+                  {months === null ? "전체" : `${months}개월`}
+                </button>
+              ))}
+            </div>
+            {visiblePurchases.length ? (
+              <ul className="mypage__billing-history">
+                {visiblePurchases.map((purchase) => (
+                  <li key={purchase.id}>
+                    <strong>{purchase.name} · {purchase.months}개월</strong>
+                    <span>{purchase.amount.toLocaleString("ko-KR")}원 · 가상결제 승인</span>
+                    <time dateTime={new Date(purchase.purchasedAt).toISOString()}>
+                      {billingDateTime.format(purchase.purchasedAt)}
+                    </time>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p role="status">
+                {billingMonths === null
+                  ? "이 브라우저에 저장된 가상결제 내역이 없습니다."
+                  : `최근 ${billingMonths}개월 내 결제 내역이 없습니다.`}
+              </p>
+            )}
+          </>
+        ) : (
+          <p>현재 준비 중인 서비스입니다.</p>
         )}
 
         <form method="dialog">

@@ -144,7 +144,8 @@
     .content-section__arrow, .ranking-section__arrow { display: none; }
 
     // 요일 버튼
-    .weekly-content__days { gap: 5px; margin: 0 0 7px; padding: 2px 0; }
+    .weekly-content__controls { margin-bottom: 7px; }
+    .weekly-content__days { gap: 5px; padding: 2px 0; }
     .weekly-content__day { flex-basis: 28px; width: 28px; height: 28px; border-radius: 6px; font-size: 12px; }
     .weekly-content__empty { padding: 24px 0; font-size: 12px; }
 

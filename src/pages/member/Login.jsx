@@ -2,10 +2,10 @@ import { FindIdModal } from "../../components/member/FindIdModal";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
+import { getSocialLoginError } from "../../utils/socialLoginError";
 import wavveLogo from "../../assets/login/wavve-logo.png";
-import naverIcon from "../../assets/login/naver.png";
+import googleIcon from "../../assets/login/googleLogo.png";
 import kakaoIcon from "../../assets/login/kakao.png";
-import appleIcon from "../../assets/login/apple.png";
 import glowLeft from "../../assets/login/glow-left.png";
 import glowRight from "../../assets/login/glow-right.png";
 import mobileGlowLeft from "../../assets/login/mobile/glow-left.svg";
@@ -14,15 +14,15 @@ import "../../styles/pages/member/Login.scss";
 import { AccountHelpModal } from "../../components/member/AccountHelpModal";
 
 const providers = [
-  { key: "naver", label: "네이버로 시작하기", icon: naverIcon },
+  { key: "google", label: "Google로 계속하기", icon: googleIcon },
   { key: "kakao", label: "카카오로 시작하기", icon: kakaoIcon },
-  { key: "apple", label: "Apple로 계속하기", icon: appleIcon },
 ];
 
 // 실제 인증 함수를 연결할 수 있도록 콜백으로 분리했습니다.
 export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
   const navigate = useNavigate();
   const onLogin = useAuthStore((state) => state.onLogin);
+  const signInSocial = useAuthStore((state) => state.onSocialLogin);
   const location = useLocation();
   const returnTo = location.state?.returnTo || '/';
   const [emailFormOpen, setEmailFormOpen] = useState(false);
@@ -41,7 +41,7 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
 
     try {
       await onLogin(email, password);
-      navigate("/profileselect", { replace: true });
+      navigate("/profileselect", { replace: true, state: { returnTo } });
     } catch (error) {
       if (error.code === "auth/too-many-requests") {
         setMessage("시도가 너무 많습니다. 잠시 후 다시 시도해주세요.");
@@ -54,17 +54,25 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
       setIsSubmitting(false);
     }
   };
+
+  const completeSocialLogin = async (provider) => {
+    const result = await (onSocialLogin ?? signInSocial)(provider);
+    navigate("/profileselect", {
+      replace: true,
+      state: { returnTo: result?.isNewUser ? "/voucher" : returnTo },
+    });
+  };
+
   const handleSocialLogin = async (provider) => {
-    if (!onSocialLogin) {
-      setMessage("소셜 로그인 기능은 아직 연결되지 않았습니다.");
-      return;
-    }
+    if (isSubmitting) return;
+
     setMessage("");
     setIsSubmitting(true);
+
     try {
-      await onSocialLogin(provider);
-    } catch {
-      setMessage("로그인을 완료하지 못했습니다. 다시 시도해주세요.");
+      await completeSocialLogin(provider);
+    } catch (error) {
+      setMessage(getSocialLoginError(error));
     } finally {
       setIsSubmitting(false);
     }
@@ -147,11 +155,7 @@ export const Login = ({ onSocialLogin, onAccountHelp, onServiceInfo } = {}) => {
       {accountHelp === "id" && (
         <FindIdModal
           onClose={() => setAccountHelp(null)}
-          onSocialLogin={
-            onSocialLogin
-              ? (provider) => handleSocialLogin(provider)
-              : undefined
-          }
+          onSocialLogin={completeSocialLogin}
         />
       )}
 

@@ -2,17 +2,15 @@ import { useId, useRef, useState } from "react";
 import { WavveAccountModal } from "../common/WavveAccountModal";
 
 import kakaoIcon from "../../assets/login/kakao.png";
-import naverIcon from "../../assets/login/naver.png";
-import appleIcon from "../../assets/login/apple.png";
+import googleIcon from "../../assets/login/googleLogo.png";
 
 import "../../styles/pages/member/FindIdModal.scss";
 
 const socialProviders = [
   { key: "kakao", name: "카카오", icon: kakaoIcon },
   { key: "t", name: "T아이디", text: "T" },
-  { key: "naver", name: "네이버", icon: naverIcon },
+  { key: "google", name: "구글", icon: googleIcon },
   { key: "facebook", name: "Facebook", text: "f" },
-  { key: "apple", name: "Apple", icon: appleIcon },
 ];
 
 export function FindIdModal({
@@ -87,11 +85,11 @@ export function FindIdModal({
     runAction(
       onFindId
         ? () =>
-            onFindId({
-              method,
-              name: trimmedName,
-              contact: trimmedContact,
-            })
+          onFindId({
+            method,
+            name: trimmedName,
+            contact: trimmedContact,
+          })
         : null,
       "아이디 조회 기능은 아직 연결되지 않았어요."
     );
@@ -245,7 +243,7 @@ export function FindIdModal({
                         disabled={busy}
                         onClick={() =>
                           runAction(
-                            onSocialLogin
+                            onSocialLogin && ["google", "kakao"].includes(provider.key)
                               ? () => onSocialLogin(provider.key)
                               : null,
                             `${provider.name} 로그인은 아직 연결되지 않았어요.`
