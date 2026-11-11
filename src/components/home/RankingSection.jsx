@@ -1,4 +1,3 @@
-import { useSwiperLayout } from '../../hooks/useSwiperLayout';
 import { SliderArrow } from '../common/SliderArrow';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,7 +10,6 @@ import 'swiper/css';
 
 export const RankingSection = ({ items = [] }) => {
   const swiperRef = useRef(null);
-  const syncLayout = useSwiperLayout();
 
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
@@ -44,7 +42,6 @@ export const RankingSection = ({ items = [] }) => {
         <Swiper
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
-            syncLayout(swiper);
             updateNavigation(swiper);
           }}
           onSlideChange={updateNavigation}
