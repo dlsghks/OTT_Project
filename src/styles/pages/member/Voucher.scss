@@ -68,13 +68,21 @@
         }
     }
 
+    &__mobile-plans,
+    &__comparison-name,
+    &__comparison-hint {
+        display: none;
+    }
+
     &__table-scroll {
+        max-width: 100%;
         overflow-x: auto;
+        overscroll-behavior-x: contain;
     }
 
     &__table {
         width: 100%;
-        min-width: 950px;
+        min-width: var(--voucher-table-width, 950px);
         border-collapse: collapse;
         table-layout: fixed;
 
@@ -319,7 +327,7 @@
         right: 0;
         bottom: 0;
         left: 0;
-        z-index: 90;
+        z-index: 105;
         padding: 20px 0 calc(20px + env(safe-area-inset-bottom, 0px));
         background: #242424;
     }
@@ -416,8 +424,7 @@
         padding-bottom: 175px;
 
         &__purchase-bar {
-            bottom: calc(50px + env(safe-area-inset-bottom, 0px));
-            padding: 14px 0;
+            padding: 14px 0 calc(14px + env(safe-area-inset-bottom, 0px));
         }
 
         &__purchase-inner {
@@ -485,7 +492,7 @@
             >button {
                 grid-column: 1 / -1;
                 width: 100%;
-                min-height: 42px;
+                min-height: 48px;
             }
         }
 
@@ -582,18 +589,6 @@
         }
     }
 
-    @media (max-width: 768px) {
-        &__banner-window:not(.is-open) img {
-            width: 760px;
-            margin-left: calc((100% - 760px) / 2);
-        }
-
-        &__banner-window.is-open img {
-            width: 100%;
-            margin-left: 0;
-        }
-    }
-
     &__billing {
         display: flex;
         justify-content: flex-end;
@@ -668,18 +663,6 @@
     }
 
     @media (max-width: 768px) {
-        &__banner-window img {
-            // 접힌 상태에서도 이미지의 제목 부분을 충분한 크기로 표시
-            width: 760px;
-            max-width: none;
-            margin-left: calc((100% - 760px) / 2);
-        }
-
-        &__banner-window.is-open img {
-            width: 100%;
-            margin-left: 0;
-        }
-
         &__all-plans {
             padding: 18px;
 
@@ -998,4 +981,170 @@
 .voucher__promotion,
 .voucher__promotion::before {
     transition: none;
+}
+.voucher__checkout {
+    width: min(420px, calc(100% - 40px));
+    margin: auto;
+    padding: 24px;
+    border: 1px solid #444;
+    border-radius: 12px;
+    background: #1c1c1c;
+    color: #fff;
+
+    &::backdrop {
+        background: rgb(0 0 0 / 70%);
+    }
+
+    h2 {
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    p {
+        margin: 12px 0;
+        color: #b7b7b7;
+    }
+
+    dl {
+        display: grid;
+        gap: 10px;
+        padding: 14px 0;
+    }
+
+    dl > div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    dd {
+        text-align: right;
+    }
+
+    &-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+
+        button,
+        a {
+            flex: 1;
+            min-height: 44px;
+            border-radius: 6px;
+            background: #383838;
+        }
+
+        a {
+            display: grid;
+            place-items: center;
+            text-align: center;
+            color: inherit;
+        }
+
+        button[type="submit"] {
+            background: #1351f9;
+        }
+    }
+}
+
+
+@media (max-width: 768px) {
+    .voucher {
+        &__billing {
+            position: static;
+            justify-content: center;
+            margin: 0 0 16px;
+
+            button {
+                min-height: 44px;
+            }
+        }
+
+        &__mobile-plans {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+
+            .voucher__plan {
+                min-height: 128px;
+                height: 100%;
+                gap: 8px;
+                padding: 12px;
+                border-radius: 8px;
+
+                &:focus-visible {
+                    outline-offset: -3px;
+                }
+            }
+
+            .voucher__plan-name,
+            .voucher__plan-price {
+                font-size: 14px;
+                white-space: normal;
+                overflow-wrap: anywhere;
+            }
+
+            .voucher__original-price,
+            .voucher__recommend {
+                position: static;
+            }
+
+            .voucher__recommend {
+                align-self: flex-start;
+                transform: none;
+            }
+        }
+
+        &__comparison-hint {
+            display: block;
+            margin: 20px 0 8px;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        &__table {
+            min-width: calc(110px + 112px * var(--voucher-plan-count));
+
+            .voucher__plan {
+                display: none;
+            }
+
+            .voucher__intro {
+                padding: 8px 10px 8px 0;
+
+                > strong { font-size: 14px; }
+                p { display: none; }
+            }
+        }
+
+        &__comparison-name {
+            display: block;
+            padding: 8px;
+            color: #fff;
+            font-size: 13px;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .site-inner:has(> .voucher) {
+        overflow-x: clip;
+    }
+
+    .voucher__banner-window:not(.is-open) {
+        height: auto;
+        // PC 배너의 접힌 높이(110px)를 이미지 너비(1024px)에 비례해 줄입니다.
+        max-height: min(110px, calc((100vw - 2 * var(--page-side-padding, 20px)) * 110 / 1024));
+    }
+
+    // 이용권 선택 중에는 결제 바가 하단 내비게이션 자리를 사용합니다.
+    .site-inner:has(> .voucher .voucher__purchase-bar.is-visible) ~ :is(.wavve-mobile-nav, .wavve-mobile-nav-space) {
+        display: none;
+    }
+
+    .voucher__purchase-bar,
+    .voucher__purchase-bar.is-visible {
+        transform: none;
+        transition: none;
+    }
 }

@@ -54,7 +54,13 @@ function ProgramFanPage({ programId, program }) {
   const [selectedCharacterId, setSelectedCharacterId] = useState(null);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   // 로그인 전: 재생 · 관심 · 공유 버튼 → 로그인 팝업 (예능~해외시리즈 상세와 같은 동작)
-  const actions = useDetailActions();
+  const favoriteProgram = programs.find((item) => item.id === programId);
+  const actions = useDetailActions({
+    id: `retrov:${programId}`,
+    title: program.title,
+    type: "program",
+    image: favoriteProgram?.thumbnail || program.hero || program.logo,
+  });
   const { user, isLiked, onLogin, onLike } = actions;
 
   // 펼치기: 펼치기 직전의 히어로 높이 · 내용 시작 위치 (펼친 뒤에도 로고 · 버튼 자리 고정)
@@ -167,6 +173,10 @@ function ProgramFanPage({ programId, program }) {
       if (target) play(target);
       return;
     }
+    if (season?.firstEpisode) {
+      play({ id: `${programId}-${seasonId}-e1`, title: `${season.label} 1회`, ...season.firstEpisode });
+      return;
+    }
     if (!tmdb) return;
     const first = (episodes[`${tmdb.id}_${tmdb.season}`] ?? [])[0];
     play(first ? episodeToVideo(first, tmdb, tmdbBackdrop, youtubeVideos, program.youtubeIds?.[seasonId], undefined, program.descriptionStrip) : {
@@ -266,6 +276,7 @@ function ProgramFanPage({ programId, program }) {
                 type="button"
                 className="rv-hero__icon-btn"
                 aria-pressed={isLiked}
+                disabled={actions.likeBusy}
                 onClick={onLike}
               >
                 <img className="rv-hero__icon" src={isLiked ? likeActiveIcon : likeIcon} alt="" width="37" height="33" />
@@ -281,6 +292,8 @@ function ProgramFanPage({ programId, program }) {
                 <span>공유</span>
               </button>
             </div>
+
+            {actions.likeError && <p role="alert">{actions.likeError}</p>}
 
             <div className="rv-hero__desc">
               {program.description.map((line) => (

@@ -1,4 +1,5 @@
 import { withContent } from '../contentCatalog';
+import { individualPurchaseMovies } from '../individualPurchaseMovies';
 import { homeContentBySection } from './requestedHomeSections';
 
 // 실제 포스터 이미지 URL을 넣으면 바로 표시됩니다. 현재는 이미지 없는 카드도 동작합니다.
@@ -20,11 +21,11 @@ const item = (
 });
 
 export const heroItems = [
-  { id: 'hero-1', title: '오늘의 추천 콘텐츠', subtitle: '웨이브에서 만나는 다양한 이야기', image: '/images/home/hero/main-hero01.jpg', textImage: '/images/home/hero/main-hero-text01.png', link: '/drama' },
-  { id: 'hero-2', title: '놓치면 아쉬운 화제작', subtitle: '지금 인기 있는 작품을 만나보세요', image: '/images/home/hero/main-hero02.jpg', textImage: '/images/home/hero/main-hero-text02.png', link: '/movie' },
-  { id: 'hero-3', title: '레트로브', subtitle: '그때 그 시절의 프로그램을 다시', image: '/images/home/hero/main-hero03.jpg', textImage: '/images/home/hero/main-hero-text03.png', link: '/retrov' },
-  { id: 'hero-4', title: '추천 영화', subtitle: '', image: '/images/home/hero/main-hero04.jpg', textImage: '/images/home/hero/main-hero-text04.png', link: '/movie' },
-  { id: 'hero-5', title: '추천 드라마', subtitle: '', image: '/images/home/hero/main-hero05.jpg', textImage: '/images/home/hero/main-hero-text05.png', link: '/drama' },
+  { id: 'hero-1', title: '김씨네 편의점', image: '/images/home/hero/main-hero01.jpg', textImage: '/images/home/hero/main-hero-text01.png', link: '/globaldetail/68106' },
+  { id: 'hero-2', title: '사랑이 온다', image: '/images/home/hero/main-hero02.jpg', textImage: '/images/home/hero/main-hero-text02.png', link: '/dramadetail/310326' },
+  { id: 'hero-3', title: '골프', image: '/images/home/hero/main-hero03.jpg', textImage: '/images/home/hero/main-hero-text03.png', link: '/special/golf' },
+  { id: 'hero-4', title: 'HOPE', image: '/images/home/hero/main-hero04.jpg', textImage: '/images/home/hero/main-hero-text04.png', link: '/moviedetail/1058424' },
+  { id: 'hero-5', title: '여름방학', image: '/images/home/hero/main-hero05.jpg', textImage: '/images/home/hero/main-hero-text05.png', link: '/dramadetail/335951' },
 ];
 
 const categoryImage = (name) =>
@@ -113,6 +114,8 @@ export const hopeItems = [
   item('hope-interstellar', '인터스텔라', 'movie', '', '개별구매'),
 ].map((entry) => {
   const movie = withContent(entry, 'home');
+  const offer = individualPurchaseMovies.find(({ title }) => title === entry.title);
+  if (offer) return { ...movie, tmdbId: offer.tmdbId, link: offer.link };
 
   return {
     ...movie,

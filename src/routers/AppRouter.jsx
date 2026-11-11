@@ -80,6 +80,7 @@ export const AppRouter = () => {
       {/* 공통 레이아웃 미사용 */}
       <Route path="/profileselect" element={<ProfileSelect />} />
       <Route path="/profileedit" element={<ProfileEdit />} />
+      <Route path="/profileadd" element={<ProfileEdit adding />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/inquiry/write" element={<InquiryWrite />} />
 

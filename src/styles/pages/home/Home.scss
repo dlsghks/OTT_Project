@@ -403,6 +403,14 @@
   // 제목과 카드 간격
   .home-section__head {
     margin-bottom: 1.625rem;
+
+    > a {
+      color: figma.$neutral-3;
+
+      &:hover {
+        color: figma.$neutral-white;
+      }
+    }
   }
 
   // 슬라이드 영역
@@ -621,13 +629,13 @@ main.site-inner:has(> .wavve-home) {
   background: linear-gradient(180deg, #071a2e 17.3077%, #000000 100%);
 }
 
-/* 콘텐츠 목록 화살표 */
-.wavve-home .content-section__arrow::before {
-  opacity: 0.8;
+/* 홈 슬라이더는 카드 위에 흰색 화살표만 표시합니다. */
+.wavve-home :is(.content-section__arrow, .ranking-section__arrow)::before {
+  content: none;
 }
 
-.wavve-home .content-section__arrow::after {
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+.wavve-home :is(.content-section__arrow, .ranking-section__arrow)::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 84'%3E%3Cpath d='M18 28L33 41.5L18 55' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 .wavve-home .content-section .content-section__arrow {
@@ -641,12 +649,4 @@ main.site-inner:has(> .wavve-home) {
   top: 0;
   bottom: auto;
   height: var(--ranking-poster-height, var(--card-h));
-}
-
-.wavve-home .ranking-section .ranking-section__arrow::before {
-  opacity: 0.35;
-}
-
-.wavve-home .ranking-section .ranking-section__arrow::after {
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
 }

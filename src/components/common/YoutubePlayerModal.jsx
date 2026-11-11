@@ -5,7 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import "../../styles/components/common/YoutubePlayerModal.scss";
 
 // 유튜브 영상 전체화면 플레이어 (ESC / 뒤로가기 버튼으로 닫기)
-// 사용: 영화 · 시리즈 상세(시청하기 · 관련영상 · 회차), 레트로브 메인 · 상세
+// 사용: 홈 시청 중 콘텐츠, 영화 · 시리즈 상세, 레트로브 메인 · 상세
 export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) {
   const closeRef = useRef(null);
   const { profileId, ownerId } = useProfileWatchHistory();
@@ -56,13 +56,17 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
     autoplay: "1", rel: "0", enablejsapi: "1", origin: window.location.origin,
   });
   if (video.playlistId) params.set("list", video.playlistId);
+  const startSeconds = Number.isFinite(video.startSeconds) ? Math.floor(video.startSeconds) : 0;
+  if (startSeconds > 0) params.set("start", String(startSeconds));
   const src = `https://www.youtube.com/embed/${video.videoId}?${params}`;
   // 영상을 못 찾았으면 유튜브 검색 결과 페이지로 안내
   const searchQuery = video.source?.query ?? video.title;
+  const watchParams = new URLSearchParams({ v: video.videoId });
+  if (startSeconds > 0) watchParams.set("t", `${startSeconds}s`);
   const watchUrl = video.videoId
-    ? `https://www.youtube.com/watch?v=${video.videoId}`
+    ? `https://www.youtube.com/watch?${watchParams}`
     : `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
-  const status = video.videoId ? "ready" : video.status ?? "loading"; // loading | notFound | ready
+  const status = video.videoId ? "ready" : video.mbcUrl ? "external" : video.status ?? "loading";
 
   return (
     <div className="yt-modal" role="dialog" aria-modal="true" aria-labelledby="yt-modal-title">
@@ -78,9 +82,14 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
           {video.date && <time dateTime={video.date.replaceAll(".", "-")}>{video.date}</time>}
 
           {/* 퍼가기가 막힌 영상 · 못 찾은 영상일 때를 위한 유튜브 링크 */}
-          {status !== "loading" && (
+          {status !== "loading" && status !== "external" && (
             <a className="yt-modal__external" href={watchUrl} target="_blank" rel="noopener noreferrer">
               {status === "ready" ? "재생이 안 되나요? YouTube에서 보기 ↗" : "YouTube에서 직접 찾아보기 ↗"}
+            </a>
+          )}
+          {status === "ready" && video.mbcUrl && (
+            <a className="yt-modal__external" href={video.mbcUrl} target="_blank" rel="noopener noreferrer">
+              MBC 다시보기 ↗
             </a>
           )}
         </div>
@@ -89,6 +98,12 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
       <div className="yt-modal__player">
         {status === "ready" ? (
           <TrackedYoutubeFrame key={src} src={src} video={video} onPlaybackStart={recordPlayback} onPlaybackProgress={persistPlayback} />
+        ) : status === "external" ? (
+          <div className="yt-modal__status">
+            <a className="yt-modal__external" href={video.mbcUrl} target="_blank" rel="noopener noreferrer">
+              MBC에서 다시보기 ↗
+            </a>
+          </div>
         ) : (
           <p className="yt-modal__status" role="status">
             {status === "loading" ? "영상을 찾는 중이에요…" : "재생할 수 있는 영상을 찾지 못했어요."}

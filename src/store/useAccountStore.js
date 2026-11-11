@@ -1,13 +1,25 @@
 import { normalizeWatchHistory, updateWatchHistory } from "../utils/watchHistoryRecords";
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
-import { createAttendanceCoin, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
+import { createAttendanceCoin, createCoinCharge, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
 import { createCouponRecord, markCouponUsed, normalizeCouponRecords } from "../utils/couponRecords";
 import { create } from "zustand";
-import { doc, onSnapshot, runTransaction, setDoc } from "firebase/firestore";
+import { deleteField, doc, onSnapshot, runTransaction } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 
 const PROFILE_IDS = ["profile1", "profile2", "profile3", "profile4"];
+export const MAX_PROFILES = PROFILE_IDS.length;
+const getProfileIds = (data) => {
+  if (Array.isArray(data.profileIds)) {
+    const savedIds = [...new Set(data.profileIds.filter((id) =>
+      PROFILE_IDS.includes(id) || (typeof id === "string" && /^profile-[0-9a-f-]{36}$/.test(id))
+    ))].slice(0, MAX_PROFILES);
+    if (savedIds.length) return savedIds;
+  }
+  return PROFILE_IDS.filter((id) =>
+    id === "profile1" || id === data.selectedProfileId || Boolean(data.profiles?.[id])
+  );
+};
 const ids = (value) => Array.isArray(value)
   ? [...new Set(value.filter((id) => typeof id === "string" && id))] : [];
 const text = (value, fallback) => typeof value === "string" && value.trim()
@@ -18,10 +30,10 @@ const attendanceDates = (value) => Array.isArray(value)
     .sort().slice(-366)
   : [];
 
-export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
+const defaultProfile = (id) => ({
   id,
-  name: `프로필${index + 1}`,
-  image: `${import.meta.env.BASE_URL}images/profiles/${id}.png`,
+  name: PROFILE_IDS.includes(id) ? `프로필${id.slice(-1)}` : "프로필",
+  image: `${import.meta.env.BASE_URL}images/profiles/${PROFILE_IDS.includes(id) ? id : "profile1"}.png`,
   likedIds: [],
   watchedIds: [],
   watchHistory: [],
@@ -34,10 +46,13 @@ export const defaultProfiles = () => PROFILE_IDS.map((id, index) => ({
   pinSalt: "",
   pinHash: "",
   locked: false,
-}));
+});
 
 const normalize = (data = {}) => {
-  const profiles = defaultProfiles().map((profile) => {
+  const profileIds = getProfileIds(data);
+  const currentProfileId = profileIds.includes(data.selectedProfileId) ? data.selectedProfileId : null;
+  const profiles = profileIds.map((id) => {
+    const profile = defaultProfile(id);
     const saved = data.profiles?.[profile.id];
     const pinSalt = typeof saved?.pinSalt === "string" ? saved.pinSalt : "";
     const pinHash = typeof saved?.pinHash === "string" ? saved.pinHash : "";
@@ -65,8 +80,8 @@ const normalize = (data = {}) => {
   });
   return {
     profiles,
-    selectedProfileId: PROFILE_IDS.includes(data.selectedProfileId)
-      ? data.selectedProfileId : "profile1",
+    currentProfileId,
+    selectedProfileId: currentProfileId ?? (profiles.find((profile) => !profile.locked) ?? profiles[0]).id,
   };
 };
 
@@ -74,7 +89,8 @@ const initial = () => ({
   uid: null,
   ready: false,
   error: "",
-  profiles: defaultProfiles(),
+  profiles: [defaultProfile("profile1")],
+  currentProfileId: null,
   selectedProfileId: "profile1",
 });
 
@@ -126,26 +142,86 @@ const requireAccount = (profileId, ownerId) => {
   const state = useAccountStore.getState();
   if (!state.ready || !state.uid || auth.currentUser?.uid !== state.uid ||
       (ownerId && ownerId !== state.uid) ||
-      (profileId && !PROFILE_IDS.includes(profileId))) {
+      (profileId && !state.profiles.some((profile) => profile.id === profileId))) {
     throw new Error("로그인 계정과 프로필을 다시 확인해주세요.");
   }
   return state.uid;
 };
 
+const getProfileDetails = (name, image) => {
+  const imageFile = image.split("/").pop();
+  const trimmedName = name.trim();
+  if (!trimmedName || trimmedName.length > 12 || !/^profile[1-4]\.png$/.test(imageFile)) {
+    throw new Error("프로필 이름과 이미지를 확인해주세요.");
+  }
+  return { name: trimmedName, imageFile };
+};
+
+// 이전 버전에서 선택만 했던 프로필도 다른 프로필로 전환하기 전에 기록합니다.
+const getLegacySelectedProfile = (data) => {
+  const id = data.selectedProfileId;
+  if (id === "profile1" || !PROFILE_IDS.includes(id) || data.profiles?.[id]) return null;
+  return defaultProfile(id);
+};
+
 export const chooseProfile = async (profileId, ownerId) => {
   const uid = requireAccount(profileId, ownerId);
-  await setDoc(doc(db, "users", uid), { selectedProfileId: profileId }, { merge: true });
+  const ref = doc(db, "users", uid);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(profileId, uid);
+    const data = snapshot.data() ?? {};
+    if (!getProfileIds(data).includes(profileId)) {
+      throw new Error("선택한 프로필을 다시 확인해주세요.");
+    }
+    const legacy = getLegacySelectedProfile(data);
+    const patch = { selectedProfileId: profileId };
+    if (legacy) patch.profiles = { [legacy.id]: getProfileDetails(legacy.name, legacy.image) };
+    transaction.set(ref, patch, { merge: true });
+  });
+};
+
+const getExistingProfileData = (snapshot, profileId) => {
+  const data = snapshot.data() ?? {};
+  if (!getProfileIds(data).includes(profileId)) {
+    throw new Error("삭제된 프로필이에요. 다른 프로필을 선택해주세요.");
+  }
+  return data.profiles?.[profileId];
 };
 
 export const updateProfile = async (profileId, name, image, ownerId) => {
   const uid = requireAccount(profileId, ownerId);
-  const imageFile = image.split("/").pop();
-  if (!name.trim() || name.trim().length > 12 || !/^profile[1-4]\.png$/.test(imageFile)) {
-    throw new Error("프로필 이름과 이미지를 확인해주세요.");
-  }
-  await setDoc(doc(db, "users", uid), {
-    profiles: { [profileId]: { name: name.trim(), imageFile } },
-  }, { merge: true });
+  const profile = getProfileDetails(name, image);
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(profileId, uid);
+    getExistingProfileData(snapshot, profileId);
+    transaction.set(ref, { profiles: { [profileId]: profile } }, { merge: true });
+  });
+};
+
+export const addProfile = async (name, image, ownerId) => {
+  const uid = requireAccount(null, ownerId);
+  const profile = getProfileDetails(name, image);
+  const profileId = `profile-${crypto.randomUUID()}`;
+  const ref = doc(db, "users", uid);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(null, uid);
+    const data = snapshot.data() ?? {};
+    const existingIds = getProfileIds(data);
+    if (existingIds.length >= MAX_PROFILES) throw new Error("프로필은 최대 4개까지 추가할 수 있어요.");
+
+    const legacy = getLegacySelectedProfile(data);
+    const profiles = { [profileId]: profile };
+    if (legacy) profiles[legacy.id] = getProfileDetails(legacy.name, legacy.image);
+    transaction.set(ref, {
+      profiles,
+      profileIds: [...existingIds, profileId],
+      selectedProfileId: profileId,
+    }, { merge: true });
+  });
 };
 
 // 트랜잭션으로 최신 서버 목록을 기준으로 변경합니다.
@@ -156,7 +232,7 @@ export const changeShortsRecord = async (profileId, id, kind, ownerId) => {
   await runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     requireAccount(profileId, uid);
-    const saved = snapshot.data()?.profiles?.[profileId];
+    const saved = getExistingProfileData(snapshot, profileId);
     if (kind === "like") {
       const previous = ids(saved?.likedIds);
       const likedIds = previous.includes(id)
@@ -179,6 +255,36 @@ const hashPin = async (pin, salt) => {
     name: "PBKDF2", salt: encoder.encode(salt), iterations: 100000, hash: "SHA-256",
   }, key, 256);
   return Array.from(new Uint8Array(bits), (value) => value.toString(16).padStart(2, "0")).join("");
+};
+
+export const removeProfile = async (profileId, pin, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(profileId, uid);
+    const profile = getExistingProfileData(snapshot, profileId);
+    const data = snapshot.data() ?? {};
+    const remaining = getProfileIds(data).filter((id) => id !== profileId);
+    if (!remaining.length) throw new Error("프로필은 하나 이상 남겨야 해요.");
+    if (!remaining.includes(data.selectedProfileId) && remaining.every((id) => {
+      const other = data.profiles?.[id];
+      return other?.pinSalt && other?.pinHash;
+    })) {
+      throw new Error("다른 프로필로 전환한 뒤 이 프로필을 삭제해주세요.");
+    }
+    if (profile?.pinHash && profile?.pinSalt &&
+        (!/^\d{4}$/.test(pin) || await hashPin(pin, profile.pinSalt) !== profile.pinHash)) {
+      throw new Error("프로필 PIN이 맞지 않아요.");
+    }
+
+    requireAccount(profileId, uid);
+    transaction.update(ref, {
+      profileIds: remaining,
+      [`profiles.${profileId}`]: deleteField(),
+      ...(data.selectedProfileId === profileId ? { selectedProfileId: null } : {}),
+    });
+  });
 };
 
 export const verifyProfilePin = async (profileId, pin, ownerId) => {
@@ -209,7 +315,7 @@ export const changeProfileLock = async (profileId, pin, mode, ownerId) => {
   await runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     requireAccount(profileId, uid);
-    const current = snapshot.data()?.profiles?.[profileId];
+    const current = getExistingProfileData(snapshot, profileId);
     if ((current?.pinHash || "") !== before.pinHash ||
         (current?.pinSalt || "") !== before.pinSalt) {
       throw new Error("잠금 상태가 변경됐어요. 다시 시도해주세요.");
@@ -228,11 +334,12 @@ export const changeEditorPickRecord = async (profileId, entry, kind, ownerId) =>
   await runTransaction(db, async transaction => {
     const snapshot = await transaction.get(ref);
     requireAccount(profileId, uid);
-    const current = snapshot.data()?.profiles?.[profileId]?.[field];
+    const profile = getExistingProfileData(snapshot, profileId);
+    const current = profile?.[field];
     const records = updateEditorPicks(current, record, kind);
     const changes = { [field]: records };
     if (kind === 'view') changes.likedEditorPicks = refreshEditorPick(
-      snapshot.data()?.profiles?.[profileId]?.likedEditorPicks, record
+      profile?.likedEditorPicks, record
     );
     transaction.set(ref, { profiles: { [profileId]: changes } }, { merge: true });
   });
@@ -254,7 +361,7 @@ export const changeContentFavorite = async (profileId, item, ownerId) => {
     const ref = doc(db, 'users', uid);
     const snapshot = await transaction.get(ref);
     validateProfile();
-    const likedContents = toggleContentFavorite(snapshot.data()?.profiles?.[profileId]?.likedContents, record);
+    const likedContents = toggleContentFavorite(getExistingProfileData(snapshot, profileId)?.likedContents, record);
     transaction.set(ref, { profiles: { [profileId]: { likedContents } } }, { merge: true });
   });
 };
@@ -274,7 +381,7 @@ export const saveAttendanceDay = async (profileId, day, ownerId) => {
   await runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     validateProfile();
-    const saved = snapshot.data()?.profiles?.[profileId];
+    const saved = getExistingProfileData(snapshot, profileId);
     const previous = attendanceDates(saved?.attendanceDays);
     if (previous.includes(day)) return;
     const attendanceDays = attendanceDates([...previous, day]);
@@ -294,6 +401,24 @@ const requireSelectedProfile = (profileId, ownerId) => {
   return uid;
 };
 
+export const saveCoinCharge = async (profileId, amount, requestId, ownerId) => {
+  const uid = requireSelectedProfile(profileId, ownerId);
+  const record = createCoinCharge(amount, requestId);
+  const ref = doc(db, "users", uid);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireSelectedProfile(profileId, uid);
+    const saved = getExistingProfileData(snapshot, profileId);
+    const records = normalizeCoinRecords(saved?.coinRecords, attendanceDates(saved?.attendanceDays));
+    const existing = records.find((item) => item.id === record.id);
+    if (existing) return existing.amount;
+
+    const coinRecords = normalizeCoinRecords([record, ...records]);
+    transaction.set(ref, { profiles: { [profileId]: { coinRecords } } }, { merge: true });
+    return record.amount;
+  });
+};
+
 // 쿠폰 등록: 번호가 틀렸거나 이 프로필에 이미 등록했으면 false 를 돌려줍니다.
 export const registerCoupon = async (profileId, code, ownerId) => {
   const record = createCouponRecord(code);
@@ -303,7 +428,7 @@ export const registerCoupon = async (profileId, code, ownerId) => {
   return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     requireSelectedProfile(profileId, uid);
-    const records = normalizeCouponRecords(snapshot.data()?.profiles?.[profileId]?.couponRecords);
+    const records = normalizeCouponRecords(getExistingProfileData(snapshot, profileId)?.couponRecords);
     if (records.some((item) => item.id === record.id)) return false;
     transaction.set(ref, { profiles: { [profileId]: { couponRecords: [record, ...records] } } }, { merge: true });
     return true;
@@ -317,10 +442,36 @@ export const redeemCoupon = async (profileId, couponId, ownerId) => {
   await runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     requireSelectedProfile(profileId, uid);
-    const records = normalizeCouponRecords(snapshot.data()?.profiles?.[profileId]?.couponRecords);
+    const records = normalizeCouponRecords(getExistingProfileData(snapshot, profileId)?.couponRecords);
     transaction.set(ref, { profiles: { [profileId]: { couponRecords: markCouponUsed(records, couponId) } } }, { merge: true });
   });
 };
+const libraryNormalizers = new Map([
+  ["watchHistory", normalizeWatchHistory],
+  ["likedContents", normalizeContentFavorites],
+  ["likedEditorPicks", normalizeEditorPicks],
+]);
+
+export const removeLibraryRecord = async (profileId, field, itemId, ownerId) => {
+  const uid = requireAccount(profileId, ownerId);
+  const normalize = libraryNormalizers.get(field);
+  if (!normalize || !itemId) throw new Error("삭제할 콘텐츠를 확인해주세요.");
+
+  const ref = doc(db, "users", uid);
+  await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireAccount(profileId, uid);
+    if (useAccountStore.getState().selectedProfileId !== profileId) {
+      throw new Error("프로필이 변경됐어요. 다시 시도해주세요.");
+    }
+
+    const records = normalize(getExistingProfileData(snapshot, profileId)?.[field]);
+    const remaining = records.filter((record) => record.id !== itemId);
+    if (remaining.length === records.length) return;
+    transaction.set(ref, { profiles: { [profileId]: { [field]: remaining } } }, { merge: true });
+  });
+};
+
 // 실제 재생을 시작한 작품만 현재 계정·프로필에 저장합니다.
 export const saveWatchHistoryRecord = async (profileId, item, ownerId) => {
   const uid = requireAccount(profileId, ownerId);
@@ -335,7 +486,7 @@ export const saveWatchHistoryRecord = async (profileId, item, ownerId) => {
   await runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     validate();
-    const watchHistory = updateWatchHistory(snapshot.data()?.profiles?.[profileId]?.watchHistory, item);
+    const watchHistory = updateWatchHistory(getExistingProfileData(snapshot, profileId)?.watchHistory, item);
     transaction.set(ref, { profiles: { [profileId]: { watchHistory } } }, { merge: true });
   });
 };
