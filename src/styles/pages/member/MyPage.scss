@@ -1170,3 +1170,62 @@
 @media (prefers-reduced-motion: reduce) {
   .wavve-mypage .mypage__profile-toast { animation: none; }
 }
+
+// 이용 중인 이용권과 배지: 이름 아래 한 줄, 변경 동작은 우측 텍스트 버튼.
+.wavve-mypage .mypage__voucher {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+.wavve-mypage .mypage__voucher > p {
+  color: #d4d4d4;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.wavve-mypage .mypage__voucher-badge {
+  display: block;
+  flex: 0 0 40px;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 32px;
+  height: auto;
+  margin-left: auto;
+  padding: 6px 0 6px 12px;
+  border-radius: 0;
+  background: transparent;
+  color: #888;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button:hover {
+  background: transparent;
+  color: #fff;
+}
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__voucher { gap: 8px; }
+  .wavve-mypage .mypage__voucher > p { font-size: 10.8px; line-height: 16px; }
+  .wavve-mypage .mypage__profile-row--subscribed { row-gap: 8px; }
+  .wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button {
+    grid-column: 2;
+    justify-self: end;
+    margin: 0;
+    padding: 4px 0 4px 12px;
+    font-size: 12px;
+  }
+  .wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button .mypage__desktop-copy { display: inline; }
+  .wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button .mypage__mobile-copy { display: none; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-mypage .mypage__voucher > p { font-size: 13px; }
+}
