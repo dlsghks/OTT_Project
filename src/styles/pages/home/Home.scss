@@ -651,3 +651,7 @@ main.site-inner:has(> .wavve-home) {
   border-color: #1351f9;
   color: #fff;
 }
+
+.wavve-home .home-hope .content-section__swiper .swiper-slide:last-child {
+  margin-right: 0 !important;
+}

@@ -1,3 +1,4 @@
+import { useSwiperLayout } from '../../hooks/useSwiperLayout';
 import { SliderArrow } from '../common/SliderArrow';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -36,6 +37,7 @@ export const ContentSection = ({
   appResponsive = false,
 }) => {
   const swiperRef = useRef(null);
+  const syncLayout = useSwiperLayout();
 
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
@@ -82,6 +84,7 @@ export const ContentSection = ({
         <Swiper
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
+            syncLayout(swiper);
             updateNavigation(swiper);
           }}
           onSlideChange={updateNavigation}
@@ -93,6 +96,9 @@ export const ContentSection = ({
           onReachBeginning={updateNavigation}
           onReachEnd={updateNavigation}
           slidesPerView="auto"
+          slidesOffsetAfter={0}
+          centeredSlides={false}
+          snapToSlideEdge={false}
           slidesPerGroup={2}
           spaceBetween={18}
           speed={500}
