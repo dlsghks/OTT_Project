@@ -47,3 +47,38 @@ export const createCoinPurchase = (type, purchase, coinsUsed, id, now = new Date
   return { id, type, purchase: { ...item, amount: originalAmount - coinsUsed, coinsUsed },
     coinsUsed, originalAmount, amount: originalAmount - coinsUsed, purchasedAt: now.getTime() };
 };
+
+
+// 기존 결제도 표시하며, 이전 기록의 잔액은 남아 있는 적립/사용 기록을 시간순으로 재계산합니다.
+export const getCoinUsageRecords = (purchases = [], profileId, records = []) => {
+  const payments = purchases.filter(entry => entry?.profileId === profileId
+    && Number.isSafeInteger(entry.coinsUsed) && entry.coinsUsed > 0
+    && Number.isFinite(entry.purchasedAt) && entry.purchase)
+    .sort((a, b) => a.purchasedAt - b.purchasedAt);
+  let balances = records.map(record => ({ ...record, remaining: record.amount }));
+  let completeHistory = true;
+  return payments.map(payment => {
+    const usedAt = formatCoinDate(new Date(payment.purchasedAt));
+    const available = balances.filter(record => record.chargedAt <= usedAt);
+    let balanceAfter = null;
+    try {
+      const deducted = deductPurchaseCoins(available, payment.coinsUsed, usedAt);
+      const byId = new Map(deducted.map(record => [record.id, record]));
+      balances = balances.map(record => byId.get(record.id) ?? record);
+      if (completeHistory) balanceAfter = getCoinTotal(deducted, usedAt);
+    } catch {
+      completeHistory = false;
+    }
+    return {
+      id: payment.id,
+      name: payment.type === "voucher"
+        ? `${payment.purchase.name} ${payment.purchase.months}개월 이용권 구매`
+        : `${payment.purchase.title} 개별구매`,
+      amount: payment.coinsUsed,
+      balanceAfter: Number.isSafeInteger(payment.balanceAfter) && payment.balanceAfter >= 0
+        ? payment.balanceAfter : balanceAfter,
+      usedAt,
+      purchasedAt: payment.purchasedAt,
+    };
+  }).reverse();
+};
