@@ -19,12 +19,14 @@ export const formatLiveTitle = (value = '') => {
   return text.replace(/^\s*\[[^\]]*\]\s*/, '');
 };
 
-// 방송 사진 로딩에 실패해도 같은 채널의 로고로 돌아갑니다.
+// 지정한 로컬 이미지와 대체 이미지를 순서대로 시도하고 마지막에 채널 로고를 표시합니다.
 export const useLiveArtwork = (program, liveVideo) => {
   const [failedImages, setFailedImages] = useState([]);
   const brand = liveChannelAssets[program.channel];
   const liveImage = getImagePath(liveVideo?.thumbnail || '');
-  const candidates = [liveImage, program.fallbackImage, program.image]
+  const candidates = (program.preferLocalArtwork
+    ? [program.image, liveImage, program.fallbackImage]
+    : [liveImage, program.fallbackImage, program.image])
     .filter(Boolean)
     .map(getImagePath);
   const image = candidates.find((src) => !failedImages.includes(src)) || '';
