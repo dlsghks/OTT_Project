@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Shorts } from "../shorts/Shorts";
 import { shorts } from "../../data/retrov/retrovMain";
 import { programs } from "../../data/retrov/retrov";
@@ -31,14 +30,6 @@ const retroShortsItems = shorts.map((item) => {
 export const RetrovShorts = () => {
   return (
     <>
-      <Link
-        to="/retrov"
-        className="retrov-shorts-back"
-      >
-        <span aria-hidden="true">←</span>
-        레트로브로 돌아가기
-      </Link>
-
       <Shorts items={retroShortsItems} />
     </>
   );
