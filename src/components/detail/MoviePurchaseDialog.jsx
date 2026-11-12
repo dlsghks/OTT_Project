@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../styles/pages/contents/MoviePurchaseDialog.scss';
 
 export const MoviePurchaseDialog = ({ movie, onPurchase, onClose }) => {
+  const contentLabel = movie.kind === 'program' ? '프로그램' : '영화';
   const dialog = useRef(null);
   const titleId = useId();
   const [completed, setCompleted] = useState(false);
@@ -25,7 +26,7 @@ export const MoviePurchaseDialog = ({ movie, onPurchase, onClose }) => {
 
   return (
     <dialog ref={dialog} className="movie-purchase-dialog" aria-labelledby={titleId} onClose={onClose}>
-      <h2 id={titleId}>{completed ? '영화 구매 완료' : '영화 개별구매'}</h2>
+      <h2 id={titleId}>{`${contentLabel} ${completed ? '구매 완료' : '개별구매'}`}</h2>
       {completed ? (
         <form method="dialog">
           <p>{movie.title} 가상결제가 완료됐어요.</p>
@@ -38,7 +39,7 @@ export const MoviePurchaseDialog = ({ movie, onPurchase, onClose }) => {
         <form onSubmit={approvePurchase}>
           <p>시연용 결제이며 실제 청구는 발생하지 않아요.</p>
           <dl>
-            <div><dt>영화</dt><dd>{movie.title}</dd></div>
+            <div><dt>{contentLabel}</dt><dd>{movie.title}</dd></div>
             <div><dt>결제 금액</dt><dd>{movie.price.toLocaleString('ko-KR')}원</dd></div>
           </dl>
           {error && <p role="alert">{error}</p>}
