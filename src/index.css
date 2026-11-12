@@ -28,6 +28,11 @@
     vertical-align: middle;
   }
 
+  // 팝업에서 스크롤을 잠가도 스크롤바 폭을 유지해 화면 이동을 방지합니다.
+  html {
+    scrollbar-gutter: stable;
+  }
+
   html,
   body,
   #root {
