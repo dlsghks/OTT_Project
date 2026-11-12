@@ -157,6 +157,14 @@ export const MyPage = ({
     return ["purchases", "downloads"].includes(tab) ? tab : "history";
   });
   const [activeFilter, setActiveFilter] = useState("all");
+  const [summaryToast, setSummaryToast] = useState(null);
+  const libraryRef = useRef(null);
+
+  useEffect(() => {
+    if (!summaryToast) return;
+    const timeout = window.setTimeout(() => setSummaryToast(null), 3000);
+    return () => window.clearTimeout(timeout);
+  }, [summaryToast]);
   const [editingScope, setEditingScope] = useState("");
   const [isRemoving, setIsRemoving] = useState(false);
   const [editFeedback, setEditFeedback] = useState(null);
@@ -384,6 +392,16 @@ export const MyPage = ({
     setEditingScope("");
     setEditFeedback(null);
   };
+  const openSummaryContent = (key, count, emptyMessage) => {
+    if (!count) {
+      setSummaryToast((previous) => ({ message: emptyMessage, sequence: (previous?.sequence ?? 0) + 1 }));
+      return;
+    }
+    setSummaryToast(null);
+    changeTab(key);
+    libraryRef.current?.querySelector(`[id="${id}-tab-${key}"]`)?.focus({ preventScroll: true });
+    libraryRef.current?.scrollIntoView({ block: "start", behavior: "auto" });
+  };
   const handleTabKeyDown = (event, index) => {
     let nextIndex;
     if (event.key === "ArrowRight") nextIndex = (index + 1) % TABS.length;
@@ -447,8 +465,10 @@ export const MyPage = ({
 
   return (
     <section className="wavve-mypage" aria-label="마이페이지">
-      {profileSaved && (
-        <div className="mypage__profile-toast" role="status">프로필이 저장됐습니다.</div>
+      {(summaryToast || profileSaved) && (
+        <div key={summaryToast ? `summary-${summaryToast.sequence}` : "profile-saved"} className="mypage__profile-toast" role="status">
+          {summaryToast?.message || "프로필이 저장됐습니다."}
+        </div>
       )}
       <div className="mypage__inner">
         <div className={`mypage__profile-row ${hasVoucher ? "mypage__profile-row--subscribed" : ""}`}>
@@ -572,16 +592,26 @@ export const MyPage = ({
             <dd>{couponCount.toLocaleString("ko-KR")}</dd>
           </div>
           <div>
-            <dt>구매 콘텐츠</dt>
+            <dt>
+              <button type="button" className="mypage__summary-link mypage__summary-button"
+                onClick={() => openSummaryContent("purchases", lists.purchases.length, "구매 콘텐츠가 없습니다.")}>
+                구매 콘텐츠
+              </button>
+            </dt>
             <dd>{lists.purchases.length.toLocaleString("ko-KR")}</dd>
           </div>
           <div className="mypage__retro-summary">
-            <dt>레트로 콘텐츠</dt>
+            <dt>
+              <button type="button" className="mypage__summary-link mypage__summary-button"
+                onClick={() => openSummaryContent("favorites", retroCount, "관심 콘텐츠에 레트로 콘텐츠가 없습니다.")}>
+                레트로 콘텐츠
+              </button>
+            </dt>
             <dd>{retroCount.toLocaleString("ko-KR")}</dd>
           </div>
         </dl>
 
-        <div className="mypage__library">
+        <div className="mypage__library" ref={libraryRef}>
           <div
             className="mypage__tabs"
             role="tablist"

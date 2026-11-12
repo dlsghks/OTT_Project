@@ -59,7 +59,7 @@ export const ComingSoonCard = ({
           <Heart
             size={26}
             strokeWidth={1.5}
-            fill={isFavorite ? "#ff424f" : "none"}
+            fill={isFavorite ? "currentColor" : "none"}
           />
         </button>
       </div>

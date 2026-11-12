@@ -53,6 +53,9 @@ export const RankingSection = ({ items = [] }) => {
           onReachBeginning={updateNavigation}
           onReachEnd={updateNavigation}
           slidesPerView="auto"
+          slidesOffsetAfter={0}
+          centeredSlides={false}
+          snapToSlideEdge={false}
           slidesPerGroup={2}
           spaceBetween={8}
           speed={500}

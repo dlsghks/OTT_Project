@@ -179,7 +179,7 @@ const HomeContentBody = ({ item, sectionId }) => {
                 <DetailHero
                     title={isJung ? '정형돈의 제목없음 TV' : item.title}
                     logo={isJung ? getImagePath('/images/home/section/jung/jungTitle.png') : undefined}
-                    backdrop={getImagePath(isJung ? '/images/home/section/jung/jungHero.jpg' : item.image)}
+                    backdrop={getImagePath(isComingSoon ? '/images/home/section/comingSoon/coming-soon-hero.jpg' : isJung ? '/images/home/section/jung/jungHero.jpg' : item.image)}
                     meta={isComingSoon ? 'Coming Soon' : '정형돈의 제목없음 TV'}
                     overview={isComingSoon ? item.description : `업로드 ${item.updatedAt}`}
                     showWatch={false}
@@ -195,9 +195,6 @@ const HomeContentBody = ({ item, sectionId }) => {
                                 </button>
                             ) : (
                                 <VoucherWatchActions
-                                    onPreview={isJung && episodes[0]
-                                        ? () => playJungEpisode(episodes[0])
-                                        : isLineup ? playComingSoonVideo : () => player.openTrailer({ title: item.title })}
                                     onPurchase={actions.onPurchaseVoucher}
                                 />
                             )}

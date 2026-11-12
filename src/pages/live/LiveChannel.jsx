@@ -1,3 +1,4 @@
+import chatToggleArrow from '../../assets/icons/AltArrowDownOutline.svg';
 import { SliderArrow } from '../../components/common/SliderArrow';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -73,17 +74,13 @@ const getChatName = (user) => {
 };
 
 function ChannelImage({ program, className = '' }) {
-  const [failed, setFailed] = useState(false);
+  const [failedSources, setFailedSources] = useState([]);
+  const src = [
+    imageSrc(program?.image || program?.thumbnail || program?.poster),
+    imageSrc(program?.fallbackImage),
+  ].find((source) => source && !failedSources.includes(source));
 
-  const src = imageSrc(
-    program?.image || program?.thumbnail || program?.poster
-  );
-
-  useEffect(() => {
-    setFailed(false);
-  }, [src]);
-
-  if (!src || failed) {
+  if (!src) {
     return (
       <span className="live-image-fallback">
         {program?.channel || program?.title || 'WAVVE LIVE'}
@@ -97,7 +94,7 @@ function ChannelImage({ program, className = '' }) {
       src={src}
       alt={program?.title || program?.channel || '채널 이미지'}
       loading="lazy"
-      onError={() => setFailed(true)}
+      onError={() => setFailedSources((previous) => [...previous, src])}
     />
   );
 }
@@ -1072,7 +1069,7 @@ export const LiveChannel = ({
               aria-expanded={chatOpen}
             >
               <strong>웨이브 실시간</strong>
-              <span>{chatOpen ? '⌃' : '⌄'}</span>
+              <img className="live-chat__toggle-arrow" src={chatToggleArrow} alt="" aria-hidden="true" width="24" height="24" />
             </button>
 
             {chatOpen ? (

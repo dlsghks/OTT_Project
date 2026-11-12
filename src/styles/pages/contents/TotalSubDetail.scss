@@ -431,14 +431,17 @@ $text-sub: figma.$neutral-2;
 
 /* 시즌별 회차 */
 .episode-row {
-  &__header {
+  .episode-row__header {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 20px;
 
     .movie-videos__title {
+      flex: 0 1 auto;
+      width: auto;
       margin: 0;
     }
   }

@@ -84,8 +84,10 @@
       transition: background-color 150ms ease;
       scroll-margin: 8px;
       
-      &.is-active { background: #1351f9; }
-      &.is-active > img { filter: contrast(10); mix-blend-mode: screen; }
+      @media (hover: hover) {
+        &:hover { background: #1351f9; }
+      }
+      &:focus-visible { background: #1351f9; }
       &:focus-visible { outline-offset: -3px; }
       > img { position: static; display: block; max-width: none; }
     }
@@ -127,7 +129,7 @@
       color: #fff;
       font-size: 14px;
       font-weight: 700;
-      &:hover { border-color: #1351f9; }
+      &:hover { background: #1351f9; border-color: #1351f9; }
       &.is-copied { background: #1351f9; border-color: #1351f9; }
       &:disabled { cursor: wait; opacity: .6; }
     }
@@ -146,15 +148,15 @@
 
   &__notice { margin: 0; padding: 0 28px 18px; color: #b8ccff; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
 }
-// 전달받은 원형 아이콘의 전체 이미지를 사용합니다.
+// 원형 배경은 버튼으로, 로고는 벡터로 표시해 확대 시에도 선명하게 유지합니다.
 .shorts-share .shorts-share__services > button > img {
   position: static;
   display: block;
-  width: 50px;
-  height: 50px;
-  min-width: 50px;
-  max-width: 50px;
-  max-height: 50px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  max-width: 24px;
+  max-height: 24px;
   margin: 0;
   object-fit: contain;
 }
@@ -182,4 +184,10 @@
 @media (max-width: 480px) {
   .shorts-share__surface { padding-inline: 20px; }
   .shorts-share__services { gap: 14px; }
+}
+
+@media (hover: hover) {
+  .shorts-share .shorts-share__services > button:hover {
+    background: #1351f9;
+  }
 }
