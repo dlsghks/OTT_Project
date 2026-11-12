@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { auth } from '../../firebase/firebase';
-import { getIndividualPurchaseMovie } from '../../data/individualPurchaseMovies';
+import { getIndividualPurchaseContent } from '../../data/individualPurchaseMovies';
 import { saveDemoMovieDownload, saveDemoMoviePurchase, useDemoMoviePurchases } from '../../utils/demoMoviePurchases';
 import { MoviePurchaseDialog } from '../../components/detail/MoviePurchaseDialog';
 import { categoryPages } from '../../data/categoryData';
@@ -58,8 +58,10 @@ const MovieDetailBody = ({ movieId }) => {
     }
   }, [localMovie, tmdbId, onFindMovieId, onFetchMovieDetail]);
 
-  const offer = getIndividualPurchaseMovie(tmdbId);
   const movieData = tmdbId ? movieDetail[tmdbId] : null;
+  const purchaseItem = localMovie ?? categoryPages.movie.items.find((item) =>
+    item.tmdbId === tmdbId || item.title === movieData?.title);
+  const offer = getIndividualPurchaseContent(tmdbId, purchaseItem);
   const movie = movieData === false && offer ? offer : movieData;
   const image = movie?.poster_path ? `${TMDB_IMG}w500${movie.poster_path}` : localMovie?.poster || localMovie?.image || '';
   const actions = useDetailActions(movie ? {
@@ -79,7 +81,7 @@ const MovieDetailBody = ({ movieId }) => {
     if (!purchasedMovie || !uid || auth.currentUser?.uid !== uid) return;
 
     try {
-      saveDemoMovieDownload(uid, offer.tmdbId);
+      saveDemoMovieDownload(uid, offer);
       setDownloadResult({ uid, success: true });
     } catch {
       setDownloadResult({ uid, success: false });
@@ -149,7 +151,7 @@ const MovieDetailBody = ({ movieId }) => {
           onClose={() => setPurchaseAccount(null)}
           onPurchase={() => {
             if (auth.currentUser?.uid !== uid) throw new Error('계정이 변경됐어요.');
-            saveDemoMoviePurchase(uid, offer.tmdbId, image);
+            saveDemoMoviePurchase(uid, offer, image);
           }}
         />
       )}
