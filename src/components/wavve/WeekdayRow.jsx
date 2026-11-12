@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import '../../styles/components/wavve/WeekdayRow.scss';
 
 import { CategorySlider } from './CategorySlider';
 import { weekdays } from '../../data/categoryData';
@@ -37,15 +39,8 @@ export const WeekdayRow = ({
     minimum
   );
 
-  const recommendationCount =
-    displayItems.length - uniqueDayItems.length;
-
-  const activeDayLabel = weekdays.find(
-    (day) => day.id === activeDay
-  )?.label;
-
   const dayButtons = (
-    <>
+    <div className="weekday-row__controls">
       <div
         className="weekday-filter"
         role="group"
@@ -65,9 +60,8 @@ export const WeekdayRow = ({
           </button>
         ))}
       </div>
-
-
-    </>
+      {moreLink && <Link to={`${moreLink}?day=${activeDay}`}>더보기</Link>}
+    </div>
   );
 
   return (
@@ -75,7 +69,6 @@ export const WeekdayRow = ({
       <CategorySlider
         key={activeDay}
         title={title}
-        moreLink={moreLink ? `${moreLink}?day=${activeDay}` : undefined}
         items={displayItems}
         headerExtra={dayButtons}
       />

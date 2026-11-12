@@ -1,3 +1,4 @@
+import { SliderArrow } from '../common/SliderArrow';
 import { SectionTitle } from '../common/SectionTitle';
 import { useEffect, useRef, useState } from "react";
 import RetroVideoCard from "./RetroVideoCard";
@@ -83,8 +84,8 @@ export default function RetroVideoRow({ id, title, videos, frame, onPlay }) {
           </li>
         ))}
       </ul>
-      {navigation.prev && <button type="button" className="retro-video-row__arrow retro-video-row__arrow--prev" onClick={() => scrollByPage(-1)} aria-label={`${title} 이전 영상`}>‹</button>}
-      {navigation.next && <button type="button" className="retro-video-row__arrow retro-video-row__arrow--next" onClick={() => scrollByPage(1)} aria-label={`${title} 다음 영상`}>›</button>}
+      {navigation.prev && <SliderArrow direction="prev"  onClick={() => scrollByPage(-1)} aria-label={`${title} 이전 영상`} />}
+      {navigation.next && <SliderArrow direction="next"  onClick={() => scrollByPage(1)} aria-label={`${title} 다음 영상`} />}
       </div>
     </section>
   );

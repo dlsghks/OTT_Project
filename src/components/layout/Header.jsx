@@ -210,7 +210,10 @@ export const Header = ({
                 <li key={menu.id}>
                   <NavLink
                     to={menu.path}
-                    className={({ isActive }) => isActive ? 'is-active' : ''}
+                    className={({ isActive }) =>
+                      [menu.path === '/retrov' && 'header-retrov-link', isActive && 'is-active']
+                        .filter(Boolean).join(' ')
+                    }
                   >
                     {menu.menu}
                   </NavLink>

@@ -58,6 +58,7 @@ export const MyHover = ({
   const triggerRef = useRef(null);
   const panelRef = useRef(null);
   const closeTimer = useRef(null);
+  const clickOpenedRef = useRef(false);
   const logoutLock = useRef(false);
 
   const panelId = useId();
@@ -82,6 +83,7 @@ export const MyHover = ({
 
   const close = () => {
     cancelClose();
+    clickOpenedRef.current = false;
     setIsOpen(false);
     setMessage("");
   };
@@ -95,12 +97,13 @@ export const MyHover = ({
   };
 
   const closeLater = (event) => {
-    if (event.pointerType === "touch") return;
+    if (event.pointerType === "touch" || clickOpenedRef.current) return;
 
     cancelClose();
 
     closeTimer.current = window.setTimeout(() => {
       if (!isInside(document.activeElement)) {
+        clickOpenedRef.current = false;
         setIsOpen(false);
         setMessage("");
       }
@@ -122,6 +125,7 @@ export const MyHover = ({
   // 프로필 선택 후 홈으로 돌아오면 새 프로필을 반영합니다.
   useEffect(() => {
     window.clearTimeout(closeTimer.current);
+    clickOpenedRef.current = false;
     setIsOpen(false);
     setMessage("");
     setSelectedProfile(readSelectedProfile());
@@ -212,6 +216,7 @@ export const MyHover = ({
         !panelRef.current?.contains(event.target)
       ) {
         window.clearTimeout(closeTimer.current);
+        clickOpenedRef.current = false;
         setIsOpen(false);
         setMessage("");
       }
@@ -221,6 +226,7 @@ export const MyHover = ({
       if (event.key !== "Escape") return;
 
       window.clearTimeout(closeTimer.current);
+      clickOpenedRef.current = false;
       setIsOpen(false);
       setMessage("");
       triggerRef.current?.focus();
@@ -308,12 +314,18 @@ export const MyHover = ({
         onClick={() => {
           cancelClose();
           setSelectedProfile(readSelectedProfile());
-          setIsOpen((open) => !open);
+          if (clickOpenedRef.current) {
+            close();
+          } else {
+            clickOpenedRef.current = true;
+            setIsOpen(true);
+          }
         }}
         onKeyDown={(event) => {
           if (event.key !== "ArrowDown") return;
 
           event.preventDefault();
+          clickOpenedRef.current = true;
           setSelectedProfile(readSelectedProfile());
           setIsOpen(true);
 

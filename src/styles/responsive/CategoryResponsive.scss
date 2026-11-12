@@ -1,7 +1,7 @@
-.category-page .category-filter-app { display: none; }
+:is(.category-page, .category-filter-group) .category-filter-app { display: none; }
 
 @media (max-width: 1024px) {
-  .category-page {
+  :is(.category-page, .category-filter-group) {
     padding-bottom: 32px;
     .category-page__sections { padding-inline: var(--app-side); }
     .category-filter { display: none; }
@@ -26,7 +26,7 @@
   }
 }
 @media (min-width: 601px) and (max-width: 1024px) {
-  .category-page {
+  :is(.category-page, .category-filter-group) {
     .category-row__slider {
       width: calc(100% + var(--app-side));
       margin-right: calc(var(--app-side) * -1);
@@ -40,5 +40,5 @@
   }
 }
 @media (min-width: 901px) and (max-width: 1024px) {
-  .category-page .collection-row__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  :is(.category-page, .category-filter-group) .collection-row__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }

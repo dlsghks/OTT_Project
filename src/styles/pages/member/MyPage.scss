@@ -53,7 +53,6 @@
 .wavve-mypage .mypage__summary dt { font-size: 18px; font-weight: 600; line-height: 22px; }
 .wavve-mypage .mypage__summary dd { margin-top: 20px; font-size: 20px; line-height: 22px; }
 .wavve-mypage .mypage__summary > .mypage__retro-summary {
-  background: linear-gradient(#000, #000) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
   font-family: "DungGeunMo", "Pretendard", sans-serif;
 }
 .wavve-mypage .mypage__retro-summary dt { font-weight: 400; }
@@ -302,9 +301,6 @@
   }
   .wavve-mypage .mypage__summary dt { color: #adb1bf; font-size: 12px; font-weight: 400; line-height: 22px; }
   .wavve-mypage .mypage__summary dd { margin-top: 0; font-size: 23px; line-height: 30px; }
-  .wavve-mypage .mypage__summary > .mypage__retro-summary {
-    background: linear-gradient(#181b25, #181b25) padding-box, linear-gradient(110deg, #1351f9, #c700e8) border-box;
-  }
 
   .wavve-mypage .mypage__library { width: calc(100% - 32px); margin: 31px 16px 0; }
   .wavve-mypage .mypage__library .mypage__tabs { gap: clamp(8px, calc((100vw - 293px) / 3), 32px); min-height: 21.05px; height: 21.05px; }
@@ -973,11 +969,6 @@
   color: #adb1bf;
 }
 
-.wavve-mypage .mypage__summary > .mypage__retro-summary {
-  background:
-    linear-gradient(#181b25, #181b25) padding-box,
-    linear-gradient(110deg, #1351f9, #c700e8) border-box;
-}
 
 // 마이페이지 모든 탭에서 숏츠 배지 제거
 .wavve-mypage .mypage__poster-frame--shorts > .mypage__shorts-badge {
@@ -1170,3 +1161,76 @@
 @media (prefers-reduced-motion: reduce) {
   .wavve-mypage .mypage__profile-toast { animation: none; }
 }
+
+// 이용 중인 이용권과 배지: 이름 아래 한 줄, 변경 동작은 우측 텍스트 버튼.
+.wavve-mypage .mypage__voucher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.wavve-mypage .mypage__voucher > p {
+  color: #d4d4d4;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.wavve-mypage .mypage__voucher-badge {
+  display: block;
+  flex: 0 0 20px;
+  width: 20px;
+  min-width: 20px;
+  max-width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+.wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 32px;
+  height: auto;
+  margin-left: auto;
+  padding: 6px 0 6px 12px;
+  border-radius: 0;
+  background: transparent;
+  color: #888;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button:hover {
+  background: transparent;
+  color: #fff;
+}
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__voucher { gap: 8px; }
+  .wavve-mypage .mypage__voucher > p { font-size: 10.8px; line-height: 16px; }
+  .wavve-mypage .mypage__profile-row--subscribed { row-gap: 8px; }
+  .wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button {
+    grid-column: 2;
+    justify-self: end;
+    margin: 0;
+    padding: 4px 0 4px 12px;
+    font-size: 12px;
+  }
+  .wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button .mypage__desktop-copy { display: inline; }
+  .wavve-mypage .mypage__profile-row--subscribed .mypage__pass-button .mypage__mobile-copy { display: none; }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-mypage .mypage__voucher > p { font-size: 13px; }
+}
+
+.wavve-mypage .mypage__summary-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+
+  &:focus-visible { outline: none; }
+  &:focus-visible::after { outline: 2px solid #fff; outline-offset: 3px; }
+}
+
+.wavve-mypage .mypage__library { scroll-margin-top: 110px; }
