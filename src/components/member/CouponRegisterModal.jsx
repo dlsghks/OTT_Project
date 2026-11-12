@@ -26,7 +26,9 @@ export function CouponRegisterModal({ onRegister, onClose }) {
     setBusy(true);
     setError("");
     try {
-      if (await onRegister(normalizeCouponCode(code))) setSuccess(true);
+      const result = await onRegister(normalizeCouponCode(code));
+      if (result === "handled") return;
+      if (result) setSuccess(true);
       else setError("쿠폰번호를 확인한 후 다시 입력해 주세요.");
     } catch {
       setError("쿠폰을 등록하지 못했어요. 다시 시도해 주세요.");
