@@ -94,12 +94,13 @@ export const Voucher = () => {
     const [receipt, setReceipt] = useState(null);
     const checkoutDialog = useRef(null);
     const account = useAccountStore();
-    const [useCoins, setUseCoins] = useState(false);
+    const [coinInput, setCoinInput] = useState("");
     const [checkoutBusy, setCheckoutBusy] = useState(false);
     const checkoutBusyRef = useRef(false);
     const coinProfile = account.profiles.find((entry) => entry.id === (checkout?.profileId ?? account.selectedProfileId));
     const coinBalance = getCoinTotal(coinProfile?.coinRecords ?? []);
-    const checkoutCoins = checkout?.allowCoins && useCoins ? Math.min(coinBalance, checkout.amount) : 0;
+    const maxCoins = checkout?.allowCoins ? Math.max(0, Math.min(coinBalance, checkout.amount)) : 0;
+    const checkoutCoins = Math.min(Number(coinInput) || 0, maxCoins);
 
     const currentSelection = getDemoVoucherSelection(activeVoucher);
     const group = voucherGroups[activeTab];
@@ -180,7 +181,7 @@ export const Voucher = () => {
         setMessage("");
         setReceipt(null);
         setCheckoutError("");
-        setUseCoins(false);
+        setCoinInput("");
         setCheckout({
             uid: user.uid,
             profileId: account.selectedProfileId,
@@ -593,11 +594,20 @@ export const Voucher = () => {
                         </dl>
                         {checkout.allowCoins && (
                             <>
-                                <label className="purchase-coins">
-                                    <input type="checkbox" checked={useCoins} disabled={checkoutBusy || coinBalance <= 0}
-                                        onChange={(event) => setUseCoins(event.target.checked)} />
-                                    보유 코인 사용 ({money(coinBalance)}코인)
-                                </label>
+                                <div className="purchase-coins">
+                                    <label htmlFor="voucher-checkout-coins">사용할 코인 · 보유 {money(coinBalance)}코인</label>
+                                    <div className="purchase-coins__controls">
+                                        <input id="voucher-checkout-coins" type="text" inputMode="numeric" pattern="[0-9]*"
+                                            aria-label="사용할 코인" value={coinInput} placeholder="0" disabled={checkoutBusy || maxCoins <= 0}
+                                            onChange={(event) => {
+                                                const digits = event.target.value.replace(/[^0-9]/g, "");
+                                                setCoinInput(digits === "" ? "" : String(Math.min(Number(digits), maxCoins)));
+                                            }} />
+                                        <span>코인</span>
+                                        <button type="button" disabled={checkoutBusy || maxCoins <= 0}
+                                            onClick={() => setCoinInput(String(maxCoins))}>전체 사용</button>
+                                    </div>
+                                </div>
                                 <dl>
                                     <div><dt>사용 코인</dt><dd>{money(checkoutCoins)}코인</dd></div>
                                     <div><dt>최종 결제 금액</dt><dd>{money(checkout.amount - checkoutCoins)}원</dd></div>
