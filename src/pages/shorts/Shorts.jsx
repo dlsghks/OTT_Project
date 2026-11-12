@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { LoginModal } from "../../components/common/LoginModal";
 import { ShortsPlayer } from "../../components/shorts/ShortsPlayer";
 import { ShortsShareModal } from "../../components/shorts/ShortsShareModal";
 import mobileHeartOutline from "../../assets/shorts/mobile/heart-outline.svg";
@@ -62,6 +63,7 @@ const ShortsFeed = ({ items, selectedGenre, filterOptions, onGenreChange }) => {
   const likeBusyRef = useRef(false);
   const profileId = profile.id;
   const [shareItem, setShareItem] = useState(null);
+  const [loginOpen, setLoginOpen] = useState(false);
   const feedRef = useRef(null);
   const slidesRef = useRef([]);
   const activeIndexRef = useRef(activeIndex);
@@ -135,6 +137,7 @@ const ShortsFeed = ({ items, selectedGenre, filterOptions, onGenreChange }) => {
 
   useEffect(() => {
     setShareItem(null);
+    setLoginOpen(false);
     setRecordMessage("");
   }, [activeItem?.id, profileId, ownerId]);
 
@@ -158,6 +161,11 @@ const ShortsFeed = ({ items, selectedGenre, filterOptions, onGenreChange }) => {
   };
 
   const toggleLike = async (id) => {
+    if (ownerId === "guest") {
+      setRecordMessage("");
+      setLoginOpen(true);
+      return;
+    }
     if (likeBusyRef.current) return;
     likeBusyRef.current = true;
     setLikeBusy(true);
@@ -203,7 +211,7 @@ const ShortsFeed = ({ items, selectedGenre, filterOptions, onGenreChange }) => {
       >
         {items.map((item, index) => {
           const isActive = index === activeIndex;
-          const liked = likedIds.includes(item.id);
+          const liked = ownerId !== "guest" && likedIds.includes(item.id);
           return (
             <div
               className="shorts-page__slide"
@@ -260,6 +268,7 @@ const ShortsFeed = ({ items, selectedGenre, filterOptions, onGenreChange }) => {
         {items.length === 0 && <p>등록된 쇼츠가 없습니다.</p>}
       </section>
       </div>
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
       {recordMessage && <p role="status">{recordMessage}</p>}
       {shareItem && <ShortsShareModal key={shareItem.id} item={shareItem} onClose={() => setShareItem(null)} />}
     </>
