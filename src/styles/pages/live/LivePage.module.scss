@@ -1,3 +1,4 @@
+@use './LiveMainResponsive' as responsive;
 @font-face {
   font-family: 'Live Wavve PADO';
   src: url('../../../assets/fonts/WavvePADO-Regular.woff2') format('woff2');
@@ -184,3 +185,10 @@
   .page .thumb > img,
   .page .cardBrandPlaceholder { transition: none; }
 }
+.page :not(:hover) > :global(.slider-arrow):not(:focus-visible) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+@include responsive.live-responsive;

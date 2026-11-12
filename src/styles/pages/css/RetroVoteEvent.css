@@ -1,0 +1,817 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+@font-face {
+  font-family: "DungGeunMo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff") format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Wavve PADO";
+  src: url("../../../assets/fonts/WavvePADO-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+.rv-vote-event {
+  --vote-accent: #ff5541;
+  --vote-accent-end: #f0453a;
+  --vote-hero-top: #fff1f3;
+  --vote-hero-bottom: #ffe3e8;
+  --vote-soft: #fff0f2;
+  --vote-line: #ffd3da;
+  --vote-promo: #ffbcb1;
+  --vote-ink: #2a2530;
+  --vote-sparkle: #ff9eab;
+  --vote-heart: #ff9fb6;
+  padding-bottom: clamp(60px, 6.25vw, 120px);
+  font-family: "Wavve PADO", "Noto Sans KR", sans-serif;
+  font-synthesis: none;
+}
+.rv-vote-event--magenta {
+  --vote-accent: #d6006e;
+  --vote-accent-end: #e01f86;
+  --vote-hero-top: #fff0f6;
+  --vote-hero-bottom: #fbdfeb;
+  --vote-soft: #fde9f2;
+  --vote-line: #f5bfd6;
+  --vote-promo: #f8c6db;
+  --vote-sparkle: #f0809a;
+  --vote-heart: #f394ae;
+}
+.rv-vote-event--purple {
+  --vote-accent: #6a38cf;
+  --vote-accent-end: #7d4be0;
+  --vote-hero-top: #fffbea;
+  --vote-hero-bottom: #fff0c6;
+  --vote-soft: #fff8e1;
+  --vote-line: #f1dfa6;
+  --vote-promo: #fbe7a6;
+  --vote-sparkle: #b9a2ee;
+  --vote-heart: #f6c94a;
+}
+.rv-vote-event.event-page {
+  max-width: none;
+}
+.rv-vote-event :where(button) {
+  font: inherit;
+  cursor: pointer;
+}
+.rv-vote-event .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.rv-vote-event {
+  /* ---------- 상단 바: [프로그램] 이벤트명 / 이벤트 기간 ---------- */
+}
+.rv-vote-event__bar {
+  margin-inline: calc(var(--page-side-padding, 0px) * -1);
+  padding: clamp(16px, 1.4583333333vw, 28px) clamp(16px, 5.729vw, 110px);
+  background: #1a1a1a;
+}
+.rv-vote-event__bar h1 {
+  margin: 0;
+  font-size: clamp(18px, 1.5625vw, 30px);
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+.rv-vote-event__bar p {
+  margin: 6px 0 0;
+  font-size: clamp(12px, 0.78125vw, 15px);
+  color: #9a9a9a;
+}
+.rv-vote-event {
+  /* ---------- 가운데 흰 종이 ---------- */
+}
+.rv-vote-event__paper {
+  width: min(1380px, 100%);
+  margin: clamp(24px, 3.125vw, 60px) auto 0;
+  overflow: hidden;
+  background: #fff;
+  color: var(--vote-ink);
+}
+.rv-vote-event {
+  /* ---------- 히어로 ---------- */
+}
+.rv-vote-event__hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: center;
+  padding: clamp(48px, 7.8125vw, 150px) 20px clamp(40px, 5.7291666667vw, 110px);
+  background: linear-gradient(180deg, var(--vote-hero-top), var(--vote-hero-bottom));
+  text-align: center;
+}
+.rv-vote-event__brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.0416666667vw, 20px);
+  margin: 0;
+  font-size: clamp(20px, 2.2916666667vw, 44px);
+}
+.rv-vote-event__brand span {
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 400;
+}
+.rv-vote-event__brand img {
+  width: auto;
+  height: clamp(40px, 5.1041666667vw, 98px);
+}
+.rv-vote-event__headline {
+  display: grid;
+  margin: clamp(12px, 1.5625vw, 30px) 0 0;
+  font-size: clamp(36px, 5vw, 96px);
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.rv-vote-event__headline em {
+  font-style: normal;
+  color: var(--vote-accent);
+}
+.rv-vote-event__lead {
+  margin: clamp(16px, 2.0833333333vw, 40px) 0 0;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: clamp(16px, 1.7708333333vw, 34px);
+  font-weight: 700;
+}
+.rv-vote-event__desc {
+  display: grid;
+  gap: 0.3em;
+  margin: clamp(10px, 1.25vw, 24px) 0 0;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(13px, 1.4583333333vw, 28px);
+  color: #6f6670;
+}
+.rv-vote-event__art {
+  width: clamp(160px, 21.875vw, 420px);
+  height: auto;
+  margin-top: clamp(16px, 2.0833333333vw, 40px);
+}
+.rv-vote-event--purple .rv-vote-event__art {
+  width: clamp(230px, 30.5729166667vw, 587px);
+}
+.rv-vote-event {
+  /* ---------- 배경 장식 (반짝이 · 하트 · 번개) ---------- */
+}
+.rv-vote-event__deco {
+  position: absolute;
+  z-index: -1;
+  width: clamp(var(--s) * 1px, var(--s) * 0.25vw, var(--s) * 2.4px);
+  height: auto;
+  pointer-events: none;
+}
+.rv-vote-event__deco--sparkle {
+  fill: var(--vote-sparkle);
+}
+.rv-vote-event__deco--heart, .rv-vote-event__deco--bolt {
+  fill: var(--vote-heart);
+}
+.rv-vote-event__deco--soft {
+  fill: var(--vote-heart);
+  opacity: 0.35;
+  filter: blur(3px);
+}
+.rv-vote-event--magenta .rv-vote-event__hero {
+  padding-bottom: clamp(120px, 22.9166666667vw, 440px);
+}
+.rv-vote-event__art--top, .rv-vote-event__art--bottom {
+  position: absolute;
+  z-index: -1;
+  margin: 0;
+}
+.rv-vote-event__art--top {
+  top: 5%;
+  right: 4%;
+  width: 24%;
+}
+.rv-vote-event__art--bottom {
+  bottom: 7%;
+  left: 9%;
+  width: 26%;
+  transform: scaleX(-1);
+}
+.rv-vote-event {
+  /* ---------- 섹션 공통 ---------- */
+}
+.rv-vote-event__section {
+  padding: clamp(48px, 6.25vw, 120px) clamp(20px, 6.7%, 92px);
+}
+.rv-vote-event__section--vote {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(180deg, var(--vote-soft), #fff 140%);
+}
+.rv-vote-event__title {
+  margin: 0;
+  font-size: clamp(20px, 2.1875vw, 42px);
+  font-weight: 800;
+  word-break: keep-all;
+}
+.rv-vote-event__subtitle {
+  margin: clamp(8px, 0.7291666667vw, 14px) 0 0;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(12px, 1.1458333333vw, 22px);
+  color: #7a7178;
+  word-break: keep-all;
+}
+.rv-vote-event {
+  /* ---------- 참여 방법 ---------- */
+}
+.rv-vote-event__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.25vw, 24px);
+  margin: clamp(20px, 2.9166666667vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.rv-vote-event__steps li {
+  position: relative;
+  display: grid;
+  gap: clamp(6px, 0.625vw, 12px);
+  padding: clamp(12px, 1.6666666667vw, 32px) clamp(12px, 1.6666666667vw, 32px);
+  border: 2px solid var(--vote-line);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff, var(--vote-soft));
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+.rv-vote-event__steps li::after {
+  content: "";
+  position: absolute;
+  top: clamp(8px, 1.25vw, 24px);
+  right: clamp(8px, 1.25vw, 24px);
+  width: clamp(12px, 0.9895833333vw, 19px);
+  aspect-ratio: 1;
+  background: var(--vote-line);
+  mask: url("../../../assets/retrov/deco-star.svg") center/contain no-repeat;
+}
+.rv-vote-event__steps em {
+  justify-self: start;
+  padding: 0.25em 0.9em;
+  border-radius: 4px;
+  background: var(--vote-accent);
+  color: #fff;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(10px, 0.9375vw, 18px);
+  font-style: normal;
+}
+.rv-vote-event__steps strong {
+  font-size: clamp(13px, 1.3541666667vw, 26px);
+  font-weight: 800;
+}
+.rv-vote-event__steps span {
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(10px, 0.9375vw, 18px);
+  color: #7a7178;
+}
+.rv-vote-event {
+  /* ---------- 장면 TV (누르면 재생) ---------- */
+}
+.rv-vote-event__tv-button {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.rv-vote-event__tv-button:hover .rv-vote-event__play, .rv-vote-event__tv-button:focus-visible .rv-vote-event__play {
+  opacity: 1;
+}
+.rv-vote-event__tv-button:focus-visible {
+  outline: 3px solid var(--vote-accent);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+.rv-vote-event__tv-button .retro-tv__screen img[src*="i.ytimg.com"] {
+  scale: 1.334;
+}
+.rv-vote-event__tv {
+  width: min(840px, 100%);
+  margin: clamp(20px, 2.9166666667vw, 56px) auto 0;
+}
+.rv-vote-event__play {
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: clamp(44px, 4.1666666667vw, 80px);
+  height: clamp(44px, 4.1666666667vw, 80px);
+  padding-left: 4px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.rv-vote-event {
+  /* ---------- 투표 폼 ---------- */
+}
+.rv-vote-event__form {
+  margin-top: clamp(20px, 2.9166666667vw, 56px);
+}
+.rv-vote-event__form fieldset {
+  display: grid;
+  gap: clamp(10px, 1.0416666667vw, 20px);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.rv-vote-event__question {
+  margin-bottom: clamp(4px, 0.625vw, 12px);
+  padding: 0;
+  font-size: clamp(15px, 1.4583333333vw, 28px);
+  font-weight: 800;
+}
+.rv-vote-event__option {
+  display: flex;
+  align-items: center;
+  min-height: clamp(52px, 5.7291666667vw, 110px);
+  padding: 0 clamp(16px, 2.0833333333vw, 40px);
+  border: 2px solid #ececec;
+  border-radius: 6px;
+  background: #fff;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(14px, 1.3541666667vw, 26px);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.rv-vote-event__option:hover {
+  border-color: var(--vote-line);
+}
+.rv-vote-event__option:has(input:checked) {
+  border-color: var(--vote-accent);
+  box-shadow: 0 0 0 2px var(--vote-accent) inset;
+}
+.rv-vote-event__option:has(input:focus-visible) {
+  outline: 3px solid var(--vote-accent);
+  outline-offset: 3px;
+}
+.rv-vote-event__option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.rv-vote-event__scene {
+  display: grid;
+  grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(14px, 2.5vw, 48px);
+  padding: clamp(14px, 2.2916666667vw, 44px);
+  border: 3px solid transparent;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.2s;
+}
+.rv-vote-event__scene.is-selected {
+  border-color: var(--vote-accent);
+}
+.rv-vote-event__scene:has(input:focus-visible) {
+  outline: 3px solid var(--vote-accent);
+  outline-offset: 3px;
+}
+.rv-vote-event__scene-info {
+  display: grid;
+  justify-items: start;
+  gap: clamp(6px, 0.7291666667vw, 14px);
+  cursor: pointer;
+}
+.rv-vote-event__scene-info input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.rv-vote-event__scene-info em {
+  padding: 0.25em 0.9em;
+  border-radius: 4px;
+  background: var(--vote-accent);
+  color: #fff;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(10px, 0.9375vw, 18px);
+  font-style: normal;
+}
+.rv-vote-event__scene-info strong {
+  font-size: clamp(15px, 1.5625vw, 30px);
+  font-weight: 800;
+  word-break: keep-all;
+}
+.rv-vote-event__couple {
+  font-size: clamp(12px, 1.0416666667vw, 20px);
+  font-weight: 700;
+}
+.rv-vote-event__scene-text {
+  display: grid;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(11px, 0.9375vw, 18px);
+  line-height: 1.6;
+  color: #7a7178;
+}
+.rv-vote-event {
+  /* ---------- 버튼 (투표 · 결과 재생 · 프로그램 보러 가기) ---------- */
+}
+.rv-vote-event__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  width: 100%;
+  min-height: clamp(52px, 5.2083333333vw, 100px);
+  margin-top: clamp(16px, 1.875vw, 36px);
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--vote-accent-end), var(--vote-accent));
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  color: #fff;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: clamp(15px, 1.4583333333vw, 28px);
+  font-weight: 700;
+  text-decoration: none;
+  transition: filter 0.2s, opacity 0.2s;
+}
+.rv-vote-event__button:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+.rv-vote-event__button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.rv-vote-event__button:focus-visible {
+  outline: 3px solid var(--vote-ink);
+  outline-offset: 3px;
+}
+.rv-vote-event {
+  /* ---------- 투표 결과 ---------- */
+}
+.rv-vote-event__result {
+  margin-top: clamp(20px, 2.9166666667vw, 56px);
+}
+.rv-vote-event__result h3 {
+  margin: 0;
+  font-size: clamp(22px, 2.5vw, 48px);
+  font-weight: 900;
+}
+.rv-vote-event__result > p {
+  margin: clamp(6px, 0.8333333333vw, 16px) 0 0;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(13px, 1.3541666667vw, 26px);
+  color: #8a7f88;
+}
+.rv-vote-event__result ol {
+  display: grid;
+  gap: clamp(12px, 1.875vw, 36px);
+  margin: clamp(20px, 2.5vw, 48px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.rv-vote-event__result li {
+  display: grid;
+  gap: clamp(10px, 1.3541666667vw, 26px);
+  padding: clamp(16px, 2.2916666667vw, 44px) clamp(16px, 1.875vw, 36px);
+  border-radius: 14px;
+  background: #fff;
+}
+.rv-vote-event__result li.is-mine {
+  box-shadow: 0 0 0 2px var(--vote-accent) inset;
+}
+.rv-vote-event__result-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4em 1.2em;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(14px, 1.3541666667vw, 26px);
+}
+.rv-vote-event__result-label strong {
+  font-weight: normal;
+  font-size: 0.9em;
+}
+.rv-vote-event__result-label em {
+  padding: 0.15em 0.7em;
+  border-radius: 999px;
+  background: var(--vote-accent);
+  color: #fff;
+  font-size: 0.7em;
+  font-style: normal;
+}
+.rv-vote-event__bar-track {
+  display: block;
+  height: clamp(8px, 0.8333333333vw, 16px);
+  border-radius: 999px;
+  background: var(--vote-soft);
+}
+.rv-vote-event__bar-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--vote-accent);
+  transition: width 0.6s ease;
+}
+.rv-vote-event {
+  /* ---------- 프로그램 카드 ---------- */
+}
+.rv-vote-event__promo {
+  display: grid;
+  grid-template-columns: minmax(0, 32%) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(16px, 2.5vw, 48px);
+  margin-top: clamp(20px, 2.9166666667vw, 56px);
+  padding: clamp(16px, 2.2916666667vw, 44px);
+  border-radius: 8px;
+  background: var(--vote-promo);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+.rv-vote-event__promo > img {
+  width: 100%;
+  aspect-ratio: 261/375;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.rv-vote-event__promo h3 {
+  margin: 0;
+  font-size: clamp(20px, 2.3958333333vw, 46px);
+  font-weight: 800;
+}
+.rv-vote-event__promo p {
+  display: grid;
+  margin: clamp(10px, 1.25vw, 24px) 0 0;
+  font-family: "DungGeunMo", "Noto Sans KR", sans-serif;
+  font-size: clamp(12px, 1.1458333333vw, 22px);
+  line-height: 1.6;
+}
+.rv-vote-event {
+  /* ---------- 유의사항 ---------- */
+}
+.rv-vote-event__notice {
+  padding: clamp(32px, 4.1666666667vw, 80px) clamp(20px, 6.7%, 92px) clamp(48px, 6.25vw, 120px);
+  font-family: "Noto Sans KR", sans-serif;
+}
+.rv-vote-event__notice h2 {
+  margin: 0;
+  font-size: clamp(15px, 1.3541666667vw, 26px);
+  font-weight: 700;
+}
+.rv-vote-event__notice ul {
+  margin: clamp(10px, 1.25vw, 24px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.rv-vote-event__notice li {
+  position: relative;
+  padding-left: 0.8em;
+  font-size: clamp(11px, 0.8854166667vw, 17px);
+  line-height: 1.8;
+  color: #6f6670;
+}
+.rv-vote-event__notice li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+}
+
+@media (max-width: 1024px) {
+  .rv-vote-event {
+    padding-bottom: 0;
+  }
+  .rv-vote-event.event-page {
+    padding-top: 0;
+  }
+  .rv-vote-event__bar {
+    display: none;
+  }
+  .rv-vote-event__paper {
+    width: auto;
+    margin: 0 calc(var(--page-side-padding, 0px) * -1);
+  }
+  .rv-vote-event {
+    /* 히어로 */
+  }
+  .rv-vote-event__hero {
+    padding: 56px 20px 32px;
+  }
+  .rv-vote-event__brand {
+    gap: 8px;
+    font-size: 15px;
+  }
+  .rv-vote-event__brand img {
+    height: 40px;
+  }
+  .rv-vote-event__headline {
+    margin-top: 10px;
+    font-size: 30px;
+    line-height: 1.3;
+  }
+  .rv-vote-event__lead {
+    margin-top: 14px;
+    font-size: 12px;
+  }
+  .rv-vote-event__desc {
+    margin-top: 10px;
+    font-size: 9px;
+  }
+  .rv-vote-event__art {
+    width: 150px;
+    margin-top: 16px;
+  }
+  .rv-vote-event--magenta .rv-vote-event__hero {
+    padding-bottom: 110px;
+  }
+  .rv-vote-event__art--top, .rv-vote-event__art--bottom {
+    width: 100px;
+    margin-top: 0;
+  }
+  .rv-vote-event__art--top {
+    top: 8%;
+    right: -3%;
+  }
+  .rv-vote-event__art--bottom {
+    bottom: 4%;
+    left: -3%;
+  }
+  .rv-vote-event--purple .rv-vote-event__art {
+    width: 230px;
+  }
+  .rv-vote-event {
+    /* 섹션 공통 */
+  }
+  .rv-vote-event__section {
+    padding: 40px 26px;
+  }
+  .rv-vote-event__title {
+    font-size: 15px;
+  }
+  .rv-vote-event__subtitle {
+    margin-top: 6px;
+    font-size: 8px;
+  }
+  .rv-vote-event {
+    /* 참여 방법: 히어로 배경 이어서, 가운데 정렬 */
+  }
+  .rv-vote-event__section--steps {
+    padding: 24px 26px 40px;
+    background: linear-gradient(180deg, var(--vote-hero-bottom), var(--vote-soft));
+    text-align: center;
+  }
+  .rv-vote-event__section--steps .rv-vote-event__title {
+    font-size: 20px;
+  }
+  .rv-vote-event__section--steps .rv-vote-event__subtitle {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .rv-vote-event__steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 32px;
+    text-align: left;
+  }
+  .rv-vote-event__steps li {
+    gap: 10px;
+    padding: 22px 28px;
+  }
+  .rv-vote-event__steps li::after {
+    top: 24px;
+    right: 96px;
+    width: 16px;
+  }
+  .rv-vote-event__steps em {
+    font-size: 12px;
+  }
+  .rv-vote-event__steps strong {
+    font-size: 16px;
+  }
+  .rv-vote-event__steps span {
+    font-size: 13px;
+  }
+  .rv-vote-event {
+    /* 투표 */
+  }
+  .rv-vote-event__tv {
+    width: 100%;
+    margin-top: 16px;
+  }
+  .rv-vote-event__play {
+    width: 44px;
+    height: 44px;
+  }
+  .rv-vote-event__form {
+    margin-top: 20px;
+  }
+  .rv-vote-event__form fieldset {
+    gap: 8px;
+  }
+  .rv-vote-event__question {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+  .rv-vote-event__option {
+    min-height: 34px;
+    padding: 0 14px;
+    font-size: 11px;
+  }
+  .rv-vote-event__scene {
+    grid-template-columns: minmax(0, 46%) minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px;
+    border-width: 2px;
+  }
+  .rv-vote-event__scene-info {
+    gap: 5px;
+  }
+  .rv-vote-event__scene-info em {
+    font-size: 8px;
+  }
+  .rv-vote-event__scene-info strong {
+    font-size: 11px;
+  }
+  .rv-vote-event__couple {
+    font-size: 9px;
+  }
+  .rv-vote-event__scene-text {
+    font-size: 8px;
+  }
+  .rv-vote-event__button {
+    min-height: 32px;
+    margin-top: 16px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  .rv-vote-event {
+    /* 투표 결과 */
+  }
+  .rv-vote-event__result {
+    margin-top: 20px;
+  }
+  .rv-vote-event__result h3 {
+    font-size: 18px;
+  }
+  .rv-vote-event__result > p {
+    font-size: 11px;
+  }
+  .rv-vote-event__result ol {
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .rv-vote-event__result li {
+    gap: 10px;
+    padding: 14px;
+    border-radius: 8px;
+  }
+  .rv-vote-event__result-label {
+    font-size: 12px;
+  }
+  .rv-vote-event__bar-track {
+    height: 8px;
+  }
+  .rv-vote-event {
+    /* 프로그램 카드: 포스터 + 설명 가로 2단 */
+  }
+  .rv-vote-event__promo {
+    grid-template-columns: minmax(0, 33%) minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+    padding: 14px;
+  }
+  .rv-vote-event__promo h3 {
+    font-size: 14px;
+  }
+  .rv-vote-event__promo p {
+    margin-top: 10px;
+    font-size: 10px;
+  }
+  .rv-vote-event__promo .rv-vote-event__button {
+    font-size: 11px;
+  }
+  .rv-vote-event {
+    /* 유의사항 */
+  }
+  .rv-vote-event__notice {
+    padding: 24px 26px 40px;
+  }
+  .rv-vote-event__notice h2 {
+    font-size: 14px;
+  }
+  .rv-vote-event__notice ul {
+    margin-top: 16px;
+  }
+  .rv-vote-event__notice li {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rv-vote-event__bar-track span {
+    transition: none;
+  }
+}

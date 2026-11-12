@@ -1,0 +1,126 @@
+.image-event {
+  width: 100%;
+  padding-bottom: 60px;
+  color: #fff;
+}
+.image-event__header {
+  padding: 45px 0 60px;
+}
+.image-event__header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.image-event__header p {
+  margin: 12px 0 0;
+  color: #777;
+  font-size: 20px;
+  line-height: 1.5;
+}
+@media (max-width: 768px) {
+  .image-event__header {
+    padding: 28px 0 32px;
+  }
+  .image-event__header h1 {
+    font-size: 22px;
+  }
+  .image-event__header p {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+}
+.image-event,
+.image-event * {
+  box-sizing: border-box;
+}
+.image-event__poster {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+.image-event__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.image-event__hotspot {
+  position: absolute;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.image-event__hotspot:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px #1351f9;
+}
+.image-event__message {
+  position: fixed;
+  left: 50%;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  z-index: 200;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: max-content;
+  max-width: calc(100% - 40px);
+  padding: 16px 20px;
+  border: 1px solid #555;
+  border-radius: 10px;
+  background: #252525;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.image-event__message p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.image-event__message button {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #1351f9;
+  color: #fff;
+  cursor: pointer;
+}
+.image-event__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.image-event__actions a {
+  padding: 12px 32px;
+  border: 1px solid #777;
+  border-radius: 24px;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+}
+.image-event__actions a:hover {
+  background: #252525;
+}
+.image-event__actions a:focus-visible {
+  outline: 2px solid #1351f9;
+  outline-offset: 4px;
+}
+@media (max-width: 768px) {
+  .image-event {
+    padding-bottom: 40px;
+  }
+  .image-event__message {
+    padding: 12px 16px;
+  }
+  .image-event__message p {
+    font-size: 12px;
+  }
+}

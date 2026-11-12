@@ -1,0 +1,21 @@
+@use "../../retrov/fonts";
+// 메인 모바일 장르 메뉴. PC 헤더와 하단 내비게이션은 기존 구성 유지.
+@media (max-width: 1024px) {
+  .wavve-home nav.home-genre-nav a {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-home nav.home-genre-nav a {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+@media (max-width: 1024px) {
+  .wavve-home nav.home-genre-nav a[href$="/retrov"] {
+    font-family: "DungGeunMo", sans-serif;
+    font-weight: 400;
+  }
+}

@@ -164,7 +164,7 @@ $footer-box: #2a2a2a;
     }
 
     .footer__privacy {
-      color: #fff;
+      color: #9a9a9a;
       font-weight: 700;
     }
   }
@@ -475,5 +475,18 @@ body:has(.notice-page, .inquiry-write) {
     &__inner {
       background: #1b1b1b;
     }
+  }
+}
+
+// 작은 PC: 헤더·본문과 같은 좌우 기준선으로 정렬합니다.
+@media (min-width: 1025px) and (max-width: 1439px) {
+  .footer {
+    --footer-side: clamp(24px, 3.333333vw, 64px);
+  }
+  .footer .footer__notice-inner {
+    padding-left: var(--footer-side);
+  }
+  .footer .footer__notice-controls {
+    margin-right: var(--footer-side);
   }
 }

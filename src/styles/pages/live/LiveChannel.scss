@@ -1675,3 +1675,8 @@ iframe.live-player__video {
 .live-player:not(.is-youtube) .live-player__settings {
   z-index: 4;
 }
+
+.detail :not(:hover) > :global(.slider-arrow):not(:focus-visible) {
+  opacity: 0;
+  pointer-events: none;
+}

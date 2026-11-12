@@ -1,0 +1,42 @@
+.top-button {
+  --top-size: clamp(44px, calc(60 / 1920 * 100vw), 60px);
+  --top-offset: clamp(16px, calc(20 / 1920 * 100vw), 20px);
+  position: fixed;
+  right: var(--top-offset);
+  bottom: var(--top-offset);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--top-size);
+  height: var(--top-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #1f4ef5;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s, background-color 0.2s ease;
+}
+.top-button.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.top-button:hover {
+  background: #3561ff;
+}
+.top-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.top-button svg {
+  width: calc(var(--top-size) * 20 / 60);
+  height: auto;
+  margin-bottom: calc(var(--top-size) * 2 / 60);
+};
+}

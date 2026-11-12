@@ -1,0 +1,199 @@
+.wavve-settings {
+  --settings-padding: 15px;
+  --settings-heading: 14.4px;
+  --settings-body: 12px;
+  min-height: 100dvh;
+  padding: 0;
+  background: #1b1b1b;
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+.wavve-settings, .wavve-settings * {
+  box-sizing: border-box;
+}
+.wavve-settings .wavve-settings__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 54px;
+  margin: 0;
+  padding: 0 48px;
+  border: 0;
+  background: #1b1b1b;
+}
+.wavve-settings .wavve-settings__header h1 {
+  margin: 0;
+  padding: 0;
+  color: #eee;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.wavve-settings .wavve-settings__back {
+  position: absolute;
+  top: 5px;
+  left: 7px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.wavve-settings .wavve-settings__back span {
+  width: 15px;
+  height: 15px;
+  border-left: 1.5px solid #eee;
+  border-bottom: 1.5px solid #eee;
+  transform: rotate(45deg);
+}
+.wavve-settings .wavve-settings__back:focus-visible {
+  outline: 2px solid #81a3ff;
+  outline-offset: -2px;
+}
+.wavve-settings .wavve-settings__main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0;
+}
+.wavve-settings .wavve-settings__section {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.wavve-settings .wavve-settings__section > h2 {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  margin: 0;
+  padding: 7px var(--settings-padding);
+  background: #252525;
+  color: #aaa;
+  font-size: var(--settings-body);
+  font-weight: 500;
+  line-height: 16px;
+}
+.wavve-settings .wavve-settings__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 82px;
+  margin: 0;
+  padding: 14px 21px 14px var(--settings-padding);
+  cursor: pointer;
+}
+.wavve-settings .wavve-settings__copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.wavve-settings .wavve-settings__name {
+  color: #fff;
+  font-size: var(--settings-heading);
+  font-weight: 700;
+  line-height: 20px;
+}
+.wavve-settings .wavve-settings__description {
+  display: block;
+  color: #929292;
+  font-size: var(--settings-body);
+  font-weight: 500;
+  line-height: 1.3;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.wavve-settings .wavve-settings__switch {
+  position: relative;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 27px;
+}
+.wavve-settings .wavve-settings__switch > input {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.wavve-settings .wavve-settings__track {
+  display: block;
+  width: 44px;
+  height: 27px;
+  border-radius: 999px;
+  background: #555;
+  transition: background-color 0.18s;
+}
+.wavve-settings .wavve-settings__track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.18s;
+}
+.wavve-settings .wavve-settings__switch > input:checked + .wavve-settings__track {
+  background: #284cf0;
+}
+.wavve-settings .wavve-settings__switch > input:checked + .wavve-settings__track::after {
+  transform: translateX(17px);
+}
+.wavve-settings .wavve-settings__switch > input:focus-visible + .wavve-settings__track {
+  outline: 2px solid #a4bcff;
+  outline-offset: 3px;
+}
+.wavve-settings .wavve-settings__account {
+  padding: 16px var(--settings-padding) calc(24px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid #333;
+}
+.wavve-settings .wavve-settings__account .wavve-settings__message {
+  padding: 0 0 12px;
+}
+.wavve-settings .wavve-settings__logout {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background: #252525;
+  color: inherit;
+  font: inherit;
+  font-size: var(--settings-heading);
+  cursor: pointer;
+}
+.wavve-settings .wavve-settings__logout:focus-visible {
+  outline: 2px solid #81a3ff;
+  outline-offset: 2px;
+}
+.wavve-settings .wavve-settings__logout:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.wavve-settings .wavve-settings__message {
+  margin: 0;
+  padding: 16px var(--settings-padding);
+  color: #ffb4b4;
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wavve-settings .wavve-settings__track,
+  .wavve-settings .wavve-settings__track::after {
+    transition: none;
+  }
+}
