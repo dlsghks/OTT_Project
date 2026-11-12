@@ -200,6 +200,7 @@ export const TvDetail = ({ programId, config }) => {
       {offer && uid && purchaseAccount === uid && (
         <MoviePurchaseDialog
           movie={offer}
+          image={tv.poster_path ? `${TMDB_IMG}w500${tv.poster_path}` : purchaseItem?.poster || purchaseItem?.image || ""}
           onClose={() => setPurchaseAccount(null)}
           onPurchase={() => {
             if (auth.currentUser?.uid !== uid) throw new Error('계정이 변경됐어요.');

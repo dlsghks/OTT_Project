@@ -148,6 +148,7 @@ const MovieDetailBody = ({ movieId }) => {
       {offer && uid && purchaseAccount === uid && (
         <MoviePurchaseDialog
           movie={offer}
+          image={image}
           onClose={() => setPurchaseAccount(null)}
           onPurchase={() => {
             if (auth.currentUser?.uid !== uid) throw new Error('계정이 변경됐어요.');
