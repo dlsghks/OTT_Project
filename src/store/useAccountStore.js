@@ -2,7 +2,7 @@ import { createCoinPurchase, deductPurchaseCoins } from "../utils/coinPayments";
 import { normalizeWatchHistory, updateWatchHistory } from "../utils/watchHistoryRecords";
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
-import { createAttendanceCoin, createCoinCharge, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
+import { createAttendanceCoin, createCoinCharge, formatCoinDate, getCoinTotal, normalizeCoinRecords } from "../utils/coinRecords";
 import { createCouponBenefit, createCouponRecord, isCouponValid, markCouponUsed, reconcileCouponBenefits } from "../utils/couponRecords";
 import { create } from "zustand";
 import { deleteField, doc, onSnapshot, runTransaction } from "firebase/firestore";
@@ -450,11 +450,12 @@ export const saveCoinPurchase = async (profileId, type, purchase, coinsUsed, req
     }
     const coins = normalizeCoinRecords(saved?.coinRecords, attendanceDates(saved?.attendanceDays));
     const coinRecords = deductPurchaseCoins(coins, coinsUsed);
+    const completedPayment = { ...payment, balanceAfter: getCoinTotal(coinRecords) };
     transaction.set(ref, {
-      coinPurchases: [payment, ...previous],
+      coinPurchases: [completedPayment, ...previous],
       profiles: { [profileId]: { coinRecords } },
     }, { merge: true });
-    return payment;
+    return completedPayment;
   });
   // 스냅샷 수신 전에도 구매 완료 화면과 권한이 같은 결제를 읽도록 합니다.
   if (useAccountStore.getState().uid === uid) {
