@@ -79,6 +79,10 @@ export default function Coupon() {
     setPendingCoupon(null);
     setRegisterOpen(false);
     try {
+      if (request.coupon.kind === "voucher" && getActiveDemoVoucher(getDemoVoucherPurchases(user?.uid))) {
+        setPendingCoupon(request);
+        return;
+      }
       const applied = await redeemCoupon(request.profileId, request.coupon.id, request.ownerId);
       if (request.scope !== scopeRef.current) return;
       if (!applied) throw new Error("이미 사용했거나 사용할 수 없는 쿠폰이에요.");
@@ -125,7 +129,7 @@ export default function Coupon() {
   const cancelApplication = () => {
     if (busyRef.current) return;
     setPendingCoupon(null);
-    setNotice("쿠폰 적용을 취소했어요.");
+
   };
 
   return (
@@ -210,12 +214,9 @@ export default function Coupon() {
         <WavveAccountModal title="쿠폰 적용" busy={Boolean(usingId)} onClose={cancelApplication}>
           {() => (
             <div className="wam-body coupon-apply">
-              <p>기존 적용된 이용권이 있습니다. {pendingCoupon.coupon.name.replace(/\s*쿠폰$/, "")}을 적용하시겠습니까?</p>
+              <p>현재 이용 중인 이용권이 있습니다. 이용권이 없을 때만 이용권 쿠폰을 사용할 수 있습니다.</p>
               <div className="coupon-apply__actions">
-                <button type="button" onClick={cancelApplication}>취소하기</button>
-                <button type="button" className="coupon-apply__confirm" onClick={() => applyCoupon(pendingCoupon)}>
-                  적용하기
-                </button>
+                <button type="button" className="coupon-apply__confirm" onClick={() => setPendingCoupon(null)}>확인</button>
               </div>
             </div>
           )}
