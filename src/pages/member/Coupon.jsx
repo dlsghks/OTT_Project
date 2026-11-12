@@ -214,7 +214,7 @@ export default function Coupon() {
         <WavveAccountModal title="쿠폰 적용" busy={Boolean(usingId)} onClose={cancelApplication}>
           {() => (
             <div className="wam-body coupon-apply">
-              <p>현재 이용 중인 이용권이 있습니다. 이용권이 없을 때만 이용권 쿠폰을 사용할 수 있습니다.</p>
+              <p>이용권이 없을 때만 이용권 쿠폰을 사용할 수 있습니다.</p>
               <div className="coupon-apply__actions">
                 <button type="button" className="coupon-apply__confirm" onClick={() => setPendingCoupon(null)}>확인</button>
               </div>
