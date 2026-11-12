@@ -30,7 +30,7 @@ export const RankingSection = ({ items = [] }) => {
       {/* 섹션 제목 */}
       <div className="home-section__head">
         <SectionTitle>오늘의 TOP 랭킹</SectionTitle>
-        <Link to="/collection/home--ranking">
+        <Link className="section-more" to="/collection/home--ranking">
           더보기
         </Link>
       </div>
