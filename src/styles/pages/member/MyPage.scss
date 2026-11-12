@@ -1234,3 +1234,13 @@
 }
 
 .wavve-mypage .mypage__library { scroll-margin-top: 110px; }
+
+
+// 앱 요약 카드에도 PC와 같은 블루·퍼플 테두리를 유지합니다.
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__summary > .mypage__retro-summary {
+    border: 2px solid transparent;
+    background: linear-gradient(#181b25, #181b25) padding-box,
+      linear-gradient(110deg, #1351f9, #c700e8) border-box;
+  }
+}

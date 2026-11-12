@@ -104,12 +104,12 @@ const setCache = (channelId, data, duration) => {
 // 유튜브 채널의 현재 라이브 영상 조회
 export const getYoutubeLive = async (
   channelId,
-  { throwOnError = false } = {}
+  { throwOnError = false, forceRefresh = false } = {}
 ) => {
   const previous = channelId ? getCache(channelId, { allowStale: true })?.data : null;
   try {
     const cached = channelId ? getCache(channelId) : null;
-    if (cached) return cached.data;
+    if (cached && !forceRefresh) return cached.data;
     if (Date.now() < getCooldownUntil()) {
       if (throwOnError) throw cooldownError();
       return previous || null;

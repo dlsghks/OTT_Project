@@ -1,0 +1,71 @@
+// 기존 편성표의 색상·사각 버튼·시간 비례 배치를 그대로 유지합니다.
+// 앱에서는 채널 열을 고정하고 시간 영역에 최소 폭을 확보합니다.
+@media (max-width: 1024px) {
+  .site-inner:has(> .schedule-page) {
+    --page-side-padding: 16px;
+    padding-inline: 16px;
+    background: #111;
+  }
+  .schedule-page {
+    --schedule-channel-width: 68px;
+    width: 100%; min-width: 0; margin: 0; padding: 28px 0 32px;
+    .schedule-page__top { gap: 12px; margin-bottom: 24px; }
+    .schedule-page__top h1 { font-size: 22px; line-height: 31px; }
+    .schedule-page__top p { font-size: 12px; line-height: 18px; }
+    .schedule-page__refresh { min-width: 56px; height: 36px; padding: 0 12px; font-size: 12px; }
+    .schedule-days { gap: 1px; margin-bottom: 16px; }
+    .schedule-days button { min-height: 62px; padding: 10px 2px; gap: 5px; font-size: 12px; line-height: 18px; }
+    .schedule-days button strong { font-size: 13px; line-height: 18px; }
+    .schedule-hours { grid-template-columns: repeat(12,minmax(0,1fr)); margin-bottom: 20px; }
+    .schedule-hours button { height: 30px; font-size: 11px; }
+    .schedule-guide { --schedule-row-height: 120px; overflow: hidden; }
+    .schedule-guide__fixed-column { border-color: #303030; }
+    .schedule-guide__fixed-heading { height: 48px; }
+    .schedule-guide__fixed-channel { height: var(--schedule-row-height); padding: 12px 5px; font-size: 12px; line-height: 18px; overflow-wrap: anywhere; }
+    .schedule-guide__content { min-width: 0; overflow-x: auto; overscroll-behavior-x: contain; touch-action: pan-x pan-y; cursor: grab; user-select: none; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: #555 #171717; }
+    .schedule-guide__swiper { width: 100%; min-width: 660px; touch-action: pan-x pan-y; }
+    .schedule-guide__swiper > .swiper-wrapper { touch-action: pan-x pan-y; }
+    .schedule-guide__content[data-dragging="true"], .schedule-guide__content[data-dragging="true"] * { cursor: grabbing; }
+    .schedule-guide__header { height: 48px; grid-template-columns: minmax(0,1fr); }
+    .schedule-guide__hour-label { font-size: 18px; }
+    .schedule-guide__row { height: var(--schedule-row-height); min-height: var(--schedule-row-height); }
+    .schedule-program {
+      container-type: inline-size;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+    }
+    .schedule-program:has(.schedule-action--replay),
+    .schedule-program:has(.schedule-action--bell) { padding-right: 12px; }
+    .schedule-program__text { flex: 0 1 auto; min-width: 0; width: 100%; gap: 4px; }
+    .schedule-program__text > span { font-size: 14px; line-height: 20px; }
+    .schedule-program__text > small { font-size: 11px; line-height: 16px; white-space: nowrap; }
+    .schedule-program .schedule-program__action,
+    .schedule-program:has(.schedule-action--replay) .schedule-program__action {
+      position: static; align-self: flex-end; transform: none;
+    }
+    .schedule-action { min-height: 26px; padding: 3px 9px; font-size: 11px; line-height: 20px; }
+    .schedule-action--bell { min-width: 28px; min-height: 26px; padding: 3px; }
+    .schedule-bell-icon { width: 14px; height: 18px; }
+    .schedule-guide__arrow { width: 32px; height: 48px; padding: 0; }
+    .schedule-guide__arrow::before { width: 8px; height: 16px; }
+    .schedule-guide__arrow,
+    .schedule-guide__arrow:hover:not(:disabled),
+    .schedule-guide__arrow:active:not(:disabled),
+    .schedule-guide__arrow:focus { background: #171717; color: #a5a5a5; }
+  }
+  // 시간축 끝의 짧은 칸은 셀 전체를 눌러 시청·예약할 수 있습니다.
+  @container (max-width: 105px) {
+    .schedule-program__action { display: none; }
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .site-inner:has(> .schedule-page) { --page-side-padding: 24px; padding-inline: 24px; }
+  .schedule-page { --schedule-channel-width: 90px; padding-top: 32px;
+    .schedule-page__top h1 { font-size: 24px; }
+    .schedule-days button { min-height: 70px; font-size: 13px; }
+    .schedule-days button strong { font-size: 14px; }
+  }
+}

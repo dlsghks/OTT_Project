@@ -57,6 +57,7 @@ const ContentCardBody = ({ item, rank, onPosterLoad }) => {
       to={item.link || `/programdetail/${item.id}`}
       className={`content-card ${rank ? "content-card--ranked" : ""}`}
     >
+      <div className="content-card__visual">
       <div className="content-card__thumbnail">
 
         {/* 프로그램 썸네일 */}
@@ -111,6 +112,8 @@ const ContentCardBody = ({ item, rank, onPosterLoad }) => {
             {item.title}
           </span>
         )}
+
+      </div>
 
         {/* TOP 20 순위 SVG 이미지 */}
         {rank && rank <= 20 && (

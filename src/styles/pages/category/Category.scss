@@ -315,3 +315,18 @@ $chip-border: rgba(255, 255, 255, 0.08);
 }
 // 공통 필터 래퍼는 별도 여백이나 레이아웃 박스를 만들지 않습니다.
 .category-filter-group { display: contents; }
+
+// 작은 PC의 공통 장르 필터 (라이브 메인 포함).
+@media (min-width: 1025px) and (max-width: 1439px) {
+  :is(.category-page, .category-filter-group) nav.category-filter {
+    gap: 12px;
+
+    > button.category-filter__button {
+      height: 48px;
+      min-height: 48px;
+      padding: 0 24px;
+      font-size: 18px;
+      border-radius: 8px;
+    }
+  }
+}

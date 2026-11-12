@@ -1,0 +1,64 @@
+@mixin live-responsive {
+  @media (min-width: 1025px) {
+    :global(.site-inner):has(> .page) { --live-inset: clamp(24px, 3.333333vw, 64px); padding-inline: var(--live-inset); }
+    .page { --live-inset: clampclamp(24px, 3.333333vw, 64px); }
+    .page .heroSlide { width: min(1321px, 76vw); max-width: none; }
+    .page .cardSlide { width: clamp(200px, 19.74vw, 379px); }
+    .page .rankedSection .cardSlide { width: clamp(220px, 21.2vw, 407px); }
+  }
+  @media (max-width: 1024px) {
+    :global(.site-inner):has(> .page) { --live-inset: 16px; --page-side-padding: 0px; padding: 0 0 32px; min-height: 0; }
+    .page { --live-inset: 16px; --app-side: 16px; padding: 0; }
+    .page .hero { width: calc(100% - 16px); margin: 0 0 26px 16px; }
+    .page .heroSwiper { width: 100%; }
+    .page .heroSlide { width: 86%; max-width: none; }
+    .page .heroCard { aspect-ratio: 1321 / 708; border-radius: 8px; }
+    .page .badge { top: 8px; left: 8px; padding: 2px 5px; font-size: 9px; line-height: 13px; gap: 3px; border-radius: 3px; }
+    .page .badge > img { flex-basis: 3px; width: 3px; min-width: 3px; max-width: 3px; height: 3px; min-height: 3px; max-height: 3px; }
+    .page .heroInfo { top: 27%; left: 59%; width: 37%; }
+    .page .heroLogoFrame { width: 100%; height: clamp(12px,4cqw,28px); margin-bottom: 2cqw; }
+    .page .heroInfo > h2 { font-size: clamp(11px,3.4cqw,22px); line-height: 1.35; letter-spacing: -.3px; margin-bottom: 1.5cqw; }
+    .page .heroInfo > p { font-size: clamp(9px,2.8cqw,16px); line-height: 1.4; letter-spacing: 0; margin-bottom: 2cqw; }
+    .page .heroInfo > .heroWatchButton { width: 27cqw; height: 7cqw; min-height: 22px; font-size: clamp(9px,2.8cqw,16px); border-radius: 5px; }
+    .page .progress { height: 2px; }
+    .page :global(.category-filter-app) { margin: 0 0 30px 16px; padding: 0; }
+    .page :global(.category-filter-app__rows) { gap: 12px; }
+    .page :global(.category-filter-app__row) { gap: 8.84px; }
+    .page :global(.category-filter__button) { height: 29.47px; min-height: 29.47px; padding: 7px 15.32px; font-size: 10px; line-height: 15px; border-radius: 6px; }
+    .page .sections { width: calc(100% - 16px); margin-left: 16px; gap: 28px; }
+    .page .section { width: 100%; }
+    .page .sectionHeader { margin: 0 16px 8px 0; }
+    .page .sectionHeader > h2 { font-size: 14px; line-height: 20px; font-weight: 500; }
+    .page .cardSwiper { container-type: inline-size; }
+    // 홈의 시청 중인 콘텐츠(HomeResponsive.scss --app-wide)와 같은 폭.
+    .page .cardSlide, .page .rankedSection .cardSlide { width: clamp(148px, 43.846154vw, 224px); }
+    .page .card { gap: 6px; }
+    .page .thumb { aspect-ratio: 16 / 9; border-radius: 6px; }
+    .page .channel, .page .title { font-size: 10px; line-height: 14px; }
+    .page .cardText { gap: 2px; }
+    .page .rankedCard .details { gap: 3px; align-items: flex-start; }
+    .page .cardRank { flex-basis: 14px; width: 14px; min-width: 14px; max-width: 14px; height: 20px; min-height: 20px; max-height: 20px; }
+    .page .cardRank.number { font-size: 20px; }
+    .page .cardBrandPlaceholder { padding: 5px; }
+    .page :global(.slider-arrow) { display: none; }
+  }
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .page .cardSlide, .page .rankedSection .cardSlide { width: calc((100cqw - 24px) / 2.5); }
+    .page .sectionHeader > h2 { font-size: 18px; line-height: 26px; }
+    .page .channel, .page .title { font-size: 12px; line-height: 18px; }
+    .page .sections { gap: 36px; }
+    .page :global(.category-filter__button) { height: 36px; min-height: 36px; padding-inline: 20px; font-size: 12px; }
+  }
+  .page :not(:hover) > :global(.slider-arrow):not(:focus-visible) { opacity: 0; pointer-events: none; }
+  @media (min-width: 1025px) and (max-width: 1439px) {
+  .page .cardSwiper {
+    container-type: inline-size;
+  }
+
+  .page .cardSlide,
+  .page .rankedSection .cardSlide {
+    width: calc((100cqw - 54px) / 3.5);
+  }
+}
+}
+

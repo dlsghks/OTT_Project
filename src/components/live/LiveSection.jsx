@@ -15,7 +15,8 @@ export const LiveSection = ({ title, items = [], ranked = false }) => {
     <section className={`${styles.section} ${ranked ? styles.rankedSection : ''}`}>
       <div className={styles.sectionHeader}><SectionTitle>{title}</SectionTitle></div>
       <div className={styles.slider}>
-        <Swiper className={styles.cardSwiper} slidesPerView="auto" spaceBetween={18} speed={500} watchOverflow
+        <Swiper className={styles.cardSwiper} slidesPerView="auto" spaceBetween={18}
+          breakpoints={{ 0: { spaceBetween: 8 }, 601: { spaceBetween: 12 }, 1025: { spaceBetween: 18 } }} speed={500} watchOverflow
           onSwiper={(swiper) => { swiperRef.current = swiper; update(swiper); }}
           onSlideChange={update} onResize={update}>
           {items.map((program) => <SwiperSlide className={styles.cardSlide} key={program.id}><LiveCard program={program} ranked={ranked} /></SwiperSlide>)}

@@ -1,0 +1,11 @@
+:is(.category-filter, .category-filter-app) button.category-filter__button {
+  border: 0;
+  box-shadow: none;
+  background: #252525;
+  transition: background-color 0.2s ease;
+}
+:is(.category-filter, .category-filter-app) button.category-filter__button:hover, :is(.category-filter, .category-filter-app) button.category-filter__button.is-active, :is(.category-filter, .category-filter-app) button.category-filter__button.is-active:hover, :is(.category-filter, .category-filter-app) button.category-filter__button[aria-pressed=true], :is(.category-filter, .category-filter-app) button.category-filter__button[aria-pressed=true]:hover {
+  border: 0;
+  box-shadow: none;
+  background: #1351f9;
+}

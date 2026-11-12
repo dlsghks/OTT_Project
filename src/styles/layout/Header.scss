@@ -5,3 +5,12 @@
 .site-header .header-left > ul > li > a.header-retrov-link {
   font-family: "DungGeunMo", sans-serif;
 }
+
+// 작은 PC에서도 읽을 수 있는 글씨와 PC 메뉴의 간격 비율을 유지합니다.
+@media (min-width: 1025px) {
+  .site-header {
+    --header-menu-font: clamp(16px, calc(.446927vw + 11.419px), 20px);
+    --header-menu-gap: clamp(24px, calc(4.022346vw - 17.229px), 60px);
+    --header-left-gap: clamp(28px, calc(3.575419vw - 8.648px), 60px);
+  }
+}

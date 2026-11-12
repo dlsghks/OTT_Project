@@ -37,7 +37,7 @@
   background: #202532;
   cursor: pointer;
 }
-.content-card__thumbnail > img:not(.content-card__original) {
+.content-card__thumbnail > img:not(.content-card__original):not(.content-card__rank) {
   display: block;
   width: 100%;
   height: 100%;
@@ -110,7 +110,7 @@
 }
 .content-card__rank {
   position: absolute;
-  top: 117.6100628931cqw;
+  bottom: 3.7735849057cqw;
   left: 4.4025157233cqw;
   z-index: 2;
   width: auto;
@@ -121,11 +121,6 @@
 }
 .content-card--ranked .content-card__info {
   display: none;
-}
-.content-card--ranked::after {
-  content: "";
-  display: block;
-  height: 9.4339622642cqw;
 }
 .content-card__info {
   padding-top: 10px;
@@ -151,20 +146,37 @@
 .content-card__thumbnail {
   overflow: hidden;
 }
-.content-card__thumbnail > img:not(.content-card__original) {
+.content-card__thumbnail > img:not(.content-card__original):not(.content-card__rank) {
   transition: transform 0.3s ease;
   transform: scale(1);
 }
-.content-card:hover .content-card__thumbnail > img:not(.content-card__original) {
+.content-card:hover .content-card__thumbnail > img:not(.content-card__original):not(.content-card__rank) {
   transform: scale(1.04);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .content-card__thumbnail > img:not(.content-card__original) {
+  .content-card__thumbnail > img:not(.content-card__original):not(.content-card__rank) {
     transition: none;
   }
 }
 /* 세로 포스터 카드만 제목 숨기기 */
 .content-section--default .content-card__info > h3 {
   display: none;
+}
+
+.content-card .content-card__visual {
+  position: relative;
+  width: 100%;
+}
+
+.content-card.content-card--ranked .content-card__visual {
+  padding-bottom: 9.4339622642cqw;
+}
+
+.content-card.content-card--ranked .content-card__rank {
+  top: auto;
+  bottom: 0;
+  left: 4.4025157233cqw;
+  width: auto;
+  height: 37.7358490566cqw;
 }

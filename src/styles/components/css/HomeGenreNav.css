@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "DungGeunMo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff") format("woff");
+  font-weight: normal;
+  font-display: swap;
+}
+@media (max-width: 1024px) {
+  .wavve-home nav.home-genre-nav a {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-home nav.home-genre-nav a {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+@media (max-width: 1024px) {
+  .wavve-home nav.home-genre-nav a[href$="/retrov"] {
+    font-family: "DungGeunMo", sans-serif;
+    font-weight: 400;
+  }
+}

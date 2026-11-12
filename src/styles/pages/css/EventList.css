@@ -1,0 +1,218 @@
+.event-page {
+  position: relative;
+  isolation: isolate;
+  background: #000;
+  color: #fff;
+}
+.event-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  inset-inline: calc(var(--page-side-padding) * -1);
+  z-index: -1;
+  background: #000;
+  pointer-events: none;
+}
+.event-page__hero {
+  position: relative;
+  width: calc(100% + var(--page-side-padding, 110px) * 2);
+  margin-inline: calc(var(--page-side-padding, 110px) * -1);
+  box-shadow: 0 15px 50px 5px rgba(227, 16, 255, 0.2);
+}
+.event-page__hero a {
+  display: block;
+}
+.event-page__hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.event-page__content {
+  width: 100%;
+  max-width: 1414px;
+  margin: 60px auto 0;
+}
+.event-page__tabs {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 60px;
+}
+.event-page__tabs button {
+  width: auto;
+  margin: 0;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 10px;
+  background: #303030;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+.event-page__tabs button.is-active {
+  background: #1351ff;
+}
+.event-page__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 50px;
+  row-gap: 30px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.event-page__list > li {
+  min-width: 0;
+}
+.event-page__card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+.event-page__card:hover .event-page__thumbnail {
+  transform: translateY(-4px);
+}
+.event-page__card:focus-visible {
+  outline: 2px solid #7da7ff;
+  outline-offset: 6px;
+}
+.event-page__thumbnail {
+  display: block;
+  flex: 0 0 40%;
+  width: 40%;
+  aspect-ratio: 267/151;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+.event-page__info {
+  flex: 1;
+  min-width: 0;
+}
+.event-page__info h2 {
+  margin: 0 0 18px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.45;
+  word-break: keep-all;
+}
+.event-page__info dl {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.event-page__info dl > div {
+  display: flex;
+  gap: 12px;
+}
+.event-page__info dt {
+  flex-shrink: 0;
+  color: #fff;
+}
+.event-page__info dd {
+  margin: 0;
+  color: #808080;
+  overflow-wrap: anywhere;
+}
+.event-page__pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+.event-page__pagination button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #999;
+  font: inherit;
+  cursor: pointer;
+}
+.event-page__pagination button[aria-current=page] {
+  background: #1351ff;
+  color: #fff;
+}
+.event-page__pagination button:focus-visible {
+  outline: 2px solid #1351ff;
+  outline-offset: 3px;
+}
+.event-page__empty {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  margin: 0;
+  color: #999;
+}
+.event-page__bottom {
+  margin-top: 100px;
+}
+
+@media (max-width: 1200px) {
+  .event-page__list {
+    column-gap: 28px;
+  }
+  .event-page__card {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .event-page__thumbnail {
+    flex: none;
+    width: 100%;
+  }
+}
+@media (max-width: 640px) {
+  .event-page {
+    padding-bottom: 60px;
+  }
+  .event-page__hero {
+    width: calc(100% + 40px);
+    margin-left: -20px;
+  }
+  .event-page__content {
+    margin-top: 36px;
+  }
+  .event-page__tabs {
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  .event-page__tabs button {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  .event-page__list {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+  .event-page__info h2 {
+    margin-bottom: 12px;
+    font-size: 18px;
+  }
+  .event-page__info dl {
+    gap: 8px;
+    font-size: 14px;
+  }
+  .event-page__pagination, .event-page__bottom {
+    margin-top: 60px;
+  }
+}
+main.site-inner > .event-page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+main.site-inner > .event-page .event-page__hero {
+  width: calc(100% + var(--page-side-padding, 0px) * 2);
+  margin-left: calc(var(--page-side-padding, 0px) * -1);
+}

@@ -1,0 +1,47 @@
+.wavve-mypage .mypage__poster-frame--shorts {
+  position: relative;
+  isolation: isolate;
+  background: #151515;
+}
+.wavve-mypage .mypage__poster-frame--shorts > .mypage__poster {
+  object-fit: cover;
+  object-position: center;
+}
+.wavve-mypage .mypage__poster-frame--shorts > .mypage__shorts-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.wavve-mypage .mypage__poster-frame--shorts > .mypage__shorts-badge > svg {
+  position: static;
+  display: block;
+  flex: 0 0 10px;
+  width: 10px;
+  height: 12px;
+}
+
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__poster-frame--shorts > .mypage__shorts-badge {
+    top: 7px;
+    right: 7px;
+    padding: 3px 6px;
+    font-size: 11px;
+    line-height: 15px;
+  }
+}

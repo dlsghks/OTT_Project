@@ -1,7 +1,9 @@
-import chatToggleArrow from '../../assets/icons/AltArrowDownOutline.svg';
+import { useMobileLayout } from '../../hooks/useMobileLayout';
+import { LiveChannelFilters } from '../../components/live/LiveChannelFilters';
 import { SliderArrow } from '../../components/common/SliderArrow';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -15,11 +17,12 @@ import { livePrograms, liveTop10 } from '../../data/live/liveData';
 import { golfLivePrograms } from '../../data/golfData';
 import { LoginModal } from '../../components/common/LoginModal';
 import { ShareModal } from '../../components/common/ShareModal';
-import { getImagePath } from '../../utils/imagePath';
 
-import '../../styles/pages/live/LiveChannel.scss';
+import styles from '../../styles/pages/live/LiveChannel.module.scss';
+import { liveDetailAssets, liveDetailRanks } from '../../data/live/liveDetailAssets';
+import { useLiveArtwork, formatLiveTitle } from '../../hooks/useLiveArtwork';
 
-import { getCachedYoutubeLive } from '../../services/youtube';
+import { getCachedYoutubeLive, getYoutubeLive } from '../../services/youtube';
 
 
 const formatTime = (value) => {
@@ -46,14 +49,6 @@ const progressOf = (program, now) => {
   );
 };
 
-const imageSrc = (path) => (
-  path ? getImagePath(path) : ''
-);
-
-const playerIcon = (filename) => (
-  getImagePath(`/images/live/uibutton/${filename}`)
-);
-
 const getChatName = (user) => {
   try {
     const profile = JSON.parse(
@@ -74,28 +69,32 @@ const getChatName = (user) => {
 };
 
 function ChannelImage({ program, className = '' }) {
-  const [failedSources, setFailedSources] = useState([]);
-  const src = [
-    imageSrc(program?.image || program?.thumbnail || program?.poster),
-    imageSrc(program?.fallbackImage),
-  ].find((source) => source && !failedSources.includes(source));
+  const live = getCachedYoutubeLive(program?.youtubeChannelId);
+  const { image, logo, failImage } = useLiveArtwork({ ...program, image: program?.image || program?.thumbnail || program?.poster }, live);
+  return image ? <img className={className} src={image} alt="" loading="lazy" draggable={false} onError={failImage} />
+    : <span className={styles.imageFallback}>{logo ? <img src={logo} alt={program?.channel || ''} /> : program?.channel || 'WAVVE LIVE'}</span>;
+}
 
-  if (!src) {
-    return (
-      <span className="live-image-fallback">
-        {program?.channel || program?.title || 'WAVVE LIVE'}
-      </span>
-    );
-  }
+const DetailIcon = ({ name, className = '' }) => <img className={`${styles.icon} ${className}`} src={liveDetailAssets[name]} alt="" draggable={false} />;
 
-  return (
-    <img
-      className={className}
-      src={src}
-      alt={program?.title || program?.channel || '채널 이미지'}
-      loading="lazy"
-      onError={() => setFailedSources((previous) => [...previous, src])}
-    />
+function ReservationDialog({ program, reserved, onClose, onConfirm, notice = false }) {
+  const dialogRef = useRef(null);
+  useEffect(() => {
+    const previousFocus = document.activeElement;
+    const dialog = dialogRef.current;
+    dialog.showModal();
+    return () => { dialog.close(); if (previousFocus?.isConnected) previousFocus.focus(); };
+  }, []);
+  return createPortal(
+    <dialog ref={dialogRef} className={styles.reservationDialog} aria-labelledby="live-reservation-title" aria-describedby="live-reservation-description" onCancel={(event) => { event.preventDefault(); onClose(); }} onClick={(event) => { if (event.target === event.currentTarget) { const bounds = event.currentTarget.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose(); } }}>
+      <button type="button" className={styles.reservationClose} onClick={onClose} aria-label={notice ? 'VOD 안내 닫기' : '시청 예약 닫기'}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 5 14 14M19 5 5 19" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg></button>
+      <h2 id="live-reservation-title">{notice ? 'VOD 보기' : '시청 예약'}</h2>
+      <div id="live-reservation-description" className={styles.reservationDescription}>
+        {!notice && <p>&lt;{formatLiveTitle(program.title)}&gt;</p>}
+        <p>{notice ? '현재 채널은 연결된 다시보기 콘텐츠가 없습니다.' : reserved ? '이미 예약된 프로그램이에요. 시청 예약을 취소할까요?' : '시청 예약을 설정할까요? 예약한 콘텐츠가 시작되면 모바일 앱 PUSH로 알려드려요.'}</p>
+      </div>
+      <div className={styles.reservationActions}>{!notice && <button type="button" onClick={onClose} autoFocus>취소</button>}<button type="button" onClick={notice ? onClose : onConfirm} autoFocus={notice}>확인</button></div>
+    </dialog>, document.body
   );
 }
 
@@ -131,13 +130,18 @@ export const LiveChannel = ({
       ...new Map(
         livePrograms.map((program) => [
           String(program.channelId),
-          program,
+          { ...program, youtubeChannelId: program.youtubeChannelId || liveTop10.find((item) => item.channel === program.channel)?.youtubeChannelId },
         ])
       ).values(),
     ];
   }, []);
 
   const [thumbnailVersion, setThumbnailVersion] = useState(0);
+  const [refreshingChannels, setRefreshingChannels] = useState(false);
+  const refreshLock = useRef(false);
+  const lastChannelRefresh = useRef(0);
+  const refreshMounted = useRef(true);
+  useEffect(() => { refreshMounted.current = true; return () => { refreshMounted.current = false; }; }, []);
 
   useEffect(() => {
     const refreshThumbnails = () => {
@@ -180,16 +184,13 @@ export const LiveChannel = ({
   const categories = useMemo(
     () => [
       '전체',
+      '관심',
       ...new Set(
         channels.map((program) => program.category).filter(Boolean)
       ),
     ],
     [channels]
   );
-
-  const filteredChannels = category === '전체'
-    ? channels
-    : channels.filter((program) => program.category === category);
 
   // 현재 방송 + 다음 방송 5개
   const displaySchedule = useMemo(() => {
@@ -247,12 +248,58 @@ export const LiveChannel = ({
   const streamUrl = `${import.meta.env.BASE_URL}videos/live-demo.mp4`;
 
   // 관심 / 알림 / 공유
-  const [liked, setLiked] = useState(false);
+  const [favoriteChannels, setFavoriteChannels] = useState([]);
+  const liked = favoriteChannels.includes(String(selected?.channelId));
+  const [reactionCounts, setReactionCounts] = useState({});
+  const [flyingHearts, setFlyingHearts] = useState([]);
+  const reactionSequence = useRef(0);
+  const [reservationProgram, setReservationProgram] = useState(null);
   const [reminders, setReminders] = useState([]);
+  const [vodNoticeChannel, setVodNoticeChannel] = useState(null);
   const [shareOpen, setShareOpen] = useState(false);
 
   // 채팅
   const [chatOpen, setChatOpen] = useState(false);
+  const isAppLayout = useMobileLayout();
+  const [miniPlayer, setMiniPlayer] = useState(false);
+  // 실제 영상 대신 원래 자리에 남아 있는 프레임을 관찰해야 전환이 반복되지 않습니다.
+  const playerFrameRef = useRef(null);
+  const miniDismissedRef = useRef(false);
+  const restorePlayer = () => {
+    miniDismissedRef.current = true;
+    setMiniPlayer(false);
+    playerFrameRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  useEffect(() => {
+    if (!isAppLayout || !isLoggedIn || streamError) {
+      setMiniPlayer(false);
+      miniDismissedRef.current = false;
+      return;
+    }
+    const frame = playerFrameRef.current;
+    if (!frame || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (document.fullscreenElement || videoRef.current?.webkitDisplayingFullscreen) return;
+      if (entry.isIntersecting) {
+        miniDismissedRef.current = false;
+        setMiniPlayer(false);
+      } else if (entry.boundingClientRect.bottom <= 50 && !miniDismissedRef.current) {
+        setMiniPlayer(true);
+      }
+    }, { root: null, rootMargin: '-50px 0px 0px 0px', threshold: 0 });
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, [isAppLayout, isLoggedIn, streamError]);
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        miniDismissedRef.current = true;
+        setMiniPlayer(false);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
   const [chatText, setChatText] = useState('');
   const [messages, setMessages] = useState([]);
   const [chatError, setChatError] = useState('');
@@ -266,8 +313,6 @@ export const LiveChannel = ({
   const layoutRef = useRef(null);
   const top10Ref = useRef(null);
 
-  const [panelHeight, setPanelHeight] = useState(680);
-  const [playerHeight, setPlayerHeight] = useState(440);
 
   // 스와이퍼
   const scheduleSwiper = useRef(null);
@@ -311,8 +356,8 @@ export const LiveChannel = ({
   }, []);
 
   useEffect(() => {
-    setLiked(false);
-    setReminders([]);
+    setReservationProgram(null);
+    setFlyingHearts([]);
     setStreamError('');
     setIsPlaying(false);
     setPlayerSettingsOpen(false);
@@ -328,48 +373,6 @@ export const LiveChannel = ({
     video.volume = volume / 100;
     video.muted = isMuted;
   }, [volume, isMuted, isLoggedIn, selected?.channelId]);
-
-  useEffect(() => {
-    const measure = () => {
-      if (
-        !playerRef.current ||
-        !top10Ref.current ||
-        !layoutRef.current
-      ) {
-        return;
-      }
-
-      const player = playerRef.current.getBoundingClientRect();
-      const top = top10Ref.current.getBoundingClientRect();
-      const layout = layoutRef.current.getBoundingClientRect();
-
-      setPlayerHeight(Math.round(player.height));
-      setPanelHeight(
-        Math.max(320, Math.round(top.bottom - layout.top))
-      );
-    };
-
-    measure();
-
-    const observer = typeof ResizeObserver !== 'undefined'
-      ? new ResizeObserver(measure)
-      : null;
-
-    [
-      playerRef.current,
-      top10Ref.current,
-      layoutRef.current,
-    ].filter(Boolean).forEach((element) => {
-      observer?.observe(element);
-    });
-
-    window.addEventListener('resize', measure);
-
-    return () => {
-      observer?.disconnect();
-      window.removeEventListener('resize', measure);
-    };
-  }, [selected?.channelId]);
 
   // 화질 안내 바깥 클릭 / ESC 닫기
   useEffect(() => {
@@ -581,654 +584,235 @@ export const LiveChannel = ({
       return;
     }
 
-    setLiked((previous) => !previous);
+    const channelId = String(selected.channelId);
+    setFavoriteChannels((previous) => previous.includes(channelId) ? previous.filter((id) => id !== channelId) : [...previous, channelId]);
   };
 
-  const toggleReminder = (id) => {
-    if (!isLoggedIn) {
-      onLoginRequired();
-      return;
+  const toggleReminder = (program) => {
+    if (!isLoggedIn) { onLoginRequired(); return; }
+    setReservationProgram(program);
+  };
+  const confirmReservation = () => {
+    const id = reservationProgram.id;
+    setReminders((previous) => previous.includes(id) ? previous.filter((value) => value !== id) : [...previous, id]);
+    setReservationProgram(null);
+  };
+  const addReaction = () => {
+    if (!isLoggedIn) { onLoginRequired(); return; }
+    const channelId = String(selected.channelId);
+    setReactionCounts((previous) => ({ ...previous, [channelId]: (previous[channelId] ?? selected.reactionCount ?? 0) + 1 }));
+    const id = ++reactionSequence.current;
+    // 최근 하트만 유지하여 연속 클릭 시에도 요소가 계속 쌓이지 않게 합니다.
+    setFlyingHearts((previous) => [...previous.slice(-19), { id, channelId }]);
+  };
+
+  const selectedLive = getCachedYoutubeLive(selected?.youtubeChannelId);
+  const selectedArtwork = useLiveArtwork(selected || {}, selectedLive);
+  const displayTitle = selectedArtwork.title || formatLiveTitle(selected?.title || '');
+  const filteredChannels = category === '관심'
+    ? [...new Map([...liveTop10, ...channels].filter((program) => favoriteChannels.includes(String(program.channelId))).map((program) => [String(program.channelId), program])).values()]
+    : category === '전체' ? channels : channels.filter((program) => program.category === category);
+  const refreshChannels = async () => {
+    if (refreshLock.current) return;
+    refreshLock.current = true;
+    setRefreshingChannels(true);
+    const startedAt = Date.now();
+    // 연속 클릭 시 API를 다시 호출하지 않고 진행률과 저장된 정보만 갱신합니다.
+    const shouldFetch = startedAt - lastChannelRefresh.current >= 30000;
+    if (shouldFetch) lastChannelRefresh.current = startedAt;
+    try {
+      const channelIds = [...new Set([...channels, ...liveTop10].map((program) => program.youtubeChannelId).filter(Boolean))];
+      await Promise.allSettled([
+        ...(shouldFetch ? channelIds.map((channelId) => getYoutubeLive(channelId, { forceRefresh: true })) : []),
+        new Promise((resolve) => window.setTimeout(resolve, 700)),
+      ]);
+      if (refreshMounted.current) {
+        setNow(Date.now());
+        setThumbnailVersion((previous) => previous + 1);
+      }
+    } finally {
+      refreshLock.current = false;
+      if (refreshMounted.current) setRefreshingChannels(false);
     }
-
-    setReminders((previous) => (
-      previous.includes(id)
-        ? previous.filter((value) => value !== id)
-        : [...previous, id]
-    ));
   };
+  const filterLabel = (label) => label === '24시간 뉴스 채널' ? '뉴스' : label;
 
-  if (!selected) {
-    return (
-      <main className="live-channel-page">
-        표시할 라이브 채널이 없습니다.
-      </main>
-    );
-  }
+  if (!selected) return <div className={styles.detail}>표시할 라이브 채널이 없습니다.</div>;
 
   return (
-    <main className="live-channel-page">
-      <div className="live-channel-layout" ref={layoutRef}>
-        <div className="live-channel-main">
-          {/* MP4 플레이어 */}
-          <div
-            className="live-player"
-            ref={playerRef}
-            style={{
-              backgroundColor: '#000',
-              backgroundImage:
-                !isLoggedIn && selected.image
-                  ? `url("${imageSrc(selected.image)}")`
-                  : 'none',
-            }}
-          >
+    <div className={styles.detail}>
+      <div className={styles.layout} ref={layoutRef}>
+        <div className={styles.main}>
+          <div className={styles.playerFrame} ref={playerFrameRef}>
+          <div className={`${styles.player} ${miniPlayer && isAppLayout ? styles.miniPlayer : ''}`} ref={playerRef} style={{ backgroundImage: !isLoggedIn && selectedArtwork.image ? `url("${selectedArtwork.image}")` : undefined }}>
+            {isAppLayout && isLoggedIn && <button type="button" className={styles.miniToggle}
+              onClick={() => { if (miniPlayer) restorePlayer(); else { miniDismissedRef.current = false; setMiniPlayer(true); } }} aria-pressed={miniPlayer}
+              aria-label={miniPlayer ? '작은 화면 닫고 원래 크기로 보기' : '작은 화면으로 보기'}>
+              {miniPlayer ? '원래 크기' : '작은 화면'}
+            </button>}
             {isLoggedIn && (
-              <video
-                key={`${selected.channelId}-${streamUrl}`}
-                ref={videoRef}
-                className="live-player__video"
-                src={streamUrl}
-                playsInline
-                autoPlay
-                muted={isMuted}
-                loop
-                preload="metadata"
-                onLoadedMetadata={(event) => {
-                  event.currentTarget.volume = volume / 100;
-                  event.currentTarget.muted = isMuted;
-                }}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onEnded={() => setIsPlaying(false)}
-                onError={() => {
-                  setStreamError(
-                    '영상을 불러오지 못했습니다. public/videos/live-demo.mp4 파일을 확인해 주세요.'
-                  );
-                }}
-              />
+              <video key={`${selected.channelId}-${streamUrl}`} ref={videoRef} className={styles.video}
+                src={streamUrl} playsInline autoPlay muted={isMuted} loop preload="metadata"
+                onLoadedMetadata={(event) => { event.currentTarget.volume = volume / 100; event.currentTarget.muted = isMuted; }}
+                onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)} onEnded={() => setIsPlaying(false)}
+                onError={() => setStreamError('영상을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.')} />
             )}
-
-            <div className="live-player__overlay">
-              {!authReady ? (
-                <p>로그인 상태를 확인하고 있어요</p>
-              ) : !isLoggedIn ? (
-                <>
-                  <h2>
-                    라이브를 시청하려면 로그인이 필요해요
-                  </h2>
-
-                  <button
-                    type="button"
-                    className="live-player__button"
-                    onClick={onLoginRequired}
-                  >
-                    로그인
-                  </button>
-                </>
-              ) : streamError ? (
-                <>
-                  <h2>영상을 재생할 수 없습니다</h2>
-                  <p>{streamError}</p>
-                </>
-              ) : null}
-            </div>
-
-            {/* 호버 컨트롤 */}
-            {isLoggedIn && !streamError && (
-              <div
-                className="live-player__controls"
-                aria-label="영상 플레이어 컨트롤"
-              >
-                <div className="live-player__controls-left">
-                  <img
-                    className="live-player__live-image"
-                    src={playerIcon('onLive.png')}
-                    alt="라이브"
-                  />
-
-                  <div className="live-player__button-row">
-                    <button
-                      type="button"
-                      onClick={togglePlayback}
-                      aria-label={
-                        isPlaying ? '일시정지' : '재생'
-                      }
-                    >
-                      {isPlaying ? (
-                        <img
-                          src={playerIcon('pause.png')}
-                          alt=""
-                        />
-                      ) : (
-                        <svg
-                          viewBox="0 0 32 32"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M7 4L27 16L7 28V4Z"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={restartLive}
-                      aria-label="10초 뒤로 이동"
-                    >
-                      <img
-                        src={playerIcon('revert.png')}
-                        alt=""
-                      />
-                    </button>
-
-                    <div className="live-player__sound">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsMuted((previous) => !previous);
-                        }}
-                        aria-label={
-                          isMuted ? '음소거 해제' : '음소거'
-                        }
-                        aria-pressed={isMuted}
-                      >
-                        <img
-                          src={playerIcon('volume.png')}
-                          alt=""
-                        />
-
-                        {isMuted && (
-                          <span
-                            className="live-player__mute-line"
-                            aria-hidden="true"
-                          />
-                        )}
-                      </button>
-
-                      <input
-                        className="live-player__volume"
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={isMuted ? 0 : volume}
-                        aria-label="볼륨"
-                        onChange={(event) => {
-                          const nextVolume = Number(
-                            event.target.value
-                          );
-
-                          setVolume(nextVolume);
-                          setIsMuted(nextVolume === 0);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="live-player__controls-right">
-                  <div
-                    className="live-player__settings-wrap"
-                    ref={settingsRef}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPlayerSettingsOpen(
-                          (previous) => !previous
-                        );
-                      }}
-                      aria-label="화질 설정"
-                      aria-expanded={playerSettingsOpen}
-                    >
-                      <img
-                        src={playerIcon('setting.png')}
-                        alt=""
-                      />
-                    </button>
-
-                    {playerSettingsOpen && (
-                      <div className="live-player__quality-panel">
-                        <strong>화질</strong>
-                        <span>원본 화질</span>
-                        <p>
-                          현재 영상은 단일 MP4 파일로
-                          재생됩니다.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={toggleFullscreen}
-                    aria-label="전체화면 전환"
-                  >
-                    <img
-                      src={playerIcon('full.png')}
-                      alt=""
-                    />
-                  </button>
-                </div>
+            {(!authReady || !isLoggedIn || streamError) && (
+              <div className={styles.playerOverlay}>
+                {!authReady ? <p>로그인 상태를 확인하고 있어요</p> : !isLoggedIn ? <>
+                  <h2>라이브를 시청하려면 로그인이 필요해요</h2>
+                  <button type="button" className={styles.loginButton} onClick={onLoginRequired}>로그인</button>
+                </> : <><h2>영상을 재생할 수 없습니다</h2><p role="status">{streamError}</p></>}
               </div>
             )}
+            {isLoggedIn && !streamError && <>
+              <span className={styles.liveBadge}><DetailIcon name="dot" />라이브</span>
+              <div className={styles.reactionArea}>
+                <div className={styles.flyingHearts} aria-hidden="true">{flyingHearts.filter((heart) => heart.channelId === String(selected.channelId)).map((heart) => <span key={heart.id} className={styles.flyingHeart} style={{ '--heart-drift': `${(heart.id % 5 - 2) * 16}px`, '--heart-color': ['#ff287f', '#ff604c', '#ff438b'][heart.id % 3] }} onAnimationEnd={() => setFlyingHearts((previous) => previous.filter((item) => item.id !== heart.id))}>♥</span>)}</div>
+                <button type="button" className={styles.reaction} onClick={addReaction} aria-label="영상 좋아요">
+                  <span aria-hidden="true">♥</span><small aria-live="polite" aria-atomic="true">{(reactionCounts[String(selected.channelId)] ?? selected.reactionCount ?? 0).toLocaleString('ko-KR')}</small>
+                </button>
+              </div>
+              <div className={styles.playerControls} aria-label="영상 플레이어 컨트롤">
+                <div className={styles.playerControlsLeft}>
+                  <button type="button" onClick={togglePlayback} aria-label={isPlaying ? '일시정지' : '재생'}>
+                    {isPlaying ? <svg className={styles.pauseIcon} viewBox="0 0 19 22" fill="none" aria-hidden="true" focusable="false"><path d="M2 1H6V21H2zM13 1H17V21H13z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /></svg> : <DetailIcon name="play" />}
+                  </button>
+                  <button type="button" onClick={restartLive} aria-label="10초 뒤로 이동"><DetailIcon name="rewind" /></button>
+                  <div className={styles.sound}>
+                    <button type="button" onClick={() => setIsMuted((previous) => !previous)} aria-label={isMuted ? '음소거 해제' : '음소거'} aria-pressed={isMuted}>
+                      <DetailIcon name="volume" />{isMuted && <span className={styles.muteLine} aria-hidden="true" />}
+                    </button>
+                    <input className={styles.volume} type="range" min="0" max="100" value={isMuted ? 0 : volume} aria-label="볼륨"
+                      onChange={(event) => { const value = Number(event.target.value); setVolume(value); setIsMuted(value === 0); }} />
+                  </div>
+                </div>
+                <div className={styles.settings} ref={settingsRef}>
+                  <DetailIcon name="settingsAndFullscreen" className={styles.settingsArtwork} />
+                  <button className={styles.settingsHit} type="button" onClick={() => setPlayerSettingsOpen((previous) => !previous)} aria-label="화질 설정" aria-expanded={playerSettingsOpen} />
+                  <button className={styles.fullscreenHit} type="button" onClick={toggleFullscreen} aria-label="전체화면 전환" />
+                  {playerSettingsOpen && <div className={styles.qualityPanel}><strong>화질</strong><span>원본 화질</span><p>방송에서 제공하는 원본 화질로 재생됩니다.</p></div>}
+                </div>
+              </div>
+            </>}
           </div>
 
-          {/* 채널 정보 */}
-          <div className="live-channel-info">
-            <div className="live-channel-info__text">
-              <strong>{selected.channel}</strong>
+          </div>
 
-              <div>
-                <b>{selected.title}</b>
-                <span>
-                  {formatTime(selected.start)}
-                  {' ~ '}
-                  {formatTime(selected.end)}
-                </span>
-              </div>
+          <div className={styles.channelInfo}>
+            <div className={styles.channelIdentity}>
+              <div className={styles.channelLogo}>{selectedArtwork.logo ? <img src={selectedArtwork.logo} alt={selected.channel} /> : <span>{selected.channel}</span>}</div>
+              <div className={styles.channelText}><strong title={displayTitle}>{displayTitle}</strong><span>{formatTime(selected.start)} ~ {formatTime(selected.end)}</span></div>
             </div>
-
-            <div className="live-channel-info__actions">
-              <button
-                type="button"
-                onClick={toggleLike}
-                aria-pressed={liked}
-              >
-                {liked ? '♥' : '♡'} 관심
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setShareOpen(true)}
-              >
-                ↥ 공유
-              </button>
+            <div className={styles.channelActions}>
+              <button type="button" onClick={() => setShareOpen(true)} aria-label="공유하기"><DetailIcon name="share" /><span>보기</span></button>
+              <button type="button" className={styles.favoriteButton} onClick={toggleLike} aria-pressed={liked} aria-label="채널 관심"><svg className={styles.favoriteIcon} viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 3.2 12.5C-2 7.3 4.4.3 10 4.9L12 6.6l2-1.7C19.6.3 26 7.3 20.8 12.5Z" /></svg><span>관심</span></button>
+              {selected.vodPath ? <Link to={selected.vodPath}><DetailIcon name="vod" /><span>vod 보기</span></Link>
+                : <button type="button" onClick={() => setVodNoticeChannel(selected.channelId)}><DetailIcon name="vod" /><span>vod 보기</span></button>}
             </div>
           </div>
 
-          {/* 편성표 */}
-          <section
-            className="live-schedule"
-            aria-label="선택한 채널 편성표"
-          >
-            <div className="live-schedule__heading">
-              <SectionTitle>{selected.channel} 편성표</SectionTitle>
-              <Link to="/schedule">전체 편성표 ›</Link>
-            </div>
-
-            <div className="live-schedule__slider">
-              <Swiper
-                key={selected.channelId}
-                onSwiper={(swiper) => {
-                  scheduleSwiper.current = swiper;
-                  updateScheduleNav(swiper);
-                }}
-                onSlideChange={updateScheduleNav}
-                onResize={updateScheduleNav}
-                initialSlide={0}
-                slidesPerView={1}
-                slidesPerGroup={1}
-                centeredSlides={false}
-                spaceBetween={10}
-                speed={500}
-                grabCursor
-                simulateTouch
-                watchOverflow
-                breakpoints={{
-                  640: {
-                    slidesPerView: 3,
-                    spaceBetween: 10,
-                  },
-                }}
-              >
-                {displaySchedule.map((program, index) => {
-                  const isCurrent = index === 0;
-
-                  return (
-                    <SwiperSlide key={program.id}>
-                      <div
-                        className={`live-schedule__item ${isCurrent ? 'is-current' : ''
-                          }`}
-                      >
-                        <div className="live-schedule__item-title">
-                          <strong>
-                            {isCurrent && (
-                              <span className="live-schedule__live">
-                                ● 라이브
-                              </span>
-                            )}
-
-                            {program.title}
-
-                            {program.isDemo && (
-                              <span className="live-schedule__demo">
-                                {' '}(예시)
-                              </span>
-                            )}
-                          </strong>
-
-                          {!isCurrent && (
-                            <button
-                              type="button"
-                              className={
-                                'live-schedule__action ' +
-                                'live-schedule__bell ' +
-                                (
-                                  reminders.includes(program.id)
-                                    ? 'is-active'
-                                    : ''
-                                )
-                              }
-                              onClick={() => {
-                                toggleReminder(program.id);
-                              }}
-                              aria-label={
-                                `${program.title} 방송 알림`
-                              }
-                              aria-pressed={
-                                reminders.includes(program.id)
-                              }
-                            >
-                              🔔
-                            </button>
-                          )}
-                        </div>
-
-                        <small>
-                          {formatTime(program.start)}
-                          {' ~ '}
-                          {formatTime(program.end)}
-                        </small>
-                      </div>
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
-
-              {schedulePrev && (
-                <SliderArrow direction="prev"
+          <section className={styles.schedule} aria-label="선택한 채널 편성표">
+            <Swiper key={selected.channelId} className={styles.scheduleSwiper}
+              onSwiper={(swiper) => { scheduleSwiper.current = swiper; updateScheduleNav(swiper); }} onSlideChange={updateScheduleNav} onResize={updateScheduleNav}
+              slidesPerView="auto" spaceBetween={12} breakpoints={{ 0: { spaceBetween: 8 }, 1025: { spaceBetween: 12 } }} initialSlide={0} speed={500} grabCursor watchOverflow>
+              {displaySchedule.map((program, index) => <SwiperSlide className={styles.scheduleSlide} key={program.id}>
+                <div
+                  className={`${styles.scheduleCard} ${index === 0 ? styles.currentSchedule : ''}`}
+                  role={index > 0 ? 'button' : undefined}
+                  tabIndex={index > 0 ? 0 : undefined}
                   onClick={() => {
-                    scheduleSwiper.current?.slidePrev();
+                    if (index > 0) toggleReminder(program);
                   }}
-                  aria-label="이전 편성"
-                 />
-              )}
+                  onKeyDown={(e) => {
+                    if (e.target !== e.currentTarget || index === 0) return;
 
-              {scheduleNext && (
-                <SliderArrow direction="next"
-                  onClick={() => {
-                    scheduleSwiper.current?.slideNext();
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleReminder(program);
+                    }
                   }}
-                  aria-label="다음 편성"
-                 />
-              )}
-            </div>
+                >
+                  <div><strong title={formatLiveTitle(program.title)}>{index === 0 && <span className={styles.scheduleLive}><DetailIcon name="dot" />라이브</span>}{formatLiveTitle(program.title)}</strong><small>{formatTime(program.start)} ~ {formatTime(program.end)}</small></div>
+                  {index > 0 && <button type="button" className={reminders.includes(program.id) ? styles.reminderActive : ''} onClick={(e) => {
+                    e.stopPropagation();
+                    toggleReminder(program);
+                  }} aria-label={`${program.title} 방송 알림`} aria-pressed={reminders.includes(program.id)}><span className={styles.bellIcon} style={{ maskImage: `url("${liveDetailAssets.bell}")`, WebkitMaskImage: `url("${liveDetailAssets.bell}")` }} aria-hidden="true" /></button>}
+                </div>
+              </SwiperSlide>)}
+            </Swiper>
+            {schedulePrev && <SliderArrow thumbnailSelector={`.${styles.scheduleCard}`} direction="prev" onClick={() => scheduleSwiper.current?.slidePrev()} aria-label="이전 편성" />}
+            {scheduleNext && <SliderArrow thumbnailSelector={`.${styles.scheduleCard}`} direction="next" onClick={() => scheduleSwiper.current?.slideNext()} aria-label="다음 편성" />}
           </section>
 
-          {/* TOP10: 기존 SCSS 클래스 유지 */}
-          <section className="live-top20" ref={top10Ref}>
+          <section className={styles.top} ref={top10Ref}>
             <SectionTitle>실시간 채널 TOP 10</SectionTitle>
-
-            <div className="live-top20__slider">
-              <Swiper
-                onSwiper={(swiper) => {
-                  topSwiper.current = swiper;
-                  updateTopNav(swiper);
-                }}
-                onSlideChange={updateTopNav}
-                onResize={updateTopNav}
-                slidesPerView={2}
-                slidesPerGroup={2}
-                spaceBetween={12}
-                speed={500}
-                grabCursor
-                simulateTouch
-                longSwipesRatio={0.1}
-                shortSwipes
-                watchOverflow
-                breakpoints={{
-                  640: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 3,
-                    spaceBetween: 14,
-                  },
-                  1024: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
-                    spaceBetween: 16,
-                  },
-                  1440: {
-                    slidesPerView: 5,
-                    slidesPerGroup: 5,
-                    spaceBetween: 20,
-                  },
-                }}
-              >
-                {top10.map((program, index) => (
-                  <SwiperSlide key={program.channelId}>
-                    <button
-                      type="button"
-                      className="live-top20__card"
-                      onClick={() => changeChannel(program)}
-                    >
-                      <div className="live-top20__image">
-                        <ChannelImage program={program} />
-                      </div>
-
-                      <div className="live-top20__meta">
-                        <em>{index + 1}</em>
-
-                        <div>
-                          <strong>{program.channel}</strong>
-                          <span>{program.title}</span>
-                        </div>
-                      </div>
-                    </button>
-                  </SwiperSlide>
-                ))}
+            <div className={styles.topSlider}>
+              <Swiper className={styles.topSwiper} onSwiper={(swiper) => { topSwiper.current = swiper; updateTopNav(swiper); }} onSlideChange={updateTopNav} onResize={updateTopNav}
+                slidesPerView="auto" spaceBetween={10} breakpoints={{ 0: { spaceBetween: 8 }, 1025: { spaceBetween: 10 } }} speed={500} grabCursor watchOverflow>
+                {top10.map((program, index) => <SwiperSlide className={styles.topSlide} key={program.channelId}>
+                  <button type="button" className={styles.topCard} onClick={() => changeChannel(program)} aria-label={`${program.channel} 시청하기`}>
+                    <div className={styles.topImage}><ChannelImage program={program} /></div>
+                    <div className={styles.topMeta}><img className={styles.rank} src={liveDetailRanks[index]} alt={`${index + 1}위`} /><div><strong>{program.channel}</strong><span>{formatLiveTitle(getCachedYoutubeLive(program.youtubeChannelId)?.title || program.title)}</span></div></div>
+                  </button>
+                </SwiperSlide>)}
               </Swiper>
-
-              {topPrev && (
-                <SliderArrow direction="prev"
-                  onClick={() => topSwiper.current?.slidePrev()}
-                  aria-label="이전 채널"
-                 />
-              )}
-
-              {topNext && (
-                <SliderArrow direction="next"
-                  onClick={() => topSwiper.current?.slideNext()}
-                  aria-label="다음 채널"
-                 />
-              )}
+              {topPrev && <SliderArrow thumbnailSelector={`.${styles.topImage}`} direction="prev" onClick={() => topSwiper.current?.slidePrev()} aria-label="이전 채널" />}
+              {topNext && <SliderArrow thumbnailSelector={`.${styles.topImage}`} direction="next" onClick={() => topSwiper.current?.slideNext()} aria-label="다음 채널" />}
             </div>
           </section>
         </div>
 
-        {/* 오른쪽 패널 */}
-        <aside
-          className="live-sidebar"
-          style={{ height: panelHeight }}
-        >
-          <section
-            className={`live-chat ${chatOpen ? 'is-open' : ''}`}
-            style={
-              chatOpen ? { height: playerHeight } : undefined
-            }
-          >
-            <button
-              type="button"
-              className="live-sidebar__heading live-chat__toggle"
-              onClick={() => {
-                setChatOpen((previous) => !previous);
-              }}
-              aria-expanded={chatOpen}
-            >
-              <strong>웨이브 실시간</strong>
-              <img className="live-chat__toggle-arrow" src={chatToggleArrow} alt="" aria-hidden="true" width="24" height="24" />
+        <aside className={`${styles.sidebar} ${chatOpen ? styles.sidebarOpen : ''}`} aria-label="실시간 톡과 라이브 채널">
+          <section className={`${styles.chat} ${chatOpen ? styles.chatOpen : ''}`} aria-label="웨이브 실시간 톡">
+            <button type="button" className={styles.chatToggle} onClick={() => setChatOpen((previous) => !previous)} aria-expanded={chatOpen} aria-controls="live-talk-content">
+              <strong>웨이브 실시간</strong><span className={styles.talkChevron} aria-hidden="true"><DetailIcon name="expand" /></span>
             </button>
-
-            {chatOpen ? (
-              <>
-                <div
-                  className="live-chat__messages"
-                  aria-live="polite"
-                >
-                  <p>실시간 채팅에 참여해보세요.</p>
-
-                  {!chatAdapter && (
-                    <p className="live-chat__demo-note">
-                      현재 화면에서만 보이는 테스트 채팅입니다.
-                    </p>
-                  )}
-
-                  {messages.map((message) => (
-                    <p key={message.id}>
-                      <b>{message.name || '사용자'}</b>
-                      {' '}
-                      {message.text}
-                    </p>
-                  ))}
-
+            {chatOpen ? <>
+              <div className={styles.chatContent} id="live-talk-content">
+                <div className={styles.chatNotice}><p>Wavve　{formatTime(selected.start)} ~ {formatTime(selected.end)} {displayTitle}</p><p>실시간 채팅에 참여해보세요.</p></div>
+                <div className={styles.chatMessages} aria-live="polite">
+                  {messages.map((message) => <p key={message.id}><b>{message.name || '사용자'}</b> {message.text}</p>)}
                   <div ref={chatBottomRef} />
                 </div>
-
-                {chatError && (
-                  <p
-                    className="live-chat__error"
-                    role="status"
-                  >
-                    {chatError}
-                  </p>
-                )}
-
-                <form
-                  className="live-chat__form"
-                  onSubmit={sendChat}
-                >
-                  <input
-                    value={chatText}
-                    maxLength={300}
-                    aria-label="채팅 메시지"
-                    onChange={(event) => {
-                      setChatText(event.target.value);
-                    }}
-                    onFocus={() => {
-                      if (!isLoggedIn) onLoginRequired();
-                    }}
-                    placeholder={
-                      !authReady
-                        ? '로그인 상태 확인 중'
-                        : isLoggedIn
-                          ? '메시지를 입력하세요'
-                          : '로그인 후 채팅할 수 있어요'
-                    }
-                    readOnly={!isLoggedIn || chatSending}
-                  />
-
-                  <button
-                    type="submit"
-                    disabled={
-                      !isLoggedIn ||
-                      !chatText.trim() ||
-                      chatSending
-                    }
-                    aria-label="채팅 전송"
-                  >
-                    ↑
-                  </button>
-                </form>
-              </>
-            ) : (
-              <button
-                type="button"
-                className="live-chat__preview"
-                onClick={() => setChatOpen(true)}
-              >
-                실시간 채팅에 참여해보세요
-              </button>
-            )}
+              </div>
+              {chatError && <p className={styles.chatError} role="status">{chatError}</p>}
+              <form className={styles.chatForm} onSubmit={sendChat}>
+                <input value={chatText} maxLength={300} aria-label="채팅 메시지" onChange={(event) => setChatText(event.target.value)}
+                  onFocus={() => { if (!isLoggedIn) onLoginRequired(); }}
+                  placeholder={!authReady ? '로그인 상태 확인 중' : isLoggedIn ? '실시간 채팅에 참여해보세요' : '로그인 후 채팅할 수 있어요'} readOnly={!isLoggedIn || chatSending} />
+                <button type="submit" disabled={!isLoggedIn || !chatText.trim() || chatSending} aria-label="채팅 전송">↑</button>
+              </form>
+            </> : <button type="button" id="live-talk-content" className={styles.chatPreview} onClick={() => setChatOpen(true)}>실시간 채팅에 참여해보세요</button>}
           </section>
 
-          <section className="live-channel-list">
-            <div className="live-sidebar__heading">
-              <strong>전체 채널</strong>
-              <Link to="/schedule">전체 편성표 ›</Link>
+          <section className={styles.channelList} aria-label="라이브 채널 목록">
+            <div className={styles.channelListHeading}>
+              <div><strong>라이브 채널</strong><button type="button" className={refreshingChannels ? styles.refreshing : ''} onClick={refreshChannels} disabled={refreshingChannels} aria-busy={refreshingChannels} aria-label="채널 목록 새로고침"><DetailIcon name="refresh" /></button></div>
+              <Link to="/schedule">전체 편성표<DetailIcon name="chevron" /></Link>
             </div>
-
-            <div className="live-channel-list__filters">
-              {categories.map((item) => (
-                <button
-                  type="button"
-                  key={item}
-                  className={category === item ? 'active' : ''}
-                  onClick={() => setCategory(item)}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-
-            <div className="live-channel-list__scroll">
-              {filteredChannels.map((program) => (
-                <button
-                  type="button"
-                  key={program.channelId}
-                  className={`live-channel-list__item ${String(selected.channelId) ===
-                    String(program.channelId)
-                    ? 'active'
-                    : ''
-                    }`}
-                  onClick={() => changeChannel(program)}
-                >
-                  <div className="live-channel-list__thumb">
-                    <ChannelImage program={program} />
-                    <span>무료</span>
-
-                    <div
-                      className="live-channel-list__progress"
-                      style={{
-                        width: `${progressOf(program, now)}%`,
-                      }}
-                    />
-                  </div>
-
-                  <div>
-                    <strong>
-                      {program.title}
-
-                      {program.isDemo && (
-                        <span className="live-schedule__demo">
-                          {' '}(예시)
-                        </span>
-                      )}
-                    </strong>
-
-                    <small>{program.channel}</small>
-                  </div>
-                </button>
-              ))}
+            <LiveChannelFilters
+              items={categories}
+              value={category}
+              onChange={setCategory}
+              formatLabel={filterLabel}
+            />
+            <div className={styles.channelScroll} aria-busy={refreshingChannels}>
+              {filteredChannels.length === 0 && <p className={styles.emptyChannels}>관심 채널이 없어요.</p>}
+              {filteredChannels.map((program) => <button type="button" key={program.channelId}
+                aria-pressed={String(selected.channelId) === String(program.channelId)} className={`${styles.channelItem} ${String(selected.channelId) === String(program.channelId) ? styles.selectedChannel : ''}`} onClick={() => changeChannel(program)}>
+                <div className={styles.channelThumb}><ChannelImage program={program} /><span className={styles.channelProgress}><span style={{ width: `${progressOf(program, now)}%` }} /></span></div>
+                <div className={styles.channelItemText}><strong>{formatLiveTitle(getCachedYoutubeLive(program.youtubeChannelId)?.title || program.title)}</strong><small>{program.channel}</small></div>
+              </button>)}
             </div>
           </section>
         </aside>
       </div>
-
-      {shareOpen && (
-        <ShareModal
-          title={`${selected.channel} - ${selected.title}`}
-          onClose={() => setShareOpen(false)}
-        />
-      )}
-
-      <LoginModal
-        isOpen={loginOpen}
-        onClose={() => setLoginOpen(false)}
-      />
-    </main>
+      {vodNoticeChannel === selected.channelId && <ReservationDialog notice onClose={() => setVodNoticeChannel(null)} />}
+      {reservationProgram && <ReservationDialog program={reservationProgram} reserved={reminders.includes(reservationProgram.id)} onClose={() => setReservationProgram(null)} onConfirm={confirmReservation} />}
+      {shareOpen && <ShareModal title={`${selected.channel} - ${displayTitle}`} onClose={() => setShareOpen(false)} />}
+      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
+    </div>
   );
 };
 

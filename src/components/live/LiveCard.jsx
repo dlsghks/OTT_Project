@@ -1,11 +1,12 @@
 import styles from '../../styles/pages/live/LivePage.module.scss';
+import gridStyles from '../../styles/pages/live/LiveFilterGrid.module.scss';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLiveArtwork } from '../../hooks/useLiveArtwork';
 import { getCachedYoutubeLive } from '../../services/youtube';
 import { liveDesignRanks } from '../../data/live/liveDesignData';
 
-export const LiveCard = ({ program, ranked = false }) => {
+export const LiveCard = ({ program, ranked = false, compact = false }) => {
   const [, setThumbnailVersion] = useState(0);
   useEffect(() => {
     const update = () => setThumbnailVersion((value) => value + 1);
@@ -17,7 +18,7 @@ export const LiveCard = ({ program, ranked = false }) => {
   const rank = program.viewerRank ?? program.rank;
   const rankImage = liveDesignRanks[rank - 1];
   return (
-    <Link className={`${styles.card} ${ranked ? styles.rankedCard : ''}`}
+    <Link className={`${styles.card} ${ranked ? styles.rankedCard : ''} ${compact ? gridStyles.card : ''}`}
       to={`/livechannel?channel=${encodeURIComponent(program.channelId)}`}
       aria-label={`${program.channel} ${title || ''} 시청하기`}>
       <div className={styles.thumb}>
@@ -31,9 +32,9 @@ export const LiveCard = ({ program, ranked = false }) => {
         {ranked && (rankImage
           ? <img className={styles.cardRank} src={rankImage} alt={`${rank}위`} loading="lazy" />
           : <strong className={`${styles.cardRank} ${styles.number}`}>{rank}</strong>)}
-        <div className={styles.cardText}>
-          <strong className={styles.channel}>{program.channel}</strong>
-          <span className={styles.title}>{title || '채널 보기'}</span>
+        <div className={`${styles.cardText} ${compact ? gridStyles.text : ''}`}>
+          <strong className={`${styles.channel} ${compact ? gridStyles.channel : ''}`}>{program.channel}</strong>
+          <span className={`${styles.title} ${compact ? gridStyles.title : ''}`}>{title || '채널 보기'}</span>
         </div>
       </div>
     </Link>

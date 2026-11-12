@@ -17,16 +17,19 @@ import '../../styles/pages/home/Home.scss';
 import '../../styles/pages/category/Category.scss';
 import '../../styles/components/home/HomeResponsive.scss';
 import '../../styles/responsive/CategoryResponsive.scss';
+import '../../styles/pages/category/CategoryFilterResults.scss';
 
 export const CategoryPage = ({ page }) => {
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState('home');
 
   const category = Object.keys(categoryPages).find(key => categoryPages[key] === page || categoryPages[key].name === page.name);
   const pageItems = page.items ?? [];
-
-  const filter = page.filters.find(
-    (item) => item.id === activeFilter
-  );
+  // 홈은 큐레이션, 전체는 모든 콘텐츠를 표시합니다.
+  const filters = [
+    { id: 'home', label: `${page.name} 홈` },
+    { id: 'all', label: `${page.name} 전체` },
+    ...(page.filters ?? []).filter((item) => item.id !== 'home' && item.id !== 'all'),
+  ];
 
   const sections = (page.sections ?? []).map((section) => {
     // 요일 선택 후 WeekdayRow에서 최소 개수 적용
@@ -55,17 +58,16 @@ export const CategoryPage = ({ page }) => {
       <BrowsePageHeader title={page.name} />
       <SubPageHeader
         heroItems={page.heroItems}
-        filters={page.filters}
+        filters={filters}
         activeFilter={activeFilter}
         onFilterChange={setActiveFilter}
       />
 
-      <div className="category-page__sections">
-        {activeFilter === 'all' ? (
+      <div className={`category-page__sections${activeFilter !== 'home' ? ' category-page__sections--filtered' : ''}`}>
+        {activeFilter === 'home' ? (
           <SectionRenderer sections={sections} />
         ) : (
           <CollectionRow
-            title={`${page.name} · ${filter?.label ?? ''}`}
             items={filterItems(pageItems, activeFilter)}
           />
         )}

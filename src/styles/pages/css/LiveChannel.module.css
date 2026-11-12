@@ -1,0 +1,2249 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "Live Detail PADO";
+  src: url("../../../assets/fonts/WavvePADO-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+:global(.site-inner):has(> .detail) {
+  padding: 84px 110px 290px;
+  min-height: 1573px;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(180deg, #0031b7 0%, #000 38%);
+}
+
+.detail {
+  width: 100%;
+  max-width: 1700px;
+  min-width: 0;
+  margin: 0 auto;
+  color: #fff;
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+.detail,
+.detail * {
+  box-sizing: border-box;
+}
+.detail button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.detail a {
+  color: inherit;
+  text-decoration: none;
+}
+.detail button:disabled {
+  cursor: default;
+}
+.detail a:focus-visible,
+.detail button:focus-visible,
+.detail input:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.detail p,
+.detail h2,
+.detail strong,
+.detail small {
+  margin: 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1170fr) minmax(0, 501fr);
+  gap: 29px;
+  align-items: start;
+  min-width: 0;
+}
+
+.main {
+  min-width: 0;
+}
+
+.player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #000 center/cover no-repeat;
+  color: #fff;
+}
+
+.video {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: contain;
+}
+
+.player:fullscreen {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+
+.playerOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.65);
+  text-align: center;
+}
+.playerOverlay h2 {
+  font-size: clamp(18px, 1.25vw, 24px);
+  line-height: 1.45;
+}
+.playerOverlay p {
+  max-width: 90%;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.detail .loginButton {
+  padding: 12px 28px;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.detail .loginButton:hover {
+  background: #1351f9;
+  border-color: #1351f9;
+}
+
+.icon {
+  display: block;
+  position: static;
+  flex-shrink: 0;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  object-fit: contain;
+}
+
+.liveBadge {
+  position: absolute;
+  z-index: 2;
+  left: 24px;
+  bottom: 65px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: #f73d3c;
+  font: 400 15px/20px "Live Detail PADO", sans-serif;
+  pointer-events: none;
+}
+.liveBadge > img {
+  width: 3px;
+  height: 3px;
+}
+
+.reactionArea {
+  position: absolute;
+  z-index: 2;
+  right: 21px;
+  bottom: 64px;
+  width: 78px;
+  height: 78px;
+}
+
+.detail .reaction {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(55, 55, 62, 0.8);
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.detail .reaction > span {
+  color: #ff287f;
+  font-size: 27px;
+  line-height: 32px;
+}
+.detail .reaction > small {
+  color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+}
+.detail .reaction:hover {
+  background: rgba(70, 70, 78, 0.9);
+}
+.detail .reaction:active {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.flyingHearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.flyingHeart {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  color: var(--heart-color);
+  font-size: 34px;
+  line-height: 1;
+  animation: liveHeartRise 1.2s ease-out forwards;
+}
+
+@keyframes liveHeartRise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--heart-drift)), -240px) scale(1.15) rotate(12deg);
+  }
+}
+.playerControls {
+  position: absolute;
+  z-index: 3;
+  left: 24px;
+  right: 24px;
+  bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 23px;
+}
+
+.playerControlsLeft {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.playerControlsLeft > button,
+.playerControlsLeft .sound > button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 23px;
+  background: transparent;
+}
+.playerControlsLeft > button:first-child {
+  width: 19px;
+}
+.playerControlsLeft img {
+  max-width: 100%;
+  max-height: 23px;
+}
+
+.pauseIcon {
+  width: 19px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.sound {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.muteLine {
+  position: absolute;
+  left: 1px;
+  top: 11px;
+  width: 22px;
+  height: 1px;
+  background: #fff;
+  transform: rotate(-45deg);
+  pointer-events: none;
+}
+
+.volume {
+  width: 0;
+  opacity: 0;
+  height: 4px;
+  margin: 0;
+  accent-color: #fff;
+  transition: width 0.2s, opacity 0.2s;
+  cursor: pointer;
+}
+
+.sound:hover .volume,
+.sound:focus-within .volume {
+  width: 70px;
+  opacity: 1;
+}
+
+.settings {
+  position: relative;
+  width: 59px;
+  height: 23px;
+}
+
+.settingsArtwork {
+  width: 59px;
+  height: 23px;
+  pointer-events: none;
+}
+
+.detail .settingsHit,
+.detail .fullscreenHit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 23px;
+  background: transparent;
+}
+
+.settingsHit {
+  left: 0;
+}
+
+.fullscreenHit {
+  right: 0;
+}
+
+.qualityPanel {
+  position: absolute;
+  z-index: 6;
+  right: 0;
+  bottom: 38px;
+  width: 220px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.94);
+  border: 1px solid #444;
+  border-radius: 10px;
+}
+.qualityPanel strong,
+.qualityPanel span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+.qualityPanel p {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #aaa;
+}
+
+.channelInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  height: 79px;
+  margin-top: 35px;
+}
+
+.channelIdentity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.channelLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 79px;
+  width: 79px;
+  height: 79px;
+  background: #0d0d0d;
+  overflow: hidden;
+}
+.channelLogo > img {
+  position: static;
+  display: block;
+  width: auto;
+  max-width: 79px;
+  height: auto;
+  max-height: 79px;
+  object-fit: contain;
+}
+.channelLogo > span {
+  padding: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.channelText {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.channelText > strong {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+}
+.channelText > span {
+  font-size: 14px;
+  line-height: 19px;
+  white-space: nowrap;
+}
+
+.channelActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+}
+.channelActions > button,
+.channelActions > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 43px;
+  padding: 12px 20px;
+  border-radius: 222px;
+  background: #252525;
+  color: #fff;
+  font-size: 16px;
+  line-height: 19px;
+  white-space: nowrap;
+}
+.channelActions > button img,
+.channelActions > a img {
+  width: 15.977px;
+  height: 15.977px;
+  object-fit: contain;
+}
+.channelActions > button:not(.favoriteButton):not(:disabled):hover,
+.channelActions > button:not(.favoriteButton):not(:disabled):active,
+.channelActions > a:hover,
+.channelActions > a:active,
+.channelActions > button:not(.favoriteButton)[aria-pressed=true] {
+  background: #1351f9;
+}
+
+.schedule {
+  position: relative;
+  margin-top: 30px;
+  padding: 0;
+  min-width: 0;
+}
+
+.scheduleSwiper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.schedule .scheduleSlide {
+  width: 359px;
+  height: 88px;
+}
+
+.scheduleCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  height: 88px;
+  padding: 19px 24px;
+  border-radius: 15px;
+  background: #252525;
+}
+.scheduleCard > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.scheduleCard strong {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 18px;
+  line-height: 24px;
+}
+.scheduleCard small {
+  font-size: 16px;
+  line-height: 22px;
+  white-space: nowrap;
+}
+.scheduleCard > button {
+  flex-shrink: 0;
+  background: transparent;
+}
+.scheduleCard > button img {
+  width: 19.893px;
+  height: 24.616px;
+}
+
+.currentSchedule {
+  background: #252525;
+}
+
+.scheduleLive {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 4px;
+  border-radius: 5px;
+  background: #f73d3c;
+  font-size: 15px;
+  line-height: 20px;
+}
+.scheduleLive img {
+  width: 3px;
+  height: 3px;
+}
+
+.scheduleCard > button {
+  color: #666;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+
+.scheduleCard > button:hover,
+.scheduleCard > button:active,
+.scheduleCard > .reminderActive {
+  color: #1351f9;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.detail .scheduleCard > button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 5px;
+}
+
+.bellIcon {
+  display: block;
+  width: 19.893px;
+  height: 24.616px;
+  background-color: currentColor;
+  mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.top {
+  min-width: 0;
+  margin-top: 60px;
+  padding: 0;
+}
+.top > h2 {
+  margin: 0 0 24px;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+}
+
+.topSlider {
+  position: relative;
+  min-width: 0;
+}
+
+.topSwiper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.top .topSlide {
+  width: 241px;
+  height: auto;
+}
+
+.detail .topCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  background: transparent;
+  text-align: left;
+}
+
+.topImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 241/136;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #142747;
+}
+.topImage > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.topCard:hover .topImage > img {
+  transform: scale(1.04);
+}
+
+.topMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 47px;
+  width: 100%;
+  min-width: 0;
+}
+.topMeta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.topMeta strong,
+.topMeta span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+}
+
+.rank {
+  position: static;
+  display: block;
+  flex-shrink: 0;
+  width: auto;
+  max-width: 63px;
+  height: 47px;
+  object-fit: contain;
+}
+
+.imageFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  background: radial-gradient(ellipse, #28467c, #071a2e);
+  font-size: 14px;
+}
+.imageFallback > img {
+  position: static;
+  width: auto;
+  max-width: 85%;
+  height: auto;
+  max-height: 80%;
+  object-fit: contain;
+}
+
+.sidebar {
+  --sidebar-padding: 20px;
+  display: grid;
+  grid-template-rows: clamp(120px, 7.291667vw, 140px) minmax(0, 1fr);
+  gap: 16px;
+  min-width: 0;
+  height: clamp(820px, 61.71875vw, 1185px);
+}
+
+.sidebarOpen {
+  grid-template-rows: clamp(450px, 35.052083vw, 673px) minmax(0, 1fr);
+  gap: 20px;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 16px var(--sidebar-padding) 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.chatOpen {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.detail .chatToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  margin-bottom: 12px;
+  background: transparent;
+  text-align: left;
+}
+.detail .chatToggle > strong {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 35px;
+}
+.detail .chatToggle > img {
+  width: 44px;
+  height: 40px;
+}
+
+.detail .chatPreview {
+  flex: 0 0 52px;
+  width: 100%;
+  height: 52px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: #000;
+  color: #a5a5a5;
+  font-size: 18px;
+  line-height: 26px;
+  text-align: left;
+}
+
+.chatContent {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chatNotice {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #aaa;
+  font-size: 17px;
+  line-height: 1.45;
+}
+.chatNotice p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.chatMessages {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 0 35px;
+  scrollbar-width: thin;
+}
+.chatMessages p {
+  margin: 0 0 14px;
+  color: #ddd;
+  font-size: 16px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.chatMessages b {
+  margin-right: 5px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.detail .chatForm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex: 0 0 52px;
+  height: 52px;
+  margin-top: 12px;
+  padding: 7px 11px 7px 20px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  background: #000;
+}
+.detail .chatForm > input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 18px;
+}
+.detail .chatForm > input::placeholder {
+  color: #a5a5a5;
+  opacity: 1;
+}
+.detail .chatForm > button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #66666b;
+  color: #171719;
+  font-size: 24px;
+  line-height: 1;
+}
+.detail .chatForm > button:not(:disabled) {
+  background: #fff;
+}
+
+.chatError {
+  margin: 4px 0 0;
+  color: #ff8a8a;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.channelList {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.channelListHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: 0 0 72px;
+  padding: 20px var(--sidebar-padding);
+  border-radius: 15px;
+  background: rgba(37, 37, 37, 0.2);
+}
+.channelListHeading > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.channelListHeading strong {
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 500;
+}
+.channelListHeading button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+}
+.channelListHeading button img {
+  display: block;
+  width: 20px;
+  height: 20px;
+  max-width: none;
+  transform-origin: 50% 50%;
+}
+.channelListHeading > a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline-end: 12.3px;
+  white-space: nowrap;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 350;
+}
+.channelListHeading > a img {
+  width: 8px;
+  height: 15px;
+}
+
+.channelFilters {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+  flex: 0 0 40px;
+  min-height: 40px;
+  margin: 8px var(--sidebar-padding) 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.channelFilters::-webkit-scrollbar {
+  display: none;
+}
+.channelFilters > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 5px;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+.channelFilters > .activeFilter,
+.channelFilters > button[aria-pressed=true] {
+  background: #1351f9;
+}
+.channelFilters > button:hover {
+  background: #1351f9;
+}
+
+.channelScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 var(--sidebar-padding) 17px;
+  scrollbar-width: thin;
+  scrollbar-color: #666 transparent;
+  overscroll-behavior: contain;
+}
+
+.detail .channelItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 110px;
+  margin: 0 0 12px;
+  padding: 10px 11px;
+  border-radius: 14px;
+  background: #000;
+  text-align: left;
+}
+
+.detail .channelItem {
+  transition: background-color 0.2s ease;
+}
+
+.detail .channelItem.selectedChannel {
+  background: #000;
+  box-shadow: none;
+}
+
+.detail .channelItem:hover,
+.detail .channelItem:active {
+  background: rgba(19, 81, 249, 0.9);
+  box-shadow: none;
+}
+
+.channelThumb {
+  position: relative;
+  flex: 0 0 160px;
+  width: 160px;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.channelThumb > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.channelItem:hover .channelThumb > img {
+  transform: scale(1.04);
+}
+
+.channelProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #fff;
+}
+.channelProgress > span {
+  display: block;
+  height: 100%;
+  background: #1351f9;
+}
+
+.channelItemText {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.channelItemText strong {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+}
+.channelItemText small {
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.emptyChannels {
+  padding: 16px 0;
+  color: #aaa;
+  font-size: 16px;
+}
+
+@media (max-width: 1600px) {
+  :global(.site-inner):has(> .detail) {
+    padding-inline: 64px;
+  }
+  .layout {
+    gap: 22px;
+    grid-template-columns: minmax(0, 1170fr) minmax(340px, 501fr);
+  }
+  .channelActions {
+    gap: 8px;
+  }
+  .channelActions > button,
+  .channelActions > a {
+    padding-inline: 14px;
+  }
+  .channelListHeading strong {
+    font-size: 19px;
+  }
+  .channelThumb {
+    flex-basis: 128px;
+    width: 128px;
+    height: 72px;
+  }
+  .channelText > strong {
+    font-size: 21px;
+    line-height: 28px;
+  }
+}
+@media (max-width: 1100px) {
+  :global(.site-inner):has(> .detail) {
+    padding: 30px 20px 80px;
+    min-height: 0;
+  }
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .sidebar {
+    height: 850px;
+    grid-template-rows: 140px minmax(0, 1fr);
+  }
+  .sidebarOpen {
+    height: 1100px;
+    grid-template-rows: 500px minmax(0, 1fr);
+  }
+  .channelThumb {
+    flex-basis: 160px;
+    width: 160px;
+    height: 90px;
+  }
+  .channelItem {
+    min-height: 110px;
+  }
+}
+@media (max-width: 600px) {
+  .player {
+    border-radius: 10px;
+  }
+  .channelInfo {
+    height: auto;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    gap: 18px;
+  }
+  .channelIdentity {
+    flex-basis: 100%;
+  }
+  .channelLogo {
+    flex-basis: 60px;
+    width: 60px;
+    height: 60px;
+  }
+  .channelLogo > img {
+    max-width: 60px;
+    max-height: 60px;
+  }
+  .channelText {
+    gap: 6px;
+  }
+  .channelText > strong {
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .channelText > span {
+    font-size: 12px;
+  }
+  .channelActions {
+    gap: 10px;
+  }
+  .channelActions > button,
+  .channelActions > a {
+    padding: 10px 16px;
+    height: 38px;
+    font-size: 14px;
+  }
+  .schedule {
+    margin-top: 24px;
+  }
+  .schedule .scheduleSlide {
+    width: 240px;
+  }
+  .scheduleCard {
+    padding: 16px;
+  }
+  .scheduleCard strong {
+    font-size: 15px;
+  }
+  .scheduleCard small {
+    font-size: 13px;
+  }
+  .scheduleLive {
+    font-size: 12px;
+  }
+  .top {
+    margin-top: 36px;
+  }
+  .top > h2 {
+    font-size: 20px;
+    line-height: 28px;
+    margin-bottom: 18px;
+  }
+  .top .topSlide {
+    width: 190px;
+  }
+  .topMeta strong,
+  .topMeta span {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .rank {
+    height: 40px;
+    max-width: 54px;
+  }
+  .playerControls {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+  .liveBadge {
+    left: 16px;
+    bottom: 50px;
+    padding: 1px 4px;
+    font-size: 12px;
+  }
+  .reactionArea {
+    right: 16px;
+    bottom: 44px;
+    width: 59px;
+    height: 59px;
+  }
+  .playerControlsLeft {
+    gap: 12px;
+  }
+  .detail .chatToggle > strong {
+    font-size: 20px;
+  }
+  .detail .chatPreview,
+  .detail .chatForm > input {
+    font-size: 14px;
+  }
+  .chatNotice {
+    font-size: 14px;
+  }
+  .channelFilters > button {
+    font-size: 14px;
+  }
+  .channelListHeading > div > strong {
+    font-size: 20px;
+  }
+  .channelListHeading > a {
+    font-size: 13px;
+  }
+  .sidebar {
+    --sidebar-padding: 12px;
+  }
+  .detail .channelItem {
+    padding: 10px;
+  }
+  .channelThumb {
+    flex-basis: 128px;
+    width: 128px;
+    height: 72px;
+  }
+  .channelItemText strong,
+  .channelItemText small {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .volume,
+  .topImage > img,
+  .channelThumb > img {
+    transition: none;
+  }
+  .topCard:hover .topImage > img,
+  .channelItem:hover .channelThumb > img {
+    transform: none;
+  }
+}
+.playerControlsLeft > button:first-child > .icon {
+  width: 21px;
+  height: 24px;
+  max-width: none;
+  max-height: none;
+}
+
+.sound > button > .icon {
+  width: 22.4992px;
+  height: 23.5px;
+  max-width: none;
+  max-height: none;
+}
+
+.detail .channelActions > .favoriteButton,
+.detail .channelActions > .favoriteButton:hover,
+.detail .channelActions > .favoriteButton:active,
+.detail .channelActions > .favoriteButton[aria-pressed=true] {
+  background: #252525;
+  color: #fff;
+}
+
+.favoriteIcon {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  transition: fill 0.15s, stroke 0.15s;
+}
+
+.favoriteButton:hover .favoriteIcon,
+.favoriteButton:active .favoriteIcon,
+.favoriteButton[aria-pressed=true] .favoriteIcon {
+  fill: #1351f9;
+  stroke: #1351f9;
+}
+
+.reservationDialog {
+  position: fixed;
+  inset: 0;
+  width: min(475px, 100vw - 32px);
+  max-height: calc(100svh - 32px);
+  margin: auto;
+  padding: 26px;
+  border: 0;
+  border-radius: 18px;
+  color: #fff;
+  background: radial-gradient(ellipse 90% 110px at 50% 0, #101d4b 0%, transparent 100%), #000;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.5333333333);
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  overflow-y: auto;
+}
+.reservationDialog,
+.reservationDialog * {
+  box-sizing: border-box;
+}
+.reservationDialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+.reservationDialog h2 {
+  margin: 0;
+  padding-right: 40px;
+  font-size: 24px;
+  line-height: 34px;
+  font-weight: 700;
+}
+.reservationDialog button {
+  font: inherit;
+  cursor: pointer;
+}
+.reservationDialog button:focus-visible {
+  outline: 2px solid #7fa8ff;
+  outline-offset: 3px;
+}
+
+.reservationDialog > .reservationClose {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  display: grid;
+  place-items: center;
+  width: 33px;
+  height: 33px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #444;
+  color: #d4d4d4;
+  line-height: 1;
+}
+
+.reservationClose > svg {
+  display: block;
+  position: static;
+  width: 23px;
+  height: 23px;
+  margin: 0;
+  padding: 0;
+  flex: none;
+}
+
+.reservationDialog > .reservationClose:hover {
+  background: #555;
+}
+
+.reservationDescription {
+  margin-top: 40px;
+  color: #d4d4d4;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.reservationDescription p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.reservationActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+.reservationActions button {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 10px;
+  background: #252525;
+  color: #fff;
+}
+.reservationActions button:last-child,
+.reservationActions button:hover {
+  background: #1351f9;
+  border-color: #1351f9;
+}
+.reservationActions button:last-child:hover {
+  background: #1351f9;
+}
+.reservationActions:has(> button:first-child:not(:last-child):hover) > button:last-child {
+  background: #252525;
+  border-color: #444;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyingHeart {
+    animation: liveHeartFade 0.2s linear forwards;
+  }
+  @keyframes liveHeartFade {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}
+.channelListHeading button.refreshing > img {
+  animation: liveChannelRefresh 0.7s cubic-bezier(0.25, 0.6, 0.35, 1) 1 both;
+}
+
+.channelListHeading button:disabled {
+  opacity: 1;
+  cursor: wait;
+}
+
+@keyframes liveChannelRefresh {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .channelListHeading button.refreshing > img {
+    animation: none;
+  }
+}
+/* 톡·라이브 목록 스크롤 통일 */
+.chatMessages,
+.channelScroll {
+  scrollbar-width: thin;
+  scrollbar-color: #666 transparent;
+}
+.chatMessages::-webkit-scrollbar,
+.channelScroll::-webkit-scrollbar {
+  width: 6px;
+}
+.chatMessages::-webkit-scrollbar-track,
+.channelScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chatMessages::-webkit-scrollbar-thumb,
+.channelScroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #666;
+}
+.chatMessages::-webkit-scrollbar-thumb:hover,
+.channelScroll::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* 톡을 펼쳤을 때 채널 영역의 네이비 유지 */
+.detail .sidebarOpen .channelList {
+  background: linear-gradient(180deg, #010615 0%, #010309 40%, #000 100%);
+}
+.detail .sidebarOpen .channelListHeading {
+  background: transparent;
+}
+.detail .sidebarOpen .channelItem {
+  background: transparent;
+}
+.detail .sidebarOpen .channelItem:hover, .detail .sidebarOpen .channelItem:active {
+  background: rgba(19, 81, 249, 0.9);
+}
+
+.reservationDialog {
+  padding: 24px;
+  border-radius: 8px;
+  background: #444;
+}
+.reservationDialog::backdrop {
+  background: rgba(0, 0, 0, 0.6666666667);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.reservationDialog h2 {
+  padding-right: 0;
+  font-size: 20px;
+  line-height: 28px;
+}
+.reservationDialog {
+  /* 취소 버튼이 있는 예약창의 X 숨김 */
+}
+.reservationDialog:has(.reservationActions > button:nth-child(2)) > .reservationClose {
+  display: none;
+}
+
+.reservationDescription {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.reservationActions {
+  justify-content: flex-end;
+  margin-top: 24px;
+  gap: 12px;
+}
+.reservationActions > button {
+  flex: 0 0 auto;
+  min-width: 64px;
+  min-height: 40px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 6px;
+  background: #555;
+  font-size: 14px;
+  line-height: 20px;
+}
+.reservationActions > button:last-child,
+.reservationActions > button:hover {
+  background: #1351f9;
+}
+.reservationActions:has(> button:first-child:not(:last-child):hover) > button:last-child {
+  background: #555;
+}
+
+.reservationActions > button:first-child:not(:last-child):hover {
+  background: #555;
+}
+.reservationActions > button:last-child,
+.reservationActions > button:last-child:hover, .reservationActions:has(> button:first-child:hover) > button:last-child {
+  background: #1351f9;
+}
+
+.reservationActions > button:first-child:not(:last-child),
+.reservationActions > button:first-child:not(:last-child):hover {
+  background: #555;
+}
+.reservationActions > button:last-child,
+.reservationActions > button:last-child:hover, .reservationActions:has(> button:first-child:not(:last-child):hover) > button:last-child {
+  background: #1351f9;
+}
+
+.reservationActions > button {
+  height: 44px;
+  min-height: 44px;
+  min-width: 64px;
+  padding: 10px 16px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.reservationDialog h2 {
+  font-size: 24px;
+  line-height: 34px;
+  font-weight: 700;
+}
+
+.reservationDescription {
+  font-size: 16px;
+  line-height: 24px;
+}
+.reservationDescription p {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.reservationActions > button:only-child {
+  width: auto;
+  height: 44px;
+  min-height: 44px;
+  min-width: 64px;
+  padding: 10px 16px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* 영상 좋아요 영역을 20px 위로 이동 */
+.reactionArea {
+  bottom: 84px;
+}
+
+@media (max-width: 600px) {
+  .reactionArea {
+    bottom: 64px;
+  }
+}
+/* 톡 열기·닫기 화살표 */
+.detail .chatToggle:hover img {
+  filter: brightness(0) saturate(100%) invert(25%) sepia(94%) saturate(4593%) hue-rotate(225deg) brightness(97%) contrast(102%);
+}
+
+/* 전체 편성표 글씨·화살표 */
+.detail .channelListHeading > a:hover {
+  color: #1351f9;
+}
+.detail .channelListHeading > a:hover img {
+  filter: brightness(0) saturate(100%) invert(25%) sepia(94%) saturate(4593%) hue-rotate(225deg) brightness(97%) contrast(102%);
+}
+
+.detail .channelItem:hover, .detail .channelItem:active,
+.detail .sidebarOpen .channelItem:hover, .detail .sidebarOpen .channelItem:active {
+  background: rgba(19, 81, 249, 0.4);
+}
+
+.detail .sidebarOpen .channelList {
+  background: linear-gradient(180deg, #010615, #010309 40%, #000);
+}
+
+.detail .sidebarOpen .channelListHeading, .detail .sidebarOpen .channelItem {
+  background-color: transparent;
+}
+
+.detail .channelListHeading > a {
+  color: #fff;
+  opacity: 0.65;
+  transition: opacity 0.2s;
+}
+
+.detail .channelListHeading > a:hover {
+  color: #fff;
+  opacity: 1;
+  background: transparent;
+}
+
+.detail .channelListHeading > a img, .detail .channelListHeading > a:hover img,
+.detail .chatToggle img, .detail .chatToggle:hover img {
+  filter: none;
+}
+
+.detail .chatToggle img {
+  opacity: 0.65;
+  transition: opacity 0.2s;
+}
+
+.detail .chatToggle:hover img {
+  opacity: 1;
+}
+
+.talkChevron {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.chatToggle[aria-expanded=true] .talkChevron {
+  transform: rotate(180deg);
+}
+
+.playerFrame {
+  min-width: 0;
+}
+
+.reservationActions > button:first-child:not(:last-child),
+.reservationActions > button:first-child:not(:last-child):hover {
+  background: #555;
+}
+
+.reservationActions > button:last-child, .reservationActions > button:last-child:hover,
+.reservationActions:has(> button:first-child:not(:last-child):hover) > button:last-child {
+  background: #1351f9;
+}
+
+.detail :not(:hover) > :global(.slider-arrow):not(:focus-visible) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.miniToggle {
+  display: none;
+}
+
+@media (min-width: 1025px) {
+  :global(.site-inner):has(> .detail) {
+    padding: clamp(32px, 4.375vw, 84px) clamp(32px, 5.729vw, 110px) 120px;
+  }
+  .detail .layout {
+    grid-template-columns: minmax(0, 1170fr) minmax(280px, 501fr);
+    gap: clamp(16px, 1.51vw, 29px);
+  }
+  .detail .channelInfo {
+    gap: 12px;
+  }
+  .detail .channelLogo {
+    flex-basis: clamp(48px, 4.12vw, 79px);
+    width: clamp(48px, 4.12vw, 79px);
+    height: clamp(48px, 4.12vw, 79px);
+  }
+  .detail .channelIdentity {
+    gap: clamp(8px, 1vw, 20px);
+    min-width: 0;
+  }
+  .detail .channelText > strong {
+    font-size: clamp(16px, 1.4vw, 27px);
+    line-height: 1.4;
+  }
+  .detail .channelText > span {
+    font-size: clamp(12px, 1vw, 18px);
+  }
+  .detail .channelActions {
+    gap: 6px;
+  }
+  .detail .channelActions > button, .detail .channelActions > a {
+    padding: 10px clamp(9px, 1vw, 20px);
+    font-size: clamp(12px, 1vw, 18px);
+  }
+  .detail .channelThumb {
+    flex-basis: clamp(90px, 8.33vw, 160px);
+    width: clamp(90px, 8.33vw, 160px);
+    height: auto;
+    aspect-ratio: 16/9;
+  }
+  .detail .channelItemText > strong, .detail .channelItemText > small {
+    font-size: clamp(12px, 1vw, 18px);
+    line-height: 1.4;
+  }
+  .detail .channelListHeading strong {
+    font-size: clamp(16px, 1.25vw, 24px);
+  }
+  .detail .channelListHeading > a {
+    font-size: clamp(11px, 0.94vw, 18px);
+  }
+  .detail .chatToggle > strong {
+    font-size: clamp(18px, 1.46vw, 28px);
+  }
+}
+@media (max-width: 1024px) {
+  :global(.site-inner):has(> .detail) {
+    --page-side-padding: 0px;
+    padding: 0 0 32px;
+    min-height: 0;
+    background: linear-gradient(180deg, #04123a 0%, #051423 38%, #000 100%);
+  }
+  .detail {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .detail .layout {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    width: 100%;
+  }
+  .detail .main {
+    width: 100%;
+    min-width: 0;
+  }
+  .detail .playerFrame {
+    scroll-margin-top: 50px;
+    width: 100%;
+    aspect-ratio: 16/9;
+    position: relative;
+  }
+  .detail .player {
+    border-radius: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+  }
+  .detail .playerOverlay {
+    gap: 10px;
+    padding: 16px;
+  }
+  .detail .playerOverlay h2 {
+    font-size: 14px;
+  }
+  .detail .playerOverlay p {
+    font-size: 12px;
+  }
+  .detail .loginButton {
+    font-size: 12px;
+    padding: 8px 16px;
+    min-height: 36px;
+  }
+  .detail .liveBadge {
+    left: 16px;
+    bottom: 35px;
+    padding: 1px 3px;
+    border-radius: 2px;
+    font-size: 7px;
+    line-height: 10px;
+    gap: 2px;
+  }
+  .detail .liveBadge > img {
+    width: 2px;
+    height: 2px;
+  }
+  .detail .playerControls {
+    left: 16px;
+    right: 16px;
+    bottom: 12px;
+    height: 16px;
+  }
+  .detail .playerControlsLeft {
+    gap: 10px;
+    height: 16px;
+  }
+  .detail .playerControlsLeft > button {
+    width: 16px;
+    height: 16px;
+    display: grid;
+    place-items: center;
+  }
+  .detail .playerControlsLeft .icon, .detail .pauseIcon {
+    width: auto;
+    max-width: 14px;
+    height: 14px;
+  }
+  .detail .sound {
+    height: 16px;
+    gap: 4px;
+  }
+  .detail .sound > button {
+    width: 18px;
+    height: 18px;
+  }
+  .detail .volume {
+    display: none;
+  }
+  .detail .settings {
+    width: 44px;
+    height: 18px;
+  }
+  .detail .settingsArtwork {
+    width: 44px;
+    height: 18px;
+  }
+  .detail .reactionArea {
+    width: 30px;
+    height: 30px;
+    right: 16px;
+    bottom: 38px;
+  }
+  .detail .reaction > span {
+    font-size: 13px;
+    line-height: 14px;
+  }
+  .detail .reaction > small {
+    font-size: 7px;
+    line-height: 10px;
+  }
+  .detail .miniToggle {
+    position: absolute;
+    display: block;
+    top: 8px;
+    right: 10px;
+    z-index: 5;
+    padding: 5px 8px;
+    min-height: 30px;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    font-size: 10px;
+    line-height: 16px;
+  }
+  .detail .miniPlayer {
+    position: fixed;
+    z-index: 110;
+    width: min(54vw, 320px);
+    height: auto;
+    right: 12px;
+    bottom: calc(64px + env(safe-area-inset-bottom));
+    border-radius: 8px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+  }
+  .detail .miniPlayer .miniToggle {
+    top: 3px;
+    right: 4px;
+    min-height: 26px;
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+  .detail .miniPlayer .reactionArea, .detail .miniPlayer .settings, .detail .miniPlayer .liveBadge {
+    display: none;
+  }
+  .detail .miniPlayer .playerControls {
+    bottom: 8px;
+    left: 8px;
+  }
+  .detail .channelInfo {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+    height: auto;
+    margin: 16px 16px 0;
+    gap: 8px;
+  }
+  .detail .channelIdentity {
+    display: flex;
+    flex-basis: auto;
+    flex: 1 1 0;
+    gap: 12px;
+    min-width: 0;
+  }
+  .detail .channelLogo {
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+  }
+  .detail .channelLogo > img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .detail .channelText {
+    min-width: 0;
+    gap: 7px;
+  }
+  .detail .channelText > strong {
+    display: block;
+    max-width: 100%;
+    font-size: 14px;
+    line-height: 19px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .detail .channelText > span {
+    font-size: 11px;
+    line-height: 16px;
+    white-space: nowrap;
+  }
+  .detail .channelActions {
+    flex-shrink: 0;
+    gap: 5px;
+  }
+  .detail .channelActions > button, .detail .channelActions > a {
+    gap: 3px;
+    min-height: 26px;
+    height: 26px;
+    padding: 5px 8px;
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .detail .channelActions .icon, .detail .favoriteIcon {
+    width: 10px;
+    height: 10px;
+  }
+  .detail .schedule {
+    margin: 18px 0 0 20px;
+  }
+  .detail .schedule .scheduleSlide {
+    width: min(251px, 70vw);
+    height: 62px;
+  }
+  .detail .scheduleCard {
+    height: 62px;
+    min-height: 62px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    gap: 10px;
+  }
+  .detail .scheduleCard strong {
+    font-size: 12px;
+    line-height: 17px;
+  }
+  .detail .scheduleCard small {
+    font-size: 11px;
+    line-height: 15px;
+  }
+  .detail .scheduleCard > div {
+    gap: 4px;
+  }
+  .detail .scheduleLive {
+    font-size: 10px;
+    line-height: 14px;
+    padding: 1px 3px;
+    border-radius: 3px;
+  }
+  .detail .bellIcon {
+    width: 14px;
+    height: 18px;
+  }
+  .detail .top {
+    margin: 28px 0 0 16px;
+    padding: 0;
+  }
+  .detail .top > h2 {
+    margin: 0 16px 14px 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .detail .topSwiper {
+    container-type: inline-size;
+  }
+  .detail .top .topSlide {
+    width: calc((100cqw - 8px) / 2);
+  }
+  .detail .topCard {
+    gap: 7.5px;
+  }
+  .detail .topMeta {
+    gap: 4.5px;
+  }
+  .detail .rank {
+    width: 25px;
+    min-width: 25px;
+    height: 35px;
+  }
+  .detail .topMeta strong, .detail .topMeta span {
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .detail .sidebar, .detail .sidebarOpen {
+    --sidebar-padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: calc(100% - 30px);
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin: 0 15px;
+  }
+  .detail .chat, .detail .chatOpen {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 11px 14px 14px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.65);
+  }
+  .detail .chatToggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    width: 100%;
+    height: 29px;
+    min-height: 29px;
+    margin: 0;
+    padding: 0;
+  }
+  .detail .chatToggle > strong {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .detail .talkChevron {
+    width: 30px;
+    height: 29px;
+  }
+  .detail .talkChevron > img {
+    width: 22px;
+    height: 20px;
+  }
+  .detail .chatPreview {
+    flex: 0 0 38px;
+    width: 100%;
+    height: 38px;
+    min-height: 38px;
+    margin-top: 8px;
+    padding: 0 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: left;
+    background: #000;
+  }
+  .detail .chatOpen {
+    min-height: 260px;
+  }
+  .detail .chatContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 100px;
+    max-height: 220px;
+    padding: 0;
+  }
+  .detail .chatNotice {
+    padding: 8px 0;
+  }
+  .detail .chatNotice p {
+    margin: 0 0 10px;
+    color: #becaff;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .detail .chatMessages {
+    padding: 8px 0;
+    flex: 1;
+    min-height: 40px;
+    max-height: 120px;
+    overflow-y: auto;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .detail .chatMessages p {
+    font-size: 12px;
+    line-height: 18px;
+    margin: 0 0 8px;
+  }
+  .detail .chatForm {
+    display: flex;
+    flex: 0 0 35px;
+    width: 100%;
+    min-height: 35px;
+    height: 35px;
+    margin-top: 12px;
+    padding: 3px 5px 3px 13px;
+    border-radius: 7px;
+  }
+  .detail .chatForm input {
+    flex: 1;
+    min-width: 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .detail .chatForm > button {
+    flex: 0 0 25px;
+    width: 25px;
+    height: 25px;
+    font-size: 17px;
+    line-height: 25px;
+  }
+  .detail .chatError {
+    font-size: 11px;
+  }
+  .detail .channelList, .detail .sidebarOpen .channelList {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .detail .channelListHeading {
+    flex: 0 0 37px;
+    height: 37px;
+    min-height: 37px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(37, 37, 37, 0.2);
+  }
+  .detail .channelListHeading > div {
+    gap: 5px;
+  }
+  .detail .channelListHeading strong {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .detail .channelListHeading > div > button {
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+  }
+  .detail .channelListHeading > div > button img {
+    width: 16px;
+    height: 16px;
+  }
+  .detail .channelListHeading > a {
+    padding: 0;
+    gap: 5px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .detail .channelListHeading > a img {
+    width: 6px;
+    height: 11px;
+  }
+  .detail .channelScroll {
+    flex: none;
+    width: 100%;
+    height: auto;
+    max-height: 390px;
+    padding: 0 14px 14px;
+    overflow-y: auto;
+  }
+  .detail .channelItem, .detail .sidebarOpen .channelItem {
+    width: 100%;
+    min-height: 80px;
+    height: auto;
+    margin: 0 0 7px;
+    padding: 7px 8px;
+    border-radius: 10px;
+    gap: 8px;
+    background: #000;
+  }
+  .detail .channelThumb {
+    flex: 0 0 114px;
+    width: 114px;
+    height: auto;
+    aspect-ratio: 16/9;
+    border-radius: 3px;
+  }
+  .detail .channelItemText {
+    flex: 1;
+    min-width: 0;
+    gap: 7px;
+  }
+  .detail .channelItemText strong {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .detail .channelItemText small {
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .detail .channelProgress {
+    height: 2px;
+  }
+  .detail :global(.slider-arrow) {
+    display: none;
+  }
+  .reservationDialog {
+    width: calc(100vw - 32px);
+    max-width: 475px;
+    padding: 24px;
+  }
+  .reservationDialog h2 {
+    font-size: 20px;
+  }
+  .reservationDialog p {
+    font-size: 14px;
+    line-height: 21px;
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .detail .playerFrame {
+    max-width: 100%;
+  }
+  .detail .channelInfo {
+    margin-inline: 24px;
+  }
+  .detail .channelLogo {
+    flex-basis: 60px;
+    width: 60px;
+    height: 60px;
+  }
+  .detail .channelText > strong {
+    font-size: 18px;
+  }
+  .detail .channelActions > button, .detail .channelActions > a {
+    height: 36px;
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+  .detail .sidebar, .detail .sidebarOpen {
+    width: calc(100% - 48px);
+    margin-inline: 24px;
+  }
+  .detail .channelScroll {
+    max-height: 520px;
+  }
+  .detail .channelItem {
+    min-height: 106px;
+  }
+  .detail .channelThumb {
+    flex-basis: 160px;
+    width: 160px;
+  }
+  .detail .channelItemText strong {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .detail .channelItemText small {
+    font-size: 12px;
+  }
+  .detail .top, .detail .schedule {
+    margin-left: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .talkChevron {
+    transition: none;
+  }
+}

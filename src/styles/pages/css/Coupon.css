@@ -1,0 +1,257 @@
+@charset "UTF-8";
+.coupon button.coupon__register,
+.coupon button.coupon__use {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #444444;
+  color: #FFFFFF;
+  font-size: 18px;
+}
+.coupon button.coupon__register:hover:not(:disabled), .coupon button.coupon__register:active:not(:disabled),
+.coupon button.coupon__use:hover:not(:disabled),
+.coupon button.coupon__use:active:not(:disabled) {
+  background: #1351F9;
+}
+.coupon button.coupon__register {
+  gap: 24px;
+}
+.coupon button.coupon__register img {
+  width: 31px;
+  height: 28px;
+  max-width: none;
+}
+.coupon button.coupon__register {
+  width: 356px;
+  max-width: 100%;
+  height: 82px;
+  margin: 80px auto 0;
+  display: flex;
+}
+.coupon button.coupon__use {
+  width: 190px;
+  height: 64px;
+}
+.coupon__tabs {
+  display: flex;
+  margin-top: 80px;
+}
+.coupon__tabs button {
+  padding: 16px;
+  border-bottom: 3px solid transparent;
+  color: #AAAAAA;
+  font-size: 18px;
+  line-height: 1.4;
+}
+.coupon__tabs button span {
+  margin-left: 8px;
+}
+.coupon__tabs button.is-active {
+  border-bottom-color: #1351F9;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+.coupon__list {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.coupon__item {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) clamp(150px, 20vw, 380px) 190px;
+  align-items: center;
+  gap: 64px;
+  padding: 64px 40px 64px 64px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.16);
+}
+.coupon img.coupon__icon {
+  width: 31px;
+  height: 28px;
+  max-width: none;
+}
+.coupon__used {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 190px;
+  height: 64px;
+  color: #888888;
+  font-size: 18px;
+}
+.coupon__info {
+  min-width: 0;
+}
+.coupon__info strong {
+  display: block;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.coupon__info p {
+  margin: 12px 0 0;
+  color: #AAAAAA;
+  font-size: 15px;
+}
+.coupon__expire span {
+  color: #AAAAAA;
+  font-size: 15px;
+}
+.coupon__expire p {
+  margin: 8px 0 0;
+  color: #DDDDDD;
+  font-size: 20px;
+}
+@media (max-width: 1024px) {
+  .coupon__item {
+    gap: 24px;
+    padding: 24px 0;
+  }
+}
+@media (max-width: 768px) {
+  .coupon button.coupon__register {
+    height: 64px;
+    margin-top: 32px;
+    font-size: 16px;
+  }
+  .coupon__tabs {
+    margin-top: 32px;
+  }
+  .coupon__tabs button {
+    font-size: 16px;
+  }
+  .coupon__item {
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .coupon img.coupon__icon {
+    width: 24px;
+    height: auto;
+  }
+  .coupon__used {
+    grid-column: 2;
+    width: 100%;
+    height: 48px;
+    font-size: 16px;
+  }
+  .coupon__info strong {
+    font-size: 17px;
+  }
+  .coupon__info p, .coupon__expire span {
+    font-size: 13px;
+  }
+  .coupon__expire {
+    grid-column: 2;
+  }
+  .coupon__expire p {
+    font-size: 15px;
+  }
+  .coupon button.coupon__use {
+    grid-column: 2;
+    width: 100%;
+    height: 48px;
+    font-size: 16px;
+  }
+}
+
+dialog.wavve-account-modal:has(.coupon-register) {
+  --wam-gap: 28px;
+  --wam-radius: 12px;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__title,
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__label {
+  display: block;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__desc {
+  margin-top: 8px;
+  color: #AAAAAA;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__label {
+  margin-bottom: 12px;
+}
+dialog.wavve-account-modal:has(.coupon-register) .wam-input {
+  border-radius: 6px;
+}
+dialog.wavve-account-modal:has(.coupon-register) .wam-input:focus, dialog.wavve-account-modal:has(.coupon-register) .wam-input:focus-visible {
+  border-color: #1351F9;
+  outline: 0;
+}
+dialog.wavve-account-modal:has(.coupon-register) .wam-input.is-error, dialog.wavve-account-modal:has(.coupon-register) .wam-input.is-error:focus {
+  border-color: #ff7a85;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__hint {
+  margin-top: 8px;
+  color: #888888;
+  font-size: 13px;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__hint.is-error {
+  color: #ff3b4e;
+}
+dialog.wavve-account-modal:has(.coupon-register) .wam-button:disabled {
+  font-size: 16px;
+}
+dialog.wavve-account-modal:has(.coupon-register) .wam-button--primary {
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 400;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes {
+  color: #BBBBBB;
+  font-size: 14px;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes ul {
+  margin: 12px 0;
+  padding: 0;
+  list-style: none;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes li {
+  position: relative;
+  padding-left: 8px;
+  line-height: 30px;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+}
+dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes-title {
+  color: #AAAAAA;
+  font-size: 16px;
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  dialog.wavve-account-modal:has(.coupon-register) {
+    --wam-width: 560px;
+    --wam-header: 56px;
+    --wam-header-x: 20px;
+    --wam-title: 18px;
+    --wam-font: 14px;
+    --wam-button-font: 16px;
+    --wam-control: 48px;
+    --wam-control-x: 14px;
+    --wam-x: 20px;
+    --wam-y: 24px;
+    --wam-gap: 20px;
+  }
+  dialog.wavve-account-modal:has(.coupon-register) .wam-input {
+    font-size: 16px;
+  }
+  dialog.wavve-account-modal:has(.coupon-register) .wam-input::placeholder {
+    font-size: 14px;
+  }
+  dialog.wavve-account-modal:has(.coupon-register) .wam-button:disabled,
+  dialog.wavve-account-modal:has(.coupon-register) .wam-button--primary {
+    font-size: 16px;
+  }
+  dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes {
+    font-size: 13px;
+  }
+  dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes li {
+    line-height: 1.7;
+  }
+  dialog.wavve-account-modal:has(.coupon-register) .coupon-register__notes-title {
+    font-size: 14px;
+  }
+}
