@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules'
@@ -38,51 +38,10 @@ const links = [
   { label: '이벤트', to: '/event' },
 ]
 
-// 사업자용 웨이브 가입 메뉴
-const businessMenu = [
-  {
-    label: '웨이브 온 서비스 소개',
-    href: 'https://www.wavve.com/customer/service',
-  },
-  {
-    label: '사업자 가입 문의',
-    href: 'https://www.wavve.com/customer',
-  },
-]
-
 export const Footer = () => {
   // 공지사항 Swiper 참조
   // React Hook은 반드시 컴포넌트 내부에서 선언
   const noticeSwiperRef = useRef(null)
-
-  // 사업자 메뉴
-  const [isBusinessOpen, setIsBusinessOpen] = useState(false)
-  const businessRef = useRef(null)
-
-  // 사업자 메뉴 바깥 클릭 또는 ESC 입력 시 닫기
-  useEffect(() => {
-    if (!isBusinessOpen) return
-
-    const handleClick = (e) => {
-      if (!businessRef.current?.contains(e.target)) {
-        setIsBusinessOpen(false)
-      }
-    }
-
-    const handleKey = (e) => {
-      if (e.key === 'Escape') {
-        setIsBusinessOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClick)
-    document.addEventListener('keydown', handleKey)
-
-    return () => {
-      document.removeEventListener('mousedown', handleClick)
-      document.removeEventListener('keydown', handleKey)
-    }
-  }, [isBusinessOpen])
 
   // 이전 공지
   const handlePrevNotice = () => {
@@ -286,11 +245,7 @@ export const Footer = () => {
         ========================= */}
         <div className="footer__right">
           {/* 사업자용 웨이브 가입 */}
-          <div
-            className={`footer__business ${isBusinessOpen ? 'is-open' : ''
-              }`}
-            ref={businessRef}
-          >
+          <div className="footer__business">
             <span className="footer__business-logo">
               <img
                 src={logo}
@@ -301,46 +256,15 @@ export const Footer = () => {
               <span>on</span>
             </span>
 
-            <button
-              type="button"
+            <a
               className="footer__business-toggle"
-              aria-haspopup="true"
-              aria-expanded={isBusinessOpen}
-              onClick={() => {
-                setIsBusinessOpen((open) => !open)
-              }}
+              href="https://www.wavveon.com/Index.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              사업자용 웨이브 가입
-              <svg
-                width="16"
-                height="9"
-                viewBox="0 0 16 9"
-                aria-hidden="true"
-              >
-                <path
-                  d="m1 1 7 7 7-7"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-              </svg>
-            </button>
+              웨이브온 서비스 소개
+            </a>
 
-            {isBusinessOpen && (
-              <ul className="footer__business-menu">
-                {businessMenu.map(({ label, href }) => (
-                  <li key={label}>
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
 
           {/* SNS */}
