@@ -70,3 +70,14 @@ export const createCouponBenefit = (coupon, profileId, now = new Date()) => {
     amount: 0, purchasedAt: now.getTime(), expiresAt: expires.getTime(), source: "coupon",
   } };
 };
+
+// 이전 버전에서 사용 표시만 남은 쿠폰은 실제 지급 기록을 확인해 복구합니다.
+export const reconcileCouponBenefits = (records, coins = [], vouchers = [], profileId) =>
+  normalizeCouponRecords(records).map((coupon) => {
+    if (coupon.status !== "used" || coupon.benefitApplied || !couponCatalog[coupon.code]) return coupon;
+    const benefitId = `coupon-${profileId}-${coupon.code}`;
+    const entries = coupon.kind === "coin" ? coins : vouchers;
+    const granted = (Array.isArray(entries) ? entries : []).some((entry) => entry?.id === benefitId);
+    return granted ? { ...coupon, benefitApplied: true }
+      : { ...coupon, status: "owned", usedAt: "" };
+  });

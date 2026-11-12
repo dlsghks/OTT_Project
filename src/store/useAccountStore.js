@@ -2,7 +2,7 @@ import { normalizeWatchHistory, updateWatchHistory } from "../utils/watchHistory
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
 import { createAttendanceCoin, createCoinCharge, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
-import { createCouponBenefit, createCouponRecord, isCouponValid, markCouponUsed, normalizeCouponRecords } from "../utils/couponRecords";
+import { createCouponBenefit, createCouponRecord, isCouponValid, markCouponUsed, reconcileCouponBenefits } from "../utils/couponRecords";
 import { create } from "zustand";
 import { deleteField, doc, onSnapshot, runTransaction } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
@@ -72,7 +72,7 @@ const normalize = (data = {}) => {
       viewedEditorPicks: normalizeEditorPicks(saved?.viewedEditorPicks),
       attendanceDays,
       coinRecords: normalizeCoinRecords(saved?.coinRecords, attendanceDays),
-      couponRecords: normalizeCouponRecords(saved?.couponRecords),
+      couponRecords: reconcileCouponBenefits(saved?.couponRecords, saved?.coinRecords, data.couponVoucherPurchases, profile.id),
       pinSalt,
       pinHash,
       locked: Boolean(pinSalt && pinHash),
@@ -428,7 +428,8 @@ export const saveCoinCharge = async (profileId, amount, requestId, ownerId) => {
 // 쿠폰 효과와 사용 상태를 함께 저장해 중복 적립·중복 사용을 막습니다.
 const couponBenefitPatch = (snapshot, saved, records, coupon, profileId) => {
   const benefit = createCouponBenefit(coupon, profileId);
-  const profilePatch = { couponRecords: markCouponUsed(records, coupon.id) };
+  const profilePatch = { couponRecords: markCouponUsed(records, coupon.id)
+    .map((item) => item.id === coupon.id ? { ...item, benefitApplied: true } : item) };
   const patch = { profiles: { [profileId]: profilePatch } };
   if (benefit.coin) {
     const coins = normalizeCoinRecords(saved?.coinRecords, attendanceDates(saved?.attendanceDays));
@@ -446,8 +447,8 @@ const couponBenefitPatch = (snapshot, saved, records, coupon, profileId) => {
   return patch;
 };
 
-// 코인 쿠폰은 등록 즉시 사용·적립합니다. 이용권은 확인 후 applyVoucher로 적용합니다.
-export const registerCoupon = async (profileId, code, ownerId, applyVoucher = false) => {
+// 등록은 보유 쿠폰 추가만 수행합니다. 혜택은 사용하기에서 지급합니다.
+export const registerCoupon = async (profileId, code, ownerId) => {
   const record = createCouponRecord(code);
   if (!record || !isCouponValid(record)) return false;
   const uid = requireSelectedProfile(profileId, ownerId);
@@ -456,12 +457,11 @@ export const registerCoupon = async (profileId, code, ownerId, applyVoucher = fa
     const snapshot = await transaction.get(ref);
     requireSelectedProfile(profileId, uid);
     const saved = getExistingProfileData(snapshot, profileId);
-    const records = normalizeCouponRecords(saved?.couponRecords);
+    const records = reconcileCouponBenefits(saved?.couponRecords, saved?.coinRecords,
+      snapshot.data()?.couponVoucherPurchases, profileId);
     if (records.some((item) => item.id === record.id)) return false;
     const next = [record, ...records];
-    const patch = record.kind === "coin" || applyVoucher
-      ? couponBenefitPatch(snapshot, saved, next, record, profileId)
-      : { profiles: { [profileId]: { couponRecords: next } } };
+    const patch = { profiles: { [profileId]: { couponRecords: next } } };
     transaction.set(ref, patch, { merge: true });
     return true;
   });
@@ -474,7 +474,8 @@ export const redeemCoupon = async (profileId, couponId, ownerId) => {
     const snapshot = await transaction.get(ref);
     requireSelectedProfile(profileId, uid);
     const saved = getExistingProfileData(snapshot, profileId);
-    const records = normalizeCouponRecords(saved?.couponRecords);
+    const records = reconcileCouponBenefits(saved?.couponRecords, saved?.coinRecords,
+      snapshot.data()?.couponVoucherPurchases, profileId);
     const coupon = records.find((item) => item.id === couponId && item.status === "owned");
     if (!coupon || !isCouponValid(coupon)) return false;
     transaction.set(ref, couponBenefitPatch(snapshot, saved, records, coupon, profileId), { merge: true });
