@@ -1,2 +1,7 @@
+@use "../retrov/fonts";
 // Share the resolved header stylesheet across both import paths.
 @forward "./HeaderBase";
+
+.site-header .header-left > ul > li > a.header-retrov-link {
+  font-family: "DungGeunMo", sans-serif;
+}

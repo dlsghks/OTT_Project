@@ -1,0 +1,705 @@
+@font-face {
+  font-family: "Live Wavve PADO";
+  src: url("../../../assets/fonts/WavvePADO-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+:global(.site-inner):has(> .page) {
+  --live-inset: 110px;
+  --page-side-padding: var(--live-inset);
+  padding: 2px var(--live-inset) 100px;
+  overflow-x: clip;
+  background: linear-gradient(180deg, #071a2e, #000);
+}
+
+.page {
+  --live-inset: 110px;
+  display: block;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+}
+.page, .page * {
+  box-sizing: border-box;
+}
+.page a {
+  color: inherit;
+  text-decoration: none;
+}
+.page button {
+  color: inherit;
+  cursor: pointer;
+}
+.page a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.page .sections {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.page .hero {
+  display: block;
+  position: relative;
+  width: calc(100% + var(--live-inset));
+  max-width: none;
+  margin: 0 0 60px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.page .heroSwiper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.page .heroSlide {
+  width: 1321px;
+  max-width: 90vw;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.page .heroCard {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1321/708;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  container-type: inline-size;
+  background: #142747;
+}
+
+.page .heroImage {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.page .heroPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 4cqw;
+  background: #142747;
+}
+
+.page .heroTint {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: linear-gradient(90.0405deg, transparent 0%, rgba(144, 162, 235, 0.45) 19.175%, rgba(33, 68, 214, 0.9) 75.254%);
+  pointer-events: none;
+}
+
+.page .badge {
+  position: absolute;
+  top: 2.8249%;
+  left: 1.514%;
+  z-index: 2;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4.95px;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 3.713px 7.426px;
+  border: 0;
+  border-radius: 6.188px;
+  background: #f73d3c;
+  color: #fff;
+  font: 400 18.564px/1.35 "Live Wavve PADO", sans-serif;
+  white-space: nowrap;
+}
+
+.page .badge > img {
+  position: static;
+  display: block;
+  flex: 0 0 3.713px;
+  width: 3.713px;
+  min-width: 3.713px;
+  max-width: 3.713px;
+  height: 3.713px;
+  min-height: 3.713px;
+  max-height: 3.713px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.page .heroInfo {
+  position: absolute;
+  top: 34.7458%;
+  left: 68.1302%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 25%;
+  margin: 0;
+  padding: 0;
+}
+
+.page .heroChannel {
+  position: static;
+  display: block;
+  width: 100%;
+  margin: 0 0 1.514cqw;
+  padding: 0;
+  color: #fff;
+  font-size: 2.4224cqw;
+  line-height: 3.331cqw;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page .heroInfo > h2 {
+  position: static;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 0 0.8327cqw;
+  padding: 0;
+  font-size: 2.4224cqw;
+  line-height: 2.7252cqw;
+  font-weight: 700;
+  letter-spacing: -1px;
+  white-space: pre-line;
+}
+
+.page .heroInfo > p {
+  position: static;
+  display: block;
+  margin: 0 0 1.1355cqw;
+  padding: 0;
+  color: #a5a5a5;
+  font-size: 1.8168cqw;
+  line-height: 2.7252cqw;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+.page .heroInfo > a {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14.913cqw;
+  height: 3.785cqw;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: #171717;
+  font-size: 1.514cqw;
+  line-height: 1.35;
+  transition: background-color 0.2s ease;
+}
+
+.page .heroInfo > a:hover {
+  background: #1351f9;
+}
+
+.page .heroRank {
+  position: absolute;
+  top: 78.9548%;
+  left: 4.0878%;
+  z-index: 2;
+  display: block;
+  width: 5.299%;
+  height: 14.1243%;
+  max-width: 5.299%;
+  max-height: 14.1243%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.page .heroRank.number {
+  display: flex;
+  align-items: center;
+  font-size: 7.57cqw;
+  line-height: 1;
+  font-style: italic;
+  font-weight: 800;
+}
+
+.page .progress {
+  position: absolute;
+  left: 2.4981%;
+  right: 2.6495%;
+  bottom: 3.6723%;
+  z-index: 2;
+  display: block;
+  width: auto;
+  height: 5px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.page .progress > span {
+  display: block;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: inherit;
+  background: #fff;
+}
+
+.page .section {
+  display: block;
+  width: calc(100% + var(--live-inset));
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.page .sectionHeader {
+  display: block;
+  margin: 0 0 26px;
+  padding: 0;
+}
+
+.page .sectionHeader > h2 {
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+}
+
+.page .slider {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.page .cardSwiper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.page .cardSlide {
+  display: block;
+  width: 379px;
+  height: auto;
+  flex-shrink: 0;
+}
+
+.page .rankedSection .cardSlide {
+  width: 407px;
+}
+
+.page .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.page .thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 480/270;
+  margin: 0;
+  padding: 0;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #142747;
+}
+
+.page .thumb > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.page .placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  font-size: 20px;
+  color: #d4d4d4;
+}
+
+.page .details {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.page .cardText {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.page .channel, .page .title {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page .channel {
+  color: #fff;
+  font-weight: 400;
+}
+
+.page .title {
+  color: #d4d4d4;
+  font-weight: 500;
+}
+
+.page .rankedCard {
+  gap: 10px;
+}
+
+.page .rankedCard .details {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.page .rankedCard .cardText {
+  gap: 3px;
+}
+
+.page .rankedCard .title {
+  color: #fff;
+}
+
+.page .cardRank {
+  position: static;
+  display: block;
+  flex: 0 0 42px;
+  width: 42px;
+  min-width: 42px;
+  max-width: 42px;
+  height: 60px;
+  min-height: 60px;
+  max-height: 60px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+}
+
+.page .cardRank.number {
+  display: grid;
+  place-items: center;
+  font-size: 48px;
+  line-height: 1;
+  font-style: italic;
+  font-weight: 800;
+}
+
+@media (max-width: 1439px) {
+  :global(.site-inner):has(> .page) {
+    --live-inset: 64px;
+    padding-inline: 64px;
+  }
+  .page {
+    --live-inset: 64px;
+  }
+  .page .heroSlide {
+    width: 85vw;
+  }
+}
+@media (max-width: 1024px) {
+  :global(.site-inner):has(> .page) {
+    --live-inset: 20px;
+    padding: 20px 20px 50px;
+  }
+  .page {
+    --live-inset: 20px;
+  }
+  .page .sections {
+    gap: 48px;
+  }
+  .page .hero {
+    margin-bottom: 36px;
+  }
+  .page .cardSlide {
+    width: 300px;
+  }
+  .page .rankedSection .cardSlide {
+    width: 320px;
+  }
+}
+@media (max-width: 600px) {
+  .page .sections {
+    gap: 36px;
+  }
+  .page .heroSlide {
+    width: 90vw;
+  }
+  .page .badge {
+    top: 10px;
+    left: 10px;
+    padding: 3px 6px;
+    gap: 4px;
+    font-size: 12px;
+  }
+  .page .heroInfo {
+    top: 24%;
+    left: 62%;
+    width: 34%;
+  }
+  .page .heroChannel {
+    font-size: 4cqw;
+    line-height: 5cqw;
+    margin-bottom: 2cqw;
+  }
+  .page .heroInfo > h2 {
+    font-size: 3.5cqw;
+    line-height: 4.5cqw;
+    margin-bottom: 2cqw;
+  }
+  .page .heroInfo > p {
+    font-size: 3cqw;
+    line-height: 4cqw;
+    margin-bottom: 2cqw;
+  }
+  .page .heroInfo > a {
+    width: 26cqw;
+    height: 8cqw;
+    font-size: 3cqw;
+    border-radius: 5px;
+  }
+  .page .progress {
+    height: 3px;
+  }
+  .page .sectionHeader {
+    margin-bottom: 18px;
+  }
+  .page .sectionHeader > h2 {
+    font-size: 20px;
+    line-height: 27px;
+  }
+  .page .cardSlide, .page .rankedSection .cardSlide {
+    width: 240px;
+  }
+  .page .card {
+    gap: 12px;
+  }
+  .page .channel, .page .title {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .page .cardRank {
+    flex-basis: 28px;
+    width: 28px;
+    min-width: 28px;
+    max-width: 28px;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+  }
+  .page .cardRank.number {
+    font-size: 32px;
+  }
+}
+.page {
+  --app-side: 0px;
+}
+
+.page :global(.category-filter) {
+  margin-top: 0;
+}
+
+.page .heroLogoFrame {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 17.4111cqw;
+  height: 3.3308cqw;
+  margin: 0 0 1.514cqw;
+  padding: 0;
+}
+
+.page .heroChannelLogo {
+  position: static;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.page .heroBrandPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40% 0 5%;
+  background: radial-gradient(ellipse at 28% 45%, #28467c, #071a2e 80%);
+}
+
+.page .heroFallbackLogo {
+  position: static;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 19cqw;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+}
+
+.page .heroBrandPlaceholder > span {
+  font-size: 4cqw;
+}
+
+.page .cardBrandPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: radial-gradient(ellipse at center, #28467c, #071a2e);
+}
+
+.page .cardFallbackLogo {
+  position: static;
+  display: block;
+  width: auto;
+  max-width: 75%;
+  height: auto;
+  max-height: 70%;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .page .heroLogoFrame {
+    width: 30cqw;
+    height: 6cqw;
+    margin-bottom: 2cqw;
+  }
+  .page .cardBrandPlaceholder {
+    padding: 20px;
+  }
+}
+.page .heroLogoFrame[data-trimmed=true] {
+  --live-logo-height: 3.33081cqw;
+  position: relative;
+  display: block;
+  width: calc(var(--live-logo-height) * var(--logo-visible-ratio));
+  min-width: 0;
+  max-width: none;
+  height: var(--live-logo-height);
+  min-height: var(--live-logo-height);
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.page .heroLogoFrame[data-trimmed=true] > .heroChannelLogo {
+  position: absolute;
+  left: calc(var(--live-logo-height) * var(--logo-offset-x));
+  top: calc(var(--live-logo-height) * var(--logo-offset-y));
+  width: calc(var(--live-logo-height) * var(--logo-image-width));
+  height: calc(var(--live-logo-height) * var(--logo-image-height));
+  max-width: none;
+  max-height: none;
+  object-fit: fill;
+}
+
+@media (max-width: 600px) {
+  .page .heroLogoFrame[data-trimmed=true] {
+    --live-logo-height: 6cqw;
+  }
+}
+.page .heroInfo > a.heroWatchButton {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  background: #171717;
+  color: #fff;
+  transition: background-color 0.2s ease;
+}
+
+.page .heroInfo > a.heroWatchButton:hover,
+.page .heroInfo > a.heroWatchButton:focus-visible {
+  background: #1351f9;
+  color: #fff;
+}

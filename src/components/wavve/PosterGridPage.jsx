@@ -3,6 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { useEditorPicks, saveEditorPick } from '../../utils/profileEditorPicks';
 import { getImagePath } from '../../utils/imagePath';
 import { Heart } from 'lucide-react';
+import { auth } from '../../firebase/firebase';
+import { useAuthState } from '../../hooks/useAuthState';
+import { LoginModal } from '../common/LoginModal';
 import { ContentCard } from '../home/ContentCard';
 import '../../styles/pages/category/SeeAllPage.scss';
 
@@ -17,6 +20,8 @@ export const PosterGridPage = ({ title, description, items = [], loading = false
   const { pathname, search } = useLocation();
   const { liked, profileId, ownerId } = useEditorPicks();
   const [busy, setBusy] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const { user, isLoggedIn, loading: authLoading } = useAuthState();
   const busyRef = useRef(false);
   const [saveError, setSaveError] = useState('');
   const to = pathname + search;
@@ -28,9 +33,13 @@ export const PosterGridPage = ({ title, description, items = [], loading = false
   const descriptionText = plainText(description);
   const record = useMemo(() => ({ id: to, to, title, description: descriptionText, cover, firstItem: coverItem }),
     [to, title, descriptionText, cover, coverItem]);
-  const isLiked = liked.some(item => item.id === to);
+  const isLiked = isLoggedIn && ownerId === user?.uid && liked.some(item => item.id === to);
 
   const toggleLike = async () => {
+    if (!auth.currentUser || ownerId === 'guest') {
+      setIsLoginOpen(true);
+      return;
+    }
     if (busyRef.current) return;
     busyRef.current = true;
     setBusy(true);
@@ -43,6 +52,7 @@ export const PosterGridPage = ({ title, description, items = [], loading = false
 
   return (
     <div className="see-all-page">
+      <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <section className="see-all-page__inner" aria-labelledby={headingId}>
         <header className="see-all-page__heading">
           <div className="see-all-page__title-group">
@@ -55,7 +65,7 @@ export const PosterGridPage = ({ title, description, items = [], loading = false
             className={`see-all-page__like${isLiked ? ' is-active' : ''}`}
             aria-label={isLiked ? '페이지 좋아요 취소' : '페이지 좋아요'}
             aria-pressed={isLiked}
-            disabled={busy || loading}
+            disabled={busy || loading || authLoading}
             onClick={toggleLike}
           >
             <Heart size={28} strokeWidth={1.5} fill={isLiked ? 'currentColor' : 'none'} aria-hidden="true" />

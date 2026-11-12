@@ -1,3 +1,4 @@
+import { SliderArrow } from '../common/SliderArrow';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -78,25 +79,17 @@ export const LandscapeRow = ({ title, items = [], ranked = false }) => {
         </Swiper>
 
         {canPrev && (
-          <button
-            type="button"
-            className="category-row__arrow category-row__arrow--prev landscape-row__arrow"
+          <SliderArrow direction="prev"
             aria-label={`${title} 이전`}
             onClick={() => swiperRef.current?.slidePrev()}
-          >
-            ‹
-          </button>
+           />
         )}
 
         {canNext && (
-          <button
-            type="button"
-            className="category-row__arrow category-row__arrow--next landscape-row__arrow"
+          <SliderArrow direction="next"
             aria-label={`${title} 다음`}
             onClick={() => swiperRef.current?.slideNext()}
-          >
-            ›
-          </button>
+           />
         )}
       </div>
     </section>

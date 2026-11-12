@@ -183,13 +183,14 @@ export default function Coin() {
         className="coin__charge-dialog"
         ref={chargeDialog}
         aria-labelledby="coin-charge-title"
+        aria-describedby="coin-charge-description"
         onCancel={(event) => {
           if (charging.current) event.preventDefault();
         }}
       >
         <form onSubmit={confirmCharge} aria-busy={isCharging}>
           <h2 id="coin-charge-title">코인 충전</h2>
-          <p>가상 결제로 코인을 충전할 수 있어요. 실제 결제는 이루어지지 않아요.</p>
+          <p id="coin-charge-description">가상 결제로 코인을 충전할 수 있어요.<br />실제 결제는 이루어지지 않아요.</p>
           <fieldset disabled={isCharging || Boolean(chargeError)}>
             <legend>충전 금액</legend>
             {COIN_CHARGE_OPTIONS.map((amount) => (

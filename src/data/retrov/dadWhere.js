@@ -35,7 +35,8 @@ const video = (id, title, description, date, image = null) => ({
 export const dadWhere = {
   title: "아빠! 어디가?",
   logo: `${IMG}/s2/logo.png`,
-  hero: `${IMG}/s2/hero.png`, // 1664 x 1000  rating: "15",
+  hero: `${IMG}/s2/hero.png`, // 1664 x 1000
+  rating: "12",
   genre: "예능",
   tvFrame: "dad-where", // 블루그레이 TV 테두리
   characterMode: "image",

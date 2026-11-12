@@ -1,25 +1,31 @@
+import styles from '../../styles/pages/live/LivePage.module.scss';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
 import {
   getYoutubeLive,
   getCachedYoutubeLive,
 } from '../../services/youtube';
-import { getImagePath } from '../../utils/imagePath';
-
+import { useLiveArtwork } from '../../hooks/useLiveArtwork';
+import { getLiveLogoStyle } from '../../data/live/liveChannelAssets';
+import { SliderArrow } from '../common/SliderArrow';
+import {
+  liveDesignRanks,
+  liveDesignDot,
+} from '../../data/live/liveDesignData';
 
 import 'swiper/css';
-
 
 export const LiveHero = ({
   programs = [],
   getProgress,
 }) => {
   const swiperRef = useRef(null);
-  const navigate = useNavigate();
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
+
   const [youtubeVideos, setYoutubeVideos] = useState(() => {
     const videos = {};
 
@@ -48,40 +54,24 @@ export const LiveHero = ({
     [programs]
   );
 
-
-
-  // 현재 선택된 방송의 유튜브 썸네일 조회
   useEffect(() => {
     let cancelled = false;
 
     const loadAllLives = async () => {
-      // 유튜브 채널 ID가 있는 방송만 조회
       const targets = sortedPrograms.filter(
         (program) => program.youtubeChannelId
       );
 
-      // 모든 방송을 동시에 조회
       const results = await Promise.all(
-        targets.map(async (program) => {
-          const result = await getYoutubeLive(
+        targets.map(async (program) => ({
+          id: program.id,
+          data: await getYoutubeLive(
             program.youtubeChannelId
-          );
-
-          return {
-            id: program.id,
-            data: result,
-          };
-        })
+          ),
+        }))
       );
 
       if (cancelled) return;
-
-      // 모든 썸네일을 한 번에 저장
-      const videos = {};
-
-      results.forEach(({ id, data }) => {
-        videos[id] = data;
-      });
 
       setYoutubeVideos((previous) => {
         const next = { ...previous };
@@ -94,7 +84,7 @@ export const LiveHero = ({
 
         return next;
       });
-      // 다른 영역에서도 갱신된 썸네일 캐시를 읽도록 알림
+
       window.dispatchEvent(
         new Event('ott-live-thumbnails-updated')
       );
@@ -108,190 +98,182 @@ export const LiveHero = ({
   }, [sortedPrograms]);
 
   const updateSwiper = (swiper) => {
-    setCanPrev(!swiper.isBeginning);
-    setCanNext(!swiper.isEnd);
-  };
+    if (!swiper || swiper.destroyed) return;
 
-  const getWatchPath = (program) =>
-    `/livechannel?channel=${encodeURIComponent(
-      program.channelId
-    )}`;
+    setCanPrev(!swiper.isBeginning && !swiper.isLocked);
+    setCanNext(!swiper.isEnd && !swiper.isLocked);
+  };
 
   if (sortedPrograms.length === 0) return null;
 
   return (
     <section
-      className="live-hero"
+      className={styles.hero}
       aria-label="인기 라이브 방송 TOP 10"
     >
       <Swiper
+        className={styles.heroSwiper}
+        slidesPerView="auto"
+        spaceBetween={18}
+        speed={600}
+        watchOverflow
+        preventClicks
+        preventClicksPropagation
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
           updateSwiper(swiper);
         }}
         onSlideChange={updateSwiper}
         onResize={updateSwiper}
-        slidesPerView="auto"
-        slidesPerGroup={1}
-        centeredSlides={false}
-        // slidesOffsetBefore={110}
-        // spaceBetween={8}
-        slidesOffsetBefore={20}
-        spaceBetween={12}
-        breakpoints={{
-          769: {
-            slidesOffsetBefore: 64,
-            spaceBetween: 18,
-          },
-          1440: {
-            slidesOffsetBefore: 110,
-            spaceBetween: 18,
-          },
-        }}
-        loop={false}
-        speed={600}
-        grabCursor={true}
-        allowTouchMove={true}
-        watchOverflow={true}
-        className="live-hero__swiper"
+        onLock={updateSwiper}
+        onUnlock={updateSwiper}
       >
-        {sortedPrograms.map((program, index) => {
-          const youtubeVideo = youtubeVideos[program.id];
-
-          const thumbnail = getImagePath(
-            youtubeVideo?.thumbnail || program.image || ''
-          );
-
-          return (
-            <SwiperSlide key={program.id}>
-              <article
-                className="live-hero__slide"
-                role="link"
-                tabIndex={0}
-                aria-label={`${program.channel} ${program.title} 시청하기`}
-                onClick={() =>
-                  navigate(getWatchPath(program))
-                }
-                onKeyDown={(event) => {
-                  if (event.target !== event.currentTarget) return;
-
-                  if (
-                    event.key === 'Enter' ||
-                    event.key === ' '
-                  ) {
-                    event.preventDefault();
-                    navigate(getWatchPath(program));
-                  }
-                }}
-                style={
-                  thumbnail
-                    ? {
-                      backgroundImage: `url("${thumbnail}")`,
-                    }
-                    : undefined
-                }
-              >
-                {/* 영상은 재생하지 않고 썸네일만 표시 */}
-                {/* 상단 왼쪽: LIVE 배지 */}
-                <span className="live-hero__badge">
-                  ● 라이브
-                </span>
-
-                {/* 오른쪽 중앙: 방송 정보 */}
-                <div className="live-hero__info">
-                  <h2>{program.channel}</h2>
-
-                  <p>{program.title}</p>
-
-                  {program.rating != null && (
-                    <small>
-                      시청률 {program.rating}%
-                    </small>
-                  )}
-
-                  <Link
-                    to={getWatchPath(program)}
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    시청하기
-                  </Link>
-                </div>
-
-                {/* 왼쪽 아래: 순위 + 진행바 */}
-                <div className="live-hero__ranking">
-                  <strong className="live-hero__rank">
-                    {program.viewerRank ?? index + 1}
-                  </strong>
-
-                  <div className="live-hero__progress">
-                    <span
-                      style={{
-                        width: `${typeof getProgress === 'function'
-                            ? getProgress(program)
-                            : 0
-                          }%`,
-                      }}
-                    />
-                  </div>
-                  
-                </div>
-              </article>
-            </SwiperSlide>
-          );
-        })}
+        {sortedPrograms.map((program, index) => (
+          <SwiperSlide
+            className={styles.heroSlide}
+            key={program.id}
+          >
+            <LiveHeroSlide
+              program={program}
+              liveVideo={youtubeVideos[program.id]}
+              rank={program.viewerRank ?? index + 1}
+              getProgress={getProgress}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
 
-      {/* 이전 버튼 */}
       {canPrev && (
-        <button
-          type="button"
-          className="live-hero__arrow live-hero__arrow--prev"
-          aria-label="이전 라이브 방송"
-          onClick={() =>
-            swiperRef.current?.slidePrev()
-          }
-        >
-          <svg
-            width="22"
-            height="36"
-            viewBox="0 0 22 36"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M20 2 2 18l18 16"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
-        </button>
+        <SliderArrow
+          thumbnailSelector={`.${styles.heroCard}`}
+          direction="prev"
+          aria-label="이전 라이브"
+          onClick={() => swiperRef.current?.slidePrev()}
+        />
       )}
 
-      {/* 다음 버튼 */}
       {canNext && (
-        <button
-          type="button"
-          className="live-hero__arrow live-hero__arrow--next"
-          aria-label="다음 라이브 방송"
-          onClick={() =>
-            swiperRef.current?.slideNext()
-          }
-        >
-          <svg
-            width="22"
-            height="36"
-            viewBox="0 0 22 36"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M2 2 20 18 2 34"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
-        </button>
+        <SliderArrow
+          thumbnailSelector={`.${styles.heroCard}`}
+          direction="next"
+          aria-label="다음 라이브"
+          onClick={() => swiperRef.current?.slideNext()}
+        />
       )}
     </section>
+  );
+};
+
+const LiveHeroSlide = ({
+  program,
+  liveVideo,
+  rank,
+  getProgress,
+}) => {
+  const {
+    image,
+    logo,
+    title,
+    failImage,
+  } = useLiveArtwork(program, liveVideo);
+
+  const logoStyle = getLiveLogoStyle(logo);
+
+  return (
+    <Link
+      className={styles.heroCard}
+      to={`/livechannel?channel=${encodeURIComponent(
+        program.channelId
+      )}`}
+      aria-label={`${program.channel} ${title || ''} 시청하기`}
+      draggable={false}
+    >
+      {image ? (
+        <img
+          key={image}
+          className={styles.heroImage}
+          draggable={false}
+          src={image}
+          alt=""
+          onError={failImage}
+        />
+      ) : (
+        <div className={styles.heroBrandPlaceholder}>
+          {logo ? (
+            <img
+              className={styles.heroFallbackLogo}
+              src={logo}
+              alt=""
+            />
+          ) : (
+            <span>{program.channel}</span>
+          )}
+        </div>
+      )}
+
+      <span
+        className={styles.heroTint}
+        aria-hidden="true"
+      />
+
+      <span className={styles.badge}>
+        <img src={liveDesignDot} alt="" />
+        라이브
+      </span>
+
+      <div className={styles.heroInfo}>
+        {logo ? (
+          <div
+            className={styles.heroLogoFrame}
+            data-trimmed={logoStyle ? 'true' : undefined}
+            style={logoStyle}
+          >
+            <img
+              className={styles.heroChannelLogo}
+              src={logo}
+              alt={program.channel}
+            />
+          </div>
+        ) : (
+          <strong className={styles.heroChannel}>
+            {program.channel}
+          </strong>
+        )}
+
+        {title && <h2>{title}</h2>}
+
+        {image && program.rating != null && (
+          <p>시청률 {program.rating}%</p>
+        )}
+
+        <span className={styles.heroWatchButton}>
+          시청하기
+        </span>
+      </div>
+
+      {liveDesignRanks[rank - 1] ? (
+        <img
+          className={styles.heroRank}
+          src={liveDesignRanks[rank - 1]}
+          alt={`${rank}위`}
+        />
+      ) : (
+        <strong
+          className={`${styles.heroRank} ${styles.number}`}
+        >
+          {rank}
+        </strong>
+      )}
+
+      {image && (
+        <div className={styles.progress}>
+          <span
+            style={{
+              width: `${getProgress?.(program) ?? 0}%`,
+            }}
+          />
+        </div>
+      )}
+    </Link>
   );
 };

@@ -1,3 +1,4 @@
+@use "../../components/common/CategoryFilterSurface";
 /* =========================
    카테고리 페이지 (예능·드라마·영화·시사교양·애니·해외시리즈)
    카드 크기 · 배지 · 순위 숫자는 공통(common/_card.scss, ContentCard.scss)
@@ -58,12 +59,13 @@ $chip-border: rgba(255, 255, 255, 0.08);
   margin: 0 0 max(40px, 3.6vw);
 
   &__header {
-    margin-bottom: 20px;
+    margin-bottom: 26px;
   }
 
   &__title {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
 
     h2 {
