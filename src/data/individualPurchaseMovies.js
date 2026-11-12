@@ -22,3 +22,19 @@ export const individualPurchaseMovies = [
 
 export const getIndividualPurchaseMovie = (tmdbId) =>
   individualPurchaseMovies.find((movie) => movie.tmdbId === Number(tmdbId));
+
+
+// 배지가 있는 영화·프로그램도 메인과 같은 시연용 구매 조건을 사용합니다.
+export const getIndividualPurchaseContent = (tmdbId, item, type = 'movie') => {
+  const id = Number(tmdbId);
+  if (!Number.isSafeInteger(id) || id <= 0) return null;
+  const listed = type === 'movie' ? getIndividualPurchaseMovie(id) : null;
+  if (listed) return listed;
+  const badges = [...(Array.isArray(item?.badges) ? item.badges : []), item?.badge];
+  if (!badges.includes('개별구매') || !item?.title) return null;
+  return {
+    id: `${type}:${id}`, tmdbId: id, title: item.title,
+    kind: type, badge: '개별구매', price: 5500,
+    link: type === 'movie' ? `/moviedetail/${id}` : item.link,
+  };
+};
