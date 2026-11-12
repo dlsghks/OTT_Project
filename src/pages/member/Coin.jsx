@@ -5,7 +5,7 @@ import { ChevronRight, CircleAlert, Copyright } from "lucide-react";
 import { saveCoinCharge, useAccountStore } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useProfileShorts } from "../../utils/profileShorts";
-import { COIN_CHARGE_OPTIONS, formatCoinDate, getAvailableCoin, getCoinTotal } from "../../utils/coinRecords";
+import { COIN_CHARGE_OPTIONS, formatCoinDate, getCoinTotal } from "../../utils/coinRecords";
 
 import { getCoinUsageRecords } from "../../utils/coinPayments";
 
@@ -152,7 +152,6 @@ export default function Coin() {
                   <th scope="col">충전금액</th>
                   <th scope="col">코인명</th>
                   <th scope="col">지급사유</th>
-                  <th scope="col">잔여코인</th>
                   <th scope="col">충전일</th>
                   <th scope="col">만료일</th>
                   <th scope="col">결제수단</th>
@@ -171,7 +170,6 @@ export default function Coin() {
                     <td>{record.kind === "charge" ? `${money(record.amount)}원` : money(record.amount)}</td>
                     <td>{record.name}</td>
                     <td>{record.reason}</td>
-                    <td>{money(getAvailableCoin(record, now))}</td>
                     <td>{displayDate(record.chargedAt)}</td>
                     <td>{displayDate(record.expiresAt)}</td>
                     <td>{record.kind === "charge" ? "가상 결제" : "-"}</td>
