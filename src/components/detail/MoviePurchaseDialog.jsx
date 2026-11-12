@@ -17,11 +17,12 @@ export const MoviePurchaseDialog = ({ movie, image = "", onPurchase, onClose }) 
   const requestId = useRef(crypto.randomUUID());
   const busyRef = useRef(false);
   const [busy, setBusy] = useState(false);
-  const [useCoins, setUseCoins] = useState(false);
+  const [coinInput, setCoinInput] = useState("");
   const [paid, setPaid] = useState(null);
   const profile = account.profiles.find((entry) => entry.id === owner.current.profileId);
   const coinBalance = getCoinTotal(profile?.coinRecords ?? []);
-  const coinsUsed = useCoins ? Math.min(coinBalance, movie.price) : 0;
+  const maxCoins = Math.max(0, Math.min(coinBalance, movie.price));
+  const coinsUsed = Math.min(Number(coinInput) || 0, maxCoins);
 
   useEffect(() => {
     const element = dialog.current;
@@ -74,11 +75,19 @@ export const MoviePurchaseDialog = ({ movie, image = "", onPurchase, onClose }) 
             <div><dt>{contentLabel}</dt><dd>{movie.title}</dd></div>
             <div><dt>결제 금액</dt><dd>{movie.price.toLocaleString('ko-KR')}원</dd></div>
           </dl>
-          <label className="purchase-coins">
-            <input type="checkbox" checked={useCoins} disabled={busy || coinBalance <= 0}
-              onChange={(event) => setUseCoins(event.target.checked)} />
-            보유 코인 사용 ({coinBalance.toLocaleString('ko-KR')}코인)
-          </label>
+          <div className="purchase-coins">
+            <label htmlFor={`${titleId}-coins`}>사용할 코인 · 보유 {coinBalance.toLocaleString('ko-KR')}코인</label>
+            <div className="purchase-coins__controls">
+              <input id={`${titleId}-coins`} type="text" inputMode="numeric" pattern="[0-9]*"
+                aria-label="사용할 코인" value={coinInput} placeholder="0" disabled={busy || maxCoins <= 0}
+                onChange={(event) => {
+                  const digits = event.target.value.replace(/[^0-9]/g, "");
+                  setCoinInput(digits === "" ? "" : String(Math.min(Number(digits), maxCoins)));
+                }} />
+              <span>코인</span>
+              <button type="button" disabled={busy || maxCoins <= 0} onClick={() => setCoinInput(String(maxCoins))}>전체 사용</button>
+            </div>
+          </div>
           <dl>
             <div><dt>사용 코인</dt><dd>{coinsUsed.toLocaleString('ko-KR')}코인</dd></div>
             <div><dt>최종 결제 금액</dt><dd>{(movie.price - coinsUsed).toLocaleString('ko-KR')}원</dd></div>
