@@ -41,7 +41,9 @@ export function getDemoVoucherPurchases(uid) {
   } catch {
     // Firestore에 저장된 쿠폰 이용권은 브라우저 저장 공간과 관계없이 사용할 수 있습니다.
   }
-  return [...couponPurchases, ...localPurchases]
+  const coinPurchases = account.uid === uid ? (account.coinPurchases ?? [])
+    .filter((entry) => entry.type === "voucher").map((entry) => entry.purchase) : [];
+  return [...couponPurchases, ...coinPurchases, ...localPurchases]
     .sort((a, b) => b.purchasedAt - a.purchasedAt);
 }
 
