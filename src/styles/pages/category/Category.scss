@@ -1,3 +1,4 @@
+@use "../../components/common/CategoryFilterSurface";
 @use "../../common/figma-tokens" as figma;
 @use "../../common/slider-navigation" as nav;
 
@@ -64,12 +65,13 @@ $chip-border: rgba(255, 255, 255, 0.08);
   margin: 0 0 max(40px, 3.6vw);
 
   &__header {
-    margin-bottom: 20px;
+    margin-bottom: 26px;
   }
 
   &__title {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
 
     h2 {
@@ -130,9 +132,18 @@ $chip-border: rgba(255, 255, 255, 0.08);
   &__button {
     @include chip-button;
 
+    border: 0;
+    background: #252525;
+
     height: 44px;
     padding: 0 20px;
     font-size: 16px;
+
+    // 모든 카테고리와 라이브에서 같은 필터 호버 색을 사용합니다.
+    &:hover,
+    &.is-active:hover {
+      background: $chip-blue;
+    }
   }
 }
 
@@ -232,7 +243,7 @@ $chip-border: rgba(255, 255, 255, 0.08);
 
 /* PC 장르 버튼: 왼쪽 정렬 + 마우스 드래그 */
 @media (min-width: 1025px) {
-  .category-page nav.category-filter {
+  :is(.category-page, .category-filter-group) nav.category-filter {
     gap: 15px;
     justify-content: flex-start;
     user-select: none;
@@ -302,3 +313,5 @@ $chip-border: rgba(255, 255, 255, 0.08);
 .category-page .category-row .category-row__arrow::after {
   filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
 }
+// 공통 필터 래퍼는 별도 여백이나 레이아웃 박스를 만들지 않습니다.
+.category-filter-group { display: contents; }

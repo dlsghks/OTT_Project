@@ -131,6 +131,7 @@ const MovieDetailBody = ({ movieId }) => {
           ) : undefined}
           onWatch={() => player.openTrailer({ title, videos: movie.videos?.results })}
           actions={actions}
+          hasWatchAccess={Boolean(purchasedMovie) || actions.hasVoucher}
           onDownload={purchasedMovie ? downloadMovie : undefined}
           downloadNotice={downloadResult && downloadResult.uid === uid && (
             <p role="status" className="movie-hero__download-status">

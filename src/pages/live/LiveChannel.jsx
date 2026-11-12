@@ -1,3 +1,5 @@
+import chatToggleArrow from '../../assets/icons/AltArrowDownOutline.svg';
+import { SliderArrow } from '../../components/common/SliderArrow';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -72,17 +74,13 @@ const getChatName = (user) => {
 };
 
 function ChannelImage({ program, className = '' }) {
-  const [failed, setFailed] = useState(false);
+  const [failedSources, setFailedSources] = useState([]);
+  const src = [
+    imageSrc(program?.image || program?.thumbnail || program?.poster),
+    imageSrc(program?.fallbackImage),
+  ].find((source) => source && !failedSources.includes(source));
 
-  const src = imageSrc(
-    program?.image || program?.thumbnail || program?.poster
-  );
-
-  useEffect(() => {
-    setFailed(false);
-  }, [src]);
-
-  if (!src || failed) {
+  if (!src) {
     return (
       <span className="live-image-fallback">
         {program?.channel || program?.title || 'WAVVE LIVE'}
@@ -96,7 +94,7 @@ function ChannelImage({ program, className = '' }) {
       src={src}
       alt={program?.title || program?.channel || '채널 이미지'}
       loading="lazy"
-      onError={() => setFailed(true)}
+      onError={() => setFailedSources((previous) => [...previous, src])}
     />
   );
 }
@@ -952,35 +950,21 @@ export const LiveChannel = ({
               </Swiper>
 
               {schedulePrev && (
-                <button
-                  type="button"
-                  className={
-                    'live-schedule__arrow ' +
-                    'live-schedule__arrow--prev'
-                  }
+                <SliderArrow direction="prev"
                   onClick={() => {
                     scheduleSwiper.current?.slidePrev();
                   }}
                   aria-label="이전 편성"
-                >
-                  ‹
-                </button>
+                 />
               )}
 
               {scheduleNext && (
-                <button
-                  type="button"
-                  className={
-                    'live-schedule__arrow ' +
-                    'live-schedule__arrow--next'
-                  }
+                <SliderArrow direction="next"
                   onClick={() => {
                     scheduleSwiper.current?.slideNext();
                   }}
                   aria-label="다음 편성"
-                >
-                  ›
-                </button>
+                 />
               )}
             </div>
           </section>
@@ -1049,31 +1033,17 @@ export const LiveChannel = ({
               </Swiper>
 
               {topPrev && (
-                <button
-                  type="button"
-                  className={
-                    'live-top20__arrow ' +
-                    'live-top20__arrow--prev'
-                  }
+                <SliderArrow direction="prev"
                   onClick={() => topSwiper.current?.slidePrev()}
                   aria-label="이전 채널"
-                >
-                  ‹
-                </button>
+                 />
               )}
 
               {topNext && (
-                <button
-                  type="button"
-                  className={
-                    'live-top20__arrow ' +
-                    'live-top20__arrow--next'
-                  }
+                <SliderArrow direction="next"
                   onClick={() => topSwiper.current?.slideNext()}
                   aria-label="다음 채널"
-                >
-                  ›
-                </button>
+                 />
               )}
             </div>
           </section>
@@ -1099,7 +1069,7 @@ export const LiveChannel = ({
               aria-expanded={chatOpen}
             >
               <strong>웨이브 실시간</strong>
-              <span>{chatOpen ? '⌃' : '⌄'}</span>
+              <img className="live-chat__toggle-arrow" src={chatToggleArrow} alt="" aria-hidden="true" width="24" height="24" />
             </button>
 
             {chatOpen ? (

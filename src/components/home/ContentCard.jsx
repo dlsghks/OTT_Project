@@ -112,6 +112,17 @@ const ContentCardBody = ({ item, rank, onPosterLoad }) => {
           </span>
         )}
 
+        {/* TOP 20 순위 SVG 이미지 */}
+        {rank && rank <= 20 && (
+          <img
+            className="content-card__rank"
+            src={getImagePath(
+              `/images/rank/wavve_rank${rank}.svg`
+            )}
+            alt={`${rank}위`}
+            draggable="false"
+          />
+        )}
       </div>
 
       {/* 카드 하단 정보 */}
@@ -128,18 +139,6 @@ const ContentCardBody = ({ item, rank, onPosterLoad }) => {
         )}
 
       </div>
-
-      {/* TOP 20 순위 SVG 이미지 */}
-      {rank && rank <= 20 && (
-        <img
-          className="content-card__rank"
-          src={getImagePath(
-            `/images/rank/wavve_rank${rank}.svg`
-          )}
-          alt={`${rank}위`}
-          draggable="false"
-        />
-      )}
 
     </Link>
   );

@@ -966,3 +966,41 @@
 @media (min-width: 1025px) {
   .rv-main-row__swiper .swiper-wrapper { height: auto; }
 }
+
+// 레트로브 메인·상세 전용 픽셀 화살표 (공통 SliderArrow를 쓰는 다른 페이지는 그대로)
+.rv-main-row__slider .slider-arrow > svg,
+.retro-video-row__slider .slider-arrow > svg {
+  display: none;
+}
+
+.rv-main-hero .rv-main-hero__nav {
+  font-size: 0;
+}
+
+.rv-main-row__slider .slider-arrow::after,
+.retro-video-row__slider .slider-arrow::after,
+.rv-main-hero .rv-main-hero__nav::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  background: currentColor;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.rv-main-row__slider .slider-arrow--prev::after,
+.retro-video-row__slider .slider-arrow--prev::after,
+.rv-main-hero .rv-main-hero__nav--prev::after {
+  -webkit-mask: url('../../../assets/retrov/pixel__left.svg') center / contain no-repeat;
+  mask: url('../../../assets/retrov/pixel__left.svg') center / contain no-repeat;
+}
+
+.rv-main-row__slider .slider-arrow--next::after,
+.retro-video-row__slider .slider-arrow--next::after,
+.rv-main-hero .rv-main-hero__nav--next::after {
+  -webkit-mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
+  mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
+}

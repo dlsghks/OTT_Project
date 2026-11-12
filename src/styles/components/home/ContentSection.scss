@@ -132,3 +132,10 @@
   .content-section__swiper .swiper-wrapper { height: auto; }
   .content-section__swiper .swiper-slide .content-card { height: auto; }
 }
+
+// 카드 공통 mixin의 margin은 Swiper가 너비 측정 시 다시 더하므로 제거합니다.
+// 실제 카드 간격은 Swiper의 spaceBetween(인라인 margin)만 관리합니다.
+.content-section__swiper .swiper-slide.card-slide,
+.ranking-section__swiper .swiper-slide.card-slide {
+  margin-right: 0;
+}

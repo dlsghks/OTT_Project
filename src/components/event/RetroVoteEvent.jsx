@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Play } from 'lucide-react';
 
@@ -353,7 +354,8 @@ export const RetroVoteEvent = ({ eventId, theme, programId, programTitle, title,
         </section>
       </div>
 
-      {playingVideo && <YoutubePlayerModal video={playingVideo} onClose={close} />}
+      {/* 페이지 틀(isolation)에 갇히지 않도록 body 에 그려 헤더 위에 전체화면으로 표시 */}
+      {playingVideo && createPortal(<YoutubePlayerModal video={playingVideo} onClose={close} />, document.body)}
     </div>
   );
 };

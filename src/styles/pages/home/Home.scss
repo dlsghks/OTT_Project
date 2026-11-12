@@ -571,7 +571,8 @@
 
     &:hover,
     &:focus-visible {
-      background: rgba(255, 255, 255, 0.2);
+      background: #1351f9;
+      border-color: #1351f9;
     }
   }
 
@@ -629,15 +630,7 @@ main.site-inner:has(> .wavve-home) {
   background: linear-gradient(180deg, #071a2e 17.3077%, #000000 100%);
 }
 
-/* 홈 슬라이더는 카드 위에 흰색 화살표만 표시합니다. */
-.wavve-home :is(.content-section__arrow, .ranking-section__arrow)::before {
-  content: none;
-}
-
-.wavve-home :is(.content-section__arrow, .ranking-section__arrow)::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 84'%3E%3Cpath d='M18 28L33 41.5L18 55' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
+/* 카드 높이의 검정 그라데이션과 공통 화살표를 사용합니다. */
 .wavve-home .content-section .content-section__arrow {
   top: 0;
   bottom: auto;
@@ -649,4 +642,16 @@ main.site-inner:has(> .wavve-home) {
   top: 0;
   bottom: auto;
   height: var(--ranking-poster-height, var(--card-h));
+}
+
+// 공통 페이지 스타일의 로드 순서와 관계없이 홈 더보기 배경을 채웁니다.
+.wavve-home .home-hope__more:hover,
+.wavve-home .home-hope__more:focus-visible {
+  background: #1351f9;
+  border-color: #1351f9;
+  color: #fff;
+}
+
+.wavve-home .home-hope .content-section__swiper .swiper-slide:last-child {
+  margin-right: 0 !important;
 }

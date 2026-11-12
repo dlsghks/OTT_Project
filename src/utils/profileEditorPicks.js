@@ -38,6 +38,7 @@ export const useEditorPicks = () => {
 
 export const saveEditorPick = async (profileId, record, kind, ownerId, { remove = false } = {}) => {
   const currentOwner = useAuthStore.getState().user?.uid || 'guest';
+  if (kind === 'like' && currentOwner === 'guest') throw new Error('로그인 후 관심 콘텐츠를 저장할 수 있어요.');
   if (currentOwner !== ownerId) throw new Error('계정이 변경됐어요. 다시 시도해주세요.');
   if (currentOwner !== "guest") {
     return remove

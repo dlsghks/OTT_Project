@@ -260,7 +260,7 @@ export const Event = () => {
               { length: totalPages },
               (_, index) => index + 1
             ).map((number) => {
-              const isActive = isOngoing || winnersPage === number;
+              const isActive = number === (isOngoing ? 1 : winnersPage);
 
               return (
                 <button

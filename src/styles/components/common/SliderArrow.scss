@@ -1,0 +1,72 @@
+.slider-arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  width: clamp(36px, 2.5vw, 48px);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    width: clamp(140px, 23.333333vw, 448px);
+    pointer-events: none;
+  }
+
+  > svg {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    transform: translateY(-50%);
+    overflow: visible;
+    pointer-events: none;
+
+    path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  }
+
+  &--prev {
+    left: 0;
+    &::before { left: 0; background: linear-gradient(90deg, #000, transparent 68.304%); }
+    > svg { transform: translateY(-50%) rotate(180deg); }
+  }
+
+  &--next {
+    right: 0;
+    &::before { right: 0; background: linear-gradient(90deg, transparent 31.696%, rgba(0,0,0,0.8)); }
+  }
+
+  &:hover { background: transparent; }
+  &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+}
+
+:hover > .slider-arrow,
+:focus-within > .slider-arrow {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 1024px) {
+  .slider-arrow { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider-arrow { transition: none; }
+}
