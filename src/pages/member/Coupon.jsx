@@ -69,8 +69,8 @@ export default function Coupon() {
   };
 
   const successMessage = (coupon) => coupon.kind === "coin"
-    ? `${coupon.amount.toLocaleString("ko-KR")}코인이 추가되었어요.`
-    : `${coupon.name}을 적용했어요.`;
+    ? "코인이 충전되었습니다."
+    : "이용권이 적용되었습니다.";
 
   const applyCoupon = async (request) => {
     if (busyRef.current || request.scope !== scopeRef.current) return;
@@ -79,9 +79,7 @@ export default function Coupon() {
     setPendingCoupon(null);
     setRegisterOpen(false);
     try {
-      const applied = request.code
-        ? await registerCoupon(request.profileId, request.code, request.ownerId, true)
-        : await redeemCoupon(request.profileId, request.coupon.id, request.ownerId);
+      const applied = await redeemCoupon(request.profileId, request.coupon.id, request.ownerId);
       if (request.scope !== scopeRef.current) return;
       if (!applied) throw new Error("이미 사용했거나 사용할 수 없는 쿠폰이에요.");
       setRegisterOpen(false);
@@ -95,10 +93,10 @@ export default function Coupon() {
     }
   };
 
-  const requestApplication = (coupon, code) => {
-    const request = { coupon, code, profileId: profile.id, ownerId, scope };
+  const requestApplication = (coupon) => {
+    const request = { coupon, profileId: profile.id, ownerId, scope };
     const current = getActiveDemoVoucher(getDemoVoucherPurchases(user?.uid));
-    if (coupon.kind === "voucher" && current) {
+    if (coupon.kind === "voucher" && (current || activeVoucher)) {
       setRegisterOpen(false);
       setPendingCoupon(request);
       return;
@@ -109,7 +107,13 @@ export default function Coupon() {
   const handleRegister = async (code) => {
     const coupon = createCouponRecord(code);
     if (!coupon || !isCouponValid(coupon) || records.some((item) => item.id === coupon.id)) return false;
-    await requestApplication(coupon, code);
+    const registeringScope = scope;
+    const registered = await registerCoupon(profile.id, code, ownerId);
+    if (!registered) return false;
+    if (registeringScope !== scopeRef.current) return "handled";
+    setRegisterOpen(false);
+    changeTab("owned");
+    setNotice(`${coupon.name}이 등록되었습니다.`);
     return "handled";
   };
 
@@ -206,12 +210,12 @@ export default function Coupon() {
         <WavveAccountModal title="쿠폰 적용" busy={Boolean(usingId)} onClose={cancelApplication}>
           {() => (
             <div className="wam-body coupon-apply">
-              <p>현재 {activeVoucher?.name || "이용권"}을 사용하고 있습니다. 쿠폰을 적용하시겠습니까?</p>
+              <p>기존 적용된 이용권이 있습니다. {pendingCoupon.coupon.name.replace(/\s*쿠폰$/, "")}을 적용하시겠습니까?</p>
               <div className="coupon-apply__actions">
+                <button type="button" onClick={cancelApplication}>취소하기</button>
                 <button type="button" className="coupon-apply__confirm" onClick={() => applyCoupon(pendingCoupon)}>
                   적용하기
                 </button>
-                <button type="button" onClick={cancelApplication}>취소하기</button>
               </div>
             </div>
           )}
