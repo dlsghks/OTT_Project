@@ -1,0 +1,234 @@
+.shorts-share {
+  position: fixed;
+  inset: 0;
+  width: min(475px, 100vw - 32px);
+  max-width: none;
+  max-height: calc(100svh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 18.269px;
+  background: #000;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.5333333333);
+  color: #fff;
+  font-family: "Noto Sans KR", "Pretendard", sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.shorts-share, .shorts-share * {
+  box-sizing: border-box;
+}
+.shorts-share::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+.shorts-share button, .shorts-share input {
+  font: inherit;
+}
+.shorts-share button {
+  cursor: pointer;
+}
+.shorts-share button:focus-visible, .shorts-share input:focus-visible {
+  outline: 2px solid #7fa8ff;
+  outline-offset: 3px;
+}
+.shorts-share__surface {
+  position: relative;
+  min-height: 250px;
+  padding: 24px 26px 26px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.shorts-share__glow {
+  position: absolute;
+  z-index: -1;
+  top: -182.692px;
+  left: calc(50% - 228.365px);
+  display: block;
+  max-width: none;
+  pointer-events: none;
+}
+.shorts-share__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 32.885px;
+  height: 32.885px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+}
+.shorts-share__close > img {
+  position: static;
+  display: block;
+  max-width: none;
+}
+.shorts-share__close:hover {
+  background: rgba(255, 255, 255, 0.0509803922);
+}
+.shorts-share h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 34px;
+}
+.shorts-share__services {
+  display: flex;
+  align-items: center;
+  justify-content: safe center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 40px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.shorts-share__services::-webkit-scrollbar {
+  display: none;
+}
+.shorts-share__services > button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #222;
+  transition: background-color 150ms ease;
+  scroll-margin: 8px;
+}
+@media (hover: hover) {
+  .shorts-share__services > button:hover {
+    background: #1351f9;
+  }
+}
+.shorts-share__services > button:focus-visible {
+  background: #1351f9;
+}
+.shorts-share__services > button:focus-visible {
+  outline-offset: -3px;
+}
+.shorts-share__services > button > img {
+  position: static;
+  display: block;
+  max-width: none;
+}
+.shorts-share__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(422px, 100%);
+  height: 52px;
+  margin-top: 30px;
+  padding: 8px 17px 8px 16px;
+  border: 1px solid #494949;
+  border-radius: 10px;
+  background: #000;
+}
+.shorts-share__link input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #a5a5a5;
+  font-size: 14px;
+  line-height: 20px;
+  text-overflow: ellipsis;
+}
+.shorts-share__link button {
+  flex: 0 0 56px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid #4b4b4b;
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+.shorts-share__link button:hover {
+  background: #1351f9;
+  border-color: #1351f9;
+}
+.shorts-share__link button.is-copied {
+  background: #1351f9;
+  border-color: #1351f9;
+}
+.shorts-share__link button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.shorts-share__status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 16px;
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 16px;
+}
+.shorts-share__status > img {
+  position: static;
+  display: block;
+  width: 13px;
+  height: 13px;
+}
+.shorts-share__notice {
+  margin: 0;
+  padding: 0 28px 18px;
+  color: #b8ccff;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.shorts-share .shorts-share__services > button > img {
+  position: static;
+  display: block;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  margin: 0;
+  object-fit: contain;
+}
+
+.shorts-share .shorts-share__close > img {
+  width: 33px;
+  height: 33px;
+  min-width: 33px;
+  max-width: 33px;
+  object-fit: contain;
+}
+
+.shorts-share .shorts-share__status > img {
+  width: 13px;
+  height: 13px;
+  min-width: 13px;
+  max-width: 13px;
+  object-fit: contain;
+}
+
+@media (max-width: 480px) {
+  .shorts-share__surface {
+    padding-inline: 20px;
+  }
+  .shorts-share__services {
+    gap: 14px;
+  }
+}
+@media (hover: hover) {
+  .shorts-share .shorts-share__services > button:hover {
+    background: #1351f9;
+  }
+}

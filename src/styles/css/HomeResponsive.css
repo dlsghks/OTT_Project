@@ -1,0 +1,491 @@
+.wavve-home .home-genre-nav,
+.wavve-home .home-categories__app {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  body:has(.home-genre-nav) .wavve-mobile-header {
+    position: relative;
+  }
+  .site-inner > .wavve-home {
+    width: calc(100% + var(--page-side-padding, 20px) * 2);
+    margin-inline: calc(var(--page-side-padding, 20px) * -1);
+  }
+  .wavve-home {
+    --app-side: 16px;
+    --app-poster: clamp(88px, 25.641026vw, 132px);
+    --app-wide: clamp(148px, 43.846154vw, 224px);
+    --app-hero: clamp(240px, 69.74359vw, 360px);
+    --app-gap: 8px;
+    min-width: 0;
+    padding: 0;
+    background: #000;
+    color: #fff;
+  }
+  .wavve-home, .wavve-home *, .wavve-home *::before, .wavve-home *::after {
+    box-sizing: border-box;
+  }
+  .wavve-home section {
+    padding-block: 0;
+  }
+  .wavve-home .swiper-wrapper {
+    height: auto;
+  }
+  .wavve-home a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .wavve-home button, .wavve-home input {
+    font-family: inherit;
+  }
+  .wavve-home a:focus-visible, .wavve-home button:focus-visible, .wavve-home [tabindex="0"]:focus-visible {
+    outline: 2px solid #1351F9;
+    outline-offset: -2px;
+  }
+  .wavve-home .wavve-home__inner {
+    padding: 0 var(--app-side) 32px;
+  }
+  .wavve-home .home-genre-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #000;
+    display: block;
+    height: 51px;
+    padding: 0 var(--app-side);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .wavve-home .home-genre-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .wavve-home .home-genre-nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-width: max-content;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .wavve-home .home-genre-nav li {
+    flex: 0 0 auto;
+  }
+  .wavve-home .home-genre-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 10px;
+    color: #a5a5a5;
+    white-space: nowrap;
+  }
+  .wavve-home .home-hero {
+    --hero-max-width: var(--app-hero);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #000;
+  }
+  .wavve-home .home-hero .home-hero__swiper {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+  .wavve-home .home-hero .home-hero__swiper > .swiper-wrapper {
+    height: auto;
+  }
+  .wavve-home .home-hero .home-hero__swiper > .swiper-wrapper > .swiper-slide {
+    flex-shrink: 0;
+    width: var(--app-hero);
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 272/374;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .wavve-home .home-hero .home-hero__slide {
+    border-radius: 10px;
+  }
+  .wavve-home .home-hero .home-hero__background {
+    position: static;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .wavve-home .home-hero .home-hero__text {
+    left: 0;
+    bottom: 0;
+    width: 180%;
+    max-width: none;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+  .wavve-home .home-hero .home-hero__arrow {
+    display: none;
+  }
+  .wavve-home .home-hero .home-hero__counter {
+    right: calc((100% - var(--app-hero)) / 2 + 16px);
+    bottom: 18px;
+    padding: 2px 6px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.5333333333);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  .wavve-home .home-events {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    width: calc(100% + var(--app-side) * 2);
+    margin: 20px calc(var(--app-side) * -1);
+  }
+  .wavve-home .home-events__banner {
+    min-height: 64px;
+    padding: 10px 20px;
+    gap: 3px;
+    border-radius: 0;
+  }
+  .wavve-home .home-events__banner strong {
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .wavve-home .home-events__banner span {
+    font-size: 10px;
+    line-height: 16px;
+  }
+  .wavve-home .home-categories {
+    padding: 0;
+    margin: 0 0 20px;
+  }
+  .wavve-home .home-categories__slider {
+    display: none;
+  }
+  .wavve-home .home-categories__app {
+    display: block;
+    width: calc(100% + var(--app-side));
+    overflow-x: auto;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-x pan-y;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  .wavve-home .home-categories__app[data-dragging] {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+  .wavve-home .home-categories__app-row > .home-categories__card {
+    scroll-snap-align: start;
+  }
+  .wavve-home .home-categories__app::-webkit-scrollbar {
+    display: none;
+  }
+  .wavve-home .home-categories__app-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: max-content;
+    padding-right: var(--app-side);
+  }
+  .wavve-home .home-categories__app-row {
+    display: flex;
+    gap: 12px;
+  }
+  .wavve-home .home-categories__app-row > .home-categories__card {
+    flex: 0 0 auto;
+    width: 93.464px;
+    height: 45.592px;
+    aspect-ratio: auto;
+    border-radius: 7.418px;
+  }
+  .wavve-home .home-categories__card img {
+    position: static;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .wavve-home .home-section, .wavve-home .content-section, .wavve-home .weekly-content {
+    width: 100%;
+    min-width: 0;
+    margin: 0 0 24px;
+  }
+  .wavve-home .home-section__head, .wavve-home .content-section__header {
+    margin: 0 0 8px;
+  }
+  .wavve-home .home-section__head h2, .wavve-home .content-section__title h2, .wavve-home .weekly-content h2 {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  .wavve-home .content-section__title {
+    gap: 8px;
+  }
+  .wavve-home .content-section__title a {
+    flex: 0 0 auto;
+    font-size: 10px;
+  }
+  .wavve-home .content-section__slider, .wavve-home .ranking-section__slider {
+    margin-right: calc(var(--app-side) * -1);
+  }
+  .wavve-home .content-section__swiper, .wavve-home .ranking-section__swiper {
+    overflow: hidden;
+  }
+  .wavve-home .content-section__swiper .swiper-slide, .wavve-home .ranking-section__swiper .swiper-slide {
+    width: var(--app-poster);
+    height: auto;
+  }
+  .wavve-home .content-section--wide .content-section__swiper .swiper-slide,
+  .wavve-home .content-section--coming-soon .content-section__swiper .swiper-slide {
+    width: var(--app-wide);
+  }
+  .wavve-home .content-section--default .content-card__thumbnail,
+  .wavve-home .ranking-section__swiper .content-card__thumbnail {
+    height: auto;
+    aspect-ratio: 2/3;
+    border-radius: 6px;
+  }
+  .wavve-home .content-section--wide .content-card__thumbnail {
+    height: auto;
+    aspect-ratio: 16/9;
+    border-radius: 6px;
+  }
+  .wavve-home .content-card {
+    height: auto;
+  }
+  .wavve-home .content-card__info {
+    padding-top: 5px;
+  }
+  .wavve-home .content-card__info h3 {
+    font-size: 12px;
+    line-height: 17px;
+  }
+  .wavve-home .content-card__info .content-card__date {
+    margin-top: 2px;
+    font-size: 9px;
+    line-height: 13px;
+  }
+  .wavve-home .content-card__placeholder {
+    padding: 8px;
+    font-size: 11px;
+  }
+  .wavve-home .content-card__badge {
+    top: 4px;
+    left: 4px;
+    padding: 2px 3px;
+    border-radius: 2px;
+    font-size: 7px;
+  }
+  .wavve-home .content-card__badges {
+    inset: 4px 4px auto;
+    gap: 2px;
+  }
+  .wavve-home .content-card__original {
+    width: 18%;
+    height: auto;
+  }
+  .wavve-home .content-card__rank {
+    top: 112cqw;
+    left: 3cqw;
+    width: auto;
+    height: 47cqw;
+  }
+  .wavve-home .content-card--ranked::after {
+    height: 12cqw;
+  }
+  .wavve-home .content-section__arrow, .wavve-home .ranking-section__arrow {
+    display: none;
+  }
+  .wavve-home .weekly-content__days {
+    gap: 5px;
+    margin: 0 0 7px;
+    padding: 2px 0;
+  }
+  .wavve-home .weekly-content__day {
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .wavve-home .weekly-content__empty {
+    padding: 24px 0;
+    font-size: 12px;
+  }
+  .wavve-home .coming-soon-card__thumbnail {
+    aspect-ratio: 407/229;
+    border-radius: 6px;
+  }
+  .wavve-home .coming-soon-card__info {
+    gap: 5px;
+    padding-top: 3px;
+  }
+  .wavve-home .coming-soon-card__text h3 {
+    font-size: 10px;
+    line-height: 15px;
+  }
+  .wavve-home .coming-soon-card__text p {
+    margin-top: 2px;
+    font-size: 9px;
+    line-height: 13px;
+  }
+  .wavve-home .coming-soon-card__heart {
+    width: 24px;
+    height: 24px;
+  }
+  .wavve-home .coming-soon-card__heart svg {
+    width: 14px;
+    height: 14px;
+  }
+  .wavve-home .coming-soon-card__thumbnail .coming-soon-card__original {
+    width: 20px;
+    height: 20px;
+  }
+  .wavve-home .home-hope {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    height: auto;
+    min-height: 409px;
+    margin: 0 0 24px;
+    padding: 24px 16px 32px;
+    border-radius: 6px;
+    background-size: 100% 100%, auto 100%;
+  }
+  .wavve-home .home-hope__intro {
+    position: static;
+    max-height: none;
+    padding: 0;
+  }
+  .wavve-home .home-hope__title {
+    width: 145px;
+    margin: 0 0 8px;
+  }
+  .wavve-home .home-hope__title img {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+  .wavve-home .home-hope__description {
+    margin: 0;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .wavve-home .home-hope__more {
+    position: absolute;
+    right: 38px;
+    bottom: 32px;
+    left: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 44px;
+    margin: 0;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 6px;
+    background: #1351F9;
+    font-size: 14px;
+  }
+  .wavve-home .home-hope__contents {
+    max-height: none;
+    margin: 20px 0 76px;
+  }
+  .wavve-home .home-hope__contents .content-section {
+    margin: 0;
+  }
+  .wavve-home .home-hope__contents .content-section__slider {
+    margin-right: -16px;
+  }
+  .wavve-home .home-hope__contents .content-section__swiper .swiper-slide {
+    width: var(--app-poster);
+  }
+  .wavve-home .home-hope__contents .content-section__swiper .swiper-slide:last-child {
+    margin-right: 0 !important;
+  }
+  .wavve-home .home-hope__contents .content-section .content-card__thumbnail {
+    height: auto;
+    aspect-ratio: 2/3;
+  }
+  .coming-soon-notice {
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    max-width: calc(100% - 32px);
+    padding: 16px;
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  .wavve-home {
+    --app-side: 24px;
+    --app-poster: clamp(132px, 18vw, 180px);
+    --app-wide: clamp(224px, 30vw, 300px);
+    --app-hero: clamp(360px, 48vw, 480px);
+    --app-gap: 12px;
+  }
+  .wavve-home .content-section__slider, .wavve-home .ranking-section__slider {
+    width: calc(100% + var(--app-side));
+    margin-right: calc(var(--app-side) * -1);
+  }
+  .wavve-home .content-section__swiper, .wavve-home .ranking-section__swiper {
+    container-type: inline-size;
+  }
+  .wavve-home .content-section__swiper .swiper-slide,
+  .wavve-home .ranking-section__swiper .swiper-slide {
+    width: calc((100cqw - 48px) / 4.5);
+  }
+  .wavve-home .content-section--wide .content-section__swiper .swiper-slide,
+  .wavve-home .content-section--coming-soon .content-section__swiper .swiper-slide {
+    width: calc((100cqw - 24px) / 2.5);
+  }
+  .wavve-home .home-genre-nav a {
+    font-size: 14px;
+  }
+  .wavve-home .home-section__head h2, .wavve-home .content-section__title h2, .wavve-home .weekly-content h2 {
+    font-size: 18px;
+    line-height: 26px;
+  }
+  .wavve-home .home-section, .wavve-home .content-section, .wavve-home .weekly-content {
+    margin-bottom: 32px;
+  }
+  .wavve-home .home-categories__app-row > .home-categories__card {
+    width: 132px;
+    height: auto;
+    aspect-ratio: 93.464/45.592;
+  }
+  .wavve-home .home-events__banner {
+    min-height: 80px;
+    padding-inline: 32px;
+  }
+  .wavve-home .home-events__banner strong {
+    font-size: 22px;
+  }
+  .wavve-home .home-events__banner span {
+    font-size: 12px;
+  }
+  .wavve-home .home-hope {
+    min-height: 0;
+    padding: 28px 24px 92px;
+  }
+  .wavve-home .home-hope__contents {
+    margin: 24px 0 0;
+  }
+  .wavve-home .home-hope__more {
+    right: 24px;
+    left: 24px;
+    bottom: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wavve-home .home-hero__text,
+  .wavve-home .home-hero__slide::after {
+    transition: none;
+  }
+}

@@ -1,0 +1,202 @@
+dialog.wavve-account-modal .find-id {
+  color: #aaaab2;
+  font-size: var(--wam-font);
+  line-height: 1.6;
+}
+dialog.wavve-account-modal .find-id__tabs {
+  display: flex;
+  border-bottom: 1px solid #353535;
+}
+dialog.wavve-account-modal .find-id__tabs > button {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: var(--wam-control);
+  padding: 12px 6px;
+  border: 0;
+  background: transparent;
+  color: #aaaab2;
+  font-size: var(--wam-font);
+  font-weight: 500;
+}
+dialog.wavve-account-modal .find-id__tabs > button[aria-pressed=true] {
+  color: #fff;
+}
+dialog.wavve-account-modal .find-id__tabs > button[aria-pressed=true]::after {
+  content: "";
+  position: absolute;
+  right: 18%;
+  bottom: 0;
+  left: 18%;
+  height: 3px;
+  background: #1351f9;
+}
+dialog.wavve-account-modal .find-id__intro {
+  padding-block: 8px;
+  color: #aaaab2;
+  font-size: var(--wam-font);
+  text-align: center;
+}
+dialog.wavve-account-modal .find-id__form {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--wam-gap) * 0.6);
+}
+dialog.wavve-account-modal .find-id__form > .wam-button {
+  margin-top: calc(var(--wam-gap) * 0.5);
+}
+dialog.wavve-account-modal .find-id__methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  min-width: 0;
+  margin: 0 0 4px;
+  padding: 0;
+  border: 0;
+}
+dialog.wavve-account-modal .find-id__methods > label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+dialog.wavve-account-modal .find-id__methods input {
+  appearance: auto;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #1351f9;
+}
+dialog.wavve-account-modal .find-id__social {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wam-gap);
+  margin-top: 8px;
+  padding-top: var(--wam-gap);
+  border-top: 1px solid #353535;
+  text-align: center;
+}
+dialog.wavve-account-modal .find-id__social strong {
+  color: #fff;
+  font-weight: 500;
+}
+dialog.wavve-account-modal .find-id__social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 18px);
+  width: 100%;
+}
+dialog.wavve-account-modal .find-id__sns {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: clamp(34px, 5vw, 54px);
+  height: auto;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  font: 700 clamp(20px, 3vw, 32px)/1 Arial, sans-serif;
+}
+dialog.wavve-account-modal .find-id__sns > img {
+  display: block;
+  width: 52%;
+  height: 52%;
+  max-width: none;
+  object-fit: contain;
+}
+dialog.wavve-account-modal .find-id__sns--kakao {
+  background: #fee500;
+}
+dialog.wavve-account-modal .find-id__sns--t {
+  background: #3617ce;
+  color: #fff;
+}
+dialog.wavve-account-modal .find-id__sns--naver {
+  background: #03c75a;
+}
+dialog.wavve-account-modal .find-id__sns--facebook {
+  background: #3b5998;
+  color: #fff;
+}
+dialog.wavve-account-modal .find-id__sns--apple {
+  background: #fff;
+}
+dialog.wavve-account-modal .find-id__verify {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  gap: 16px;
+  width: 65%;
+  min-height: 180px;
+  padding: 24px;
+  border: 1px solid #aaa;
+  border-radius: var(--wam-control-radius);
+  background: transparent;
+  color: #fff;
+  font-size: var(--wam-font);
+}
+dialog.wavve-account-modal .find-id__verify > svg {
+  display: block;
+  width: 44px;
+  height: 61px;
+  stroke: #b5b5bd;
+  stroke-width: 2;
+}
+dialog.wavve-account-modal .find-id__notice {
+  margin-top: 8px;
+  color: #85858e;
+  font-size: var(--wam-small);
+}
+dialog.wavve-account-modal .find-id__message {
+  color: #b8ccff;
+  font-size: var(--wam-small);
+  overflow-wrap: anywhere;
+}
+dialog.wavve-account-modal .find-id__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  dialog.wavve-account-modal .find-id__methods {
+    gap: 12px;
+  }
+  dialog.wavve-account-modal .find-id__methods input {
+    width: 14px;
+    height: 14px;
+  }
+  dialog.wavve-account-modal .find-id__verify {
+    min-height: 130px;
+    gap: 12px;
+    padding: 16px;
+  }
+  dialog.wavve-account-modal .find-id__verify > svg {
+    width: 32px;
+    height: 44px;
+  }
+}
+dialog.wavve-account-modal .find-id__sns > img {
+  width: 52%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+dialog.wavve-account-modal .find-id__sns--kakao > img,
+dialog.wavve-account-modal .find-id__sns--apple > img {
+  filter: brightness(0);
+}
+dialog.wavve-account-modal .find-id__sns--naver > img {
+  filter: brightness(0) invert(1);
+}

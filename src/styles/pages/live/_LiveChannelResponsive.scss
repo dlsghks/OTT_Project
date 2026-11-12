@@ -1,0 +1,135 @@
+@mixin live-responsive {
+  .miniToggle { display: none; }
+  @media (min-width: 1025px) {
+    :global(.site-inner):has(> .detail) { padding: clamp(32px,4.375vw,84px) clamp(24px,3.333333vw,64px) 120px; }
+    .detail .chatPreview {
+      min-width: 0;
+      padding-inline: clamp(12px, 1vw, 20px);
+      font-size: clamp(12px, 1.1vw, 18px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .detail .layout { grid-template-columns: minmax(0,1170fr) minmax(280px,501fr); gap: clamp(16px,1.51vw,29px); }
+    .detail .channelInfo { gap: 12px; }
+    .detail .channelLogo { flex-basis: clamp(48px,4.12vw,79px); width: clamp(48px,4.12vw,79px); height: clamp(48px,4.12vw,79px); }
+    .detail .channelIdentity { gap: clamp(8px,1vw,20px); min-width: 0; }
+    .detail .channelText > strong { font-size: clamp(16px,1.4vw,27px); line-height: 1.4; }
+    .detail .channelText > span { font-size: clamp(12px,1vw,18px); }
+    .detail .channelActions { gap: 6px; }
+    .detail .channelActions > button, .detail .channelActions > a { padding: 10px clamp(9px,1vw,20px); font-size: clamp(12px,1vw,18px); }
+    .detail .channelThumb { flex-basis: clamp(90px,8.33vw,160px); width: clamp(90px,8.33vw,160px); height: auto; aspect-ratio: 16 / 9; }
+    .detail .channelItemText > strong, .detail .channelItemText > small { font-size: clamp(12px,1vw,18px); line-height: 1.4; }
+    .detail .channelListHeading strong { font-size: clamp(16px,1.25vw,24px); }
+    .detail .channelListHeading > a { font-size: clamp(11px,.94vw,18px); }
+    .detail .chatToggle > strong { font-size: clamp(18px,1.46vw,28px); }
+  }
+  @media (max-width: 1024px) {
+    :global(.site-inner):has(> .detail) { --page-side-padding: 0px; padding: 0 0 32px; min-height: 0; background: linear-gradient(180deg,#04123a 0%,#051423 38%,#000 100%); }
+    .detail { width: 100%; max-width: none; margin: 0; padding: 0; }
+    .detail .layout { display: flex; flex-direction: column; gap: 28px; width: 100%; }
+    .detail .main { width: 100%; min-width: 0; }
+    .detail .playerFrame { scroll-margin-top: 50px; width: 100%; aspect-ratio: 16 / 9; position: relative; }
+    .detail .player { border-radius: 0; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+    .detail .playerOverlay { gap: 10px; padding: 16px; }
+    .detail .playerOverlay h2 { font-size: 14px; }
+    .detail .playerOverlay p { font-size: 12px; }
+    .detail .loginButton { font-size: 12px; padding: 8px 16px; min-height: 36px; }
+    .detail .liveBadge { left: 16px; bottom: 35px; padding: 1px 3px; border-radius: 2px; font-size: 7px; line-height: 10px; gap: 2px; }
+    .detail .liveBadge > img { width: 2px; height: 2px; }
+    .detail .playerControls { left: 16px; right: 16px; bottom: 12px; height: 16px; }
+    .detail .playerControlsLeft { gap: 10px; height: 16px; }
+    .detail .playerControlsLeft > button { width: 16px; height: 16px; display: grid; place-items: center; }
+    .detail .playerControlsLeft .icon, .detail .pauseIcon { width: auto; max-width: 14px; height: 14px; }
+    .detail .sound { height: 16px; gap: 4px; }
+    .detail .sound > button { width: 18px; height: 18px; }
+    .detail .volume { display: none; }
+    .detail .settings { width: 44px; height: 18px; }
+    .detail .settingsArtwork { width: 44px; height: 18px; }
+    .detail .reactionArea { width: 30px; height: 30px; right: 16px; bottom: 38px; }
+    .detail .reaction > span { font-size: 13px; line-height: 14px; }
+    .detail .reaction > small { font-size: 7px; line-height: 10px; }
+    .detail .miniToggle { position: absolute; display: block; top: 8px; right: 10px; z-index: 5; padding: 5px 8px; min-height: 30px; border-radius: 5px; background: rgba(0,0,0,.65); color: #fff; font-size: 10px; line-height: 16px; }
+    .detail .miniPlayer { position: fixed; z-index: 110; width: min(54vw,320px); height: auto; right: 12px; bottom: calc(64px + env(safe-area-inset-bottom)); border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,.6); }
+    .detail .miniPlayer .miniToggle { top: 3px; right: 4px; min-height: 26px; padding: 3px 6px; font-size: 9px; }
+    .detail .miniPlayer .reactionArea, .detail .miniPlayer .settings, .detail .miniPlayer .liveBadge { display: none; }
+    .detail .miniPlayer .playerControls { bottom: 8px; left: 8px; }
+    .detail .channelInfo { display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: center; width: auto; height: auto; margin: 16px 16px 0; gap: 8px; }
+    .detail .channelIdentity { display: flex; flex-basis: auto; flex: 1 1 0; gap: 12px; min-width: 0; }
+    .detail .channelLogo { flex: 0 0 46px; width: 46px; height: 46px; }
+    .detail .channelLogo > img { max-width: 100%; max-height: 100%; }
+    .detail .channelText { min-width: 0; gap: 7px; }
+    .detail .channelText > strong { display: block; max-width: 100%; font-size: 14px; line-height: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .detail .channelText > span { font-size: 11px; line-height: 16px; white-space: nowrap; }
+    .detail .channelActions { flex-shrink: 0; gap: 5px; }
+    .detail .channelActions > button, .detail .channelActions > a { gap: 3px; min-height: 26px; height: 26px; padding: 5px 8px; font-size: 10px; line-height: 14px; }
+    .detail .channelActions .icon, .detail .favoriteIcon { width: 10px; height: 10px; }
+    .detail .schedule { margin: 18px 0 0 20px; }
+    .detail .schedule .scheduleSlide { width: min(251px,70vw); height: 62px; }
+    .detail .scheduleCard { height: 62px; min-height: 62px; padding: 10px 14px; border-radius: 10px; gap: 10px; }
+    .detail .scheduleCard strong { font-size: 12px; line-height: 17px; }
+    .detail .scheduleCard small { font-size: 11px; line-height: 15px; }
+    .detail .scheduleCard > div { gap: 4px; }
+    .detail .scheduleLive { font-size: 10px; line-height: 14px; padding: 1px 3px; border-radius: 3px; }
+    .detail .bellIcon { width: 14px; height: 18px; }
+    .detail .top { margin: 28px 0 0 16px; padding: 0; }
+    .detail .top > h2 { margin: 0 16px 14px 0; font-size: 12px; line-height: 18px; }
+    .detail .topSwiper { container-type: inline-size; }
+    .detail .top .topSlide { width: calc((100cqw - 8px) / 2); }
+    .detail .topCard { gap: 7.5px; }
+    .detail .topMeta { gap: 4.5px; }
+    .detail .rank { width: 25px; min-width: 25px; height: 35px; }
+    .detail .topMeta strong, .detail .topMeta span { font-size: 12px; line-height: 16px; }
+    .detail .sidebar, .detail .sidebarOpen { --sidebar-padding: 14px; display: flex; flex-direction: column; gap: 8px; width: calc(100% - 30px); height: auto; min-height: 0; max-height: none; margin: 0 15px; }
+    .detail .chat, .detail .chatOpen { display: flex; flex-direction: column; width: 100%; height: auto; min-height: 0; margin: 0; padding: 11px 14px 14px; border-radius: 14px; background: rgba(0,0,0,.65); }
+    .detail .chatToggle { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; width: 100%; height: 29px; min-height: 29px; margin: 0; padding: 0; }
+    .detail .chatToggle > strong { font-size: 14px; line-height: 20px; }
+    .detail .talkChevron { width: 30px; height: 29px; }
+    .detail .talkChevron > img { width: 22px; height: 20px; }
+    .detail .chatPreview { flex: 0 0 38px; width: 100%; height: 38px; min-height: 38px; margin-top: 8px; padding: 0 14px; border-radius: 7px; font-size: 12px; line-height: 18px; text-align: left; background: #000; }
+    .detail .chatOpen { min-height: 260px; }
+    .detail .chatContent { display: flex; flex-direction: column; flex: 1 1 auto; height: auto; min-height: 100px; max-height: 220px; padding: 0; }
+    .detail .chatNotice { padding: 8px 0; }
+    .detail .chatNotice p { margin: 0 0 10px; color: #becaff; font-size: 11px; line-height: 16px; }
+    .detail .chatMessages { padding: 8px 0; flex: 1; min-height: 40px; max-height: 120px; overflow-y: auto; font-size: 12px; line-height: 18px; }
+    .detail .chatMessages p { font-size: 12px; line-height: 18px; margin: 0 0 8px; }
+    .detail .chatForm { display: flex; flex: 0 0 35px; width: 100%; min-height: 35px; height: 35px; margin-top: 12px; padding: 3px 5px 3px 13px; border-radius: 7px; }
+    .detail .chatForm input { flex: 1; min-width: 0; font-size: 12px; line-height: 18px; }
+    .detail .chatForm > button { flex: 0 0 25px; width: 25px; height: 25px; font-size: 17px; line-height: 25px; }
+    .detail .chatError { font-size: 11px; }
+    .detail .channelList, .detail .sidebarOpen .channelList { width: 100%; height: auto; min-height: 0; border-radius: 14px; background: rgba(0,0,0,.6); }
+    .detail .channelListHeading { flex: 0 0 37px; height: 37px; min-height: 37px; padding: 8px 14px; border-radius: 10px; background: rgba(37,37,37,.2); }
+    .detail .channelListHeading > div { gap: 5px; }
+    .detail .channelListHeading strong { font-size: 12px; line-height: 18px; }
+    .detail .channelListHeading > div > button { flex: 0 0 18px; width: 18px; height: 18px; }
+    .detail .channelListHeading > div > button img { width: 16px; height: 16px; }
+    .detail .channelListHeading > a { padding: 0; gap: 5px; font-size: 11px; line-height: 16px; }
+    .detail .channelListHeading > a img { width: 6px; height: 11px; }
+    .detail .channelScroll { flex: none; width: 100%; height: auto; max-height: 390px; padding: 0 14px 14px; overflow-y: auto; }
+    .detail .channelItem, .detail .sidebarOpen .channelItem { width: 100%; min-height: 80px; height: auto; margin: 0 0 7px; padding: 7px 8px; border-radius: 10px; gap: 8px; background: #000; }
+    .detail .channelThumb { flex: 0 0 114px; width: 114px; height: auto; aspect-ratio: 16 / 9; border-radius: 3px; }
+    .detail .channelItemText { flex: 1; min-width: 0; gap: 7px; }
+    .detail .channelItemText strong { font-size: 11px; line-height: 16px; }
+    .detail .channelItemText small { font-size: 10px; line-height: 14px; }
+    .detail .channelProgress { height: 2px; }
+    .detail :global(.slider-arrow) { display: none; }
+    .reservationDialog { width: calc(100vw - 32px); max-width: 475px; padding: 24px; }
+    .reservationDialog h2 { font-size: 20px; }
+    .reservationDialog p { font-size: 14px; line-height: 21px; }
+  }
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .detail .playerFrame { max-width: 100%; }
+    .detail .channelInfo { margin-inline: 24px; }
+    .detail .channelLogo { flex-basis: 60px; width: 60px; height: 60px; }
+    .detail .channelText > strong { font-size: 18px; }
+    .detail .channelActions > button, .detail .channelActions > a { height: 36px; font-size: 13px; padding: 8px 14px; }
+    .detail .sidebar, .detail .sidebarOpen { width: calc(100% - 48px); margin-inline: 24px; }
+    .detail .channelScroll { max-height: 520px; }
+    .detail .channelItem { min-height: 106px; }
+    .detail .channelThumb { flex-basis: 160px; width: 160px; }
+    .detail .channelItemText strong { font-size: 14px; line-height: 20px; }
+    .detail .channelItemText small { font-size: 12px; }
+    .detail .top, .detail .schedule { margin-left: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .talkChevron { transition: none; } }
+}

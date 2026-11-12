@@ -115,6 +115,7 @@ export const LiveHero = ({
         className={styles.heroSwiper}
         slidesPerView="auto"
         spaceBetween={18}
+        breakpoints={{ 0: { spaceBetween: 8 }, 1025: { spaceBetween: 18 } }}
         speed={600}
         watchOverflow
         preventClicks

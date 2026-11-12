@@ -5,11 +5,11 @@ import { ContentCard } from '../home/ContentCard';
 export const CollectionRow = ({ title, items = [] }) => {
   return (
     <section className="category-row collection-row">
-      <div className="category-row__header">
+      {title && <div className="category-row__header">
         <div className="category-row__title">
           <SectionTitle>{title}</SectionTitle>
         </div>
-      </div>
+      </div>}
 
       {items.length ? (
         <ul className="collection-row__grid">

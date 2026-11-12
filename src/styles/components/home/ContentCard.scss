@@ -227,3 +227,21 @@
 .content-section--default .content-card__info > h3 {
   display: none;
 }
+
+// 숫자는 포스터의 이미지 클리핑 밖에 두고, 걸치는 만큼 카드 높이를 확보합니다.
+.content-card .content-card__visual {
+  position: relative;
+  width: 100%;
+}
+
+.content-card.content-card--ranked .content-card__visual {
+  padding-bottom: card.in-card(card.$rank-overhang);
+}
+
+.content-card.content-card--ranked .content-card__rank {
+  top: auto;
+  bottom: 0;
+  left: card.in-card(card.$rank-left);
+  width: auto;
+  height: card.in-card(card.$rank-h);
+}
