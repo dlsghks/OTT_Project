@@ -1,4 +1,4 @@
-import { withContent } from './contentCatalog';
+import { categoryPages } from './categoryData';
 
 
 export const popularKeywords = [
@@ -14,12 +14,5 @@ export const popularKeywords = [
     { rank: 10, keyword: '꼬리에 꼬리를 무는 그날 이야기', change: 'up' },
 ];
 
-// 하단 추천 콘텐츠 (임시 데이터)
-export const searchContents = [
-    { id: 1, title: '그 해 우리는', image: '', badge: '독점', isOriginal: false },
-    { id: 2, title: '낭만닥터 김사부', image: '', badge: '', isOriginal: false },
-    { id: 3, title: '커넥션', image: '', badge: '', isOriginal: true },
-    { id: 4, title: '수사반장 1958', image: '', badge: '', isOriginal: false },
-    { id: 5, title: '우리들의 블루스', image: '', badge: '', isOriginal: false },
-    { id: 6, title: '악귀', image: '', badge: '독점', isOriginal: false },
-].map((entry) => withContent(entry, 'search'));
+// 상세 페이지와 동일한 드라마 데이터를 사용해 포스터와 이동 경로를 함께 유지합니다.
+export const searchContents = categoryPages.drama.items.slice(0, 6);
