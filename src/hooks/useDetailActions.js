@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useActiveVoucher } from './useActiveVoucher';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getImagePath } from '../utils/imagePath';
 import { useAuthStore } from '../store/useAuthStore';
 import {
@@ -11,6 +12,8 @@ import {
 export const useDetailActions = (item) => {
   const user = useAuthStore((state) => state.user);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const activeVoucher = useActiveVoucher();
   const { favorites, profileId, ownerId } = useProfileFavorites();
 
   const [loginOpen, setLoginOpen] = useState(false);
@@ -67,6 +70,8 @@ export const useDetailActions = (item) => {
   return {
     historyItem: item ? { ...item, image: getImagePath(item.image), to: pathname } : null,
     user,
+    hasVoucher: Boolean(activeVoucher),
+    onPurchaseVoucher: () => navigate("/voucher", { state: { returnTo: pathname } }),
     isLiked,
     likeBusy,
     likeError,

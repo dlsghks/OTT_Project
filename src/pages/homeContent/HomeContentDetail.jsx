@@ -1,3 +1,4 @@
+import { VoucherWatchActions } from '../../components/common/VoucherWatchActions';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { DetailHero } from '../../components/detail/DetailHero';
@@ -178,13 +179,13 @@ const HomeContentBody = ({ item, sectionId }) => {
                 <DetailHero
                     title={isJung ? '정형돈의 제목없음 TV' : item.title}
                     logo={isJung ? getImagePath('/images/home/section/jung/jungTitle.png') : undefined}
-                    backdrop={getImagePath(isJung ? '/images/home/section/jung/jungHero.jpg' : item.image)}
+                    backdrop={getImagePath(isComingSoon ? '/images/home/section/comingSoon/coming-soon-hero.jpg' : isJung ? '/images/home/section/jung/jungHero.jpg' : item.image)}
                     meta={isComingSoon ? 'Coming Soon' : '정형돈의 제목없음 TV'}
                     overview={isComingSoon ? item.description : `업로드 ${item.updatedAt}`}
                     showWatch={false}
                     watchActions={isLineup || isMunmu || isJung ? (
                         <div className="home-lineup-actions">
-                            {actions.user ? (
+                            {actions.hasVoucher ? (
                                 <button
                                     type="button"
                                     className="movie-hero__buy"
@@ -193,26 +194,9 @@ const HomeContentBody = ({ item, sectionId }) => {
                                     {isMunmu ? '에피소드 티저1 보기' : '에피소드 보기'}
                                 </button>
                             ) : (
-                                <>
-                                    <button
-                                        type="button"
-                                        className="movie-hero__buy home-lineup-actions__preview"
-                                        disabled={!isJung || !episodes[0]}
-                                        onClick={isJung && episodes[0]
-                                            ? () => playJungEpisode(episodes[0])
-                                            : undefined}
-                                    >
-                                        <span aria-hidden="true">▶</span> 미리보기
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        className="movie-hero__buy"
-                                        onClick={actions.onLogin}
-                                    >
-                                        로그인
-                                    </button>
-                                </>
+                                <VoucherWatchActions
+                                    onPurchase={actions.onPurchaseVoucher}
+                                />
                             )}
                         </div>
                     ) : upcomingWatchAction}

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { SliderArrow } from '../common/SliderArrow';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -9,7 +10,6 @@ import 'swiper/css';
 
 export const RankingSection = ({ items = [] }) => {
   const swiperRef = useRef(null);
-  const sliderRef = useRef(null);
 
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
@@ -23,30 +23,7 @@ export const RankingSection = ({ items = [] }) => {
   };
 
   // 순위 숫자 영역을 제외한 실제 포스터 높이 측정
-  useEffect(() => {
-    const slider = sliderRef.current;
-    const thumbnail = slider?.querySelector(
-      '.content-card__thumbnail'
-    );
 
-    if (!slider || !thumbnail) return;
-
-    const updateHeight = () => {
-      slider.style.setProperty(
-        '--ranking-poster-height',
-        `${thumbnail.getBoundingClientRect().height}px`
-      );
-    };
-
-    const observer = new ResizeObserver(updateHeight);
-    observer.observe(thumbnail);
-    updateHeight();
-
-    return () => {
-      observer.disconnect();
-      slider.style.removeProperty('--ranking-poster-height');
-    };
-  }, [items]);
 
   return (
     <section className="home-section ranking-section">
@@ -60,7 +37,6 @@ export const RankingSection = ({ items = [] }) => {
 
       {/* Swiper 슬라이드 영역 */}
       <div
-        ref={sliderRef}
         className="ranking-section__slider"
       >
         <Swiper
@@ -77,6 +53,9 @@ export const RankingSection = ({ items = [] }) => {
           onReachBeginning={updateNavigation}
           onReachEnd={updateNavigation}
           slidesPerView="auto"
+          slidesOffsetAfter={0}
+          centeredSlides={false}
+          snapToSlideEdge={false}
           slidesPerGroup={2}
           spaceBetween={8}
           speed={500}
@@ -116,26 +95,18 @@ export const RankingSection = ({ items = [] }) => {
 
         {/* 이전 버튼 */}
         {canPrev && (
-          <button
-            type="button"
-            className="ranking-section__arrow ranking-section__arrow--prev"
+          <SliderArrow direction="prev"
             aria-label="랭킹 이전"
             onClick={() => swiperRef.current?.slidePrev()}
-          >
-            <span aria-hidden="true">‹</span>
-          </button>
+           />
         )}
 
         {/* 다음 버튼 */}
         {canNext && (
-          <button
-            type="button"
-            className="ranking-section__arrow ranking-section__arrow--next"
+          <SliderArrow direction="next"
             aria-label="랭킹 다음"
             onClick={() => swiperRef.current?.slideNext()}
-          >
-            <span aria-hidden="true">›</span>
-          </button>
+           />
         )}
       </div>
     </section>

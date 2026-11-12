@@ -1,3 +1,4 @@
+import { VoucherWatchActions } from '../../components/common/VoucherWatchActions';
 import { SectionTitle } from '../../components/common/SectionTitle';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -61,7 +62,7 @@ function ProgramFanPage({ programId, program }) {
     type: "program",
     image: favoriteProgram?.thumbnail || program.hero || program.logo,
   });
-  const { user, isLiked, onLogin, onLike } = actions;
+  const { isLiked, onLike } = actions;
 
   // 펼치기: 펼치기 직전의 히어로 높이 · 내용 시작 위치 (펼친 뒤에도 로고 · 버튼 자리 고정)
   const [expanded, setExpanded] = useState(false);
@@ -246,7 +247,7 @@ function ProgramFanPage({ programId, program }) {
             </p>
 
             <div className="rv-hero__actions">
-              {seasons.length > 0 && (
+              {actions.hasVoucher && seasons.length > 0 && (
                 <label className="rv-hero__season">
                   <span className="sr-only">시즌 선택</span>
                   <select
@@ -266,11 +267,14 @@ function ProgramFanPage({ programId, program }) {
                 </label>
               )}
 
-              <button type="button" className="rv-hero__play" onClick={user ? playFirstEpisode : onLogin} aria-label={playLabel}>
-                {/* PC: 회차 문구 / 모바일: 시안대로 "시청하기" */}
-                <span className="rv-hero__play-label">{playLabel}</span>
-                <span className="rv-hero__play-label rv-hero__play-label--mobile" aria-hidden="true">시청하기</span>
-              </button>
+              {actions.hasVoucher ? (
+                <button type="button" className="rv-hero__play" onClick={playFirstEpisode} aria-label={playLabel}>
+                  <span className="rv-hero__play-label">{playLabel}</span>
+                  <span className="rv-hero__play-label rv-hero__play-label--mobile" aria-hidden="true">시청하기</span>
+                </button>
+              ) : (
+                <VoucherWatchActions onPurchase={actions.onPurchaseVoucher} />
+              )}
 
               <button
                 type="button"
@@ -397,7 +401,7 @@ function ProgramFanPage({ programId, program }) {
                 <li key={item.id}>
                   <Link to={`/retrov/${item.id}`} className="rv-others__item">
                     <img
-                      src={getImagePath(item.another ?? item.thumbnail ?? item.image)}
+                      src={getImagePath(item.othersLogo ?? item.another ?? item.thumbnail ?? item.image)}
                       alt={item.title}
                       loading="lazy"
                     />
