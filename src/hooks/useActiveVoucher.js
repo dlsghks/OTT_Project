@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useSyncExternalStore } from 'react';
+import { useAccountStore } from '../store/useAccountStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { getActiveDemoVoucher, getDemoVoucherPurchases } from '../utils/demoVoucherPurchases';
 
 const CHANGE_EVENT = 'ott:voucher-updated';
 const subscribe = (refresh) => {
+  const stopAccount = useAccountStore.subscribe(refresh);
   window.addEventListener(CHANGE_EVENT, refresh);
   window.addEventListener('storage', refresh);
   window.addEventListener('focus', refresh);
   return () => {
+    stopAccount();
     window.removeEventListener(CHANGE_EVENT, refresh);
     window.removeEventListener('storage', refresh);
     window.removeEventListener('focus', refresh);
