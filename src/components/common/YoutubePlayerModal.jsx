@@ -81,7 +81,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
         <h2 id="yt-modal-title">{video.title}</h2>
 
         <div className="yt-modal__info">
-          {video.videoId && <button type="button" className="mobile-playback-action" onClick={landscape.enter}>전체화면</button>}
+          {video.videoId && <button type="button" className="mobile-playback-action" onClick={landscape.enter}>가로 화면</button>}
           {historyError && <span role="status">{historyError}</span>}
           {video.date && <time dateTime={video.date.replaceAll(".", "-")}>{video.date}</time>}
 
