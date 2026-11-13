@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import { useAuthStore } from "../../store/useAuthStore";
+import { LoginModal } from "../common/LoginModal";
 import { useProfileShorts } from "../../utils/profileShorts";
 import fallbackProfile from "../../assets/mypage/profile.png";
 import { Link, useLocation } from "react-router-dom";
@@ -17,6 +21,8 @@ const menus = [
 
 export const MobileBottomNav = () => {
   const { pathname } = useLocation();
+  const user = useAuthStore((state) => state.user);
+  const [loginOpen, setLoginOpen] = useState(false);
   const { profile } = useProfileShorts();
   const profileImage = profile?.image || `${import.meta.env.BASE_URL}images/profiles/profile1.png`;
   const activeKey = /^\/(live|livechannel|schedule)(\/|$)/.test(pathname) ? "live"
@@ -33,6 +39,11 @@ export const MobileBottomNav = () => {
           {menus.map((menu) => (
             <li key={menu.key}>
               <Link to={menu.to}
+                onClick={(event) => {
+                  if (menu.key !== "my" || user) return;
+                  event.preventDefault();
+                  setLoginOpen(true);
+                }}
                 className={`wavve-mobile-nav__link${activeKey === menu.key ? " is-active" : ""}`}
                 aria-current={activeKey === menu.key ? "page" : undefined}>
                 <span className={`wavve-mobile-nav__icon wavve-mobile-nav__icon--${menu.key}`} aria-hidden="true">
@@ -54,6 +65,10 @@ export const MobileBottomNav = () => {
           ))}
         </ul>
       </nav>
+      {loginOpen && !user && createPortal(
+        <LoginModal isOpen onClose={() => setLoginOpen(false)} returnTo="/mypage" />,
+        document.body
+      )}
     </>
   );
 };
