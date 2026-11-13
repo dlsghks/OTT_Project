@@ -4,14 +4,17 @@ import { ContentSection } from './ContentSection';
 import { WatchHistoryCard } from '../member/WatchHistoryCard';
 import { useProfileWatchHistory } from '../../utils/profileWatchHistory';
 import { useProfileShorts } from '../../utils/profileShorts';
+import { useAuthStore } from '../../store/useAuthStore';
 
 // 메인과 마이페이지가 같은 프로필별 시청 기록을 공유합니다.
 export const ContinueWatchingSection = () => {
+  const user = useAuthStore((state) => state.user);
   const { history, profileId, ownerId } = useProfileWatchHistory();
   const { profile } = useProfileShorts();
   const name = profile.name?.trim() || '프로필';
   const items = history.slice(0, 20);
-  if (!items.length) return null;
+  // 로그아웃 후 남아 있는 비로그인용 로컬 기록은 계정의 시청 목록으로 표시하지 않습니다.
+  if (!user || ownerId !== user.uid || !items.length) return null;
 
   return (
     <ContinueWatchingContent
