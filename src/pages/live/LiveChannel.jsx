@@ -513,7 +513,7 @@ export const LiveChannel = ({
 
   const toggleFullscreen = async () => {
     if (isMobilePlayback()) {
-      if (landscape.active) landscape.exit();
+      if (document.fullscreenElement || document.webkitFullscreenElement || videoRef.current?.webkitDisplayingFullscreen) landscape.exit();
       else void landscape.enter();
       return;
     }
