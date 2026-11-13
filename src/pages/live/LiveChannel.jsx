@@ -1,3 +1,5 @@
+import { useMobileLandscapePlayback } from '../../hooks/useMobileLandscapePlayback';
+import { isMobilePlayback } from '../../utils/mobileLandscapePlayback';
 import { useMobileLayout } from '../../hooks/useMobileLayout';
 import { LiveChannelFilters } from '../../components/live/LiveChannelFilters';
 import { SliderArrow } from '../../components/common/SliderArrow';
@@ -243,6 +245,7 @@ export const LiveChannel = ({
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(70);
   const [streamError, setStreamError] = useState('');
+  const landscape = useMobileLandscapePlayback(playerRef, isLoggedIn && !streamError, selected?.channelId);
   const [playerSettingsOpen, setPlayerSettingsOpen] = useState(false);
 
   // 현재 모든 채널에서 동일한 MP4 사용
@@ -491,6 +494,7 @@ export const LiveChannel = ({
     }
 
     try {
+      if (isMobilePlayback()) void landscape.enter();
       await video.play();
     } catch (error) {
       if (error.name === 'AbortError') return;
@@ -508,6 +512,11 @@ export const LiveChannel = ({
   };
 
   const toggleFullscreen = async () => {
+    if (isMobilePlayback()) {
+      if (landscape.active) landscape.exit();
+      else void landscape.enter();
+      return;
+    }
     try {
       if (!document.fullscreenElement) {
         await playerRef.current?.requestFullscreen?.();
@@ -679,8 +688,9 @@ export const LiveChannel = ({
       <div className={styles.layout} ref={layoutRef}>
         <div className={styles.main}>
           <div className={styles.playerFrame} ref={playerFrameRef}>
-          <div className={`${styles.player} ${miniPlayer && isAppLayout ? styles.miniPlayer : ''}`} ref={playerRef} style={{ backgroundImage: !isLoggedIn && selectedArtwork.image ? `url("${selectedArtwork.image}")` : undefined }}>
-            {isAppLayout && isLoggedIn && <button type="button" className={styles.miniToggle}
+          <div className={`${styles.player} ${miniPlayer && isAppLayout && !landscape.active ? styles.miniPlayer : ''} ${landscape.active ? 'mobile-landscape-player' : ''}`}  ref={playerRef} style={{ backgroundImage: !isLoggedIn && selectedArtwork.image ? `url("${selectedArtwork.image}")` : undefined }}>
+            {landscape.active && <button type="button" className="mobile-playback-action" onClick={landscape.exit}>영상에서 나가기</button>}
+            {isAppLayout && isLoggedIn && !landscape.active && <button type="button" className={styles.miniToggle}
               onClick={() => { if (miniPlayer) restorePlayer(); else { miniDismissedRef.current = false; setMiniPlayer(true); } }} aria-pressed={miniPlayer}
               aria-label={miniPlayer ? '작은 화면 닫고 원래 크기로 보기' : '작은 화면으로 보기'}>
               {miniPlayer ? '원래 크기' : '작은 화면'}
