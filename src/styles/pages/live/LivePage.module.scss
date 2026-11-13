@@ -146,14 +146,19 @@
   .page .heroLogoFrame[data-trimmed='true'] { --live-logo-height: 6cqw; }
 }
 
-// 시청하기 표시는 기본 색을 유지하고 배경 이미지만 호버 시 확대합니다.
+// 시청하기 버튼에 직접 호버하거나 키보드로 카드를 선택하면 강조합니다.
 .page .heroInfo > .heroWatchButton {
   position: relative;
   z-index: 3;
   pointer-events: auto;
   background: #171717;
   color: #fff;
- 
+  transition: background-color 0.2s ease;
+}
+
+.page .heroInfo > .heroWatchButton:hover,
+.page .heroCard:focus-visible .heroWatchButton {
+  background: #1351f9;
 }
 
 // 다른 콘텐츠 카드와 동일하게 내부 이미지만 1.04배 / 0.3초 확대합니다.
