@@ -389,18 +389,20 @@ export const saveAttendanceDay = async (profileId, day, ownerId) => {
   };
   validateProfile();
   const ref = doc(db, "users", uid);
-  await runTransaction(db, async (transaction) => {
+  return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     validateProfile();
     const saved = getExistingProfileData(snapshot, profileId);
     const previous = attendanceDates(saved?.attendanceDays);
-    if (previous.includes(day)) return;
+    if (previous.includes(day)) return { awarded: false, amount: 0 };
     const attendanceDays = attendanceDates([...previous, day]);
+    const reward = createAttendanceCoin(day, formatCoinDate(new Date()));
     const coinRecords = normalizeCoinRecords(
-      [createAttendanceCoin(day, formatCoinDate(new Date())), ...(saved?.coinRecords ?? [])],
+      [reward, ...(saved?.coinRecords ?? [])],
       attendanceDays
     );
     transaction.set(ref, { profiles: { [profileId]: { attendanceDays, coinRecords } } }, { merge: true });
+    return { awarded: true, amount: reward.amount };
   });
 };
 
