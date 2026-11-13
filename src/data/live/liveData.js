@@ -29,15 +29,15 @@ const heroFallbackImages = [
 // 히어로는 외부 API에 의존하지 않는 저장된 이미지를 우선 사용합니다.
 const heroImages = [
   '/images/special-hero/news_hero.jpg',
-  '/images/special-hero/news_hero.jpg',
-  '/images/special-hero/kbs_hero.jpg',
-  '/images/special-hero/news_hero.jpg',
-  '/images/live/thumbnail/livethumbnail019.jpg',
+  '/images/live/thumbnail/mbn-live.jpg',
+  '/images/live/thumbnail/kbs1-live.jpg',
+  '/images/live/thumbnail/yonhap-live.jpg',
+  '/images/live/thumbnail/tasty-guys-live.jpg',
   '/images/live/K31.jpg',
   '/images/live/PM1.jpg',
   '/images/live/thumbnail/livethumbnail026.jpg',
-  '/images/special-hero/mbc_hero.jpg',
-  '/images/special-hero/news_hero.jpg',
+  '/images/live/thumbnail/mbc-live.jpg',
+  '/images/live/thumbnail/tv-chosun-live.jpg',
 ];
 
 const demoRatings = [
