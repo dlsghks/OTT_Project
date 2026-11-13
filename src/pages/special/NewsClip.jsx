@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useMobileLandscapePlayback } from '../../hooks/useMobileLandscapePlayback';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 import { getNewsClip, getTabClips } from '../../data/newsClips';
@@ -41,6 +42,8 @@ export const NewsClipBody = ({ clip, youtubeId, recommends: recommendItems, fall
   // undefined: 찾는 중 · null: 못 찾음
   const [video, setVideo] = useState(undefined);
   const [shareMessage, setShareMessage] = useState('');
+  const playerRef = useRef(null);
+  const landscape = useMobileLandscapePlayback(playerRef, Boolean(video?.videoId), video?.videoId);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -93,7 +96,8 @@ export const NewsClipBody = ({ clip, youtubeId, recommends: recommendItems, fall
 
       <div className="news-clip__body">
         <div className="news-clip__main">
-          <div className="news-clip__player">
+          <div ref={playerRef} className={`news-clip__player${landscape.active ? " mobile-landscape-player" : ""}`}>
+            {video?.videoId && <button type="button" className="mobile-playback-action" onClick={landscape.active ? landscape.exit : landscape.enter}>{landscape.active ? "영상에서 나가기" : "가로 전체화면"}</button>}
             {video?.videoId ? (
               <iframe
                 src={`https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0`}
