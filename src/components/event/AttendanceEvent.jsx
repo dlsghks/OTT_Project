@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { PosterRow } from '../wavve/PosterRow';
 import { LoginModal } from '../common/LoginModal';
 import { useProfileShorts } from '../../utils/profileShorts';
@@ -30,12 +31,15 @@ export const AttendanceEvent = ({ title, image, benefits = [], doubleDays = [], 
   const [saving, setSaving] = useState(false);
   const [checkMessage, setCheckMessage] = useState('');
   const [shareMessage, setShareMessage] = useState('');
+  const [rewardToast, setRewardToast] = useState(null);
+  useEffect(() => {
+    if (!rewardToast) return;
+    const timer = window.setTimeout(() => setRewardToast(null), 3000);
+    return () => window.clearTimeout(timer);
+  }, [rewardToast]);
   const isCheckedToday = checked.includes(todayKey);
-  // x2 날짜는 2일로 계산
-  const attendanceCount = checked.reduce(
-    (count, dayKey) => count + (doubleDays.includes(Number(dayKey.slice(-2))) ? 2 : 1),
-    0
-  );
+  // 2X는 지급 코인만 두 배이며 출석 일수는 실제 날짜 수입니다.
+  const attendanceCount = checked.length;
 
   const firstDay = new Date(year, month, 1).getDay();
   const lastDate = new Date(year, month + 1, 0).getDate();
@@ -53,7 +57,12 @@ export const AttendanceEvent = ({ title, image, benefits = [], doubleDays = [], 
     setSaving(true);
     setCheckMessage('');
     try {
-      await saveAttendanceDay(profile.id, todayKey, ownerId);
+      const reward = await saveAttendanceDay(profile.id, todayKey, ownerId);
+      if (reward.awarded) {
+        setRewardToast({ ownerId, profileId: profile.id, message: `출석체크 완료! ${reward.amount}코인이 지급되었습니다.` });
+      } else {
+        setCheckMessage('오늘은 이미 출석체크를 완료했어요.');
+      }
     } catch (error) {
       setCheckMessage(error?.message || '출석을 저장하지 못했어요. 다시 시도해주세요.');
     } finally {
@@ -153,6 +162,10 @@ export const AttendanceEvent = ({ title, image, benefits = [], doubleDays = [], 
       </section>
     </div>
 
+    {rewardToast?.ownerId === ownerId && rewardToast?.profileId === profile.id && createPortal(
+      <div className="attendance-event__toast" role="status" aria-live="polite">{rewardToast.message}</div>,
+      document.body
+    )}
     <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </>
   );
