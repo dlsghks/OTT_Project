@@ -2,14 +2,19 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { createMobileLandscapePlayback } from '../utils/mobileLandscapePlayback';
 import '../styles/components/common/MobileLandscapePlayback.scss';
 
-export const useMobileLandscapePlayback = (ref, enabled, sessionKey) => {
+export const useMobileLandscapePlayback = (ref, enabled, sessionKey, onExit) => {
   const controller = useRef(null);
+  const onExitRef = useRef(onExit);
+  useEffect(() => { onExitRef.current = onExit; }, [onExit]);
   const [active, setActive] = useState(false);
   useEffect(() => {
     if (!enabled) return;
     let mounted = true;
     const player = createMobileLandscapePlayback(ref.current, () => {
-      if (mounted) setActive(false);
+      if (mounted) {
+        setActive(false);
+        onExitRef.current?.();
+      }
     });
     controller.current = player;
     const enter = () => {
