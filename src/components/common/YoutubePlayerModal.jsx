@@ -118,7 +118,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
   );
 }
 
-// 최초 재생 시 저장하고, 재생 중 15초마다 및 일시정지/종료/닫기 시 진행률을 갱신합니다.
+// 영상 길이를 처음 받을 때까지 매초 확인하고, 이후 15초마다 및 일시정지/종료/닫기 시 진행률을 갱신합니다.
 function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }) {
   const hostRef = useRef(null);
   const latest = useRef({ video, onPlaybackStart, onPlaybackProgress });
@@ -131,11 +131,18 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
     let started = false;
     let interval;
     let lastProgress = "";
+    let lastSavedAt = 0;
+    let savedDuration = 0;
+    let lastKnownProgress = { position: 0, duration: 0 };
     const snapshot = () => {
       const position = Number(player?.getCurrentTime?.());
       const duration = Number(player?.getDuration?.());
-      return { position: Number.isFinite(position) ? Math.max(0, position) : 0,
-        duration: Number.isFinite(duration) ? Math.max(0, duration) : 0 };
+      lastKnownProgress = {
+        position: Number.isFinite(position) && position >= 0 && (duration > 0 || position > 0)
+          ? position : lastKnownProgress.position,
+        duration: Number.isFinite(duration) && duration > 0 ? duration : lastKnownProgress.duration,
+      };
+      return lastKnownProgress;
     };
     const invoke = (callback, progress) => {
       if (!callback) return;
@@ -148,6 +155,8 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
       const signature = `${Math.floor(progress.position)}:${Math.floor(progress.duration)}`;
       if (lastProgress === signature) return;
       lastProgress = signature;
+      lastSavedAt = Date.now();
+      savedDuration = progress.duration;
       invoke(latest.current.onPlaybackProgress, progress);
     };
     const iframe = document.createElement("iframe");
@@ -163,10 +172,13 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
         events: {
           onStateChange: (event) => {
             if (cancelled) return;
+            player = event.target || player;
             if (event.data === YT.PlayerState.PLAYING && !started) {
               started = true;
               const progress = snapshot();
               lastProgress = `${Math.floor(progress.position)}:${Math.floor(progress.duration)}`;
+              lastSavedAt = Date.now();
+              savedDuration = progress.duration;
               invoke(latest.current.onPlaybackStart, progress);
             } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
               saveProgress();
@@ -175,8 +187,9 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
         },
       });
       interval = window.setInterval(() => {
-        if (!cancelled && player?.getPlayerState?.() === YT.PlayerState.PLAYING) saveProgress();
-      }, 15000);
+        if (!cancelled && player?.getPlayerState?.() === YT.PlayerState.PLAYING
+          && (!savedDuration || Date.now() - lastSavedAt >= 15000)) saveProgress();
+      }, 1000);
     }).catch(() => {});
     return () => {
       saveProgress();
