@@ -1,3 +1,4 @@
+import { useMobileLandscapePlayback } from '../../hooks/useMobileLandscapePlayback';
 import { useEffect, useRef, useState } from "react";
 import { useProfileWatchHistory, saveProfileWatchHistory } from "../../utils/profileWatchHistory";
 import { loadYouTubeAPI } from "../../utils/youtubePlayerApi";
@@ -8,6 +9,8 @@ import "../../styles/components/common/YoutubePlayerModal.scss";
 // 사용: 홈 시청 중 콘텐츠, 영화 · 시리즈 상세, 레트로브 메인 · 상세
 export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) {
   const closeRef = useRef(null);
+  const landscapeRef = useRef(null);
+  const landscape = useMobileLandscapePlayback(landscapeRef, Boolean(video.videoId), video.videoId);
   const { profileId, ownerId } = useProfileWatchHistory();
   // 모달을 연 계정·프로필을 유지하여 재생 중 변경 시 잘못된 계정에 쓰지 않습니다.
   const openedBy = useRef({ profileId, ownerId });
@@ -69,7 +72,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
   const status = video.videoId ? "ready" : video.mbcUrl ? "external" : video.status ?? "loading";
 
   return (
-    <div className="yt-modal" role="dialog" aria-modal="true" aria-labelledby="yt-modal-title">
+    <div ref={landscapeRef} className={`yt-modal${landscape.active ? " mobile-landscape-player" : ""}`} role="dialog" aria-modal="true" aria-labelledby="yt-modal-title">
       {/* 상단: 뒤로가기 + 제목 / 오른쪽: 날짜 · 유튜브 링크 */}
       <div className="yt-modal__head">
         <button ref={closeRef} type="button" className="yt-modal__close" onClick={onClose} aria-label="영상 닫기">
@@ -78,6 +81,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
         <h2 id="yt-modal-title">{video.title}</h2>
 
         <div className="yt-modal__info">
+          {video.videoId && <button type="button" className="mobile-playback-action" onClick={landscape.enter}>전체화면</button>}
           {historyError && <span role="status">{historyError}</span>}
           {video.date && <time dateTime={video.date.replaceAll(".", "-")}>{video.date}</time>}
 
