@@ -1,3 +1,5 @@
+import { lockPlaybackScroll } from '../../utils/playbackScrollLock';
+import { useMobileLandscapePlayback } from '../../hooks/useMobileLandscapePlayback';
 import { useEffect, useRef, useState } from "react";
 import { useProfileWatchHistory, saveProfileWatchHistory } from "../../utils/profileWatchHistory";
 import { loadYouTubeAPI } from "../../utils/youtubePlayerApi";
@@ -8,6 +10,8 @@ import "../../styles/components/common/YoutubePlayerModal.scss";
 // 사용: 홈 시청 중 콘텐츠, 영화 · 시리즈 상세, 레트로브 메인 · 상세
 export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) {
   const closeRef = useRef(null);
+  const landscapeRef = useRef(null);
+  const landscape = useMobileLandscapePlayback(landscapeRef, Boolean(video.videoId), video.videoId, onClose);
   const { profileId, ownerId } = useProfileWatchHistory();
   // 모달을 연 계정·프로필을 유지하여 재생 중 변경 시 잘못된 계정에 쓰지 않습니다.
   const openedBy = useRef({ profileId, ownerId });
@@ -37,8 +41,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
   };
 
   useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden"; // 뒤 페이지 스크롤 막기
+    const releaseScroll = lockPlaybackScroll();
     closeRef.current?.focus();
 
     const handleKeyDown = (e) => {
@@ -47,7 +50,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = prevOverflow;
+      releaseScroll();
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
@@ -69,7 +72,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
   const status = video.videoId ? "ready" : video.mbcUrl ? "external" : video.status ?? "loading";
 
   return (
-    <div className="yt-modal" role="dialog" aria-modal="true" aria-labelledby="yt-modal-title">
+    <div ref={landscapeRef} className={`yt-modal${landscape.active ? " mobile-landscape-player" : ""}`} role="dialog" aria-modal="true" aria-labelledby="yt-modal-title">
       {/* 상단: 뒤로가기 + 제목 / 오른쪽: 날짜 · 유튜브 링크 */}
       <div className="yt-modal__head">
         <button ref={closeRef} type="button" className="yt-modal__close" onClick={onClose} aria-label="영상 닫기">
@@ -78,6 +81,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
         <h2 id="yt-modal-title">{video.title}</h2>
 
         <div className="yt-modal__info">
+          {video.videoId && <button type="button" className="mobile-playback-action" onClick={landscape.enter}>전체화면</button>}
           {historyError && <span role="status">{historyError}</span>}
           {video.date && <time dateTime={video.date.replaceAll(".", "-")}>{video.date}</time>}
 
@@ -114,7 +118,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
   );
 }
 
-// 최초 재생 시 저장하고, 재생 중 15초마다 및 일시정지/종료/닫기 시 진행률을 갱신합니다.
+// 영상 길이를 처음 받을 때까지 매초 확인하고, 이후 15초마다 및 일시정지/종료/닫기 시 진행률을 갱신합니다.
 function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }) {
   const hostRef = useRef(null);
   const latest = useRef({ video, onPlaybackStart, onPlaybackProgress });
@@ -127,11 +131,18 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
     let started = false;
     let interval;
     let lastProgress = "";
+    let lastSavedAt = 0;
+    let savedDuration = 0;
+    let lastKnownProgress = { position: 0, duration: 0 };
     const snapshot = () => {
       const position = Number(player?.getCurrentTime?.());
       const duration = Number(player?.getDuration?.());
-      return { position: Number.isFinite(position) ? Math.max(0, position) : 0,
-        duration: Number.isFinite(duration) ? Math.max(0, duration) : 0 };
+      lastKnownProgress = {
+        position: Number.isFinite(position) && position >= 0 && (duration > 0 || position > 0)
+          ? position : lastKnownProgress.position,
+        duration: Number.isFinite(duration) && duration > 0 ? duration : lastKnownProgress.duration,
+      };
+      return lastKnownProgress;
     };
     const invoke = (callback, progress) => {
       if (!callback) return;
@@ -144,6 +155,8 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
       const signature = `${Math.floor(progress.position)}:${Math.floor(progress.duration)}`;
       if (lastProgress === signature) return;
       lastProgress = signature;
+      lastSavedAt = Date.now();
+      savedDuration = progress.duration;
       invoke(latest.current.onPlaybackProgress, progress);
     };
     const iframe = document.createElement("iframe");
@@ -159,10 +172,13 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
         events: {
           onStateChange: (event) => {
             if (cancelled) return;
+            player = event.target || player;
             if (event.data === YT.PlayerState.PLAYING && !started) {
               started = true;
               const progress = snapshot();
               lastProgress = `${Math.floor(progress.position)}:${Math.floor(progress.duration)}`;
+              lastSavedAt = Date.now();
+              savedDuration = progress.duration;
               invoke(latest.current.onPlaybackStart, progress);
             } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
               saveProgress();
@@ -171,8 +187,9 @@ function TrackedYoutubeFrame({ src, video, onPlaybackStart, onPlaybackProgress }
         },
       });
       interval = window.setInterval(() => {
-        if (!cancelled && player?.getPlayerState?.() === YT.PlayerState.PLAYING) saveProgress();
-      }, 15000);
+        if (!cancelled && player?.getPlayerState?.() === YT.PlayerState.PLAYING
+          && (!savedDuration || Date.now() - lastSavedAt >= 15000)) saveProgress();
+      }, 1000);
     }).catch(() => {});
     return () => {
       saveProgress();

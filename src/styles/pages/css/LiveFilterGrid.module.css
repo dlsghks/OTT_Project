@@ -1,0 +1,73 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 32px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.grid > li {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+.grid .card.card {
+  width: 100%;
+  min-width: 0;
+  gap: 10px;
+}
+.grid .text.text {
+  gap: 4px;
+}
+.grid .channel.channel {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+.grid .title.title {
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 400;
+  color: #a5a5a5;
+}
+
+.empty {
+  margin: 0;
+  color: #a5a5a5;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@media (max-width: 1440px) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px 14px;
+  }
+}
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px 10px;
+  }
+}
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1024px) {
+  .grid {
+    padding-inline: 16px;
+  }
+  .empty {
+    margin-inline: 16px;
+  }
+}

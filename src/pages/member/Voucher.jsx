@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { Check, ChevronDown } from "lucide-react";
 
+import { useAccountStore, saveCoinPurchase } from "../../store/useAccountStore";
+import { getCoinTotal } from "../../utils/coinRecords";
+import "../../styles/components/common/CoinPayment.scss";
 import { auth } from "../../firebase/firebase";
 import { LoginModal } from "../../components/common/LoginModal";
 import { voucherGroups, voucherTabs } from "../../data/voucherData";
@@ -90,6 +93,14 @@ export const Voucher = () => {
     const [checkoutError, setCheckoutError] = useState("");
     const [receipt, setReceipt] = useState(null);
     const checkoutDialog = useRef(null);
+    const account = useAccountStore();
+    const [coinInput, setCoinInput] = useState("");
+    const [checkoutBusy, setCheckoutBusy] = useState(false);
+    const checkoutBusyRef = useRef(false);
+    const coinProfile = account.profiles.find((entry) => entry.id === (checkout?.profileId ?? account.selectedProfileId));
+    const coinBalance = getCoinTotal(coinProfile?.coinRecords ?? []);
+    const maxCoins = checkout?.allowCoins ? Math.max(0, Math.min(coinBalance, checkout.amount)) : 0;
+    const checkoutCoins = Math.min(Number(coinInput) || 0, maxCoins);
 
     const currentSelection = getDemoVoucherSelection(activeVoucher);
     const group = voucherGroups[activeTab];
@@ -170,8 +181,11 @@ export const Voucher = () => {
         setMessage("");
         setReceipt(null);
         setCheckoutError("");
+        setCoinInput("");
         setCheckout({
             uid: user.uid,
+            profileId: account.selectedProfileId,
+            allowCoins: activeTab === "wavve",
             id: crypto.randomUUID(),
             planId: selectedPlan.id,
             isChange: Boolean(activeVoucher),
@@ -185,23 +199,35 @@ export const Voucher = () => {
         if (checkout && !checkoutDialog.current.open) checkoutDialog.current.showModal();
     }, [checkout]);
 
-    const approveCheckout = (event) => {
+    const approveCheckout = async (event) => {
         event.preventDefault();
-        if (!checkoutDialog.current.open || !checkout || auth.currentUser?.uid !== checkout.uid) {
-            return;
-        }
-
+        if (checkoutBusyRef.current || !checkoutDialog.current.open || !checkout
+            || auth.currentUser?.uid !== checkout.uid) return;
+        checkoutBusyRef.current = true;
+        setCheckoutBusy(true);
+        setCheckoutError("");
         try {
-            saveDemoVoucherPurchase(checkout);
-        } catch {
-            setCheckoutError("결제 내역을 저장하지 못했습니다. 브라우저 저장 공간을 확인한 뒤 다시 시도해 주세요.");
-            return;
+            if (account.uid !== checkout.uid || account.selectedProfileId !== checkout.profileId) {
+                throw new Error("계정 또는 프로필이 변경됐어요. 구매 팝업을 다시 열어주세요.");
+            }
+            let result = { ...checkout, coinsUsed: 0 };
+            if (checkoutCoins > 0) {
+                const payment = await saveCoinPurchase(checkout.profileId, "voucher", checkout,
+                    checkoutCoins, checkout.id, checkout.uid);
+                result = { ...result, ...payment.purchase, coinsUsed: payment.coinsUsed };
+            } else {
+                saveDemoVoucherPurchase(checkout);
+            }
+            setActiveVoucher(getActiveDemoVoucher(getDemoVoucherPurchases(checkout.uid)));
+            setSelectedId(null);
+            setCheckout(null);
+            setReceipt(result);
+        } catch (error) {
+            setCheckoutError(error.message || "결제를 완료하지 못했어요. 다시 시도해주세요.");
+        } finally {
+            checkoutBusyRef.current = false;
+            setCheckoutBusy(false);
         }
-
-        setActiveVoucher(getActiveDemoVoucher(getDemoVoucherPurchases(checkout.uid)));
-        setSelectedId(null);
-        setCheckout(null);
-        setReceipt(checkout);
     };
 
     const renderPlanButton = (plan) => {
@@ -535,6 +561,7 @@ export const Voucher = () => {
                 className="voucher__checkout"
                 aria-labelledby="voucher-checkout-title"
                 onCancel={(event) => {
+                    if (checkoutBusyRef.current) { event.preventDefault(); return; }
                     if (!receipt) return;
                     event.preventDefault();
                     navigate("/mypage", { replace: true });
@@ -551,6 +578,7 @@ export const Voucher = () => {
                         navigate("/mypage", { replace: true });
                     }}>
                         <p>{receipt.name} {receipt.months}개월 {receipt.isChange ? "이용권으로 변경됐어요." : "가상결제가 완료됐어요."}</p>
+                        <p>사용 코인 {money(receipt.coinsUsed || 0)}코인 · 결제 금액 {money(receipt.amount)}원</p>
                         <div className="voucher__checkout-actions">
                             <Link to="/mypage?billing=1">결제 내역 보기</Link>
                             <button type="submit" autoFocus>확인</button>
@@ -564,10 +592,32 @@ export const Voucher = () => {
                             <div><dt>이용 기간</dt><dd>{checkout.months}개월</dd></div>
                             <div><dt>결제 금액</dt><dd>{money(checkout.amount)}원</dd></div>
                         </dl>
+                        {checkout.allowCoins && (
+                            <>
+                                <div className="purchase-coins">
+                                    <label htmlFor="voucher-checkout-coins">사용할 코인 · 보유 {money(coinBalance)}코인</label>
+                                    <div className="purchase-coins__controls">
+                                        <input id="voucher-checkout-coins" type="text" inputMode="numeric" pattern="[0-9]*"
+                                            aria-label="사용할 코인" value={coinInput} placeholder="0" disabled={checkoutBusy || maxCoins <= 0}
+                                            onChange={(event) => {
+                                                const digits = event.target.value.replace(/[^0-9]/g, "");
+                                                setCoinInput(digits === "" ? "" : String(Math.min(Number(digits), maxCoins)));
+                                            }} />
+                                        <span>코인</span>
+                                        <button type="button" disabled={checkoutBusy || maxCoins <= 0}
+                                            onClick={() => setCoinInput(String(maxCoins))}>전체 사용</button>
+                                    </div>
+                                </div>
+                                <dl>
+                                    <div><dt>사용 코인</dt><dd>{money(checkoutCoins)}코인</dd></div>
+                                    <div><dt>최종 결제 금액</dt><dd>{money(checkout.amount - checkoutCoins)}원</dd></div>
+                                </dl>
+                            </>
+                        )}
                         {checkoutError && <p role="alert">{checkoutError}</p>}
                         <div className="voucher__checkout-actions">
-                            <button type="button" onClick={() => checkoutDialog.current.close()} autoFocus>취소</button>
-                            <button type="submit">가상결제 승인</button>
+                            <button type="button" disabled={checkoutBusy} onClick={() => checkoutDialog.current.close()} autoFocus>취소</button>
+                            <button type="submit" disabled={checkoutBusy}>{checkoutBusy ? "결제 중…" : "가상결제 승인"}</button>
                         </div>
                     </form>
                 )}

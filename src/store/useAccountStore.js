@@ -1,8 +1,9 @@
+import { createCoinPurchase, deductPurchaseCoins } from "../utils/coinPayments";
 import { normalizeWatchHistory, updateWatchHistory } from "../utils/watchHistoryRecords";
 import { normalizeContentFavorites, toggleContentFavorite } from "../utils/contentFavoriteRecords";
 import { normalizeEditorPicks, updateEditorPicks, refreshEditorPick } from "../utils/editorPickRecords";
-import { createAttendanceCoin, createCoinCharge, formatCoinDate, normalizeCoinRecords } from "../utils/coinRecords";
-import { createCouponRecord, markCouponUsed, normalizeCouponRecords } from "../utils/couponRecords";
+import { createAttendanceCoin, createCoinCharge, formatCoinDate, getCoinTotal, normalizeCoinRecords } from "../utils/coinRecords";
+import { createCouponBenefit, createCouponRecord, isCouponValid, markCouponUsed, reconcileCouponBenefits } from "../utils/couponRecords";
 import { create } from "zustand";
 import { deleteField, doc, onSnapshot, runTransaction } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
@@ -72,7 +73,7 @@ const normalize = (data = {}) => {
       viewedEditorPicks: normalizeEditorPicks(saved?.viewedEditorPicks),
       attendanceDays,
       coinRecords: normalizeCoinRecords(saved?.coinRecords, attendanceDays),
-      couponRecords: normalizeCouponRecords(saved?.couponRecords),
+      couponRecords: reconcileCouponBenefits(saved?.couponRecords, saved?.coinRecords, data.couponVoucherPurchases, profile.id),
       pinSalt,
       pinHash,
       locked: Boolean(pinSalt && pinHash),
@@ -81,6 +82,14 @@ const normalize = (data = {}) => {
   return {
     profiles,
     currentProfileId,
+    coinPurchases: Array.isArray(data.coinPurchases) ? data.coinPurchases.filter((entry) =>
+      entry && ["voucher", "content"].includes(entry.type) && entry.purchase
+      && typeof entry.id === "string" && Number.isFinite(entry.purchasedAt)) : [],
+    couponVoucherPurchases: Array.isArray(data.couponVoucherPurchases)
+      ? data.couponVoucherPurchases.filter((item) => item && typeof item.id === "string"
+        && ["wavve-standard", "double-basic"].includes(item.planId)
+        && Number.isFinite(item.purchasedAt) && Number.isFinite(item.expiresAt))
+      : [],
     selectedProfileId: currentProfileId ?? (profiles.find((profile) => !profile.locked) ?? profiles[0]).id,
   };
 };
@@ -91,6 +100,8 @@ const initial = () => ({
   error: "",
   profiles: [defaultProfile("profile1")],
   currentProfileId: null,
+  couponVoucherPurchases: [],
+  coinPurchases: [],
   selectedProfileId: "profile1",
 });
 
@@ -378,18 +389,20 @@ export const saveAttendanceDay = async (profileId, day, ownerId) => {
   };
   validateProfile();
   const ref = doc(db, "users", uid);
-  await runTransaction(db, async (transaction) => {
+  return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     validateProfile();
     const saved = getExistingProfileData(snapshot, profileId);
     const previous = attendanceDates(saved?.attendanceDays);
-    if (previous.includes(day)) return;
+    if (previous.includes(day)) return { awarded: false, amount: 0 };
     const attendanceDays = attendanceDates([...previous, day]);
+    const reward = createAttendanceCoin(day, formatCoinDate(new Date()));
     const coinRecords = normalizeCoinRecords(
-      [createAttendanceCoin(day, formatCoinDate(new Date())), ...(saved?.coinRecords ?? [])],
+      [reward, ...(saved?.coinRecords ?? [])],
       attendanceDays
     );
     transaction.set(ref, { profiles: { [profileId]: { attendanceDays, coinRecords } } }, { merge: true });
+    return { awarded: true, amount: reward.amount };
   });
 };
 
@@ -419,31 +432,113 @@ export const saveCoinCharge = async (profileId, amount, requestId, ownerId) => {
   });
 };
 
-// 쿠폰 등록: 번호가 틀렸거나 이 프로필에 이미 등록했으면 false 를 돌려줍니다.
+// 코인 차감과 구매 권한을 같은 계정 트랜잭션에서 확정합니다.
+export const saveCoinPurchase = async (profileId, type, purchase, coinsUsed, requestId, ownerId) => {
+  const uid = requireSelectedProfile(profileId, ownerId);
+  const payment = { ...createCoinPurchase(type, purchase, coinsUsed, requestId), profileId };
+  const ref = doc(db, "users", uid);
+  const result = await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(ref);
+    requireSelectedProfile(profileId, uid);
+    const saved = getExistingProfileData(snapshot, profileId);
+    const previous = Array.isArray(snapshot.data()?.coinPurchases)
+      ? snapshot.data().coinPurchases.filter((entry) => entry && entry.purchase) : [];
+    const existing = previous.find((entry) => entry.id === requestId
+      || (type === "content" && entry.type === "content" && entry.purchase?.id === payment.purchase.id));
+    if (existing) {
+      if (existing.profileId !== profileId || existing.type !== type
+        || existing.purchase.id !== payment.purchase.id) throw new Error("결제 요청이 변경됐어요.");
+      return existing;
+    }
+    const coins = normalizeCoinRecords(saved?.coinRecords, attendanceDates(saved?.attendanceDays));
+    const coinRecords = deductPurchaseCoins(coins, coinsUsed);
+    const completedPayment = { ...payment, balanceAfter: getCoinTotal(coinRecords) };
+    transaction.set(ref, {
+      coinPurchases: [completedPayment, ...previous],
+      profiles: { [profileId]: { coinRecords } },
+    }, { merge: true });
+    return completedPayment;
+  });
+  // 스냅샷 수신 전에도 구매 완료 화면과 권한이 같은 결제를 읽도록 합니다.
+  if (useAccountStore.getState().uid === uid) {
+    useAccountStore.setState((state) => ({
+      coinPurchases: [result, ...(state.coinPurchases ?? []).filter((entry) => entry.id !== result.id)],
+    }));
+  }
+  return result;
+};
+
+const hasExistingVoucher = (data, uid) => {
+  const purchases = [...(data.couponVoucherPurchases ?? []),
+    ...(data.coinPurchases ?? []).filter((entry) => entry.type === "voucher").map((entry) => entry.purchase)];
+  try {
+    const prefix = `ott:demo-voucher:${encodeURIComponent(uid)}:`;
+    Object.keys(localStorage).filter((key) => key.startsWith(prefix)).forEach((key) => {
+      try { const value = JSON.parse(localStorage.getItem(key)); if (value) purchases.push(value); } catch { /* 잘못된 기록 제외 */ }
+    });
+  } catch { /* 서버에 저장된 이용권으로 확인 */ }
+  purchases.sort((a, b) => b.purchasedAt - a.purchasedAt);
+  return purchases[0]?.expiresAt > Date.now();
+};
+
+// 쿠폰 효과와 사용 상태를 함께 저장해 중복 적립·중복 사용을 막습니다.
+const couponBenefitPatch = (snapshot, saved, records, coupon, profileId) => {
+  const benefit = createCouponBenefit(coupon, profileId);
+  const profilePatch = { couponRecords: markCouponUsed(records, coupon.id)
+    .map((item) => item.id === coupon.id ? { ...item, benefitApplied: true } : item) };
+  const patch = { profiles: { [profileId]: profilePatch } };
+  if (benefit.coin) {
+    const coins = normalizeCoinRecords(saved?.coinRecords, attendanceDates(saved?.attendanceDays));
+    profilePatch.coinRecords = normalizeCoinRecords([
+      benefit.coin, ...coins.filter((item) => item.id !== benefit.coin.id),
+    ]);
+  }
+  if (benefit.voucher) {
+    const previous = snapshot.data()?.couponVoucherPurchases;
+    patch.couponVoucherPurchases = [
+      benefit.voucher,
+      ...(Array.isArray(previous) ? previous : []).filter((item) => item.id !== benefit.voucher.id),
+    ];
+  }
+  return patch;
+};
+
+// 등록은 보유 쿠폰 추가만 수행합니다. 혜택은 사용하기에서 지급합니다.
 export const registerCoupon = async (profileId, code, ownerId) => {
   const record = createCouponRecord(code);
-  if (!record) return false;
+  if (!record || !isCouponValid(record)) return false;
   const uid = requireSelectedProfile(profileId, ownerId);
   const ref = doc(db, "users", uid);
   return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     requireSelectedProfile(profileId, uid);
-    const records = normalizeCouponRecords(getExistingProfileData(snapshot, profileId)?.couponRecords);
+    const saved = getExistingProfileData(snapshot, profileId);
+    const records = reconcileCouponBenefits(saved?.couponRecords, saved?.coinRecords,
+      snapshot.data()?.couponVoucherPurchases, profileId);
     if (records.some((item) => item.id === record.id)) return false;
-    transaction.set(ref, { profiles: { [profileId]: { couponRecords: [record, ...records] } } }, { merge: true });
+    const next = [record, ...records];
+    const patch = { profiles: { [profileId]: { couponRecords: next } } };
+    transaction.set(ref, patch, { merge: true });
     return true;
   });
 };
 
-// 쿠폰 사용: 보유 쿠폰을 이용 쿠폰으로 옮깁니다.
 export const redeemCoupon = async (profileId, couponId, ownerId) => {
   const uid = requireSelectedProfile(profileId, ownerId);
   const ref = doc(db, "users", uid);
-  await runTransaction(db, async (transaction) => {
+  return runTransaction(db, async (transaction) => {
     const snapshot = await transaction.get(ref);
     requireSelectedProfile(profileId, uid);
-    const records = normalizeCouponRecords(getExistingProfileData(snapshot, profileId)?.couponRecords);
-    transaction.set(ref, { profiles: { [profileId]: { couponRecords: markCouponUsed(records, couponId) } } }, { merge: true });
+    const saved = getExistingProfileData(snapshot, profileId);
+    const records = reconcileCouponBenefits(saved?.couponRecords, saved?.coinRecords,
+      snapshot.data()?.couponVoucherPurchases, profileId);
+    const coupon = records.find((item) => item.id === couponId && item.status === "owned");
+    if (!coupon || !isCouponValid(coupon)) return false;
+    if (coupon.kind === "voucher" && hasExistingVoucher(snapshot.data() ?? {}, uid)) {
+      throw new Error("이용권이 없을 때만 이용권 쿠폰을 사용할 수 있습니다.");
+    }
+    transaction.set(ref, couponBenefitPatch(snapshot, saved, records, coupon, profileId), { merge: true });
+    return true;
   });
 };
 const libraryNormalizers = new Map([

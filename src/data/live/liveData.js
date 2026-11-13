@@ -13,7 +13,7 @@ const liveThumbnails = Array.from({ length: 30 }, (_, index) => {
 });
 
 // API 제한 시에도 채널에 맞는 로컬 이미지를 즉시 표시합니다.
-const heroImages = [
+const heroFallbackImages = [
   '/images/live/fallback/ytn.svg',
   '/images/live/fallback/mbn.svg',
   '/images/live/fallback/kbs1.svg',
@@ -24,6 +24,20 @@ const heroImages = [
   '/images/live/thumbnail/livethumbnail026.jpg',
   '/images/live/fallback/mbc.svg',
   '/images/live/fallback/tv-chosun.svg',
+];
+
+// 히어로는 외부 API에 의존하지 않는 저장된 이미지를 우선 사용합니다.
+const heroImages = [
+  '/images/special-hero/news_hero.jpg',
+  '/images/live/thumbnail/mbn-live.jpg',
+  '/images/live/thumbnail/kbs1-live.jpg',
+  '/images/live/thumbnail/yonhap-live.jpg',
+  '/images/live/thumbnail/tasty-guys-live.jpg',
+  '/images/live/K31.jpg',
+  '/images/live/PM1.jpg',
+  '/images/live/thumbnail/livethumbnail026.jpg',
+  '/images/live/thumbnail/mbc-live.jpg',
+  '/images/live/thumbnail/tv-chosun-live.jpg',
 ];
 
 const demoRatings = [
@@ -219,7 +233,8 @@ export const liveTop10 = top10Data.map((program, index) => ({
   category: '인기 라이브',
 
   image: program.image || heroImages[index],
-  fallbackImage: program.image || heroImages[index],
+  fallbackImage: program.image || heroFallbackImages[index],
+  preferLocalArtwork: true,
 
   start: stamp(-25 - index * 2),
   end: stamp(35 + index * 2),

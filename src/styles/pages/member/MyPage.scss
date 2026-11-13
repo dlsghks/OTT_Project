@@ -1234,3 +1234,12 @@
 }
 
 .wavve-mypage .mypage__library { scroll-margin-top: 110px; }
+
+
+// 모바일 레트로 요약 카드를 다른 요약 카드와 같은 단색 배경으로 표시합니다.
+@media (max-width: 1024px) {
+  .wavve-mypage .mypage__summary > .mypage__retro-summary {
+    border: 2px solid transparent;
+    background: #181b25;
+  }
+}

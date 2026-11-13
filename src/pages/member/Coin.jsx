@@ -2,10 +2,12 @@ import { useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ChevronRight, CircleAlert, Copyright } from "lucide-react";
 
-import { saveCoinCharge } from "../../store/useAccountStore";
+import { saveCoinCharge, useAccountStore } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
 import { useProfileShorts } from "../../utils/profileShorts";
-import { COIN_CHARGE_OPTIONS, formatCoinDate, getAvailableCoin, getCoinTotal } from "../../utils/coinRecords";
+import { COIN_CHARGE_OPTIONS, formatCoinDate, getCoinTotal } from "../../utils/coinRecords";
+
+import { getCoinUsageRecords } from "../../utils/coinPayments";
 
 import "../../styles/pages/member/Coin.scss";
 
@@ -23,6 +25,7 @@ export default function Coin() {
   const user = useAuthStore((state) => state.user);
   const authReady = useAuthStore((state) => state.authReady);
   const { profile, ownerId } = useProfileShorts();
+  const account = useAccountStore();
   const chargeDialog = useRef(null);
   const chargeRequest = useRef(null);
   const charging = useRef(false);
@@ -41,7 +44,9 @@ export default function Coin() {
   const now = formatCoinDate(new Date());
   const chargedCoin = getCoinTotal(records.filter((record) => record.kind === "charge"), now);
   const bonusCoin = getCoinTotal(records, now) - chargedCoin;
-  const rows = tab === "earned" ? records : []; // 코인 사용 기능이 생기면 소진 내역 연결
+  const usageRecords = user && account.uid === ownerId
+    ? getCoinUsageRecords(account.coinPurchases, profile.id, records) : [];
+  const rows = tab === "earned" ? records : usageRecords;
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const pageRows = rows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -136,28 +141,40 @@ export default function Coin() {
           <div className="coin__table-wrap">
             <table className="coin__table">
               <thead>
-                <tr>
+                {tab === "used" ? (
+                  <tr>
+                    <th scope="col">사용 내역</th>
+                    <th scope="col">사용 금액</th>
+                    <th scope="col">사용 후 남은 금액</th>
+                    <th scope="col">사용일</th>
+                  </tr>
+                ) : <tr>
                   <th scope="col">충전금액</th>
                   <th scope="col">코인명</th>
                   <th scope="col">지급사유</th>
-                  <th scope="col">잔여코인</th>
                   <th scope="col">충전일</th>
                   <th scope="col">만료일</th>
                   <th scope="col">결제수단</th>
                   <th scope="col">자동결제</th>
-                </tr>
+                </tr>}
               </thead>
               <tbody>
                 {pageRows.map((record) => (
                   <tr key={record.id}>
+                    {tab === "used" ? <>
+                      <td>{record.name}</td>
+                      <td>{money(record.amount)}코인</td>
+                      <td>{record.balanceAfter === null ? "-" : `${money(record.balanceAfter)}코인`}</td>
+                      <td>{displayDate(record.usedAt)}</td>
+                    </> : <>
                     <td>{record.kind === "charge" ? `${money(record.amount)}원` : money(record.amount)}</td>
                     <td>{record.name}</td>
                     <td>{record.reason}</td>
-                    <td>{money(getAvailableCoin(record, now))}</td>
                     <td>{displayDate(record.chargedAt)}</td>
                     <td>{displayDate(record.expiresAt)}</td>
                     <td>{record.kind === "charge" ? "가상 결제" : "-"}</td>
                     <td>자동결제 대상이 아님</td>
+                    </>}
                   </tr>
                 ))}
               </tbody>

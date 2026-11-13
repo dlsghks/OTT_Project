@@ -1,4 +1,5 @@
 import { useCallback, useSyncExternalStore } from 'react';
+import { useAccountStore } from '../store/useAccountStore';
 import { getIndividualPurchaseMovie } from '../data/individualPurchaseMovies.js';
 
 const PREFIX = 'ott:demo-movie:';
@@ -9,7 +10,7 @@ const resolveOffer = (value) => typeof value === 'object' && value
   ? value : getIndividualPurchaseMovie(value);
 const storageId = (offer) => offer.kind === 'program' ? offer.id : String(offer.tmdbId);
 
-function readPurchases(uid) {
+function readLocalPurchases(uid) {
   if (!uid) return [];
 
   try {
@@ -50,6 +51,21 @@ function readPurchases(uid) {
   }
 }
 
+function readPurchases(uid) {
+  if (!uid) return [];
+  const account = useAccountStore.getState();
+  const remote = account.uid === uid ? (account.coinPurchases ?? [])
+    .filter((entry) => entry.type === 'content')
+    .map((entry) => ({
+      id: entry.purchase.id, title: entry.purchase.title, type: entry.purchase.kind,
+      to: entry.purchase.link, image: entry.purchase.image || '',
+      savedAt: entry.purchasedAt, downloadedAt: null,
+    })) : [];
+  const merged = new Map(remote.map((entry) => [entry.id, entry]));
+  readLocalPurchases(uid).forEach((entry) => merged.set(entry.id, entry));
+  return [...merged.values()].sort((a, b) => b.savedAt - a.savedAt);
+}
+
 export function saveDemoMoviePurchase(uid, tmdbId, image) {
   const movie = resolveOffer(tmdbId);
   if (!uid || !movie) throw new Error('구매할 영화와 계정을 확인해주세요.');
@@ -66,20 +82,23 @@ export function saveDemoMovieDownload(uid, tmdbId) {
   if (!uid || !movie) throw new Error('구매한 영화를 확인해주세요.');
 
   const key = `${accountPrefix(uid)}${storageId(movie)}`;
-  const record = JSON.parse(localStorage.getItem(key));
-  if (!Number.isFinite(record?.savedAt)) throw new Error('구매 기록이 없어요.');
+  const owned = readPurchases(uid).find((entry) => entry.id === movie.id);
+  if (!owned) throw new Error('구매 기록이 없어요.');
+  const record = JSON.parse(localStorage.getItem(key)) ?? { offer: movie, savedAt: owned.savedAt, image: owned.image };
 
   localStorage.setItem(key, JSON.stringify({ ...record, downloadedAt: Date.now() }));
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
 const subscribe = (refresh) => {
+  const stopAccount = useAccountStore.subscribe(refresh);
   const onStorage = (event) => {
     if (!event.key || event.key.startsWith(PREFIX)) refresh();
   };
   window.addEventListener('storage', onStorage);
   window.addEventListener(CHANGE_EVENT, refresh);
   return () => {
+    stopAccount();
     window.removeEventListener('storage', onStorage);
     window.removeEventListener(CHANGE_EVENT, refresh);
   };

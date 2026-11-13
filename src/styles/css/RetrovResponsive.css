@@ -220,9 +220,6 @@
     width: calc(100% + var(--retro-side) * 2);
     margin: 30px calc(var(--retro-side) * -1) 0;
   }
-  .retrov-main .retrov-main__event > .rv-event {
-    display: none;
-  }
   .retrov-main .rv-mobile-events {
     display: flex;
     flex-direction: column;

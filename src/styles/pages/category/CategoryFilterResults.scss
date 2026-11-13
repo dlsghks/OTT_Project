@@ -1,0 +1,38 @@
+// Figma 272:4810: 6 × 268.333px, column gap 16px, row gap 24px.
+// 홈 큐레이션을 제외한 전체·장르 필터 결과에만 적용합니다.
+.category-page .category-page__sections--filtered {
+  .collection-row__grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: 16px;
+    row-gap: 24px;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+
+    > li { min-width: 0; }
+    .content-card { width: 100%; min-width: 0; }
+    .content-card__thumbnail { width: 100%; height: auto; aspect-ratio: 268.333 / 391.53; border-radius: 15px; }
+  }
+}
+
+@media (max-width: 1024px) {
+  .category-page .category-page__sections--filtered .collection-row__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 12px; }
+}
+@media (min-width: 901px) and (max-width: 1024px) {
+  .category-page .category-page__sections--filtered .collection-row__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .category-page .category-page__sections--filtered .collection-row__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 8px;
+    .content-card__thumbnail { border-radius: 6px; }
+  }
+}
+
+// 작은 PC: 전체·장르 필터 결과는 한 줄에 5개.
+@media (min-width: 1025px) and (max-width: 1439px) {
+  .category-page .category-page__sections--filtered .collection-row__grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

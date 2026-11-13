@@ -23,10 +23,11 @@ export const WatchHistoryCard = ({ item, onOpenContent, onPlay }) => {
       <img src={getImagePath(images[Math.min(imageIndex, images.length - 1)])} alt="" loading="lazy"
         onError={() => setImageIndex((index) => Math.min(index + 1, images.length - 1))} />
       {duration > 0 && <span className="mypage__history-duration">{formatTime(duration)}</span>}
-      {duration > 0 && <span className="mypage__history-progress" role="progressbar"
-        aria-label={`${item.title} 시청 진행률`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}>
+      <span className="mypage__history-progress" role="progressbar"
+        aria-label={`${item.title} 시청 진행률`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={duration > 0 ? Math.round(progress) : undefined}
+        aria-valuetext={duration > 0 ? undefined : "재생 정보 확인 중"}>
         <span style={{ width: `${progress}%` }} />
-      </span>}
+      </span>
     </span>
     <strong className="mypage__history-title">{title}</strong>
     <span className="mypage__history-program">{item.title}</span>

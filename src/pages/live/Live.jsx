@@ -1,8 +1,11 @@
 import styles from '../../styles/pages/live/LivePage.module.scss';
 import { useEffect, useState } from 'react';
+import { BrowsePageHeader } from '../../components/common/BrowsePageHeader';
 import { LiveHero } from '../../components/live/LiveHero';
 import { CategoryFilter } from '../../components/common/CategoryFilter';
 import { LiveSection } from '../../components/live/LiveSection';
+import { LiveCard } from '../../components/live/LiveCard';
+import gridStyles from '../../styles/pages/live/LiveFilterGrid.module.scss';
 import { livePrograms, liveTop10, liveCategories } from '../../data/live/liveData';
 
 
@@ -25,12 +28,16 @@ export const Live = () => {
     const end = new Date(program.end).getTime();
     return end > start ? Math.max(0, Math.min(100, (now - start) / (end - start) * 100)) : 0;
   };
-  const showAll = selectedCategory === '라이브 홈' || selectedCategory === '라이브 전체';
+  const isHome = selectedCategory === '라이브 홈';
   const dataCategory = CATEGORY_NAMES[selectedCategory] ?? selectedCategory;
-  const categories = showAll ? liveCategories : liveCategories.filter((category) => category === dataCategory);
+  const categories = liveCategories;
+  const filteredPrograms = selectedCategory === '라이브 전체'
+    ? livePrograms
+    : livePrograms.filter((program) => program.category === dataCategory);
   const getCategoryTitle = (category) => category === '24시간 뉴스 채널' ? '뉴스' : category;
   return (
     <div className={styles.page} aria-label="라이브">
+      <BrowsePageHeader title="라이브" />
       <LiveHero programs={liveTop10} getProgress={getProgress} />
       <CategoryFilter
         filters={LIVE_FILTER_OPTIONS}
@@ -38,14 +45,22 @@ export const Live = () => {
         onFilterChange={setSelectedCategory}
         ariaLabel="라이브 카테고리"
       />
-      <div className={styles.sections}>
+      {isHome ? <div className={styles.sections}>
         {categories.length === 0 && <p role="status">현재 등록된 라이브 채널이 없어요.</p>}
         {categories.slice(0, 1).map((category) => <LiveSection key={category} title={getCategoryTitle(category)}
           items={livePrograms.filter((program) => program.category === category)} />)}
-        {showAll && <LiveSection title="실시간 채널 TOP 10" items={liveTop10} ranked />}
+        <LiveSection title="실시간 채널 TOP 10" items={liveTop10} ranked />
         {categories.slice(1).map((category) => <LiveSection key={category} title={getCategoryTitle(category)}
           items={livePrograms.filter((program) => program.category === category)} />)}
-      </div>
+      </div> : filteredPrograms.length > 0 ? (
+        <ul className={gridStyles.grid} aria-label={`${selectedCategory} 채널 목록`}>
+          {filteredPrograms.map((program) => (
+            <li key={program.id}>
+              <LiveCard program={program} compact />
+            </li>
+          ))}
+        </ul>
+      ) : <p className={gridStyles.empty} role="status">현재 등록된 라이브 채널이 없어요.</p>}
     </div>
   );
 };

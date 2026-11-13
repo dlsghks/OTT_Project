@@ -1,3 +1,4 @@
+import { useAccountStore } from "../store/useAccountStore";
 import { voucherGroups } from "../data/voucherData.js";
 
 const purchasePrefix = (uid) => `ott:demo-voucher:${encodeURIComponent(uid)}:`;
@@ -22,10 +23,12 @@ export function saveDemoVoucherPurchase({ uid, id, planId, name, months, amount 
 
 export function getDemoVoucherPurchases(uid) {
   if (!uid) return [];
-
+  const account = useAccountStore.getState();
+  const couponPurchases = account.uid === uid ? account.couponVoucherPurchases ?? [] : [];
+  let localPurchases = [];
   try {
     const prefix = purchasePrefix(uid);
-    return Object.keys(localStorage)
+    localPurchases = Object.keys(localStorage)
       .filter((key) => key.startsWith(prefix))
       .flatMap((key) => {
         try {
@@ -34,11 +37,14 @@ export function getDemoVoucherPurchases(uid) {
         } catch {
           return [];
         }
-      })
-      .sort((a, b) => b.purchasedAt - a.purchasedAt);
+      });
   } catch {
-    return [];
+    // Firestore에 저장된 쿠폰 이용권은 브라우저 저장 공간과 관계없이 사용할 수 있습니다.
   }
+  const coinPurchases = account.uid === uid ? (account.coinPurchases ?? [])
+    .filter((entry) => entry.type === "voucher").map((entry) => entry.purchase) : [];
+  return [...couponPurchases, ...coinPurchases, ...localPurchases]
+    .sort((a, b) => b.purchasedAt - a.purchasedAt);
 }
 
 export function getDemoVoucherPurchasesInPeriod(purchases, months, now) {

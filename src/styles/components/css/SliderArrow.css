@@ -65,7 +65,7 @@
 }
 
 :hover > .slider-arrow,
-:focus-within > .slider-arrow {
+.slider-arrow:focus-visible {
   opacity: 1;
   pointer-events: auto;
 }
