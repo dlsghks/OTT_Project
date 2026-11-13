@@ -1,3 +1,6 @@
+import { CouponRegisterModal } from "./CouponRegisterModal";
+import { registerCoupon, useAccountStore } from "../../store/useAccountStore";
+import { useProfileShorts } from "../../utils/profileShorts";
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -41,6 +44,8 @@ export const MyHover = ({
   onAction,
   onLogout,
 }) => {
+  const { profile, ownerId } = useProfileShorts();
+  const [couponRequest, setCouponRequest] = useState(null);
   const [user, setUser] = useState(auth.currentUser);
   const [authReady, setAuthReady] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(readSelectedProfile);
@@ -129,6 +134,7 @@ export const MyHover = ({
     setIsOpen(false);
     setMessage("");
     setSelectedProfile(readSelectedProfile());
+    setCouponRequest(null);
   }, [location.key]);
 
   // 다른 탭에서 프로필을 변경하거나 창으로 돌아온 경우에도 반영합니다.
@@ -241,6 +247,18 @@ export const MyHover = ({
     };
   }, [isOpen]);
 
+  const handleCouponRegister = async (code) => {
+    if (!couponRequest) return false;
+    const registered = await registerCoupon(couponRequest.profileId, code, couponRequest.ownerId);
+    if (!registered) return false;
+    // 저장 도중 계정이나 프로필이 바뀌면 이전 요청으로 페이지를 이동하지 않습니다.
+    if (auth.currentUser?.uid !== couponRequest.ownerId
+      || useAccountStore.getState().selectedProfileId !== couponRequest.profileId) return "handled";
+    setCouponRequest(null);
+    navigate("/coupon");
+    return "handled";
+  };
+
   const handleAction = async (key, label) => {
     if (!authReady) return;
 
@@ -258,7 +276,7 @@ export const MyHover = ({
 
     if (key === "coupon") {
       close();
-      navigate("/coupon");
+      setCouponRequest({ profileId: profile.id, ownerId });
       return;
     }
 
@@ -476,6 +494,14 @@ export const MyHover = ({
           </div>,
           document.body
         )}
+      {couponRequest?.ownerId === user?.uid && couponRequest?.ownerId === ownerId
+        && couponRequest?.profileId === profile.id && (
+        <CouponRegisterModal
+          key={`${couponRequest.ownerId}:${couponRequest.profileId}`}
+          onRegister={handleCouponRegister}
+          onClose={() => setCouponRequest(null)}
+        />
+      )}
     </div>
   );
 };
