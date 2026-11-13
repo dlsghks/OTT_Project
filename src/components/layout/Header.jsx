@@ -164,9 +164,19 @@ export const Header = ({
     setPanelPosition(null);
   }, [location.pathname, user?.uid]);
 
-  // ESC 키로 닫기
+  // 메뉴 바깥 클릭·터치 또는 ESC 키로 닫기
   useEffect(() => {
     if (!isNotificationOpen) return;
+
+    const handlePointerDown = (event) => {
+      if (
+        panelRef.current?.contains(event.target) ||
+        bellRef.current?.contains(event.target)
+      ) return;
+
+      setIsNotificationOpen(false);
+      setPanelPosition(null);
+    };
 
     const handleKeyDown = (event) => {
       if (event.key !== 'Escape') return;
@@ -177,9 +187,11 @@ export const Header = ({
     };
 
     window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown, true);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown, true);
     };
   }, [isNotificationOpen]);
 
