@@ -92,7 +92,7 @@
     }
 
     // 홈 · 라이브 · 쇼츠 · 검색 아이콘
-    &__icon > img.wavve-mobile-nav__glyph {
+    &__icon > svg.wavve-mobile-nav__glyph {
       position: absolute;
       inset: 0;
       display: block;
@@ -110,36 +110,19 @@
       background: transparent;
       object-fit: contain;
       transform: none;
-      filter: brightness(0) invert(1);
+      fill: currentColor;
     }
 
-    &__icon--home > img.wavve-mobile-nav__glyph {
+    &__icon--home > svg.wavve-mobile-nav__glyph {
       inset: 1.8894px auto auto 2.5px;
       width: 15px;
       height: 15.6106px;
     }
 
-    &__icon--live > img.wavve-mobile-nav__glyph {
+    &__icon--live > svg.wavve-mobile-nav__glyph {
       inset: 4.17px auto auto 2.0833px;
       width: 15.8329px;
       height: 11.6676px;
-    }
-
-    // 선택한 메뉴의 아이콘 색상
-    &__link.is-active &__glyph {
-      filter:
-        brightness(0)
-        saturate(100%)
-        invert(24%)
-        sepia(98%)
-        saturate(5473%)
-        hue-rotate(224deg)
-        brightness(97%)
-        contrast(103%);
-    }
-
-    &__link.is-active &__icon--home > img.wavve-mobile-nav__glyph {
-      filter: none;
     }
 
     // MY: 현재 선택한 프로필 사진
