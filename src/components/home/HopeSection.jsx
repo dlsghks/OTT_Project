@@ -8,11 +8,11 @@ export const HopeSection = ({ appResponsive = false }) => (
   <section
     className="home-hope"
     aria-labelledby="home-hope-title"
-    style={{ '--hope-background': `url("${getImagePath('/images/home/section/Timothée.jpg')}")` }}
+    style={{ '--hope-background': `url("${getImagePath('/images/home/section/Timothee.jpg')}")` }}
   >
     <div className="home-hope__intro">
       <SectionTitle id="home-hope-title" className="home-hope__title">
-        <img src={getImagePath('/images/home/section/Timothée_name.png')} alt="티모시 샬라메" />
+        <img src={getImagePath('/images/home/section/Timothee_name.png')} alt="티모시 샬라메" />
       </SectionTitle>
       <p className="home-hope__description">
         〈마티 슈프림〉의 주역<br />
