@@ -1,3 +1,4 @@
+import { lockPlaybackScroll } from '../../utils/playbackScrollLock';
 import { useMobileLandscapePlayback } from '../../hooks/useMobileLandscapePlayback';
 import { useEffect, useRef, useState } from "react";
 import { useProfileWatchHistory, saveProfileWatchHistory } from "../../utils/profileWatchHistory";
@@ -10,7 +11,7 @@ import "../../styles/components/common/YoutubePlayerModal.scss";
 export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) {
   const closeRef = useRef(null);
   const landscapeRef = useRef(null);
-  const landscape = useMobileLandscapePlayback(landscapeRef, Boolean(video.videoId), video.videoId);
+  const landscape = useMobileLandscapePlayback(landscapeRef, Boolean(video.videoId), video.videoId, onClose);
   const { profileId, ownerId } = useProfileWatchHistory();
   // 모달을 연 계정·프로필을 유지하여 재생 중 변경 시 잘못된 계정에 쓰지 않습니다.
   const openedBy = useRef({ profileId, ownerId });
@@ -40,8 +41,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
   };
 
   useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden"; // 뒤 페이지 스크롤 막기
+    const releaseScroll = lockPlaybackScroll();
     closeRef.current?.focus();
 
     const handleKeyDown = (e) => {
@@ -50,7 +50,7 @@ export default function YoutubePlayerModal({ video, onClose, onPlaybackStart }) 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = prevOverflow;
+      releaseScroll();
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);

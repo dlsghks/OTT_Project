@@ -1,3 +1,5 @@
+import { lockPlaybackScroll } from './playbackScrollLock.js';
+
 let latestSession = 0;
 
 // Shorts never opt in to this controller. Desktop playback is left untouched.
@@ -11,7 +13,7 @@ export const createMobileLandscapePlayback = (element, onExit = () => {}) => {
   let disposed = false;
   let pending = false;
   let ownsFullscreen = false;
-  let previousOverflow;
+  let releaseScroll;
   let session = 0;
   const video = element.querySelector('video');
   const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
@@ -45,7 +47,8 @@ export const createMobileLandscapePlayback = (element, onExit = () => {}) => {
     if (!active) return;
     active = false;
     element.classList.remove('mobile-landscape-player');
-    document.body.style.overflow = previousOverflow;
+    releaseScroll?.();
+    releaseScroll = null;
     restorePortrait();
     closeNativeFullscreen();
     onExit();
@@ -55,9 +58,8 @@ export const createMobileLandscapePlayback = (element, onExit = () => {}) => {
     if (!active) {
       active = true;
       session = ++latestSession;
-      previousOverflow = document.body.style.overflow;
+      releaseScroll = lockPlaybackScroll();
       element.classList.add('mobile-landscape-player');
-      document.body.style.overflow = 'hidden';
     }
     if (pending) return;
     pending = true;
