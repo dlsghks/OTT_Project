@@ -236,6 +236,7 @@ export const liveTop10 = top10Data.map((program, index) => ({
   fallbackImage: program.image || heroFallbackImages[index],
   preferLocalArtwork: true,
 
+  repeatSchedule: true,
   start: stamp(-25 - index * 2),
   end: stamp(35 + index * 2),
 

@@ -20,13 +20,20 @@ export const Live = () => {
   const [now, setNow] = useState(() => Date.now());
   const [selectedCategory, setSelectedCategory] = useState('라이브 홈');
   useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 30000);
+    const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
   }, []);
   const getProgress = (program) => {
     const start = new Date(program.start).getTime();
     const end = new Date(program.end).getTime();
-    return end > start ? Math.max(0, Math.min(100, (now - start) / (end - start) * 100)) : 0;
+    const duration = end - start;
+    if (!Number.isFinite(duration) || duration <= 0 || now < start) return 0;
+
+    // 데모 편성은 같은 길이의 다음 방송으로 이어집니다.
+    const elapsed = program.repeatSchedule
+      ? (now - start) % duration
+      : now - start;
+    return Math.max(0, Math.min(100, elapsed / duration * 100));
   };
   const isHome = selectedCategory === '라이브 홈';
   const dataCategory = CATEGORY_NAMES[selectedCategory] ?? selectedCategory;
