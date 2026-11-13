@@ -520,3 +520,29 @@ $text-sub: figma.$neutral-2;
     }
   }
 }
+
+/* 상세 페이지 섹션 제목 (시즌 회차 · 관련영상 · 비슷한 프로그램 등)
+   프로그램 메인 페이지 제목과 같은 크기 (responsive/CategoryResponsive.scss 의 .category-row__title h2 기준) */
+@media (max-width: 1024px) {
+  // 섹션(콘텐츠 줄) 사이 상하 간격 80px → 60px
+  .movie-detail .movie-detail__sections {
+    gap: 60px;
+  }
+
+  .movie-detail .movie-detail__sections .section-title {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  // 포스터 아래 콘텐츠 제목 12px (부모 글자 16px 기준 0.75em, 홈 반응형 콘텐츠 제목과 같은 크기)
+  .movie-detail .movie-detail__sections .content-card__info h3 {
+    font-size: 0.75em;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  .movie-detail .movie-detail__sections .section-title {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}

@@ -358,7 +358,20 @@ $quiz-text-sub: #b9b7ea;
   }
 
   &__verdict {
+    display: inline-flex;
+    align-items: center;
+    justify-self: center;
+    gap: 6px;
     font-size: 11px;
+
+    // ● 정답 / ● 오답
+    &::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
 
     &.is-correct {
       color: #8fb0ff;
@@ -443,22 +456,280 @@ $quiz-text-sub: #b9b7ea;
 }
 
 @media (max-width: 1024px) {
-  // 작은 화면에서는 고정 높이 대신 내용만큼 늘어나도록
+  // 모바일 시안 기준: 390 x 600 (화면 너비 가득, 최소 높이 600 — 내용이 길면 그만큼 늘어남)
   .mudo-quiz {
     height: auto;
     min-height: 600px;
 
+    /* ---------- 상단 / 하단 바 ---------- */
     &__bar {
+      height: 51px;
       padding: 0 16px;
+      border-bottom: 1px solid rgba($quiz-text-sub, 0.35);
+      font-size: 12px;
+
+      &--bottom {
+        height: 40px;
+        border-bottom: 0;
+        font-size: 12px;
+      }
     }
 
+    &__brand {
+      gap: 8px;
+      font-family: $retrov-pixel;
+      font-size: 17px;
+      font-weight: 400;
+    }
+
+    &__logo {
+      width: 29px;
+      height: 29px;
+      font-family: $retrov-sans;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* ---------- 본문: 위에서부터 차례로 ---------- */
     &__body {
-      padding: 76px 16px 28px; // 위쪽 알약 버튼 자리 확보
+      align-content: start;
+      padding: 53px 16px 24px; // 위쪽 알약 버튼(9px + 32px) + 12px 아래부터 내용
     }
 
     &__actions {
-      top: 20px;
+      top: 9px;
       right: 16px;
+      gap: 8px;
+    }
+
+    &__pill {
+      gap: 6px;
+      height: 32px;
+      padding: 0 12px;
+      border-color: #b6bdf5;
+      background: #001a7a;
+      font-size: 13px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &__stage {
+      width: 100%;
+
+      &--intro,
+      &--result {
+        padding-top: 0;
+      }
+    }
+
+    &__eyebrow {
+      margin-bottom: 6px;
+      font-size: 13px;
+
+      span {
+        opacity: 1;
+        font-weight: 400;
+      }
+    }
+
+    // 문제 번호는 굵게 (예: 문제 01)
+    &__stage:not(.mudo-quiz__stage--intro):not(.mudo-quiz__stage--result) .mudo-quiz__eyebrow {
+      font-weight: 700;
+      color: #c9cdff;
+    }
+
+    // 시작 화면 (Figma 358 x 416.3): 그룹 사이 gap 12 / 문구 묶음(윗줄 · 제목 · 설명) 안은 gap 6
+    // (.mudo-quiz p, h3 { margin: 0 } 보다 우선하도록 두 단계 선택자 사용)
+    &__stage--intro {
+      row-gap: 12px;
+
+      .mudo-quiz__eyebrow {
+        margin: 0 0 -6px; // 다음 제목과 6px
+        font-family: $retrov-pixel; // "무도 좀 보셨습니까?" 는 도트 폰트
+        font-size: 15px;
+        line-height: 29px;
+      }
+
+      .mudo-quiz__title {
+        margin: 0 0 -6px; // 다음 설명과 6px
+        font-size: 28px;
+        line-height: 31px;
+      }
+
+      .mudo-quiz__desc {
+        margin: 0;
+        font-size: 13px;
+        line-height: 18.5px;
+      }
+
+      .mudo-quiz__profile {
+        margin: 0;
+        padding: 17px 16px 11px; // 카드 223 x 184.5
+
+        strong {
+          line-height: 24px;
+        }
+
+        span {
+          line-height: 15px;
+        }
+      }
+
+      .mudo-quiz__hint {
+        margin: 0;
+        line-height: 12px;
+      }
+    }
+
+    &__title {
+      margin-bottom: 6px;
+      font-size: 26px;
+      line-height: 1.15;
+    }
+
+    &__question {
+      font-size: 18px;
+    }
+
+    &__desc {
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    /* ---------- 캐릭터 카드 ---------- */
+    &__profile {
+      gap: 2px;
+      width: 223px;
+      margin-bottom: 12px;
+      padding: 16px 16px 14px;
+      border: 1px solid rgba(#7d84e0, 0.55);
+      border-radius: 12px;
+
+      img {
+        width: 104px;
+        height: 104px;
+        margin-bottom: 8px;
+        border: 2px solid #b6bdf5;
+      }
+
+      strong {
+        font-size: 17px;
+      }
+
+      span {
+        font-size: 11px;
+      }
+    }
+
+    /* ---------- 버튼 ---------- */
+    &__primary,
+    &__secondary {
+      gap: 10px;
+      height: 44px;
+      border-radius: 8px;
+      font-weight: 500;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    &__hint {
+      margin-top: 16px;
+      font-size: 12px;
+    }
+
+    /* ---------- 진행 바 ---------- */
+    &__progress {
+      margin-bottom: 14px;
+    }
+
+    &__progress-label {
+      align-items: center;
+      font-size: 12px;
+
+      span:last-child {
+        font-size: 14px;
+      }
+    }
+
+    &__progress-bar {
+      gap: 5px;
+
+      li.is-done {
+        background: $quiz-blue;
+      }
+    }
+
+    /* ---------- 문제 이미지: 높이 204 고정, 가로는 화면 안에서 ---------- */
+    &__image {
+      width: 100%;
+      margin: 8px 0 12px; // 질문(h3)은 공통 margin: 0 이라 이미지 쪽에서 간격 지정
+
+      img {
+        height: 204px;
+        border-radius: 4px;
+        object-fit: cover;
+      }
+    }
+
+    /* ---------- 입력 ---------- */
+    &__form {
+      gap: 7px;
+    }
+
+    &__input {
+      input {
+        height: 44px;
+        padding: 0 46px 0 16px;
+        border-radius: 8px;
+        background: #f4f3fb;
+      }
+
+      svg {
+        right: 16px;
+        width: 18px;
+        height: 18px;
+        color: #8b8aa3;
+      }
+    }
+
+    /* ---------- 정답 공개: ● 정답/오답 + 정답 문구 ---------- */
+    &__answer {
+      gap: 2px;
+      margin-bottom: 4px;
+
+      strong {
+        font-size: 18px;
+        font-weight: 800;
+      }
+    }
+
+    &__verdict {
+      font-size: 12px;
+      font-weight: 700;
+
+      &.is-correct,
+      &.is-wrong {
+        color: #fff;
+      }
+
+      &.is-correct::before {
+        background: $quiz-blue-light;
+      }
+
+      &.is-wrong::before {
+        background: #ff3b4f;
+      }
+    }
+
+    &__my-answer {
+      display: none;
     }
   }
 }
