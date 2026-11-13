@@ -97,7 +97,7 @@ export const NewsClipBody = ({ clip, youtubeId, recommends: recommendItems, fall
       <div className="news-clip__body">
         <div className="news-clip__main">
           <div ref={playerRef} className={`news-clip__player${landscape.active ? " mobile-landscape-player" : ""}`}>
-            {video?.videoId && <button type="button" className="mobile-playback-action" onClick={landscape.active ? landscape.exit : landscape.enter}>{landscape.active ? "영상에서 나가기" : "가로 전체화면"}</button>}
+            {video?.videoId && <button type="button" className="mobile-playback-action" onClick={landscape.active ? landscape.exit : landscape.enter}>{landscape.active ? "영상에서 나가기" : "가로 화면"}</button>}
             {video?.videoId ? (
               <iframe
                 src={`https://www.youtube.com/embed/${video.videoId}?autoplay=1&rel=0`}
