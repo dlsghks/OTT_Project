@@ -189,7 +189,7 @@ function QuizQuestion({ name, question, index, total, result, onSubmit, onNext }
         <>
           <div className="mudo-quiz__answer" role="status">
             <p className={`mudo-quiz__verdict ${result.correct ? "is-correct" : "is-wrong"}`}>
-              • {result.correct ? "정답" : "아쉬워요! 정답은"}
+              {result.correct ? "정답" : "오답"}
             </p>
             <strong>{question.answer}</strong>
             {!result.correct && <p className="mudo-quiz__my-answer">내 답: {result.input}</p>}
