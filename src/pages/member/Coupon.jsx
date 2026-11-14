@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { CircleAlert } from "lucide-react";
 
+import { WavveAccountModal } from "../../components/common/WavveAccountModal";
+import { couponCatalog } from "../../data/couponData";
+import { useActiveVoucher } from "../../hooks/useActiveVoucher";
+import { getActiveDemoVoucher, getDemoVoucherPurchases } from "../../utils/demoVoucherPurchases";
 import ticketIcon from "../../assets/coupon/ticket.png";
 import { CouponRegisterModal } from "../../components/member/CouponRegisterModal";
 import { redeemCoupon, registerCoupon } from "../../store/useAccountStore";
 import { useAuthStore } from "../../store/useAuthStore";
-import { getOwnedCoupons, getUsedCoupons } from "../../utils/couponRecords";
+import { createCouponRecord, getOwnedCoupons, getUsedCoupons, isCouponValid } from "../../utils/couponRecords";
 import { useProfileShorts } from "../../utils/profileShorts";
 
 import "../../styles/pages/member/Coin.scss";
@@ -28,6 +32,23 @@ export default function Coupon() {
   const [registerOpen, setRegisterOpen] = useState(false);
   const [usingId, setUsingId] = useState("");
   const [notice, setNotice] = useState("");
+  const [pendingCoupon, setPendingCoupon] = useState(null);
+  const activeVoucher = useActiveVoucher();
+  const busyRef = useRef(false);
+  const scopeRef = useRef("");
+  const scope = `${ownerId}:${profile.id}`;
+  scopeRef.current = scope;
+
+  useEffect(() => {
+    if (!notice) return;
+    const timer = setTimeout(() => setNotice(""), 3500);
+    return () => clearTimeout(timer);
+  }, [notice]);
+  useEffect(() => {
+    setPendingCoupon(null);
+    setRegisterOpen(false);
+    setNotice("");
+  }, [scope]);
 
   if (authReady && !user) {
     return <Navigate to="/login" replace state={{ returnTo: "/coupon" }} />;
@@ -47,25 +68,68 @@ export default function Coupon() {
     setNotice("");
   };
 
-  const handleRegister = async (code) => {
-    const registered = await registerCoupon(profile.id, code, ownerId);
-    if (registered) changeTab("owned");
-    return registered;
-  };
+  const successMessage = (coupon) => coupon.kind === "coin"
+    ? "코인이 충전되었습니다."
+    : "이용권이 적용되었습니다.";
 
-  const handleUse = async (coupon) => {
-    if (usingId || !window.confirm("쿠폰을 사용하시겠습니까?")) return;
-
-    setUsingId(coupon.id);
-    setNotice("");
+  const applyCoupon = async (request) => {
+    if (busyRef.current || request.scope !== scopeRef.current) return;
+    busyRef.current = true;
+    setUsingId(request.coupon.id);
+    setPendingCoupon(null);
+    setRegisterOpen(false);
     try {
-      await redeemCoupon(profile.id, coupon.id, ownerId);
+      if (request.coupon.kind === "voucher" && getActiveDemoVoucher(getDemoVoucherPurchases(user?.uid))) {
+        setPendingCoupon(request);
+        return;
+      }
+      const applied = await redeemCoupon(request.profileId, request.coupon.id, request.ownerId);
+      if (request.scope !== scopeRef.current) return;
+      if (!applied) throw new Error("이미 사용했거나 사용할 수 없는 쿠폰이에요.");
+      setRegisterOpen(false);
       changeTab("used");
+      setNotice(successMessage(request.coupon));
     } catch {
-      setNotice("쿠폰을 사용하지 못했어요. 다시 시도해 주세요.");
+      if (request.scope === scopeRef.current) setNotice("쿠폰을 적용하지 못했어요. 쿠폰 상태를 확인하고 다시 시도해주세요.");
     } finally {
+      busyRef.current = false;
       setUsingId("");
     }
+  };
+
+  const requestApplication = (coupon) => {
+    const request = { coupon, profileId: profile.id, ownerId, scope };
+    const current = getActiveDemoVoucher(getDemoVoucherPurchases(user?.uid));
+    if (coupon.kind === "voucher" && (current || activeVoucher)) {
+      setRegisterOpen(false);
+      setPendingCoupon(request);
+      return;
+    }
+    return applyCoupon(request);
+  };
+
+  const handleRegister = async (code) => {
+    const coupon = createCouponRecord(code);
+    if (!coupon || !isCouponValid(coupon) || records.some((item) => item.id === coupon.id)) return false;
+    const registeringScope = scope;
+    const registered = await registerCoupon(profile.id, code, ownerId);
+    if (!registered) return false;
+    if (registeringScope !== scopeRef.current) return "handled";
+    setRegisterOpen(false);
+    changeTab("owned");
+    setNotice(`${coupon.name}이 등록되었습니다.`);
+    return "handled";
+  };
+
+  const handleUse = (coupon) => {
+    if (usingId || busyRef.current) return;
+    requestApplication({ ...coupon, ...couponCatalog[coupon.code] });
+  };
+
+  const cancelApplication = () => {
+    if (busyRef.current) return;
+    setPendingCoupon(null);
+
   };
 
   return (
@@ -74,7 +138,7 @@ export default function Coupon() {
         <h1>쿠폰내역</h1>
       </header>
 
-      <button type="button" className="coupon__register" onClick={() => setRegisterOpen(true)}>
+      <button type="button" className="coupon__register" disabled={Boolean(usingId)} onClick={() => setRegisterOpen(true)}>
         <img src={ticketIcon} alt="" />
         등록하기
       </button>
@@ -93,7 +157,7 @@ export default function Coupon() {
           </button>
         ))}
       </div>
-      {notice && <p className="coin__notice" role="status">{notice}</p>}
+      {notice && <p className="coupon__toast" role="status">{notice}</p>}
 
       {rows.length === 0 ? (
         <div className="coin__empty">
@@ -144,6 +208,19 @@ export default function Coupon() {
             ))}
           </nav>
         </>
+      )}
+
+      {pendingCoupon && (
+        <WavveAccountModal title="쿠폰 적용" busy={Boolean(usingId)} onClose={cancelApplication}>
+          {() => (
+            <div className="wam-body coupon-apply">
+              <p>이용권이 없을 때만 이용권 쿠폰을 사용할 수 있습니다.</p>
+              <div className="coupon-apply__actions">
+                <button type="button" className="coupon-apply__confirm" onClick={() => setPendingCoupon(null)}>확인</button>
+              </div>
+            </div>
+          )}
+        </WavveAccountModal>
       )}
 
       {registerOpen && (

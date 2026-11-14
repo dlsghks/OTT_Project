@@ -239,6 +239,12 @@
     line-height: 1.55;
   }
 
+  // 접힌 상태에서는 출연진 아래에 펼치기 버튼 공간을 확보한다.
+  @media (min-width: 1025px) {
+    &:not(.is-expanded) &__content {
+      padding-bottom: 60px;
+    }
+  }
   // 펼치기 · 접기 버튼 (예능~해외시리즈 상세와 같은 위치, 글씨체는 레트로브 DungGeunMo)
   &__toggle {
     position: absolute;
@@ -271,6 +277,7 @@
     height: auto;
     min-height: var(--hero-height);
     padding-top: var(--content-top);
+    background-color: $retrov-detail-bg;
 
     &::before,
     &::after {
@@ -363,6 +370,15 @@
 
   &:has(.rv-cast__item[aria-expanded="true"]) .rv-cast__item:not([aria-expanded="true"]) {
     opacity: 0.35;
+  }
+  &:has(.rv-cast__item:hover) .rv-cast__item:not(:hover),
+  &:has(.rv-cast__item:focus-visible) .rv-cast__item:not(:focus-visible) {
+    opacity: 0.5;
+  }
+
+  .rv-cast__item:hover,
+  .rv-cast__item:focus-visible {
+    opacity: 1;
   }
 }
 
@@ -952,5 +968,28 @@
     li {
       flex: 0 0 41vw;
     }
+  }
+}
+.rv-detail .rv-event__nav {
+  > svg {
+    display: none;
+  }
+
+  &::after {
+    content: '';
+    width: 50px;
+    height: 50px;
+    background: currentColor;
+    pointer-events: none;
+  }
+
+  &--prev::after {
+    -webkit-mask: url('../../../assets/retrov/pixel__left.svg') center / contain no-repeat;
+    mask: url('../../../assets/retrov/pixel__left.svg') center / contain no-repeat;
+  }
+
+  &--next::after {
+    -webkit-mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
+    mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
   }
 }

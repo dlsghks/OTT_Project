@@ -1004,3 +1004,40 @@
   -webkit-mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
   mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
 }
+
+.retrov-main .rv-event__nav {
+  > svg {
+    display: none;
+  }
+
+  &::after {
+    content: '';
+    width: 50px;
+    height: 50px;
+    background: currentColor;
+    pointer-events: none;
+  }
+
+  &--prev::after {
+    -webkit-mask: url('../../../assets/retrov/pixel__left.svg') center / contain no-repeat;
+    mask: url('../../../assets/retrov/pixel__left.svg') center / contain no-repeat;
+  }
+
+  &--next::after {
+    -webkit-mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
+    mask: url('../../../assets/retrov/pixel__right.svg') center / contain no-repeat;
+  }
+}
+.retrov-main .rv-short-card {
+  &__image {
+    overflow: hidden;
+
+    > img:not(.rv-short-card__badge) {
+      transition: transform 0.3s;
+    }
+  }
+
+  &:hover .rv-short-card__image > img:not(.rv-short-card__badge) {
+    transform: scale(1.05);
+  }
+}

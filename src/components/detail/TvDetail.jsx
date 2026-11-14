@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react';
+import { auth } from '../../firebase/firebase';
+import { getIndividualPurchaseContent } from '../../data/individualPurchaseMovies';
+import { saveDemoMoviePurchase, useDemoMoviePurchases } from '../../utils/demoMoviePurchases';
+import { MoviePurchaseDialog } from './MoviePurchaseDialog';
 
 import { categoryPages } from '../../data/categoryData';
 import { useTvStore, getTvCast } from '../../store/useTvStore';
@@ -30,6 +34,7 @@ export const TvDetail = ({ programId, config }) => {
 
   const [searchFailed, setSearchFailed] = useState(false);
   const [season, setSeason] = useState(null);
+  const [purchaseAccount, setPurchaseAccount] = useState(null);
 
   const tv = tmdbId ? tvDetail[tmdbId] : null;
   const actions = useDetailActions(tv ? {
@@ -38,6 +43,16 @@ export const TvDetail = ({ programId, config }) => {
     title: localItem?.title ?? tv.name,
     image: tv.poster_path ? `${TMDB_IMG}w500${tv.poster_path}` : localItem?.poster || localItem?.image || '',
   } : null);
+
+  const purchaseItem = localItem ?? items.find((item) =>
+    item.tmdbId === tmdbId || item.title === tv?.name);
+  const offer = getIndividualPurchaseContent(tmdbId,
+    purchaseItem && { ...purchaseItem, link: `${config.basePath}/${tmdbId}` }, 'program');
+  const uid = actions.user?.uid;
+  const purchases = useDemoMoviePurchases(uid);
+  const purchasedProgram = offer && purchases.find((record) => record.id === offer.id);
+  const needsPurchase = Boolean(offer && !purchasedProgram);
+  const requestPurchase = () => uid ? setPurchaseAccount(uid) : actions.onLogin();
 
   // 시즌 선택 목록 (스페셜 시즌 0 제외) · 기본 시즌
   const seasons = tv
@@ -108,6 +123,10 @@ export const TvDetail = ({ programId, config }) => {
   // 로그인 후에는 영상 팝업을 먼저 열고(찾는 중) 영상을 찾으면 재생
   // 1) data/episodeYoutube.js 직접 지정 → 2) TMDB 회차 영상 → 3) 유튜브 검색
   const handleEpisode = (episode) => {
+    if (needsPurchase) {
+      requestPurchase();
+      return;
+    }
     if (!actions.user) {
       actions.onLogin();
       return;
@@ -167,11 +186,30 @@ export const TvDetail = ({ programId, config }) => {
               ))}
             </select>
           )}
+          watchActions={needsPurchase ? (
+            <button type="button" className="movie-hero__buy" onClick={requestPurchase}>
+              구매하기
+            </button>
+          ) : undefined}
+          hasWatchAccess={Boolean(purchasedProgram) || actions.hasVoucher}
           onWatch={handleWatch}
           actions={actions}
         />
       )}
     >
+      {offer && uid && purchaseAccount === uid && (
+        <MoviePurchaseDialog
+          movie={offer}
+          image={tv.poster_path ? `${TMDB_IMG}w500${tv.poster_path}` : purchaseItem?.poster || purchaseItem?.image || ""}
+          onClose={() => setPurchaseAccount(null)}
+          onPurchase={() => {
+            if (auth.currentUser?.uid !== uid) throw new Error('계정이 변경됐어요.');
+            saveDemoMoviePurchase(uid, offer,
+              tv.poster_path ? `${TMDB_IMG}w500${tv.poster_path}` : purchaseItem?.poster || purchaseItem?.image || '');
+          }}
+        />
+      )}
+
       {/* 시즌별 회차 */}
       {seasonNumber !== null && (
         <div id="detail-episodes">

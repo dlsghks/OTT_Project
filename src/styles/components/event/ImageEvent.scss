@@ -144,3 +144,22 @@
     }
   }
 }
+// 출석 적립이 저장된 뒤 표시하는 하단 안내
+.attendance-event__toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 2000;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  padding: 14px 22px;
+  border-radius: 10px;
+  background: rgba(40, 40, 40, 0.96);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  pointer-events: none;
+}

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
 
 
 @layer base {
@@ -24,6 +28,11 @@
     vertical-align: middle;
   }
 
+  /* 팝업에서 스크롤을 잠가도 스크롤바 폭을 유지해 화면 이동을 방지합니다. */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   html,
   body,
   #root {
@@ -33,5 +42,13 @@
 
   body {
     margin: 0;
+    font-family: var(--font-sans);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
   }
 }

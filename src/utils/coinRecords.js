@@ -1,7 +1,7 @@
 // 코인 적립 기록: 프로필별로 계정(Firestore)에 저장합니다. 날짜는 "YYYY-MM-DD HH:mm" 문자열입니다.
 export const ATTENDANCE_COIN = 100;
 export const COIN_CHARGE_OPTIONS = [1000, 5000, 10000];
-// x2 날짜 (달력 표시 · 출석 일수 · 코인 2배 공통, src/data/eventPages.js 에서 사용)
+// x2 날짜 (달력 표시 · 출석 코인 2배 공통, src/data/eventPages.js 에서 사용)
 export const ATTENDANCE_DOUBLE_DAYS = [1, 6, 8, 13, 14, 15, 21, 22, 27, 28, 29];
 const VALID_DAYS = 60; // 적립일로부터 유효기간
 const MAX_RECORDS = 366;

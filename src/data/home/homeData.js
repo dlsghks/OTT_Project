@@ -134,6 +134,7 @@ const comingSoonItems = [
   },
   {
     id: "coming-soon-02",
+    backdrop: "/images/home/section/comingSoon/bro-and-sister.jpg",
     title: "연애남매2",
     description: "11월, 웨이브 독점 공개",
     image: "/images/home/section/preview02.jpg",
@@ -141,6 +142,7 @@ const comingSoonItems = [
   },
   {
     id: "coming-soon-03",
+    backdrop: "/images/home/section/comingSoon/my-son.jpg",
     title: "내 새끼의 연애3",
     description: "11월 6일, 오전 11시 공개",
     image: "/images/home/section/preview03.jpg",
@@ -148,12 +150,14 @@ const comingSoonItems = [
   },
   {
     id: "coming-soon-04",
+    backdrop: "/images/home/section/comingSoon/mun-mu.jpg",
     title: "문무",
     description: "11월 14일, 오후 9시 20분 첫 방송",
     image: "/images/home/section/preview04.jpg",
   },
   {
     id: "coming-soon-05",
+    backdrop: "/images/home/section/comingSoon/mma.jpg",
     title: "2026 멜론뮤직어워드",
     description: "11월 14일, 웨이브 OTT 독점 생중계",
     image: "/images/home/section/preview05.jpg",

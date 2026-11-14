@@ -67,7 +67,7 @@ export const ContentSection = ({
             <SectionTitle>{title}</SectionTitle>
 
             {(moreLink || more) && (
-              <Link to={moreLink || more}>
+              <Link className="section-more" to={moreLink || more}>
                 더보기
               </Link>
             )}

@@ -1,3 +1,5 @@
+import { useMobileLandscapePlayback } from '../../hooks/useMobileLandscapePlayback';
+import { isMobilePlayback } from '../../utils/mobileLandscapePlayback';
 import { useMobileLayout } from '../../hooks/useMobileLayout';
 import { LiveChannelFilters } from '../../components/live/LiveChannelFilters';
 import { SliderArrow } from '../../components/common/SliderArrow';
@@ -11,7 +13,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import 'swiper/css';
 
 import { auth } from '../../firebase/firebase';
-import { liveChatAdapter } from '../../services/liveChat';
+import { liveChatAdapter, liveReactionAdapter } from '../../services/liveChat';
 import { livePrograms, liveTop10 } from '../../data/live/liveData';
 // 골프 스페셜 "이번 주 골프 중계" → ?channel=중계 id 로 들어오면 해당 골프 중계 선택
 import { golfLivePrograms } from '../../data/golfData';
@@ -100,6 +102,7 @@ function ReservationDialog({ program, reserved, onClose, onConfirm, notice = fal
 
 export const LiveChannel = ({
   chatAdapter = liveChatAdapter,
+  reactionAdapter = liveReactionAdapter,
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const requestedId = searchParams.get('channel');
@@ -242,6 +245,7 @@ export const LiveChannel = ({
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(70);
   const [streamError, setStreamError] = useState('');
+  const landscape = useMobileLandscapePlayback(playerRef, isLoggedIn && !streamError, selected?.channelId);
   const [playerSettingsOpen, setPlayerSettingsOpen] = useState(false);
 
   // 현재 모든 채널에서 동일한 MP4 사용
@@ -252,6 +256,8 @@ export const LiveChannel = ({
   const liked = favoriteChannels.includes(String(selected?.channelId));
   const [reactionCounts, setReactionCounts] = useState({});
   const [flyingHearts, setFlyingHearts] = useState([]);
+  const [reactionError, setReactionError] = useState('');
+  const reactionSession = useRef(0);
   const reactionSequence = useRef(0);
   const [reservationProgram, setReservationProgram] = useState(null);
   const [reminders, setReminders] = useState([]);
@@ -488,6 +494,7 @@ export const LiveChannel = ({
     }
 
     try {
+      if (isMobilePlayback()) void landscape.enter();
       await video.play();
     } catch (error) {
       if (error.name === 'AbortError') return;
@@ -505,6 +512,11 @@ export const LiveChannel = ({
   };
 
   const toggleFullscreen = async () => {
+    if (isMobilePlayback()) {
+      if (document.fullscreenElement || document.webkitFullscreenElement || videoRef.current?.webkitDisplayingFullscreen) landscape.exit();
+      else void landscape.enter();
+      return;
+    }
     try {
       if (!document.fullscreenElement) {
         await playerRef.current?.requestFullscreen?.();
@@ -597,13 +609,45 @@ export const LiveChannel = ({
     setReminders((previous) => previous.includes(id) ? previous.filter((value) => value !== id) : [...previous, id]);
     setReservationProgram(null);
   };
-  const addReaction = () => {
-    if (!isLoggedIn) { onLoginRequired(); return; }
+  useEffect(() => {
+    const session = ++reactionSession.current;
+    setReactionError('');
+    setFlyingHearts([]);
+    if (!isLoggedIn || !selected?.channelId) return;
     const channelId = String(selected.channelId);
-    setReactionCounts((previous) => ({ ...previous, [channelId]: (previous[channelId] ?? selected.reactionCount ?? 0) + 1 }));
-    const id = ++reactionSequence.current;
-    // 최근 하트만 유지하여 연속 클릭 시에도 요소가 계속 쌓이지 않게 합니다.
-    setFlyingHearts((previous) => [...previous.slice(-19), { id, channelId }]);
+    let previousCount = null;
+    let active = true;
+    const unsubscribe = reactionAdapter.subscribe(channelId, count => {
+      if (!active || !Number.isSafeInteger(count) || count < 0) return;
+      setReactionCounts(previous => ({ ...previous, [channelId]: count }));
+      if (previousCount !== null && count > previousCount) {
+        const hearts = Array.from({ length: Math.min(20, count - previousCount) }, () => ({
+          id: ++reactionSequence.current, channelId,
+        }));
+        setFlyingHearts(previous => [...previous, ...hearts].slice(-20));
+      }
+      previousCount = count;
+    }, () => {
+      if (active) setReactionError('하트에 연결하지 못했습니다. 네트워크와 권한을 확인해주세요.');
+    });
+    return () => {
+      active = false;
+      if (reactionSession.current === session) reactionSession.current += 1;
+      unsubscribe?.();
+    };
+  }, [selected?.channelId, isLoggedIn, user?.uid, reactionAdapter]);
+
+  const addReaction = async () => {
+    if (!isLoggedIn) { onLoginRequired(); return; }
+    const session = reactionSession.current;
+    setReactionError('');
+    try {
+      await reactionAdapter.send(String(selected.channelId));
+    } catch {
+      if (reactionSession.current === session) {
+        setReactionError('하트를 전송하지 못했습니다. 잠시 후 다시 눌러주세요.');
+      }
+    }
   };
 
   const selectedLive = getCachedYoutubeLive(selected?.youtubeChannelId);
@@ -644,8 +688,9 @@ export const LiveChannel = ({
       <div className={styles.layout} ref={layoutRef}>
         <div className={styles.main}>
           <div className={styles.playerFrame} ref={playerFrameRef}>
-          <div className={`${styles.player} ${miniPlayer && isAppLayout ? styles.miniPlayer : ''}`} ref={playerRef} style={{ backgroundImage: !isLoggedIn && selectedArtwork.image ? `url("${selectedArtwork.image}")` : undefined }}>
-            {isAppLayout && isLoggedIn && <button type="button" className={styles.miniToggle}
+          <div className={`${styles.player} ${miniPlayer && isAppLayout && !landscape.active ? styles.miniPlayer : ''} ${landscape.active ? 'mobile-landscape-player' : ''}`}  ref={playerRef} style={{ backgroundImage: !isLoggedIn && selectedArtwork.image ? `url("${selectedArtwork.image}")` : undefined }}>
+            {landscape.active && <button type="button" className="mobile-playback-action" onClick={landscape.exit}>영상에서 나가기</button>}
+            {isAppLayout && isLoggedIn && !landscape.active && <button type="button" className={styles.miniToggle}
               onClick={() => { if (miniPlayer) restorePlayer(); else { miniDismissedRef.current = false; setMiniPlayer(true); } }} aria-pressed={miniPlayer}
               aria-label={miniPlayer ? '작은 화면 닫고 원래 크기로 보기' : '작은 화면으로 보기'}>
               {miniPlayer ? '원래 크기' : '작은 화면'}
@@ -670,7 +715,7 @@ export const LiveChannel = ({
               <div className={styles.reactionArea}>
                 <div className={styles.flyingHearts} aria-hidden="true">{flyingHearts.filter((heart) => heart.channelId === String(selected.channelId)).map((heart) => <span key={heart.id} className={styles.flyingHeart} style={{ '--heart-drift': `${(heart.id % 5 - 2) * 16}px`, '--heart-color': ['#ff287f', '#ff604c', '#ff438b'][heart.id % 3] }} onAnimationEnd={() => setFlyingHearts((previous) => previous.filter((item) => item.id !== heart.id))}>♥</span>)}</div>
                 <button type="button" className={styles.reaction} onClick={addReaction} aria-label="영상 좋아요">
-                  <span aria-hidden="true">♥</span><small aria-live="polite" aria-atomic="true">{(reactionCounts[String(selected.channelId)] ?? selected.reactionCount ?? 0).toLocaleString('ko-KR')}</small>
+                  <span aria-hidden="true">♥</span><small aria-live="polite" aria-atomic="true">{(reactionCounts[String(selected.channelId)] ?? 0).toLocaleString('ko-KR')}</small>
                 </button>
               </div>
               <div className={styles.playerControls} aria-label="영상 플레이어 컨트롤">
@@ -699,6 +744,7 @@ export const LiveChannel = ({
 
           </div>
 
+          {reactionError && <p className={styles.chatError} role="status">{reactionError}</p>}
           <div className={styles.channelInfo}>
             <div className={styles.channelIdentity}>
               <div className={styles.channelLogo}>{selectedArtwork.logo ? <img src={selectedArtwork.logo} alt={selected.channel} /> : <span>{selected.channel}</span>}</div>
@@ -770,7 +816,7 @@ export const LiveChannel = ({
             </button>
             {chatOpen ? <>
               <div className={styles.chatContent} id="live-talk-content">
-                <div className={styles.chatNotice}><p>Wavve　{formatTime(selected.start)} ~ {formatTime(selected.end)} {displayTitle}</p><p>실시간 채팅에 참여해보세요.</p></div>
+                <div className={styles.chatNotice}><p>Wavve　{formatTime(selected.start)} ~ {formatTime(selected.end)} {displayTitle}</p><p>실시간 채팅에 참여해보세요. 채팅은 5분 후 사라집니다.</p></div>
                 <div className={styles.chatMessages} aria-live="polite">
                   {messages.map((message) => <p key={message.id}><b>{message.name || '사용자'}</b> {message.text}</p>)}
                   <div ref={chatBottomRef} />
