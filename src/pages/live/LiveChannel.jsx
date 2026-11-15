@@ -751,7 +751,7 @@ export const LiveChannel = ({
               <div className={styles.channelText}><strong title={displayTitle}>{displayTitle}</strong><span>{formatTime(selected.start)} ~ {formatTime(selected.end)}</span></div>
             </div>
             <div className={styles.channelActions}>
-              <button type="button" onClick={() => setShareOpen(true)} aria-label="공유하기"><DetailIcon name="share" /><span>보기</span></button>
+              <button type="button" onClick={() => setShareOpen(true)} aria-label="공유하기"><DetailIcon name="share" /><span>공유</span></button>
               <button type="button" className={styles.favoriteButton} onClick={toggleLike} aria-pressed={liked} aria-label="채널 관심"><svg className={styles.favoriteIcon} viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 3.2 12.5C-2 7.3 4.4.3 10 4.9L12 6.6l2-1.7C19.6.3 26 7.3 20.8 12.5Z" /></svg><span>관심</span></button>
               {selected.vodPath ? <Link to={selected.vodPath}><DetailIcon name="vod" /><span>vod 보기</span></Link>
                 : <button type="button" onClick={() => setVodNoticeChannel(selected.channelId)}><DetailIcon name="vod" /><span>vod 보기</span></button>}
